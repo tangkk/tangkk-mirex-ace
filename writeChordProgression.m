@@ -1,9 +1,12 @@
 % write out the chord progression as txt file according to the MIREX
 % standard: http://www.music-ir.org/mirex/wiki/2015:Audio_Chord_Estimation
-function writeChordProgression(audiopath, nslices, hopsize, fs, outchordogram, outbassgram, outboundaries, endtime)
+function writeChordProgression(outfolder, outpath, nslices, hopsize, fs, outchordogram, outboundaries, endtime)
 
-chordlrc = [audiopath(1:end-4) '.cp.txt'];
-fw = fopen(chordlrc,'w');
+if exist(outfolder, 'file') == 0
+    mkdir(outfolder);
+end
+
+fw = fopen(outpath,'w');
 formatSpec2 = '%s\n';
 tw = ((hopsize/fs)*(0:nslices));
 

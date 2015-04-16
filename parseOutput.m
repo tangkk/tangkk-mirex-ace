@@ -12,8 +12,6 @@ while ischar(tline) && length(tline) > 1
     st = tokens{1};
     et = tokens{2};
     ch = tokens{3};
-    % delete the '\n' char at the end
-    ch = ch(1:end-1);
     
     % parse bass and treble
     [bass,treble] = parseBassTreble(ch);

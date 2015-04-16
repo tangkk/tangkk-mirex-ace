@@ -1,7 +1,7 @@
 % this maps treble to a treble class
 % more trebles are to be added
 function tt = trebleTypeMapping(treble)
-
+% FIXME: how to deal with no-chord 'N'
 switch treble
     % type 1 cases:
     case '0'

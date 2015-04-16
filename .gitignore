@@ -44,5 +44,6 @@ Temporary Items
 
 # application specific
 cp/
-res/
+audio/
+ref/
 *.txt

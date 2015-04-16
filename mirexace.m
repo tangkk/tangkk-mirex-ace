@@ -12,16 +12,30 @@ clc;
 % global control variables
 feedbackpause = 0;
 usemono = false;
-df = false;
+df = true;
 grainsize = 1;
 
 % input stage
 display('input stage -- read audio from path');
-root = '../AudioSamples/';
-target = 'demo';
-audio = strcat(target,'/','demo1','.mp3');
-path = [root audio];
-[x, fs] = myInput(path, usemono);
+
+
+artist = 'demoartist';
+album = 'demoalbum';
+songtitle = 'demosong';
+
+audioroot = './audio/';
+audiofolder = strcat(audioroot, artist,'/',album,'/');
+audiopath = [audiofolder songtitle '.mp3'];
+
+cproot = './cp/';
+cpfolder = strcat(cproot, artist,'/',album,'/');
+cppath = [cpfolder songtitle '.txt'];
+
+gtroot = './gt/';
+gtfolder = strcat(gtroot, artist,'/',album,'/');
+gtpath = [gtfolder songtitle '.lab']; % '.lab' is the ground-truth
+
+[x, fs] = myInput(audiopath, usemono);
 
 % ********************************************************** %
 % ********************* Front End ************************** %
@@ -209,17 +223,15 @@ visualizeChordProgression(newoutchordogram, newoutbassgram, newoutboundaries);
 % ********************* Input ****************************** %
 % ********************************************************** %
 
-writeChordProgression(path, nslices, hopsize, fs, newoutchordogram, newoutbassgram, newoutboundaries, endtime);
+writeChordProgression(cpfolder, cppath, nslices, hopsize, fs, newoutchordogram, newoutboundaries, endtime);
 
 % ********************* End of System A ******************** %
-display(strcat('end of system A recognizing:',path));
+display(strcat('end of system A recognizing:',audiopath));
 
 % ********************************************************** %
 % ********************* Comparison - A******************* %
 % ********************************************************** %
-% r = groundTruthComparison(target);
-% display('r = [cdbrco, cdtrco, cdrco, cdsq; cpbrco, cptrco, cprco, cpsq]:');
-% display(r);
+% r = groundTruthComparison(gtpath);
 
 if df
     close all;
