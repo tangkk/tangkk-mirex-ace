@@ -2,6 +2,7 @@
 % more trebles are to be added
 function tt = trebleTypeMapping(treble)
 % FIXME: how to deal with no-chord 'N'
+% FIXME: implement MIREX standard chord matching
 switch treble
     % type 1 cases:
     case '0'
@@ -19,6 +20,10 @@ switch treble
     case 'maj7'
         tt = 1;
     case 'M7'
+        tt = 1;
+    case 'maj9'
+        tt = 1;
+    case 'M9'
         tt = 1;
     case '7'
         tt = 1;
