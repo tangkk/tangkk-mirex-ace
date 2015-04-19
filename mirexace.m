@@ -3,11 +3,20 @@
 % and chord progression boundaries within a piece of music
 
 % ********************************************************** %
-% ********************* Input ****************************** %
+% ********************* Batch Input ************************ %
 % ********************************************************** %
 close all;
 clear;
 clc;
+% use "single.txt" to run single song, use "testlist.txt" to run multiple
+% songs
+feval = fopen('single.txt','r');
+tline = fgetl(feval);
+while ischar(tline) && length(tline) > 1
+    
+% ********************************************************** %
+% ********************* Input ****************************** %
+% ********************************************************** %
 
 % global control variables
 feedbackpause = 0;
@@ -21,7 +30,7 @@ display('input stage -- read audio from path');
 
 artist = 'demoartist';
 album = 'demoalbum';
-songtitle = 'demosong';
+songtitle = tline;
 
 audioroot = './audio/';
 audiofolder = strcat(audioroot, artist,'/',album,'/');
@@ -232,6 +241,11 @@ if df
     close all;
 end
 
+tline = fgetl(feval);
+end % pair with the very first while loop
+
+fclose(feval);
+
 % ********************************************************** %
 % ********************* Evaluation - A******************* %
 % ********************************************************** %
@@ -260,45 +274,45 @@ end
 % MirexSevenths
 % MirexSeventhsBass
 % MirexRoot
-outroot = './out/';
-evaltype = 'MirexRoot';
-evalout = [outroot album evaltype '.txt'];
-evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
-    cpfolder ' --refext .lab --testext .txt --output ' evalout...
-    ' --chords ' evaltype];
-system(evalcmd);
-
-evaltype = 'Bass';
-evalout = [outroot album evaltype '.txt'];
-evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
-    cpfolder ' --refext .lab --testext .txt --output ' evalout...
-    ' --chords ' evaltype];
-system(evalcmd);
-
-evaltype = 'MirexMajMin';
-evalout = [outroot album evaltype '.txt'];
-evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
-    cpfolder ' --refext .lab --testext .txt --output ' evalout...
-    ' --chords ' evaltype];
-system(evalcmd);
-
-evaltype = 'MirexMajMinBass';
-evalout = [outroot album evaltype '.txt'];
-evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
-    cpfolder ' --refext .lab --testext .txt --output ' evalout...
-    ' --chords ' evaltype];
-system(evalcmd);
-
-% segmentation evaluation
-% Segmentation
+% outroot = './out/';
+% evaltype = 'MirexRoot';
+% evalout = [outroot album evaltype '.txt'];
+% evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
+%     cpfolder ' --refext .lab --testext .txt --output ' evalout...
+%     ' --chords ' evaltype];
+% system(evalcmd);
 % 
-% Onset
-% Offset
-% Inner
-% Outer
-evaltype = 'Onset';
-evalout = [outroot album evaltype 'Seg.txt'];
-evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
-    cpfolder ' --refext .lab --testext .txt --output ' evalout...
-    ' --segmentation ' evaltype];
-system(evalcmd);
+% evaltype = 'Bass';
+% evalout = [outroot album evaltype '.txt'];
+% evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
+%     cpfolder ' --refext .lab --testext .txt --output ' evalout...
+%     ' --chords ' evaltype];
+% system(evalcmd);
+% 
+% evaltype = 'MirexMajMin';
+% evalout = [outroot album evaltype '.txt'];
+% evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
+%     cpfolder ' --refext .lab --testext .txt --output ' evalout...
+%     ' --chords ' evaltype];
+% system(evalcmd);
+% 
+% evaltype = 'MirexMajMinBass';
+% evalout = [outroot album evaltype '.txt'];
+% evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
+%     cpfolder ' --refext .lab --testext .txt --output ' evalout...
+%     ' --chords ' evaltype];
+% system(evalcmd);
+% 
+% % segmentation evaluation
+% % Segmentation
+% % 
+% % Onset
+% % Offset
+% % Inner
+% % Outer
+% evaltype = 'Onset';
+% evalout = [outroot album evaltype 'Seg.txt'];
+% evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
+%     cpfolder ' --refext .lab --testext .txt --output ' evalout...
+%     ' --segmentation ' evaltype];
+% system(evalcmd);

@@ -24,8 +24,8 @@ qualgram = {};
 boundaries = [];
 
 fr = fopen(path,'r');
-tline = fgets(fr);
-while ischar(tline) && length(tline) > 1
+tline = fgetl(fr);
+while ischar(tline)
     tokens = strsplit(tline);
     st = tokens{1};
     et = tokens{2};
@@ -42,7 +42,7 @@ while ischar(tline) && length(tline) > 1
     % parse seconds
     sec = str2double(st);
     boundaries = [boundaries sec];
-    tline = fgets(fr);
+    tline = fgetl(fr);
 end
 
 % parse the end time

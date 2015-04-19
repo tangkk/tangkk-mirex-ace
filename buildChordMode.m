@@ -195,10 +195,10 @@ chordmode{2,idx} = 'min7';
 chordmode{3,idx} = [1,1-s,s];
 idx = idx + 1;
 
-chordmode{1,idx} = [3,7,11];
-chordmode{2,idx} = 'minmaj7';
-chordmode{3,idx} = [1,1-s,s];
-idx = idx + 1;
+% chordmode{1,idx} = [3,7,11];
+% chordmode{2,idx} = 'minmaj7';
+% chordmode{3,idx} = [1,1-s,s];
+% idx = idx + 1;
 
 chordmode{1,idx} = [4,7,10];
 chordmode{2,idx} = '7';
@@ -210,10 +210,10 @@ chordmode{2,idx} = 'dim7';
 chordmode{3,idx} = [1,1-s,s];
 idx = idx + 1;
 
-chordmode{1,idx} = [3,6,10];
-chordmode{2,idx} = 'hdim';
-chordmode{3,idx} = [1,1-s,s];
-idx = idx + 1;
+% chordmode{1,idx} = [3,6,10];
+% chordmode{2,idx} = 'hdim';
+% chordmode{3,idx} = [1,1-s,s];
+% idx = idx + 1;
 
 chordmode{1,idx} = [3,7,8];
 chordmode{2,idx} = 'maj7/3';

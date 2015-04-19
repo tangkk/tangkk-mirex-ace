@@ -1,12 +1,12 @@
 % transform .lrc format to .lab format
 
-target = './gt/demoartist/demoalbum/dontbreakmyheart';
+target = './gt/demoartist/demoalbum/demosong';
 in = [target '.gt.lrc'];
 out = [target '.lab'];
 fr = fopen(in,'r');
 fw = fopen(out,'w');
-tline = fgets(fr);
-while ischar(tline) && length(tline) > 1
+tline = fgetl(fr);
+while ischar(tline)
     % this line
     tokens = strsplit(tline,']');
     st = tokens{1};
@@ -19,7 +19,6 @@ while ischar(tline) && length(tline) > 1
     
     disp(ch);
     
-    ch = ch(1:end-1); % delete the last char
     % construct new chord label
     if isempty(ch)
         tline = fgets(fr);
@@ -84,7 +83,7 @@ while ischar(tline) && length(tline) > 1
     end
     
     % next line
-    tline = fgets(fr);
+    tline = fgetl(fr);
     tokens = strsplit(tline,']');
     et = tokens{1};
     et = et(2:end);
