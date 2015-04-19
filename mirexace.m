@@ -228,11 +228,42 @@ writeChordProgression(cpfolder, cppath, nslices, hopsize, fs, newoutchordogram, 
 % ********************* End of System A ******************** %
 display(strcat('end of system A recognizing:',audiopath));
 
-% ********************************************************** %
-% ********************* Comparison - A******************* %
-% ********************************************************** %
-% r = groundTruthComparison(gtpath);
-
 if df
     close all;
 end
+
+% ********************************************************** %
+% ********************* Evaluation - A******************* %
+% ********************************************************** %
+% The following evaluator is built from Johan's source code:
+% https://github.com/jpauwels/MusOOEvaluator
+%
+% ACE Evaluation presets
+% 
+% Triads
+% Tetrads
+% TriadsInput
+% TetradsOnly
+% Bass
+% Root
+% ChromaRecall
+% ChromaPrecision
+% ChromaFmeasure
+% Mirex2009
+% Mirex2010
+% 4TriadsInput
+% 4TriadsOutput
+% 6TriadsInput
+% 6TriadsOutput
+% MirexMajMin
+% MirexMajMinBass
+% MirexSevenths
+% MirexSeventhsBass
+% MirexRoot
+outroot = './out/';
+evaltype = 'MirexRoot';
+evalout = [outroot album evaltype '.txt'];
+evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
+    cpfolder ' --refext .lab --testext .txt --output ' evalout...
+    ' --chords ' evaltype];
+system(evalcmd);

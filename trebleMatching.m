@@ -1,7 +1,7 @@
 function [treble, ctidx] = trebleMatching(bass,upper,template)
 
 if sum(upper) >= 8 % this is the 'no-chord' condition (too many light bins)
-    treble = '0';
+    treble = '1';
     ctidx = 0;
     return;
 end
@@ -20,6 +20,6 @@ end
 if maxscore > 0
     treble = chordmode{2,ctidx};
 else
-    treble = '0';
+    treble = '1';
     ctidx = 0;
 end

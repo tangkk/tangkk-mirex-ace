@@ -46,4 +46,6 @@ Temporary Items
 cp/
 audio/
 ref/
+out/
+eval/
 *.txt
