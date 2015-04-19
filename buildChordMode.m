@@ -135,25 +135,25 @@ chordmode{2,idx} = 'min';
 chordmode{3,idx} = [1,1];
 idx = idx + 1;
 
-chordmode{1,idx} = [4,9];
-chordmode{2,idx} = 'maj6';
-chordmode{3,idx} = [1,1];
-idx = idx + 1;
-
-chordmode{1,idx} = [3,9];
-chordmode{2,idx} = 'min6';
-chordmode{3,idx} = [1,1];
-idx = idx + 1;
-
-chordmode{1,idx} = [5,7];
-chordmode{2,idx} = 'sus4';
-chordmode{3,idx} = [1,1];
-idx = idx + 1;
-
-chordmode{1,idx} = [2,7];
-chordmode{2,idx} = 'sus2';
-chordmode{3,idx} = [1,1];
-idx = idx + 1;
+% chordmode{1,idx} = [4,9];
+% chordmode{2,idx} = 'maj6';
+% chordmode{3,idx} = [1,1];
+% idx = idx + 1;
+% 
+% chordmode{1,idx} = [3,9];
+% chordmode{2,idx} = 'min6';
+% chordmode{3,idx} = [1,1];
+% idx = idx + 1;
+% 
+% chordmode{1,idx} = [5,7];
+% chordmode{2,idx} = 'sus4';
+% chordmode{3,idx} = [1,1];
+% idx = idx + 1;
+% 
+% chordmode{1,idx} = [2,7];
+% chordmode{2,idx} = 'sus2';
+% chordmode{3,idx} = [1,1];
+% idx = idx + 1;
 
 chordmode{1,idx} = [3,8];
 chordmode{2,idx} = 'maj/3';
