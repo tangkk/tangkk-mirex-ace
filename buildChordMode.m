@@ -64,7 +64,7 @@
 function chordmode = buildChordMode
 
 s = 0.5; % seventh reduce factor
-c = 0.0; % slash chord reduce factor
+c = 0.5; % slash chord reduce factor
 nchordtype = 50; % just leave aboundant space for chord types
 chordmode = cell(4,nchordtype); %[dif; type; weight]
 

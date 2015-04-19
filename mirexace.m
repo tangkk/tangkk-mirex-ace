@@ -267,3 +267,38 @@ evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
     cpfolder ' --refext .lab --testext .txt --output ' evalout...
     ' --chords ' evaltype];
 system(evalcmd);
+
+evaltype = 'Bass';
+evalout = [outroot album evaltype '.txt'];
+evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
+    cpfolder ' --refext .lab --testext .txt --output ' evalout...
+    ' --chords ' evaltype];
+system(evalcmd);
+
+evaltype = 'MirexMajMin';
+evalout = [outroot album evaltype '.txt'];
+evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
+    cpfolder ' --refext .lab --testext .txt --output ' evalout...
+    ' --chords ' evaltype];
+system(evalcmd);
+
+evaltype = 'MirexMajMinBass';
+evalout = [outroot album evaltype '.txt'];
+evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
+    cpfolder ' --refext .lab --testext .txt --output ' evalout...
+    ' --chords ' evaltype];
+system(evalcmd);
+
+% segmentation evaluation
+% Segmentation
+% 
+% Onset
+% Offset
+% Inner
+% Outer
+evaltype = 'Onset';
+evalout = [outroot album evaltype 'Seg.txt'];
+evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
+    cpfolder ' --refext .lab --testext .txt --output ' evalout...
+    ' --segmentation ' evaltype];
+system(evalcmd);

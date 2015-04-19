@@ -53,7 +53,7 @@ cpfolder = strcat(cproot,artist,'/',album,'/');
 cppath = [cpfolder songtitle '.txt']; % '.txt' is the output of this system
 
 outroot = './out/';
-evaltype = 'MirexRoot';
+evaltype = 'Bass';
 evalout = [outroot album evaltype '.txt'];
 evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
     cpfolder ' --refext .lab --testext .txt --output ' evalout...
