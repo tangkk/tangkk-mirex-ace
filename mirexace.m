@@ -32,14 +32,13 @@ enMajMin = 1;
 enMajMinBass = 1;
 enSixth = 1;
 enSus = 1;
-enSus2MajMin = 1; % in case we'd like to substitute sus to maj or min
+enCast2MajMin = 1; % in case we'd like to substitute others to maj or min
 enAugDim = 0;
 enSeventh = 1;
 enSeventhBass = 0;
 enOtherSlash = 0;
 
 feval = fopen('singlelist.txt','r');
-% feval = fopen('alllist.txt','r');
 tline = fgetl(feval);
 
 % use examine target to examine specific sections
@@ -310,7 +309,7 @@ else
     
     % write output
     writeChordProgression(cpfolder, cppath, nslices, hopsize, fs, newoutchordogram, newoutboundaries, endtime,...
-        enSus2MajMin, notefrequencies);
+        enCast2MajMin, notefrequencies);
     
     display(strcat('end of system A recognizing:',audiopath));
     tline = fgetl(feval);

@@ -1,7 +1,7 @@
 % write out the chord progression as txt file according to the MIREX
 % standard: http://www.music-ir.org/mirex/wiki/2015:Audio_Chord_Estimation
 function writeChordProgression(outfolder, outpath, nslices, hopsize, fs, outchordogram, outboundaries, endtime,...
-    enSus2MajMin, notefrequencies)
+    enCast2MajMin, notefrequencies)
 
 if exist(outfolder, 'file') == 0
     mkdir(outfolder);
@@ -26,8 +26,8 @@ for i = 1:1:lenoutchordogram
     sec2 = tw(outboundaries(i+1));
     timestr2 = num2str(sec2);
     chordstr = outchordogram{i};
-    if enSus2MajMin
-        chordstr = sus2MajMin(chordstr, notefrequencies); % substitute sus to majmin
+    if enCast2MajMin
+        chordstr = uni2MajMin(chordstr, notefrequencies); % substitute sus to majmin
     end
     s = [timestr1, ' ', timestr2, ' ', chordstr];
     fprintf(fw, formatSpec2, s);

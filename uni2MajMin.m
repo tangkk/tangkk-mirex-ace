@@ -1,5 +1,5 @@
-% FIXME: currently limited to sus2 and sus4
-function ch = sus2MajMin(ch,nf)
+% FIXME: currently limited to sus2, sus4, maj6, min6
+function ch = uni2MajMin(ch,nf)
 
 if ~isempty(strfind(ch,'sus2')) || ~isempty(strfind(ch,'sus4'))
     tokens = strsplit(ch,':');
@@ -15,6 +15,10 @@ if ~isempty(strfind(ch,'sus2')) || ~isempty(strfind(ch,'sus4'))
     else
         ch = [num2note(root) ':' '5'];
     end
+elseif ~isempty(strfind(ch,'maj6'))
+    ch = ch(1:end-1);
+elseif ~isempty(strfind(ch,'min6'))
+    ch = ch(1:end-1);
 else
     ch = ch;
 end
