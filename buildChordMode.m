@@ -62,7 +62,7 @@
 % Information Retrieval Conference (ISMIR), 66–71.
 
 function chordmode = buildChordMode(seventhcontrol, slashcontrol, enDyad, enMajMin, enMajMinBass, enSixth, enSus,...
-    enAugDim, enSeventh, enSeventhBass, enOtherSlash)
+    enSus2MajMin, enAugDim, enSeventh, enSeventhBass, enOtherSlash)
 
 s = seventhcontrol; % seventh reduce factor
 c = slashcontrol; % slash chord reduce factor
@@ -141,7 +141,7 @@ chordmode{3,idx} = [1,1];
 idx = idx + 1;
 end
 
-% ******************** suspend and sixth *************************** %
+% ************************ sixth ******************************* %
 
 if enSixth
 chordmode{1,idx} = [4,9];
@@ -155,16 +155,28 @@ chordmode{3,idx} = [1,1];
 idx = idx + 1;
 end
 
+% ************************ suspend ******************************* %
 if enSus
 chordmode{1,idx} = [5,7];
 chordmode{2,idx} = 'sus4';
-% chordmode{2,idx} = 'maj';
 chordmode{3,idx} = [1,1];
 idx = idx + 1;
 
 chordmode{1,idx} = [2,7];
 chordmode{2,idx} = 'sus2';
-% chordmode{2,idx} = 'maj';
+chordmode{3,idx} = [1,1];
+idx = idx + 1;
+end
+
+% ************************ sus to majmin ***************************** %
+if enSus2MajMin
+chordmode{1,idx} = [5,7];
+chordmode{2,idx} = 'maj'; % turn sus4 to maj
+chordmode{3,idx} = [1,1];
+idx = idx + 1;
+
+chordmode{1,idx} = [2,7];
+chordmode{2,idx} = 'min'; % turn sus2 to min
 chordmode{3,idx} = [1,1];
 idx = idx + 1;
 end

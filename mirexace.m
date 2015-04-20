@@ -32,18 +32,19 @@ enMajMin = 1;
 enMajMinBass = 1;
 enSixth = 1;
 enSus = 0;
+enSus2MajMin = 0;
 enAugDim = 0;
 enSeventh = 1;
 enSeventhBass = 0;
 enOtherSlash = 0;
 
-% feval = fopen('singlelist.txt','r');
-feval = fopen('alllist.txt','r');
+feval = fopen('singlelist.txt','r');
+% feval = fopen('alllist.txt','r');
 tline = fgetl(feval);
 
 % use examine target to examine specific sections
-examinetarget = 'xiaoxiaochong';
-examinesection = '.04.mp3';
+examinetarget = 'examine';
+examinesection = '.01.mp3';
  
 if isexamine
     tline = 'examine';
@@ -229,7 +230,7 @@ end
 display('backend-A -- chordmode');
 
 chordmode = buildChordMode(seventhcontrol, slashcontrol, enDyad, enMajMin, enMajMinBass, enSixth, enSus,...
-    enAugDim, enSeventh, enSeventhBass, enOtherSlash);
+    enSus2MajMin, enAugDim, enSeventh, enSeventhBass, enOtherSlash);
 
 chordogram = computeChordogram(basegram, uppergram, chordmode);
 
