@@ -8,11 +8,27 @@
 close all;
 clear;
 clc;
+
+% ********************************************************** %
+% ********************* Mode Select ************************ %
+% ********************************************************** %
+isexamine = 0;
+
 % use "single.txt" to run single song, use "testlist.txt" to run multiple
 % songs
-feval = fopen('single.txt','r');
+% feval = fopen('singlelist.txt','r');
+feval = fopen('alllist.txt','r');
 tline = fgetl(feval);
-while ischar(tline) && length(tline) > 1
+
+% use examine target to examine specific sections
+examinetarget = 'xiaoxiaochong';
+examinesection = '.04.mp3';
+
+if isexamine
+    tline = 'examine';
+end
+
+while ischar(tline)
     
 % ********************************************************** %
 % ********************* Input ****************************** %
@@ -21,8 +37,10 @@ while ischar(tline) && length(tline) > 1
 % global control variables
 feedbackpause = 0;
 usemono = false;
-df = true;
+df = false;
 grainsize = 1;
+seventhcontrol = 0.5;
+slashcontrol = 0.3;
 
 % input stage
 display('input stage -- read audio from path');
@@ -44,7 +62,16 @@ gtroot = './gt/';
 gtfolder = strcat(gtroot, artist,'/',album,'/');
 gtpath = [gtfolder songtitle '.lab']; % '.lab' is the ground-truth
 
-[x, fs] = myInput(audiopath, usemono);
+examineroot = '../AudioSamples/';
+examinepath = [examineroot examinetarget '/' examinetarget examinesection];
+
+if isexamine
+    [x, fs] = myInput(examinepath, path);
+    df = true;
+else
+    [x, fs] = myInput(audiopath, usemono);
+    df = false;
+end
 
 % ********************************************************** %
 % ********************* Front End ************************** %
@@ -61,7 +88,9 @@ endtime = (1/fs)*length(x);
 tk = (1/fs)*(1:length(x));
 kk = (1:nslices);
 ff = fs/2*linspace(0,1,wl/2);
+if df
 myImagePlot(X, kk, ff, 'slice', 'Hz', 'spectrogram');
+end
 
 fmin = 27.5; % MIDI note 21, Piano key number 1
 fmax = 1661; % MIDI note 92, Piano key number 72
@@ -79,32 +108,40 @@ Sc = Mc*X;
 Spre = Sc.*Sc;
 sizeM = size(Ms);
 ps = 1:sizeM(1);
+if df
 myImagePlot(Ss, kk, ps, 'slice', '1/3 semitone', 'simple tone salience matrix');
 myImagePlot(Sc, kk, ps, 'slice', '1/3 semitone', 'complex tone salience matrix');
 myImagePlot(Spre, kk, ps, 'slice', '1/3 semitone', 'preliminary salience matrix');
+end
 
 % noise reduction process
 nt = 0.1;
 Ssn = noteSalienceNoiseReduce(Ss, nt);
 Scn = noteSalienceNoiseReduce(Sc, nt);
 Spren = Ssn.*Scn;
+if df
 myImagePlot(Ssn, kk, ps, 'slice', '1/3 semitone', 'noised reduced simple tone salience matrix');
 myImagePlot(Scn, kk, ps, 'slice', '1/3 semitone', 'noised reduced complex tone salience matrix');
 myImagePlot(Spren, kk, ps, 'slice', '1/3 semitone', 'pre salience matrix');
+end
 
 % long salience compensation process
 st = 0.1;
 bb = 28; % bass bound, only compensate below bb
 wgmax = 10;
 Spren = compensateLongSalience(Spren,wgmax,st,bb);
+if df
 myImagePlot(Spren, kk, ps, 'slice', '1/3 semitone', 'compensated pre salience matrix');
+end
 
 % short salience reduction process
 st = 0.0;
 bb = 28; % bass bound, only reduce below bass
 wgmax = 5;
 Spren = reduceShortSalience(Spren,wgmax,st,bb);
+if df
 myImagePlot(Spren, kk, ps, 'slice', '1/3 semitone', 'reduced pre salience matrix');
+end
 
 % computer note salience matrix by combining 1/3 semitones into semitones
 S = Spren(1:3:end,:) + Spren(2:3:end,:) + Spren(3:3:end,:);
@@ -112,38 +149,48 @@ sizeS = size(S);
 ntones = sizeS(1);
 S = normalizeGram(S);
 p = 1:ntones;
+if df
 myImagePlot(S, kk, p, 'slice', 'semitone', 'note salience matrix');
+end
 
 % gestaltize the note salience matrix
 wgmax = 10;
 st = 0.0;
 Sg = gestaltNoteSalience(S,wgmax, st);
+if df
 % myImagePlot(Sgpos, kk, p, 'slice', 'semitone', 'positive gestalt note salience matrix');
 % myImagePlot(Sgneg, kk, p, 'slice', 'semitone', 'negative gestalt note salience matrix');
 myImagePlot(Sg, kk, p, 'slice', 'semitone', 'gestalt note salience matrix');
+end
 
 % onset filter (roughly detect the note onsets)
 ot = 0.0;
 wo = 10;
 So = noteOnsetFilter(Sg, ot, wo);
+if df
 myImagePlot(So, kk, p, 'slice', 'semitone', 'note onset matrix');
+end
 
 % bassline filter (roughly set the dynamic bass bounds)
 bt = 0.0;
 wb = 10;
 cb = 1;
 Sb = bassLineFilter(Sg, bt, wb, cb);
+if df
 myLinePlot(1:length(Sb), Sb, 'slice', 'semitone',nslices, ntones, '*', 'rough bassline');
+end
 
 % harmonic change filter (detect harmonic change boundaries)ht = 0.1;
 ht = 0.1;
 bc = 6;
 [Sh, Shv, Shc, nchords] = harmonicChangeFilter(Sg, Sb, So, ht, bc);
+if df
 myImagePlot(Sh, kk, p, 'slice', 'semitone', 'harmonic bounded salience matrix');
 myImagePlot(Shv, kk(1:nchords), p, 'chord progression order',...
     'semitone', 'harmonic change matrix');
 myLinePlot(1:length(Shc), Shc, 'chord progression order', 'slice',...
     nchords, nslices, 'o', 'haromonic change moments');
+end
 
 % ********************************************************** %
 % ********************* Mid End - A************************* %
@@ -157,17 +204,19 @@ bassnotenames = {'N','C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
 treblenotenames = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
 kh = 1:nchords;
 ph = 1:12;
+if df
 myLinePlot(kh, basegram(1,:), 'chord progression order', 'semitone',...
     nchords, 12, 'o', 'basegram', 0:12, bassnotenames);
 myImagePlot(uppergram, kh, ph, 'chord progression order', 'semitone',...
     'uppergram', ph,treblenotenames);
+end
 
 % ********************************************************** %
 % ********************* Back End - A************************ %
 % ********************************************************** %
 display('backend-A -- chordmode');
 
-chordmode = buildChordMode;
+chordmode = buildChordMode(seventhcontrol,slashcontrol);
 
 chordogram = computeChordogram(basegram, uppergram, chordmode);
 
@@ -182,12 +231,14 @@ chordogram = computeChordogram(basegram, uppergram, chordmode);
 [outchordogram, outbassgram, outtreblegram, outboundaries] = mergeSimilarChords(outchordogram, outbassgram,...
     outtreblegram, outboundaries, chordmode);
 
+if df
 myLinePlot(1:length(outbassgram), outbassgram, 'chord progression order', 'semitone',...
     length(outbassgram), 12, 'o', 'outbassgram', 0:12, bassnotenames);
 myLinePlot(1:length(outboundaries), outboundaries, 'chord progression order', 'slice',...
     length(outboundaries), nslices, 'o', 'outboundaries');
 
 visualizeChordProgression(outchordogram, outbassgram, outboundaries);
+end
 
 % ********************************************************** %
 % ********************* Feedback Once - A******************* %
@@ -204,8 +255,10 @@ nt = 0.25;
 [newbasegram, newuppergram] = updateBaseUpperGram(outboundaries, S, So, ut, nt);
 kh = 1:length(newbasegram);
 ph = 1:12;
+if df
 myLinePlot(kh, newbasegram(1,:), 'chord progression order', 'semitone', nchords, 12, 'o', 'newbasegram', 0:12, bassnotenames);
 myImagePlot(newuppergram, kh, ph, 'chord progression order', 'semitone', 'newuppergram', ph,treblenotenames);
+end
 
 % ****** feedback back end ****** %
 newchordogram = computeChordogram(newbasegram, newuppergram, chordmode);
@@ -221,27 +274,30 @@ newchordogram = computeChordogram(newbasegram, newuppergram, chordmode);
 [newoutchordogram, newoutbassgram, newouttreblegram, newoutboundaries] = mergeSimilarChords(newoutchordogram, newoutbassgram,...
     newouttreblegram, newoutboundaries, chordmode);
 
+if df
 myLinePlot(1:length(newoutbassgram), newoutbassgram, 'chord progression order', 'semitone',...
     length(newoutbassgram), 12, 'o', 'newoutbassgram', 0:12, bassnotenames);
 myLinePlot(1:length(newoutboundaries), newoutboundaries, 'chord progression order', 'slice',...
     length(newoutboundaries), nslices, 'o', 'newoutboundaries');
 
 visualizeChordProgression(newoutchordogram, newoutbassgram, newoutboundaries);
-
-% ********************************************************** %
-% ********************* Input ****************************** %
-% ********************************************************** %
-
-writeChordProgression(cpfolder, cppath, nslices, hopsize, fs, newoutchordogram, newoutboundaries, endtime);
-
-% ********************* End of System A ******************** %
-display(strcat('end of system A recognizing:',audiopath));
-
-if df
-    close all;
 end
 
-tline = fgetl(feval);
+% ********************************************************** %
+% ********************* Output ***************************** %
+% ********************************************************** %
+
+
+% ********************* End of System A ******************** %
+if isexamine
+    display(strcat('end of system A recognizing:',examinepath));
+    break;
+else
+    writeChordProgression(cpfolder, cppath, nslices, hopsize, fs, newoutchordogram, newoutboundaries, endtime);
+    display(strcat('end of system A recognizing:',audiopath));
+    tline = fgetl(feval);
+end
+
 end % pair with the very first while loop
 
 fclose(feval);
@@ -249,70 +305,4 @@ fclose(feval);
 % ********************************************************** %
 % ********************* Evaluation - A******************* %
 % ********************************************************** %
-% The following evaluator is built from Johan's source code:
-% https://github.com/jpauwels/MusOOEvaluator
-%
-% ACE Evaluation presets
-% 
-% Triads
-% Tetrads
-% TriadsInput
-% TetradsOnly
-% Bass
-% Root
-% ChromaRecall
-% ChromaPrecision
-% ChromaFmeasure
-% Mirex2009
-% Mirex2010
-% 4TriadsInput
-% 4TriadsOutput
-% 6TriadsInput
-% 6TriadsOutput
-% MirexMajMin
-% MirexMajMinBass
-% MirexSevenths
-% MirexSeventhsBass
-% MirexRoot
-% outroot = './out/';
-% evaltype = 'MirexRoot';
-% evalout = [outroot album evaltype '.txt'];
-% evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
-%     cpfolder ' --refext .lab --testext .txt --output ' evalout...
-%     ' --chords ' evaltype];
-% system(evalcmd);
-% 
-% evaltype = 'Bass';
-% evalout = [outroot album evaltype '.txt'];
-% evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
-%     cpfolder ' --refext .lab --testext .txt --output ' evalout...
-%     ' --chords ' evaltype];
-% system(evalcmd);
-% 
-% evaltype = 'MirexMajMin';
-% evalout = [outroot album evaltype '.txt'];
-% evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
-%     cpfolder ' --refext .lab --testext .txt --output ' evalout...
-%     ' --chords ' evaltype];
-% system(evalcmd);
-% 
-% evaltype = 'MirexMajMinBass';
-% evalout = [outroot album evaltype '.txt'];
-% evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
-%     cpfolder ' --refext .lab --testext .txt --output ' evalout...
-%     ' --chords ' evaltype];
-% system(evalcmd);
-% 
-% % segmentation evaluation
-% % Segmentation
-% % 
-% % Onset
-% % Offset
-% % Inner
-% % Outer
-% evaltype = 'Onset';
-% evalout = [outroot album evaltype 'Seg.txt'];
-% evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
-%     cpfolder ' --refext .lab --testext .txt --output ' evalout...
-%     ' --segmentation ' evaltype];
-% system(evalcmd);
+% open "groundTruthComparison.m"
