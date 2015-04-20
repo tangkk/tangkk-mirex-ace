@@ -62,7 +62,7 @@
 % Information Retrieval Conference (ISMIR), 66–71.
 
 function chordmode = buildChordMode(seventhcontrol, slashcontrol, enDyad, enMajMin, enMajMinBass, enSixth, enSus,...
-    enSus2MajMin, enAugDim, enSeventh, enSeventhBass, enOtherSlash)
+    enAugDim, enSeventh, enSeventhBass, enOtherSlash)
 
 s = seventhcontrol; % seventh reduce factor
 c = slashcontrol; % slash chord reduce factor
@@ -168,21 +168,6 @@ chordmode{3,idx} = [1,1];
 idx = idx + 1;
 end
 
-% ************************ sus to majmin ***************************** %
-if enSus2MajMin
-chordmode{1,idx} = [5,7];
-chordmode{2,idx} = 'maj'; % turn sus4 to maj
-chordmode{3,idx} = [1,1];
-idx = idx + 1;
-
-chordmode{1,idx} = [2,7];
-chordmode{2,idx} = 'min'; % turn sus2 to min
-chordmode{3,idx} = [1,1];
-idx = idx + 1;
-end
-
-% ******************** suspend and sixth *************************** %
-
 % ******************** augmenteds and diminisheds ******************** %
 
 if enAugDim
@@ -212,8 +197,6 @@ chordmode{3,idx} = [1-s,1-s,1-s];
 idx = idx + 1;
 end
 
-% ******************** augmenteds and diminisheds ******************** %
-
 % ******************** MajMinBass ************************%
 if enMajMinBass
 chordmode{1,idx} = [3,8];
@@ -236,7 +219,6 @@ chordmode{2,idx} = 'min/5';
 chordmode{3,idx} = [1,1];
 idx = idx + 1;
 end
-% ******************** MajMinBass ************************%
 
 % ******************** Sevenths ************************%
 if enSeventh
@@ -255,7 +237,6 @@ chordmode{2,idx} = '7';
 chordmode{3,idx} = [1-s,1-s,1-s];
 idx = idx + 1;
 end
-% ******************** Sevenths ************************%
 
 % ******************** SeventhsBass ************************%
 if enSeventhBass
@@ -304,7 +285,6 @@ chordmode{2,idx} = '7/b7';
 chordmode{3,idx} = [1-c,1-c,1-c];
 idx = idx + 1;
 end
-% ******************** SeventhsBass ************************%
 
 % ******************** Other Slash Chords ******************%
 if enOtherSlash
@@ -319,7 +299,6 @@ chordmode{2,idx} = 'min/2';
 chordmode{3,idx} = [1,1-c,1-c];
 idx = idx + 1;
 end
-% ******************** Other Slash Chords ******************%
 
 chordmode = chordmode(:,1:idx - 1);
 

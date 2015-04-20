@@ -32,7 +32,7 @@ enMajMin = 1;
 enMajMinBass = 1;
 enSixth = 1;
 enSus = 1;
-enSus2MajMin = 0;
+enSus2MajMin = 1; % in case we'd like to substitute sus to maj or min
 enAugDim = 0;
 enSeventh = 1;
 enSeventhBass = 0;
@@ -230,7 +230,7 @@ end
 display('backend-A -- chordmode');
 
 chordmode = buildChordMode(seventhcontrol, slashcontrol, enDyad, enMajMin, enMajMinBass, enSixth, enSus,...
-    enSus2MajMin, enAugDim, enSeventh, enSeventhBass, enOtherSlash);
+    enAugDim, enSeventh, enSeventhBass, enOtherSlash);
 
 chordogram = computeChordogram(basegram, uppergram, chordmode);
 
@@ -309,7 +309,8 @@ else
     tonic = calTonic(notescale);
     
     % write output
-    writeChordProgression(cpfolder, cppath, nslices, hopsize, fs, newoutchordogram, newoutboundaries, endtime);
+    writeChordProgression(cpfolder, cppath, nslices, hopsize, fs, newoutchordogram, newoutboundaries, endtime,...
+        enSus2MajMin, notefrequencies);
     
     display(strcat('end of system A recognizing:',audiopath));
     tline = fgetl(feval);
