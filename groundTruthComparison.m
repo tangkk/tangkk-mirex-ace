@@ -39,66 +39,136 @@
 % Inner
 % Outer
 
-gtroot = './gt/';
-cproot = './cp/';
+
 artist = 'demoartist';
 album = 'demoalbum';
+sufix = '-ok';
 
+gtroot = './gt/';
+cproot = './cp/';
 gtfolder = strcat(gtroot,artist,'/',album,'/');
 cpfolder = strcat(cproot,artist,'/',album,'/');
 
 outroot = './out/';
+
+% ************************ Chords *************************** %
 evaltype = 'Root';
-evalout = [outroot album evaltype '.txt'];
+disp([evaltype '......']);
+evalout = [outroot album evaltype sufix '.txt'];
 evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
     cpfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
     ' --chords ' evaltype];
 system(evalcmd);
 
 evaltype = 'Bass';
-evalout = [outroot album evaltype '.txt'];
+disp([evaltype '......']);
+evalout = [outroot album evaltype sufix '.txt'];
+evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
+    cpfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+    ' --chords ' evaltype];
+system(evalcmd);
+
+evaltype = 'MirexRoot';
+disp([evaltype '......']);
+evalout = [outroot album evaltype sufix '.txt'];
 evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
     cpfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
     ' --chords ' evaltype];
 system(evalcmd);
 
 evaltype = 'MirexMajMin';
-evalout = [outroot album evaltype '.txt'];
+disp([evaltype '......']);
+evalout = [outroot album evaltype sufix '.txt'];
 evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
     cpfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
     ' --chords ' evaltype];
 system(evalcmd);
 
 evaltype = 'MirexMajMinBass';
-evalout = [outroot album evaltype '.txt'];
+disp([evaltype '......']);
+evalout = [outroot album evaltype sufix '.txt'];
 evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
     cpfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
     ' --chords ' evaltype];
 system(evalcmd);
 
+% evaltype = 'MirexSevenths';
+% disp([evaltype '......']);
+% evalout = [outroot album evaltype sufix '.txt'];
+% evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
+%     cpfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+%     ' --chords ' evaltype];
+% system(evalcmd);
+% 
+% evaltype = 'MirexSeventhsBass';
+% disp([evaltype '......']);
+% evalout = [outroot album evaltype sufix '.txt'];
+% evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
+%     cpfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+%     ' --chords ' evaltype];
+% system(evalcmd);
+
 evaltype = 'ChromaRecall';
-evalout = [outroot album evaltype '.txt'];
+disp([evaltype '......']);
+evalout = [outroot album evaltype sufix '.txt'];
 evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
     cpfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
     ' --chords ' evaltype];
 system(evalcmd);
 
 evaltype = 'ChromaPrecision';
-evalout = [outroot album evaltype '.txt'];
+disp([evaltype '......']);
+evalout = [outroot album evaltype sufix '.txt'];
 evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
     cpfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
     ' --chords ' evaltype];
 system(evalcmd);
 
+evaltype = 'ChromaFmeasure';
+disp([evaltype '......']);
+evalout = [outroot album evaltype sufix '.txt'];
+evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
+    cpfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+    ' --chords ' evaltype];
+system(evalcmd);
+
+evaltype = 'Mirex2010';
+disp([evaltype '......']);
+evalout = [outroot album evaltype sufix '.txt'];
+evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
+    cpfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+    ' --chords ' evaltype];
+system(evalcmd);
+
+% **************** segmentation ****************
+
 evaltype = 'Onset';
-evalout = [outroot album evaltype 'Seg.txt'];
+disp([evaltype '......']);
+evalout = [outroot album evaltype sufix 'Seg.txt'];
 evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
     cpfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
     ' --segmentation ' evaltype];
 system(evalcmd);
 
 evaltype = 'Offset';
-evalout = [outroot album evaltype 'Seg.txt'];
+disp([evaltype '......']);
+evalout = [outroot album evaltype sufix 'Seg.txt'];
+evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
+    cpfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+    ' --segmentation ' evaltype];
+system(evalcmd);
+
+evaltype = 'Inner';
+disp([evaltype '......']);
+evalout = [outroot album evaltype sufix 'Seg.txt'];
+evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
+    cpfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+    ' --segmentation ' evaltype];
+system(evalcmd);
+
+evaltype = 'Outer';
+disp([evaltype '......']);
+evalout = [outroot album evaltype sufix 'Seg.txt'];
 evalcmd = ['eval --list evallist.txt --refdir ' gtfolder ' --testdir '...
     cpfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
     ' --segmentation ' evaltype];

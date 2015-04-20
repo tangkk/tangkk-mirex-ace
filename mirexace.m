@@ -10,12 +10,33 @@ clear;
 clc;
 
 % ********************************************************** %
-% ********************* Mode Select ************************ %
+% ********************* Presets **************************** %
 % ********************************************************** %
-isexamine = 0;
 
-% use "single.txt" to run single song, use "testlist.txt" to run multiple
-% songs
+% output control
+isexamine = 0;
+runeval = 0;
+
+% global control variables
+usemono = false;
+
+% grain size control
+grainsize = 1;
+
+% chord vocabulary control
+seventhcontrol = 0.3;
+slashcontrol = 0.3;
+
+enDyad = 0;
+enMajMin = 1;
+enMajMinBass = 1;
+enSixth = 1;
+enSus = 0;
+enAugDim = 0;
+enSeventh = 1;
+enSeventhBass = 0;
+enOtherSlash = 0;
+
 % feval = fopen('singlelist.txt','r');
 feval = fopen('alllist.txt','r');
 tline = fgetl(feval);
@@ -23,7 +44,7 @@ tline = fgetl(feval);
 % use examine target to examine specific sections
 examinetarget = 'xiaoxiaochong';
 examinesection = '.04.mp3';
-
+ 
 if isexamine
     tline = 'examine';
 end
@@ -34,17 +55,8 @@ while ischar(tline)
 % ********************* Input ****************************** %
 % ********************************************************** %
 
-% global control variables
-feedbackpause = 0;
-usemono = false;
-df = false;
-grainsize = 1;
-seventhcontrol = 0.5;
-slashcontrol = 0.3;
-
 % input stage
 display('input stage -- read audio from path');
-
 
 artist = 'demoartist';
 album = 'demoalbum';
@@ -216,7 +228,8 @@ end
 % ********************************************************** %
 display('backend-A -- chordmode');
 
-chordmode = buildChordMode(seventhcontrol,slashcontrol);
+chordmode = buildChordMode(seventhcontrol, slashcontrol, enDyad, enMajMin, enMajMinBass, enSixth, enSus,...
+    enAugDim, enSeventh, enSeventhBass, enOtherSlash);
 
 chordogram = computeChordogram(basegram, uppergram, chordmode);
 
@@ -243,11 +256,7 @@ end
 % ********************************************************** %
 % ********************* Feedback Once - A******************* %
 % ********************************************************** %
-if feedbackpause
-    display('press enter to continue with the feedback stage...');
-    pause;
-end
-% ****** feedback mid end ****** %
+
 display('feedback-A -- use chord boundaries information to do it again');
 
 ut = 1;
@@ -305,4 +314,6 @@ fclose(feval);
 % ********************************************************** %
 % ********************* Evaluation - A******************* %
 % ********************************************************** %
-% open "groundTruthComparison.m"
+if runeval
+    groundTruthComparison;
+end

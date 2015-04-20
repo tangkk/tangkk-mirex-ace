@@ -48,4 +48,5 @@ audio/
 ref/
 out/
 eval/
+res/
 *.txt
