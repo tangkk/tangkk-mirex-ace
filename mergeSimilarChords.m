@@ -23,8 +23,8 @@ for i = 1:1:nchords - 1
         ctn = cttn(2);
         ntt = nttn(1);
         ntn = nttn(2);
-        % second condition, type equal or there's at least one type 3
-        if ctt == ntt || ctt == 3 || ntt == 3
+        % second condition: super type
+        if ctt == ntt && ctt ~= 0 && ntt ~= 0
             % third condition, number of notes priority
             if ctn > ntn
                 treblegram(i+1) = treblegram(i);

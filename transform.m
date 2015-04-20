@@ -1,6 +1,6 @@
 % transform .lrc format to .lab format
 
-target = './gt/demoartist/demoalbum/demosong';
+target = './gt/demoartist/demoalbum/a';
 in = [target '.gt.lrc'];
 out = [target '.lab'];
 fr = fopen(in,'r');
