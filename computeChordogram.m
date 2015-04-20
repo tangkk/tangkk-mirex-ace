@@ -17,7 +17,7 @@ for j = 1:1:nchords
     [treble, ctidx] = trebleMatching(bass, upper, chordtemplate);
     if strcmp(treble,'1')
         chordogram{1,j} = bass;
-        chordogram{2,j} = 'maj'; % FIXME: noew we use 'maj' to substitute '1'
+        chordogram{2,j} = 'maj'; % FIXME: now we use 'maj' to substitute '1'
         chordogram{3,j} = num2note(bass);
         chordogram{4,j} = 0;
     else

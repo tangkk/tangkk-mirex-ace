@@ -31,7 +31,7 @@ enDyad = 0;
 enMajMin = 1;
 enMajMinBass = 1;
 enSixth = 1;
-enSus = 0;
+enSus = 1;
 enSus2MajMin = 0;
 enAugDim = 0;
 enSeventh = 1;
@@ -303,7 +303,14 @@ if isexamine
     display(strcat('end of system A recognizing:',examinepath));
     break;
 else
+    % compute note frequencies and tonic
+    notefrequencies = calNoteFreq(newoutbassgram, newouttreblegram, chordmode);
+    notescale = calNoteScale(notefrequencies);
+    tonic = calTonic(notescale);
+    
+    % write output
     writeChordProgression(cpfolder, cppath, nslices, hopsize, fs, newoutchordogram, newoutboundaries, endtime);
+    
     display(strcat('end of system A recognizing:',audiopath));
     tline = fgetl(feval);
 end
