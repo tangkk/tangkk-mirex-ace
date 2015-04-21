@@ -32,7 +32,7 @@ enMajMin = 1;
 enMajMinBass = 1;
 enSixth = 1;
 enSus = 1;
-enCast2MajMin = 1; % in case we'd like to substitute others to maj or min
+enCast2MajMin = 0; % in case we'd like to substitute others to maj or min
 enAugDim = 0;
 enSeventh = 1;
 enSeventhBass = 0;
@@ -323,5 +323,5 @@ fclose(feval);
 % ********************* Evaluation - A******************* %
 % ********************************************************** %
 if runeval
-    groundTruthComparison;
+    evaluate;
 end
