@@ -1,8 +1,8 @@
 % transform .lrc format to .lab format
 
-target = './gt/demoartist/demoalbum/a';
-in = [target '.gt.lrc'];
-out = [target '.lab'];
+target = './cd/demoartist/demoalbum/xiaoxiaochong';
+in = [target '.cd.lrc'];
+out = [target '.txt'];
 fr = fopen(in,'r');
 fw = fopen(out,'w');
 tline = fgetl(fr);
@@ -84,13 +84,15 @@ while ischar(tline)
     
     % next line
     tline = fgetl(fr);
-    tokens = strsplit(tline,']');
-    et = tokens{1};
-    et = et(2:end);
-    ttokens = strsplit(et,':');
-    mm = str2double(ttokens{1});
-    ss = str2double(ttokens{2});
-    sec2 = mm*60 + ss;
+    if ~isempty(strfind(tline,']'))
+        tokens = strsplit(tline,']');
+        et = tokens{1};
+        et = et(2:end);
+        ttokens = strsplit(et,':');
+        mm = str2double(ttokens{1});
+        ss = str2double(ttokens{2});
+        sec2 = mm*60 + ss;
+    end
     
     fprintf(fw,'%s\n',[num2str(sec1) ' ' num2str(sec2) ' ' newch]);
 end
