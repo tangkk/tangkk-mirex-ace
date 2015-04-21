@@ -41,7 +41,7 @@
 
 artist = 'demoartist';
 album = 'demoalbum';
-sufix = '-semiExtSus';
+sufix = '-semiDynNf';
 evallist = 'evallist.txt';
 
 gtroot = './gt/';

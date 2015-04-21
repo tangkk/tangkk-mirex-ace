@@ -1,7 +1,13 @@
-function scale = calNoteScale(notefrequencies)
+function scale = calNoteScale(nfSeq)
 
-[~, ridx] = sort(notefrequencies);
-scale = cell(1,7);
-for i = length(ridx) : -1 : length(ridx) - 6
-    scale{length(ridx) - i + 1} = num2note(ridx(i));
+scale = cell(7,size(nfSeq,2));
+
+for i = 1:1:size(scale,2)
+    nfi = nfSeq(:,i);
+    [~, ridx] = sort(nfi);
+    scalei = cell(7,1);
+    for j = length(ridx) : -1 : length(ridx) - 6
+        scalei{length(ridx) - j + 1} = num2note(ridx(j));
+    end
+    scale(:,i) = scalei;
 end
