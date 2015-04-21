@@ -18,7 +18,7 @@ stereotomono = false;
 
 % output control
 isexamine = 0;
-runeval = 1;
+runeval = 0;
 
 % chored grain size control
 grainsize = 1;
@@ -43,7 +43,7 @@ enOtherSlash = 0;
 % chord casting control
 enCast2MajMin = 1; % in case we'd like to substitute others to maj or min
 
-feval = fopen('singlelist.txt','r');
+feval = fopen('alllist.txt','r');
 tline = fgetl(feval);
 
 % use examine target to examine specific sections
@@ -309,14 +309,15 @@ if isexamine
     display(strcat('end of system A recognizing:',examinepath));
     break;
 else
-    % compute note frequencies and tonic
-    notefrequencies = calNoteFreq(newoutbassgram, newouttreblegram, chordmode);
-    notescale = calNoteScale(notefrequencies);
-    tonic = calTonic(notescale);
+    % compute note frequencies and tonic (dynamically)
+    hwin = 5;
+    nfSeq = calNoteFreq(newoutbassgram, newouttreblegram, chordmode, hwin);
+    scaleSeq = calNoteScale(nfSeq);
+    tonicSeq = calTonic(scaleSeq);
     
     % write output
     writeChordProgression(cpfolder, cppath, nslices, hopsize, fs, newoutchordogram, newoutboundaries, endtime,...
-        enCast2MajMin, notefrequencies);
+        enCast2MajMin, nfSeq);
     
     display(strcat('end of system A recognizing:',audiopath));
     tline = fgetl(feval);
