@@ -14,7 +14,6 @@
 % 1->b7 b7             1,11             10           1          3
 % 1->7 7+              1,12             11           1          3
 
-% *********************** Active Region *******************************%
 % 1->3->5 maj          1,5,8            4,7          1,1        1
 % 1->b3->5 min         1,4,8            3,7          1,1        2
 
@@ -51,23 +50,18 @@
 % 1->b3->b5->b7 hdim   1,4,7,11         3,6,10       [1-tc]*3   2
 % 1->b3->5->7 minmaj7  1,4,8,12         3,7,11       [1-tc]*3   2
 
-% 1->b3->5->b6 maj7/3  1,4,8,9          3,7,8        [1-tc]*3   2
-% 1->3->4->6 maj7/5    1,5,6,10         4,5,9        [1-tc]*3   1
-% 1->b2->4->b6 maj7/7  1,2,6,9          1,5,8        [1-tc]*3   3
-% 1->3->5->6 min7/b3   1,5,8,10         4,7,9        [1-tc]*3   1
-% 1->b3->4->b6 min7/5  1,4,6,9          3,5,8        [1-tc]*3   2
-% 1->2->4->6 min7/b7   1,3,6,10         2,5,9        [1-tc]*3   3
-% 1->b3->b5->b6 7/3    1,4,7,9          3,6,8        [1-tc]*3   2
-% 1->b3->4->6 7/5      1,4,6,10         3,5,9        [1-tc]*3   2
-% 1->2->b5->6 7/b7     1,3,7,10         2,6,9        [1-tc]*3   3
-% *********************************************************************%
+% 1->b3->5->b6 maj7/3  1,4,8,9          3,7,8        [1-ic]*3   2
+% 1->3->4->6 maj7/5    1,5,6,10         4,5,9        [1-ic]*3   1
+% 1->b2->4->b6 maj7/7  1,2,6,9          1,5,8        [1-ic]*3   3
+% 1->3->5->6 min7/b3   1,5,8,10         4,7,9        [1-ic]*3   1
+% 1->b3->4->b6 min7/5  1,4,6,9          3,5,8        [1-ic]*3   2
+% 1->2->4->6 min7/b7   1,3,6,10         2,5,9        [1-ic]*3   3
+% 1->b3->b5->b6 7/3    1,4,7,9          3,6,8        [1-ic]*3   2
+% 1->b3->4->6 7/5      1,4,6,10         3,5,9        [1-ic]*3   2
+% 1->2->b5->6 7/b7     1,3,7,10         2,6,9        [1-ic]*3   3
 
-% 1->2->4#->6 maj/b7   1,3,7,10         2,6,9        [1-tc]*3   3
-% 1->b2->4->b6 maj/7   1,2,6,9          1,5,8        [1-tc]*3   3
-% 1->2->4->b7 maj/2    1,3,6,11         2,5,10       [1-tc]*3   3
-% 1->2->4->6 min/b7    1,3,6,10         2,5,9        [1-tc]*3   3
-% 1->b2->3->b6 min/7   1,2,5,9          1,4,8        [1-tc]*3   3
-% 1->b2->4->b7 min/2   1,2,6,11         1,5,10       [1-tc]*3   3
+% 1->2->4->b7 maj/2    1,3,6,11         2,5,10       [1-ic]*3   3
+% 1->b2->4->b7 min/2   1,2,6,11         1,5,10       [1-ic]*3   3
 
 
 % if this file is modified, also check file "trebleTypeMapping.m"
@@ -78,13 +72,15 @@
 % annotations.” In Proceedings of the 6th International Society for Music
 % Information Retrieval Conference (ISMIR), 66–71.
 
-function chordmode = buildChordMode(tetradcontrol, pentacontrol, hexacontrol, enDyad, enMajMin, enSusAdd,...
+function chordmode = buildChordMode(tetradcontrol, pentacontrol, hexacontrol, inversioncontrol,...
+    enDyad, enMajMin, enSusAdd,...
     enSixth, enSeventh, enExtended, enAugDim,...
     enMajMinBass, enSeventhBass, enOtherSlash)
 
 tc = tetradcontrol; % tetrad reduce factor
 pc = pentacontrol; % pentachord reduce factor
 hc = hexacontrol; % hexachord reduce factor
+ic = inversioncontrol; % inversion reduce factor
 
 chordmode = cell(4,50); %[dif; qual; weight; supertype]
 
@@ -313,47 +309,47 @@ end
 if enSeventhBass
 chordmode{1,idx} = [3,7,8];
 chordmode{2,idx} = 'maj7/3';
-chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-ic,1-ic,1-ic];
 idx = idx + 1;
 
 chordmode{1,idx} = [4,5,9];
 chordmode{2,idx} = 'maj7/5';
-chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-ic,1-ic,1-ic];
 idx = idx + 1;
 
 chordmode{1,idx} = [1,5,8];
 chordmode{2,idx} = 'maj7/7';
-chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-ic,1-ic,1-ic];
 idx = idx + 1;
 
 chordmode{1,idx} = [4,7,9];
 chordmode{2,idx} = 'min7/b3';
-chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-ic,1-ic,1-ic];
 idx = idx + 1;
 
 chordmode{1,idx} = [3,5,8];
 chordmode{2,idx} = 'min7/5';
-chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-ic,1-ic,1-ic];
 idx = idx + 1;
 
 chordmode{1,idx} = [2,5,9];
 chordmode{2,idx} = 'min7/b7';
-chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-ic,1-ic,1-ic];
 idx = idx + 1;
 
 chordmode{1,idx} = [3,6,8];
 chordmode{2,idx} = '7/3';
-chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-ic,1-ic,1-ic];
 idx = idx + 1;
 
 chordmode{1,idx} = [3,5,9];
 chordmode{2,idx} = '7/5';
-chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-ic,1-ic,1-ic];
 idx = idx + 1;
 
 chordmode{1,idx} = [2,6,9];
 chordmode{2,idx} = '7/b7';
-chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-ic,1-ic,1-ic];
 idx = idx + 1;
 end
 
@@ -361,13 +357,13 @@ end
 if enOtherSlash
 chordmode{1,idx} = [2,5,10];
 chordmode{2,idx} = 'maj/2';
-chordmode{3,idx} = [1,1-tc,1-tc];
+chordmode{3,idx} = [1-ic,1-ic,1-ic];
 idx = idx + 1;
 
 
 chordmode{1,idx} = [1,5,10];
 chordmode{2,idx} = 'min/2';
-chordmode{3,idx} = [1,1-tc,1-tc];
+chordmode{3,idx} = [1-ic,1-ic,1-ic];
 idx = idx + 1;
 end
 

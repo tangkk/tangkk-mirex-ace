@@ -18,7 +18,7 @@ stereotomono = false;
 
 % output control
 isexamine = 0;
-runeval = 0;
+runeval = 1;
 
 % chored grain size control
 grainsize = 1;
@@ -27,6 +27,7 @@ grainsize = 1;
 tetradcontrol = 0.2;
 pentacontrol = 0.2;
 hexacontrol = 0.2;
+inversioncontrol = 0.2;
 
 enDyad = 0;
 enMajMin = 1;
@@ -232,7 +233,8 @@ end
 % ********************************************************** %
 display('backend-A -- chordmode');
 
-chordmode = buildChordMode(tetradcontrol, pentacontrol, hexacontrol, enDyad, enMajMin, enSusAdd,...
+chordmode = buildChordMode(tetradcontrol, pentacontrol, hexacontrol, inversioncontrol,...
+    enDyad, enMajMin, enSusAdd,...
     enSixth, enSeventh, enExtended, enAugDim,...
     enMajMinBass, enSeventhBass, enOtherSlash);
 
