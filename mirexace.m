@@ -18,7 +18,7 @@ stereotomono = false;
 
 % output control
 isexamine = 0;
-runeval = 0;
+runeval = 1;
 
 % chored grain size control
 grainsize = 1;
@@ -37,7 +37,7 @@ enSeventh = 1;
 enExtended = 1;
 enAugDim = 1;
 enMajMinBass = 1;
-enSeventhBass = 0;
+enSeventhBass = 1;
 enOtherSlash = 0;
 
 % chord casting control

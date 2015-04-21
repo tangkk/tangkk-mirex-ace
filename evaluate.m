@@ -41,7 +41,7 @@
 
 artist = 'demoartist';
 album = 'demoalbum';
-sufix = '-semiDynNf';
+sufix = '-full';
 evallist = 'evallist.txt';
 
 gtroot = './gt/';
@@ -92,21 +92,21 @@ evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
     ' --chords ' evaltype];
 system(evalcmd);
 
-% evaltype = 'MirexSevenths';
-% disp([evaltype '......']);
-% evalout = [outroot album evaltype sufix '.txt'];
-% evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
-%     cpfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
-%     ' --chords ' evaltype];
-% system(evalcmd);
-% 
-% evaltype = 'MirexSeventhsBass';
-% disp([evaltype '......']);
-% evalout = [outroot album evaltype sufix '.txt'];
-% evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
-%     cpfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
-%     ' --chords ' evaltype];
-% system(evalcmd);
+evaltype = 'MirexSevenths';
+disp([evaltype '......']);
+evalout = [outroot album evaltype sufix '.txt'];
+evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
+    cpfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+    ' --chords ' evaltype];
+system(evalcmd);
+
+evaltype = 'MirexSeventhsBass';
+disp([evaltype '......']);
+evalout = [outroot album evaltype sufix '.txt'];
+evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
+    cpfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+    ' --chords ' evaltype];
+system(evalcmd);
 
 evaltype = 'ChromaRecall';
 disp([evaltype '......']);
