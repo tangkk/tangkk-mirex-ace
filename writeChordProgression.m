@@ -27,7 +27,7 @@ for i = 1:1:lenoutchordogram
     timestr2 = num2str(sec2);
     chordstr = outchordogram{i};
     if enCast2MajMin
-        chordstr = uni2MajMin(chordstr, notefrequencies); % substitute sus to majmin
+        chordstr = cast2MajMin(chordstr, notefrequencies); % substitute sus to majmin
     end
     s = [timestr1, ' ', timestr2, ' ', chordstr];
     fprintf(fw, formatSpec2, s);

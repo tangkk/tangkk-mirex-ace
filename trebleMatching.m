@@ -20,6 +20,6 @@ end
 if maxscore > 0
     treble = chordmode{2,ctidx};
 else
-    treble = '1';
+    treble = '1'; % this is the 'no-chord' condition (no light bins)
     ctidx = 0;
 end

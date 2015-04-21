@@ -42,7 +42,7 @@
 
 artist = 'demoartist';
 album = 'demoalbum';
-sufix = '-ok';
+sufix = '-morect';
 evallist = 'evallist.txt';
 
 gtroot = './gt/';

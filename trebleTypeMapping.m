@@ -156,7 +156,19 @@ switch treble
         tt = 1;
     case 'maj7'
         tt = 1;
+    case 'maj9'
+        tt = 1;
+    case 'maj11';
+        tt = 1;
     case '7'
+        tt = 1;
+    case '9'
+        tt = 1;
+    case '11'
+        tt = 1;
+    case 'add9'
+        tt = 1;
+    case 'add11'
         tt = 1;
         
     case 'min'
@@ -164,6 +176,14 @@ switch treble
     case 'min6'
         tt = 2;
     case 'min7'
+        tt = 2;
+    case 'min9'
+        tt = 2;
+    case 'min11'
+        tt = 2;
+    case 'madd9'
+        tt = 2;
+    case 'madd11'
         tt = 2;
         
     otherwise

@@ -1,6 +1,6 @@
 function transval = trebleTransval(treble)
 
-tokens = strsplit(treble,'/');
+tokens = strsplit(treble,'/'); % in case the input contains '/'
 if length(tokens) > 1
     token = tokens{2};
 else

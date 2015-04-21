@@ -1,7 +1,7 @@
 % the chord mode is built this way with full chord notes
 % the order matters when there is a tie matching score
 %
-% --chord--            --digit--     --dif--     --weight--    --type,#--
+% --tchord--            --digit--     --dif--     --weight--    --type??--
 % 1->b2 b2             1,2              1            1          3
 % 1->2 2               1,3              2            1          3
 % 1->b3 min            1,4              3            1          2
@@ -17,43 +17,60 @@
 % *********************** Active Region *******************************%
 % 1->3->5 maj          1,5,8            4,7          1,1        1
 % 1->b3->5 min         1,4,8            3,7          1,1        2
-% 1->3->6 maj6         1,5,10           4,9          1,1        1
-% 1->b3->6 min6        1,4,10           3,9          1,1        2
-% 1->4->5 sus4         1,6,8            5,7          1,1        3
+
 % 1->2->5 sus2         1,3,8            2,7          1,1        3
+% 1->4->5 sus4         1,6,8            5,7          1,1        3
+% 1->2->3->5 add9      1,3,5,8          2,4,7        [1-tc]*3   1
+% 1->3->4->5 add11     1,5,6,8          4,5,7        [1-tc]*3   1
+% 1->2->b3->5 madd9    1,3,4,8          2,3,7        [1-tc]*3   2
+% 1->b3->4->5 madd11   1,4,6,8          3,5,7        [1-tc]*3   2
+
+% 1->3->5->6 maj6      1,5,8,10         4,7,9        [1-tc]*3   1
+% 1->b3->5->6 min6     1,4,8,10         3,7,9        [1-tc]*3   2
+
+% 1->3->5->7 maj7      1,5,8,12         4,7,11       [1-tc]*3   1
+% 1->b3->5->b7 min7    1,4,8,11         3,7,10       [1-tc]*3   2
+% 1->3->5->b7 7        1,5,8,11         4,7,10       [1-tc]*3   1
+
+% 1->3->5->7->9 maj9   1,5,8,12,15      4,7,11,14    [1-pc]*4   1
+% 1->b3->5->b7->9 min9 1,4,8,11,15      3,7,10,14    [1-pc]*4   2
+% 1->3->5->b7->9 9     1,5,8,11,15      4,7,10,14    [1-pc]*4   1
+
+% 1->3->5->7->9->11 maj11   1,5,8,12,15,18      4,7,11,14,17    [1-hc]*5   1
+% 1->b3->5->b7->9->11 min11 1,4,8,11,15,18      3,7,10,14,17    [1-hc]*5   2
+% 1->3->5->b7->9->11 11     1,5,8,11,15,18      4,7,10,14,17    [1-hc]*5   1
+
 % 1->b3->b6 maj/3      1,4,9            3,8          1,1        2
 % 1->4->6 maj/5        1,6,10           5,9          1,1        3
 % 1->3->6 min/b3       1,5,10           4,9          1,1        1
 % 1->4->b6 min/5       1,6,9            5,8          1,1        3
+
 % 1->3->5# aug         1,5,9            4,8          1,1        1
 % 1->b3->b5 dim        1,4,7            3,6          1,1        2
-% 1->3->5->7 maj7      1,5,8,12         4,7,11       [1-s]*3    1
-% 1->b3->5->b7 min7    1,4,8,11         3,7,10       [1-s]*3    2
-% 1->b3->5->7 minmaj7  1,4,8,12         3,7,11       [1-s]*3    2
-% 1->3->5->b7 7        1,5,8,11         4,7,10       [1-s]*3    1
-% 1->b3->b5->bb7 dim7  1,4,7,10         3,6,9        [1-s]*3    2
-% 1->b3->b5->b7 hdim   1,4,7,11         3,6,10       [1-s]*3    2
-% 1->b3->5->b6 maj7/3  1,4,8,9          3,7,8        [1-c]*3    2
-% 1->3->4->6 maj7/5    1,5,6,10         4,5,9        [1-c]*3    1
-% 1->b2->4->b6 maj7/7  1,2,6,9          1,5,8        [1-c]*3    3
-% 1->3->5->6 min7/b3   1,5,8,10         4,7,9        [1-c]*3    1
-% 1->b3->4->b6 min7/5  1,4,6,9          3,5,8        [1-c]*3    2
-% 1->2->4->6 min7/b7   1,3,6,10         2,5,9        [1-c]*3    3
-% 1->b3->b5->b6 7/3    1,4,7,9          3,6,8        [1-c]*3    2
-% 1->b3->4->6 7/5      1,4,6,10         3,5,9        [1-c]*3    2
-% 1->2->b5->6 7/b7     1,3,7,10         2,6,9        [1-c]*3    3
+% 1->b3->b5->bb7 dim7  1,4,7,10         3,6,9        [1-tc]*3   2
+% 1->b3->b5->b7 hdim   1,4,7,11         3,6,10       [1-tc]*3   2
+% 1->b3->5->7 minmaj7  1,4,8,12         3,7,11       [1-tc]*3   2
+
+% 1->b3->5->b6 maj7/3  1,4,8,9          3,7,8        [1-tc]*3   2
+% 1->3->4->6 maj7/5    1,5,6,10         4,5,9        [1-tc]*3   1
+% 1->b2->4->b6 maj7/7  1,2,6,9          1,5,8        [1-tc]*3   3
+% 1->3->5->6 min7/b3   1,5,8,10         4,7,9        [1-tc]*3   1
+% 1->b3->4->b6 min7/5  1,4,6,9          3,5,8        [1-tc]*3   2
+% 1->2->4->6 min7/b7   1,3,6,10         2,5,9        [1-tc]*3   3
+% 1->b3->b5->b6 7/3    1,4,7,9          3,6,8        [1-tc]*3   2
+% 1->b3->4->6 7/5      1,4,6,10         3,5,9        [1-tc]*3   2
+% 1->2->b5->6 7/b7     1,3,7,10         2,6,9        [1-tc]*3   3
 % *********************************************************************%
 
-% 1->2->4#->6 maj/b7   1,3,7,10         2,6,9        1,1-c,1-c  3
-% 1->b2->4->b6 maj/7   1,2,6,9          1,5,8        1,1-c,1-c  3
-% 1->2->4->b7 maj/2    1,3,6,11         2,5,10       1,1-c,1-c  3
-% 1->2->4->6 min/b7    1,3,6,10         2,5,9        1,1-c,1-c  3
-% 1->b2->3->b6 min/7   1,2,5,9          1,4,8        1,1-c,1-c  3
-% 1->b2->4->b7 min/2   1,2,6,11         1,5,10       1,1-c,1-c  3
+% 1->2->4#->6 maj/b7   1,3,7,10         2,6,9        [1-tc]*3   3
+% 1->b2->4->b6 maj/7   1,2,6,9          1,5,8        [1-tc]*3   3
+% 1->2->4->b7 maj/2    1,3,6,11         2,5,10       [1-tc]*3   3
+% 1->2->4->6 min/b7    1,3,6,10         2,5,9        [1-tc]*3   3
+% 1->b2->3->b6 min/7   1,2,5,9          1,4,8        [1-tc]*3   3
+% 1->b2->4->b7 min/2   1,2,6,11         1,5,10       [1-tc]*3   3
 
 
-% if this file is modified, also check file "trebleTypeMapping.m",
-% "trebleMatching.m", "trebleTransval.m" and "parseBassTreble.m"
+% if this file is modified, also check file "trebleTypeMapping.m"
 
 % for naming conventions and labeling methodology, please refer to:
 % Harte, C., M. Sandler, S. Abdallah, and E. Gómez. 2005.
@@ -61,13 +78,15 @@
 % annotations.” In Proceedings of the 6th International Society for Music
 % Information Retrieval Conference (ISMIR), 66–71.
 
-function chordmode = buildChordMode(seventhcontrol, slashcontrol, enDyad, enMajMin, enMajMinBass, enSixth, enSus,...
-    enAugDim, enSeventh, enSeventhBass, enOtherSlash)
+function chordmode = buildChordMode(tetradcontrol, pentacontrol, hexacontrol, enDyad, enMajMin, enSusAdd,...
+    enSixth, enSeventh, enExtended, enAugDim,...
+    enMajMinBass, enSeventhBass, enOtherSlash)
 
-s = seventhcontrol; % seventh reduce factor
-c = slashcontrol; % slash chord reduce factor
-nchordtype = 50; % just leave aboundant space for chord types
-chordmode = cell(4,nchordtype); %[dif; type; weight]
+tc = tetradcontrol; % tetrad reduce factor
+pc = pentacontrol; % pentachord reduce factor
+hc = hexacontrol; % hexachord reduce factor
+
+chordmode = cell(4,50); %[dif; qual; weight; supertype]
 
 idx = 1;
 
@@ -141,34 +160,104 @@ chordmode{3,idx} = [1,1];
 idx = idx + 1;
 end
 
-% ************************ sixth ******************************* %
-
-if enSixth
-chordmode{1,idx} = [4,9];
-chordmode{2,idx} = 'maj6';
+% ************************ suspend and add *************************** %
+if enSusAdd
+chordmode{1,idx} = [2,7];
+chordmode{2,idx} = 'sus2';
 chordmode{3,idx} = [1,1];
 idx = idx + 1;
 
-chordmode{1,idx} = [3,9];
-chordmode{2,idx} = 'min6';
-chordmode{3,idx} = [1,1];
-idx = idx + 1;
-end
-
-% ************************ suspend ******************************* %
-if enSus
 chordmode{1,idx} = [5,7];
 chordmode{2,idx} = 'sus4';
 chordmode{3,idx} = [1,1];
 idx = idx + 1;
 
-chordmode{1,idx} = [2,7];
-chordmode{2,idx} = 'sus2';
-chordmode{3,idx} = [1,1];
+chordmode{1,idx} = [2,4,7];
+chordmode{2,idx} = 'add9';
+chordmode{3,idx} = [1-tc,1-tc,1-tc];
+idx = idx + 1;
+
+chordmode{1,idx} = [2,3,7];
+chordmode{2,idx} = 'madd9';
+chordmode{3,idx} = [1-tc,1-tc,1-tc];
+idx = idx + 1;
+
+chordmode{1,idx} = [4,5,7];
+chordmode{2,idx} = 'add11';
+chordmode{3,idx} = [1-tc,1-tc,1-tc];
+idx = idx + 1;
+
+chordmode{1,idx} = [3,5,7];
+chordmode{2,idx} = 'madd11';
+chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 end
 
-% ******************** augmenteds and diminisheds ******************** %
+% ************************ sixth ******************************* %
+if enSixth
+chordmode{1,idx} = [4,7,9];
+chordmode{2,idx} = 'maj6';
+chordmode{3,idx} = [1-tc,1-tc,1-tc];
+idx = idx + 1;
+
+chordmode{1,idx} = [3,7,9];
+chordmode{2,idx} = 'min6';
+chordmode{3,idx} = [1-tc,1-tc,1-tc];
+idx = idx + 1;
+end
+
+% ******************** Sevenths ************************%
+if enSeventh
+chordmode{1,idx} = [4,7,11];
+chordmode{2,idx} = 'maj7';
+chordmode{3,idx} = [1-tc,1-tc,1-tc];
+idx = idx + 1;
+
+chordmode{1,idx} = [3,7,10];
+chordmode{2,idx} = 'min7';
+chordmode{3,idx} = [1-tc,1-tc,1-tc];
+idx = idx + 1;
+
+chordmode{1,idx} = [4,7,10];
+chordmode{2,idx} = '7';
+chordmode{3,idx} = [1-tc,1-tc,1-tc];
+idx = idx + 1;
+end
+
+% ******************** Extended ************************%
+if enExtended
+chordmode{1,idx} = [4,7,11,14];
+chordmode{2,idx} = 'maj9';
+chordmode{3,idx} = [1-pc,1-pc,1-pc,1-pc];
+idx = idx + 1;
+
+chordmode{1,idx} = [3,7,10,14];
+chordmode{2,idx} = 'min9';
+chordmode{3,idx} = [1-pc,1-pc,1-pc,1-pc];
+idx = idx + 1;
+
+chordmode{1,idx} = [4,7,10,14];
+chordmode{2,idx} = '9';
+chordmode{3,idx} = [1-pc,1-pc,1-pc,1-pc];
+idx = idx + 1;
+
+chordmode{1,idx} = [4,7,11,14,17];
+chordmode{2,idx} = 'maj11';
+chordmode{3,idx} = [1-hc,1-hc,1-hc,1-hc,1-hc];
+idx = idx + 1;
+
+chordmode{1,idx} = [3,7,10,14,17];
+chordmode{2,idx} = 'min11';
+chordmode{3,idx} = [1-hc,1-hc,1-hc,1-hc,1-hc];
+idx = idx + 1;
+
+chordmode{1,idx} = [4,7,10,14,17];
+chordmode{2,idx} = '11';
+chordmode{3,idx} = [1-hc,1-hc,1-hc,1-hc,1-hc];
+idx = idx + 1;
+end
+
+% ******************** augmented and diminished ******************** %
 
 if enAugDim
 chordmode{1,idx} = [4,8];
@@ -183,17 +272,17 @@ idx = idx + 1;
 
 chordmode{1,idx} = [3,6,9];
 chordmode{2,idx} = 'dim7';
-chordmode{3,idx} = [1-s,1-s,1-s];
+chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 
 chordmode{1,idx} = [3,6,10];
 chordmode{2,idx} = 'hdim7';
-chordmode{3,idx} = [1-s,1-s,1-s];
+chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 
 chordmode{1,idx} = [3,7,11];
 chordmode{2,idx} = 'minmaj7';
-chordmode{3,idx} = [1-s,1-s,1-s];
+chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 end
 
@@ -220,69 +309,51 @@ chordmode{3,idx} = [1,1];
 idx = idx + 1;
 end
 
-% ******************** Sevenths ************************%
-if enSeventh
-chordmode{1,idx} = [4,7,11];
-chordmode{2,idx} = 'maj7';
-chordmode{3,idx} = [1-s,1-s,1-s];
-idx = idx + 1;
-
-chordmode{1,idx} = [3,7,10];
-chordmode{2,idx} = 'min7';
-chordmode{3,idx} = [1-s,1-s,1-s];
-idx = idx + 1;
-
-chordmode{1,idx} = [4,7,10];
-chordmode{2,idx} = '7';
-chordmode{3,idx} = [1-s,1-s,1-s];
-idx = idx + 1;
-end
-
 % ******************** SeventhsBass ************************%
 if enSeventhBass
 chordmode{1,idx} = [3,7,8];
 chordmode{2,idx} = 'maj7/3';
-chordmode{3,idx} = [1-c,1-c,1-c];
+chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 
 chordmode{1,idx} = [4,5,9];
 chordmode{2,idx} = 'maj7/5';
-chordmode{3,idx} = [1-c,1-c,1-c];
+chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 
 chordmode{1,idx} = [1,5,8];
 chordmode{2,idx} = 'maj7/7';
-chordmode{3,idx} = [1-c,1-c,1-c];
+chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 
 chordmode{1,idx} = [4,7,9];
 chordmode{2,idx} = 'min7/b3';
-chordmode{3,idx} = [1-c,1-c,1-c];
+chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 
 chordmode{1,idx} = [3,5,8];
 chordmode{2,idx} = 'min7/5';
-chordmode{3,idx} = [1-c,1-c,1-c];
+chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 
 chordmode{1,idx} = [2,5,9];
 chordmode{2,idx} = 'min7/b7';
-chordmode{3,idx} = [1-c,1-c,1-c];
+chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 
 chordmode{1,idx} = [3,6,8];
 chordmode{2,idx} = '7/3';
-chordmode{3,idx} = [1-c,1-c,1-c];
+chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 
 chordmode{1,idx} = [3,5,9];
 chordmode{2,idx} = '7/5';
-chordmode{3,idx} = [1-c,1-c,1-c];
+chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 
 chordmode{1,idx} = [2,6,9];
 chordmode{2,idx} = '7/b7';
-chordmode{3,idx} = [1-c,1-c,1-c];
+chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 end
 
@@ -290,13 +361,13 @@ end
 if enOtherSlash
 chordmode{1,idx} = [2,5,10];
 chordmode{2,idx} = 'maj/2';
-chordmode{3,idx} = [1,1-c,1-c];
+chordmode{3,idx} = [1,1-tc,1-tc];
 idx = idx + 1;
 
 
 chordmode{1,idx} = [1,5,10];
 chordmode{2,idx} = 'min/2';
-chordmode{3,idx} = [1,1-c,1-c];
+chordmode{3,idx} = [1,1-tc,1-tc];
 idx = idx + 1;
 end
 

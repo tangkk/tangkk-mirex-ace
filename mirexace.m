@@ -13,30 +13,34 @@ clc;
 % ********************* Presets **************************** %
 % ********************************************************** %
 
+% input control
+stereotomono = false;
+
 % output control
 isexamine = 0;
 runeval = 0;
 
-% global control variables
-usemono = false;
-
-% grain size control
+% chored grain size control
 grainsize = 1;
 
 % chord vocabulary control
-seventhcontrol = 0.3;
-slashcontrol = 0.3;
+tetradcontrol = 0.2;
+pentacontrol = 0.2;
+hexacontrol = 0.2;
 
 enDyad = 0;
 enMajMin = 1;
-enMajMinBass = 1;
+enSusAdd = 1;
 enSixth = 1;
-enSus = 1;
-enCast2MajMin = 0; % in case we'd like to substitute others to maj or min
-enAugDim = 0;
 enSeventh = 1;
+enExtended = 1;
+enAugDim = 1;
+enMajMinBass = 1;
 enSeventhBass = 0;
 enOtherSlash = 0;
+
+% chord casting control
+enCast2MajMin = 1; % in case we'd like to substitute others to maj or min
 
 feval = fopen('singlelist.txt','r');
 tline = fgetl(feval);
@@ -78,10 +82,10 @@ examineroot = '../AudioSamples/';
 examinepath = [examineroot examinetarget '/' examinetarget examinesection];
 
 if isexamine
-    [x, fs] = myInput(examinepath, path);
+    [x, fs] = myInput(examinepath, stereotomono);
     df = true;
 else
-    [x, fs] = myInput(audiopath, usemono);
+    [x, fs] = myInput(audiopath, stereotomono);
     df = false;
 end
 
@@ -228,8 +232,9 @@ end
 % ********************************************************** %
 display('backend-A -- chordmode');
 
-chordmode = buildChordMode(seventhcontrol, slashcontrol, enDyad, enMajMin, enMajMinBass, enSixth, enSus,...
-    enAugDim, enSeventh, enSeventhBass, enOtherSlash);
+chordmode = buildChordMode(tetradcontrol, pentacontrol, hexacontrol, enDyad, enMajMin, enSusAdd,...
+    enSixth, enSeventh, enExtended, enAugDim,...
+    enMajMinBass, enSeventhBass, enOtherSlash);
 
 chordogram = computeChordogram(basegram, uppergram, chordmode);
 
