@@ -10,10 +10,8 @@ if ~isempty(strfind(ch,'sus2')) || ~isempty(strfind(ch,'sus4'))
     majP = pitchTranspose(root,4);
     if nf(minP) > nf(majP)
         ch = [num2note(root) ':' 'min'];
-    elseif nf(majP) > nf(minP)
-        ch = [num2note(root) ':' 'maj'];
     else
-        ch = [num2note(root) ':' '5'];
+        ch = [num2note(root) ':' 'maj'];
     end
 elseif ~isempty(strfind(ch,'maj6')) || ~isempty(strfind(ch,'min6'))
     ch = ch(1:end-1);
