@@ -32,7 +32,6 @@
 % Test A:min7/b  A	    A:min	    A:min/b3	    A:min7	        A:min7/b3	        C	    {A C E G}	            A:min7
 
 % segmentation evaluation
-% Segmentation
 % 
 % Onset
 % Offset
@@ -42,7 +41,7 @@
 
 artist = 'demoartist';
 album = 'demoalbum';
-sufix = '-semict-con0.2';
+sufix = '-semiExtSus';
 evallist = 'evallist.txt';
 
 gtroot = './gt/';
