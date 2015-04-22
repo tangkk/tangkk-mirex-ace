@@ -19,16 +19,16 @@ codec = 'mp3';
 
 % output control
 isexamine = 0;
-runeval = 0;
+runeval = 1;
 
 % chored grain size control
 grainsize = 1;
 
 % chord vocabulary control
-tetradcontrol = 0.2;
-pentacontrol = 0.2;
-hexacontrol = 0.2;
-inversioncontrol = 0.2;
+tetradcontrol = 0.5;
+pentacontrol = 0.5;
+hexacontrol = 0.5;
+inversioncontrol = 0.5;
 
 enDyad = 0;
 enMajMin = 1;
@@ -36,7 +36,7 @@ enSusAdd = 1;
 enSixth = 1;
 enSeventh = 1;
 enExtended = 1;
-enAugDim = 1;
+enAugDim = 0;
 enMajMinBass = 1;
 enSeventhBass = 1;
 enOtherSlash = 0;
@@ -44,7 +44,7 @@ enOtherSlash = 0;
 % chord casting control
 enCast2MajMin = 1; % in case we'd like to substitute others to maj or min
 
-feval = fopen('alllist.txt','r');
+feval = fopen('evallist.txt','r');
 tline = fgetl(feval);
 
 % use examine target to examine specific sections
