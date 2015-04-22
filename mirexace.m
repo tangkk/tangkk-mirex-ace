@@ -14,31 +14,37 @@ clc;
 % ********************************************************** %
 
 % input control
-stereotomono = false;
+stereotomono = true;
 codec = 'mp3';
 
 % output control
 isexamine = 0;
 runeval = 1;
 
+% optimization control
+preGestaltCompensate = false;
+preGestaltReduce = false;
+enGestaltize = true;
+wgmax = 10; % gestalt window size
+
 % chored grain size control
 grainsize = 1;
 
 % chord vocabulary control
-tetradcontrol = 0.5;
-pentacontrol = 0.5;
-hexacontrol = 0.5;
-inversioncontrol = 0.5;
+tetradcontrol = 0.3;
+pentacontrol = 0.3;
+hexacontrol = 0.3;
+inversioncontrol = 0.3;
 
 enDyad = 0;
 enMajMin = 1;
 enSusAdd = 1;
 enSixth = 1;
 enSeventh = 1;
-enExtended = 1;
+enExtended = 0;
 enAugDim = 0;
 enMajMinBass = 1;
-enSeventhBass = 1;
+enSeventhBass = 0;
 enOtherSlash = 0;
 
 % chord casting control
@@ -145,22 +151,26 @@ myImagePlot(Scn, kk, ps, 'slice', '1/3 semitone', 'noised reduced complex tone s
 myImagePlot(Spren, kk, ps, 'slice', '1/3 semitone', 'pre salience matrix');
 end
 
+if preGestaltCompensate
 % long salience compensation process
 st = 0.1;
 bb = 28; % bass bound, only compensate below bb
-wgmax = 10;
-Spren = compensateLongSalience(Spren,wgmax,st,bb);
+% wgmax = 10;
+Spren = compensateLongSalience(Spren,wgmax,st,bb,1);
 if df
 myImagePlot(Spren, kk, ps, 'slice', '1/3 semitone', 'compensated pre salience matrix');
 end
+end
 
+if preGestaltReduce
 % short salience reduction process
 st = 0.0;
 bb = 28; % bass bound, only reduce below bass
-wgmax = 5;
-Spren = reduceShortSalience(Spren,wgmax,st,bb);
+% wgmax = 10;
+Spren = reduceShortSalience(Spren,wgmax,st,bb,1);
 if df
 myImagePlot(Spren, kk, ps, 'slice', '1/3 semitone', 'reduced pre salience matrix');
+end
 end
 
 % computer note salience matrix by combining 1/3 semitones into semitones
@@ -173,15 +183,37 @@ if df
 myImagePlot(S, kk, p, 'slice', 'semitone', 'note salience matrix');
 end
 
+Sgo = S; % interface to another gestalt process
+
 % gestaltize the note salience matrix
-wgmax = 10;
+if enGestaltize
+% wgmax = 10;
 st = 0.0;
-Sg = gestaltNoteSalience(S,wgmax, st);
-if df
-% myImagePlot(Sgpos, kk, p, 'slice', 'semitone', 'positive gestalt note salience matrix');
-% myImagePlot(Sgneg, kk, p, 'slice', 'semitone', 'negative gestalt note salience matrix');
-myImagePlot(Sg, kk, p, 'slice', 'semitone', 'gestalt note salience matrix');
+Sgo = gestaltNoteSalience(Sgo,wgmax, st);
 end
+
+% if gestaltCompensate
+% % gestaltize the note salience matrix
+% % wgmax = 10;
+% st = 0.0;
+% Sgo = compensateLongSalience(Sgo,wgmax,st,0,0);
+% if df
+% myImagePlot(Sgo, kk, p, 'slice', 'semitone', 'positive gestalt note salience matrix');
+% % myImagePlot(Sgneg, kk, p, 'slice', 'semitone', 'negative gestalt note salience matrix');
+% end
+% end
+% 
+% if gestaltReduce
+% % wgmax = 10;
+% st = 0.0;
+% Sgo = reduceShortSalience(Sgo,wgmax,st,0,0);
+% if df
+% myImagePlot(Sg, kk, p, 'slice', 'semitone', 'gestalt note salience matrix');
+% end
+% end
+% 
+
+Sg = Sgo; % interface to mid-end
 
 % onset filter (roughly detect the note onsets)
 ot = 0.0;

@@ -1,7 +1,12 @@
-function Sout = compensateLongSalience(Sin, wgmax, st, bb)
+function Sout = compensateLongSalience(Sin, wgmax, st, bb, isPre)
 
 Sout = Sin;
-for i = 1:1:bb*3
+if isPre
+    upperbound = bb*3;
+else
+    upperbound = size(Sin,1);
+end
+for i = 1:1:upperbound
     trackidx = 1;
     isblank = 0;
     wpg = 0;
