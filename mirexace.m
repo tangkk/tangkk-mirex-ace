@@ -15,10 +15,11 @@ clc;
 
 % input control
 stereotomono = false;
+codec = 'mp3';
 
 % output control
 isexamine = 0;
-runeval = 1;
+runeval = 0;
 
 % chored grain size control
 grainsize = 1;
@@ -48,7 +49,7 @@ tline = fgetl(feval);
 
 % use examine target to examine specific sections
 examinetarget = 'examine';
-examinesection = '.01.mp3';
+examinesection = '.00.mp3';
  
 if isexamine
     tline = 'examine';
@@ -63,21 +64,23 @@ while ischar(tline)
 % input stage
 display('input stage -- read audio from path');
 
-artist = 'demoartist';
-album = 'demoalbum';
-songtitle = tline;
+songpath = tline;
+pathtokens = strsplit(songpath,'/');
+artist = pathtokens{1};
+album = pathtokens{2};
+songtitle = pathtokens{3};
 
 audioroot = './audio/';
-audiofolder = strcat(audioroot, artist,'/',album,'/');
-audiopath = [audiofolder songtitle '.mp3'];
+audiofolder = strcat(audioroot, artist, '/', album);
+audiopath = [audiofolder '/' songtitle '.' codec];
 
 cproot = './cp/';
-cpfolder = strcat(cproot, artist,'/',album,'/');
-cppath = [cpfolder songtitle '.txt'];
+cpfolder = strcat(cproot, artist, '/', album);
+cppath = [cpfolder '/' songtitle '.txt'];
 
 gtroot = './gt/';
-gtfolder = strcat(gtroot, artist,'/',album,'/');
-gtpath = [gtfolder songtitle '.lab']; % '.lab' is the ground-truth
+gtfolder = strcat(gtroot, artist, '/', album);
+gtpath = [gtfolder '/' songtitle '.lab']; % '.lab' is the ground-truth
 
 examineroot = '../AudioSamples/';
 examinepath = [examineroot examinetarget '/' examinetarget examinesection];
