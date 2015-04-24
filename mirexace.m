@@ -109,10 +109,11 @@ myImagePlot(X, kk, ff, 'slice', 'Hz', 'spectrogram');
 end
 
 fmin = 27.5; % MIDI note 21, Piano key number 1
-fmax = 1661; % MIDI note 92, Piano key number 72
+fmax = 1661; % MIDI note 92, Piano key number numnotes
 numsemitones = 3;
 fratio = 2^(1/(12*numsemitones));
-numtones = 72*numsemitones;
+numnotes = 72;
+numtones = numnotes*numsemitones;
 [Ms,Mc] = toneProfileGen(wl, numtones, numsemitones, fmin, fmax, fratio, fs);
 if df
 myImagePlot(Ms, wl/2, numtones, 'time', '1/numsemitones semitone', 'simple tone profile');
@@ -170,8 +171,11 @@ myImagePlot(Spren, kk, ps, 'slice', '1/numsemitones semitone', 'reduced pre sali
 end
 end
 
-% computer note salience matrix by combining 1/3 semitones into semitones
-S = Spren(1:3:end,:) + Spren(2:3:end,:) + Spren(3:3:end,:);
+% computer note salience matrix by combining 1/numsemitones semitones into semitones
+S = zeros(numnotes,nslices);
+for i = 1:1:numsemitones
+    S = S + Spren(i:numsemitones:end,:);
+end
 sizeS = size(S);
 ntones = sizeS(1);
 S = normalizeGram(S);
