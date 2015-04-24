@@ -49,4 +49,5 @@ ref/
 out/
 eval/
 res/
+data/
 *.txt

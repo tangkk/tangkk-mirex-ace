@@ -14,13 +14,13 @@ clc;
 % ********************************************************** %
 
 % input control
-stereotomono = true;
+stereotomono = false;
 codec = 'mp3';
 
 % output control
-isexamine = 1;
+isexamine = 0;
 runeval = 1;
-examinerange = [1,100]; % start and endtime in unit of second
+examinerange = [10,20]; % start and endtime in unit of second
 if isexamine
     df = true;
 else
@@ -48,10 +48,10 @@ enMajMin = 1;
 enSusAdd = 1;
 enSixth = 1;
 enSeventh = 1;
-enExtended = 0;
-enAugDim = 0;
+enExtended = 1;
+enAugDim = 1;
 enMajMinBass = 1;
-enSeventhBass = 0;
+enSeventhBass = 1;
 enOtherSlash = 0;
 
 % chord casting control
@@ -191,6 +191,9 @@ if enGestaltize
 % wgmax = 10;
 st = 0.0;
 Sgo = gestaltNoteSalience(Sgo,wgmax, st);
+end
+if df
+myImagePlot(Sgo, kk, p, 'slice', 'semitone', 'gestalt note salience matrix');
 end
 
 % if gestaltCompensate
