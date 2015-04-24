@@ -20,7 +20,7 @@ codec = 'mp3';
 % output control
 isexamine = 1;
 runeval = 1;
-examinerange = [1,10]; % start and endtime in unit of second
+examinerange = [1,100]; % start and endtime in unit of second
 if isexamine
     df = true;
 else
@@ -110,12 +110,13 @@ end
 
 fmin = 27.5; % MIDI note 21, Piano key number 1
 fmax = 1661; % MIDI note 92, Piano key number 72
-fratio = 2^(1/36);
-numtones = 72*3;
-[Ms,Mc] = toneProfileGen(wl, numtones, fmin, fmax, fratio, fs);
+numsemitones = 3;
+fratio = 2^(1/(12*numsemitones));
+numtones = 72*numsemitones;
+[Ms,Mc] = toneProfileGen(wl, numtones, numsemitones, fmin, fmax, fratio, fs);
 if df
-myImagePlot(Ms, wl/2, numtones, 'time', '1/3 semitone', 'simple tone profile');
-myImagePlot(Mc, wl/2, numtones, 'time', '1/3 semitone', 'complex tone profile');
+myImagePlot(Ms, wl/2, numtones, 'time', '1/numsemitones semitone', 'simple tone profile');
+myImagePlot(Mc, wl/2, numtones, 'time', '1/numsemitones semitone', 'complex tone profile');
 end
 
 % calculate note salience matrix of the stft spectrogram (cosine
@@ -127,10 +128,14 @@ Spre = Sc.*Sc;
 sizeM = size(Ms);
 ps = 1:sizeM(1);
 if df
-myImagePlot(Ss, kk, ps, 'slice', '1/3 semitone', 'simple tone salience matrix');
-myImagePlot(Sc, kk, ps, 'slice', '1/3 semitone', 'complex tone salience matrix');
-myImagePlot(Spre, kk, ps, 'slice', '1/3 semitone', 'preliminary salience matrix');
+myImagePlot(Ss, kk, ps, 'slice', '1/numsemitones semitone', 'simple tone salience matrix');
+myImagePlot(Sc, kk, ps, 'slice', '1/numsemitones semitone', 'complex tone salience matrix');
+myImagePlot(Spre, kk, ps, 'slice', '1/numsemitones semitone', 'preliminary salience matrix');
 end
+
+% tuning algorithm
+Ss = tuning(Ss,numsemitones);
+Sc = tuning(Sc,numsemitones);
 
 % noise reduction process
 nt = 0.1;
@@ -138,9 +143,9 @@ Ssn = noteSalienceNoiseReduce(Ss, nt);
 Scn = noteSalienceNoiseReduce(Sc, nt);
 Spren = Ssn.*Scn;
 if df
-myImagePlot(Ssn, kk, ps, 'slice', '1/3 semitone', 'noised reduced simple tone salience matrix');
-myImagePlot(Scn, kk, ps, 'slice', '1/3 semitone', 'noised reduced complex tone salience matrix');
-myImagePlot(Spren, kk, ps, 'slice', '1/3 semitone', 'pre salience matrix');
+myImagePlot(Ssn, kk, ps, 'slice', '1/numsemitones semitone', 'noised reduced simple tone salience matrix');
+myImagePlot(Scn, kk, ps, 'slice', '1/numsemitones semitone', 'noised reduced complex tone salience matrix');
+myImagePlot(Spren, kk, ps, 'slice', '1/numsemitones semitone', 'pre salience matrix');
 end
 
 if preGestaltCompensate
@@ -150,7 +155,7 @@ bb = 28; % bass bound, only compensate below bb
 % wgmax = 10;
 Spren = compensateLongSalience(Spren,wgmax,st,bb,1);
 if df
-myImagePlot(Spren, kk, ps, 'slice', '1/3 semitone', 'compensated pre salience matrix');
+myImagePlot(Spren, kk, ps, 'slice', '1/numsemitones semitone', 'compensated pre salience matrix');
 end
 end
 
@@ -161,7 +166,7 @@ bb = 28; % bass bound, only reduce below bass
 % wgmax = 10;
 Spren = reduceShortSalience(Spren,wgmax,st,bb,1);
 if df
-myImagePlot(Spren, kk, ps, 'slice', '1/3 semitone', 'reduced pre salience matrix');
+myImagePlot(Spren, kk, ps, 'slice', '1/numsemitones semitone', 'reduced pre salience matrix');
 end
 end
 
