@@ -16,7 +16,7 @@ for i = 1:1:len
         C(k) = sum(c(k:numsemitones:end));
     end
     [~,idx] = max(C);
-    disp(C);
+%     disp(C);
     
     if idx < center % tuning < 440 Hz, move upward
         c(center:end) = c(idx:end-(center-idx));
@@ -27,8 +27,8 @@ for i = 1:1:len
         c(end - (idx-center) + 1:end) = 0;
     end
     S(:,i) = c;
-    for k = 1:1:numsemitones
-        C(k) = sum(c(k:numsemitones:end));
-    end
-    disp(C);
+%     for k = 1:1:numsemitones
+%         C(k) = sum(c(k:numsemitones:end));
+%     end
+%     disp(C);
 end
