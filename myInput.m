@@ -1,6 +1,14 @@
-function [x, fs] = myInput(path, usemono)
+function [x, fs] = myInput(path, usemono, range, isexamine)
 
-[x,fs] = audioread(path);
+info = audioinfo(path);
+fs = info.SampleRate;
+if isexamine
+    rstart = round(range(1)*fs)+1;
+    rend = round(range(2)*fs)+1;
+    [x,~] = audioread(path,[rstart,rend]);
+else
+    [x,~] = audioread(path);
+end
 DSR = 4;
 if usemono
     x = (x(:,1)+x(:,2))/2;

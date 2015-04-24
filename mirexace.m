@@ -10,7 +10,7 @@ clear;
 clc;
 
 % ********************************************************** %
-% ********************* Presets **************************** %
+% ********************* Control Panel ********************** %
 % ********************************************************** %
 
 % input control
@@ -18,8 +18,15 @@ stereotomono = true;
 codec = 'mp3';
 
 % output control
-isexamine = 0;
+isexamine = 1;
 runeval = 1;
+examinerange = [1,10]; % start and endtime in unit of second
+if isexamine
+    df = true;
+else
+    
+    df = false;
+end
 
 % optimization control
 preGestaltCompensate = false;
@@ -53,14 +60,6 @@ enCast2MajMin = 1; % in case we'd like to substitute others to maj or min
 feval = fopen('evallist.txt','r');
 tline = fgetl(feval);
 
-% use examine target to examine specific sections
-examinetarget = 'examine';
-examinesection = '.00.mp3';
- 
-if isexamine
-    tline = 'examine';
-end
-
 while ischar(tline)
     
 % ********************************************************** %
@@ -88,16 +87,7 @@ gtroot = './gt/';
 gtfolder = strcat(gtroot, artist, '/', album);
 gtpath = [gtfolder '/' songtitle '.lab']; % '.lab' is the ground-truth
 
-examineroot = '../AudioSamples/';
-examinepath = [examineroot examinetarget '/' examinetarget examinesection];
-
-if isexamine
-    [x, fs] = myInput(examinepath, stereotomono);
-    df = true;
-else
-    [x, fs] = myInput(audiopath, stereotomono);
-    df = false;
-end
+[x, fs] = myInput(audiopath, stereotomono, examinerange, isexamine);
 
 % ********************************************************** %
 % ********************* Front End ************************** %
@@ -123,8 +113,10 @@ fmax = 1661; % MIDI note 92, Piano key number 72
 fratio = 2^(1/36);
 numtones = 72*3;
 [Ms,Mc] = toneProfileGen(wl, numtones, fmin, fmax, fratio, fs);
-% myImagePlot(Ms, wl/2, numtones, 'time', '1/3 semitone', 'simple tone profile');
-% myImagePlot(Mc, wl/2, numtones, 'time', '1/3 semitone', 'complex tone profile');
+if df
+myImagePlot(Ms, wl/2, numtones, 'time', '1/3 semitone', 'simple tone profile');
+myImagePlot(Mc, wl/2, numtones, 'time', '1/3 semitone', 'complex tone profile');
+end
 
 % calculate note salience matrix of the stft spectrogram (cosine
 % similarity) (note that this is an additive approach, as contrast to
@@ -341,7 +333,6 @@ end
 
 % ********************* End of System A ******************** %
 if isexamine
-    display(strcat('end of system A recognizing:',examinepath));
     break;
 else
     % compute note frequencies and tonic (dynamically)
@@ -365,6 +356,6 @@ fclose(feval);
 % ********************************************************** %
 % ********************* Evaluation - A******************* %
 % ********************************************************** %
-if runeval
+if runeval && ~isexamine
     evaluate;
 end
