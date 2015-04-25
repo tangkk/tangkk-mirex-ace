@@ -22,13 +22,12 @@ stereotomono = false;
 codec = 'mp3';
 
 % output control
-isexamine = 0;
+isexamine = 2; % 0: turn off, 1:examine range, 2: examine piece
 runeval = 1;
-examinerange = [10,20]; % start and endtime in unit of second
+examinerange = [15,30]; % start and endtime in unit of second
 if isexamine
     df = true;
 else
-    
     df = false;
 end
 

@@ -2,7 +2,7 @@ function [x, fs] = myInput(path, usemono, range, isexamine)
 
 info = audioinfo(path);
 fs = info.SampleRate;
-if isexamine
+if isexamine == 1 % examine range
     rstart = round(range(1)*fs)+1;
     rend = round(range(2)*fs)+1;
     [x,~] = audioread(path,[rstart,rend]);
