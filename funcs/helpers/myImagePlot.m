@@ -2,7 +2,8 @@
 function myImagePlot(img, x, y, xl, yl, tit, ytl, ytlab)
 sfactor = 100;
 if nargin == 6
-    figure;
+    scrsz = get(groot,'ScreenSize');
+    figure('Position',[scrsz(3)/4 scrsz(4)/4 scrsz(3)/2 scrsz(4)/2]);
     image(x,y,sfactor*img);
     set(gca,'YDir','normal');
     xlabel(xl);
@@ -10,7 +11,8 @@ if nargin == 6
     title(tit);
 end
 if nargin == 8
-    figure;
+    scrsz = get(groot,'ScreenSize');
+    figure('Position',[scrsz(3)/4 scrsz(4)/4 scrsz(3)/2 scrsz(4)/2]);
     image(x,y,sfactor*img);
     set(gca,'YDir','normal');
     xlabel(xl);

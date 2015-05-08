@@ -22,7 +22,7 @@ stereotomono = false;
 codec = 'mp3';
 
 % output control
-isexamine = 2; % 0: turn off, 1:examine range, 2: examine piece
+isexamine = 2; % 0: full evaluation, 1:examine range, 2: examine piece
 runeval = 1;
 examinerange = [15,30]; % start and endtime in unit of second
 if isexamine
@@ -373,4 +373,12 @@ fclose(feval);
 % ********************************************************** %
 if runeval && ~isexamine
     evaluate;
+end
+
+% ********************************************************** %
+% ********************* Piece Play - A********************** %
+% ********************************************************** %
+if isexamine == 2
+    p = audioplayer(x,fs);
+    play(p);
 end

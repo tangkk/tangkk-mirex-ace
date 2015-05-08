@@ -1,7 +1,8 @@
 function visualizeChordProgression(outchordogram, outbassgram, outboundaries, tt)
 
 if nargin == 3
-    figure;
+    scrsz = get(groot,'ScreenSize');
+    figure('Position',[scrsz(3)/4 scrsz(4)/4 scrsz(3)/2 scrsz(4)/2]);
     hold on;
     Y = -10:0.1:10;
     for i = 1:1:length(outboundaries)
@@ -29,7 +30,8 @@ if nargin == 3
 end
 
 if nargin == 4
-    figure;
+    scrsz = get(groot,'ScreenSize');
+    figure('Position',[scrsz(3)/4 scrsz(4)/4 scrsz(3)/2 scrsz(4)/2]);
     hold on;
     Y = -10:0.1:10;
     for i = 1:1:length(outboundaries)
