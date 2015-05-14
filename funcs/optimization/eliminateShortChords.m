@@ -1,10 +1,10 @@
-% this is another gestalize process that eliminate non-chords or chords with very short
-% duration into the chords nearby with reasonable duration
-function [chordogram, bassgram, treblegram, boundaries] = eliminateShortChords(chordogram, bassgram, treblegram, boundaries, grain)
+% eliminate chords with very short duration, update other grams
+function [rootgram, bassgram, treblegram, bdrys] = ...
+    eliminateShortChords(rootgram, bassgram, treblegram, bdrys, grain)
 
 % chord beat duration calculation
-nchords = length(chordogram);
-difbdrys = boundaries(2:end) - boundaries(1:end-1);
+nchords = size(rootgram,2);
+difbdrys = bdrys(2:end) - bdrys(1:end-1);
 chordbeats = round(difbdrys ./ (median(difbdrys) / 4));
 
 % eliminate candidates selection:
@@ -38,8 +38,8 @@ if ~isempty(elimiateidxes)
 end
 
 % eliminate process
-chordogram(elimiateidxes) = [];
+rootgram(elimiateidxes) = [];
 bassgram(elimiateidxes) = [];
 treblegram(elimiateidxes) = [];
-boundaries(elimiateidxes) = [];
+bdrys(elimiateidxes) = [];
 

@@ -1,14 +1,10 @@
-% CPRSA - Chord Progression Recognition System A
-% This implements a machine listening method for recognizing the chords
-% and chord progression boundaries within a piece of music
+% Automatic Chord Estimation
+% A ''bass centric + gestalt'' approach
 
 % ********************************************************** %
 % ********************* Batch Input ************************ %
 % ********************************************************** %
-warning off
 path(path,genpath('.'));
-warning on
-
 close all;
 clear;
 clc;
@@ -70,7 +66,7 @@ while ischar(tline)
 % ********************************************************** %
 
 % input stage
-display('input stage -- read audio from path');
+display('input...');
 
 songpath = tline;
 pathtokens = strsplit(songpath,'/');
@@ -95,7 +91,7 @@ gtpath = [gtfolder '/' songtitle '.lab']; % '.lab' is the ground-truth
 % ********************************************************** %
 % ********************* Front End ************************** %
 % ********************************************************** %
-display('frontend -- from input to harmonic salience matrix');
+display('frontend...');
 
 % transform time domain into frequency domain
 wl = 4096;
@@ -252,9 +248,9 @@ myLinePlot(1:length(Shc), Shc, 'chord progression order', 'slice',...
 end
 
 % ********************************************************** %
-% ********************* Mid End - A************************* %
+% ********************* Mid End **************************** %
 % ********************************************************** %
-display('midend-A -- uppergram and basegram');
+display('midend...');
 
 % compute basegram and uppergram (based on harmonic change matrix)
 basegram = computeBasegram(Shv);
@@ -271,9 +267,9 @@ myImagePlot(uppergram, kh, ph, 'chord progression order', 'semitone',...
 end
 
 % ********************************************************** %
-% ********************* Back End - A************************ %
+% ********************* Back End *************************** %
 % ********************************************************** %
-display('backend-A -- chordmode');
+display('backend...');
 
 chordmode = buildChordMode(tetradcontrol, pentacontrol, hexacontrol, inversioncontrol,...
     enDyad, enMajMin, enSusAdd,...
@@ -282,85 +278,94 @@ chordmode = buildChordMode(tetradcontrol, pentacontrol, hexacontrol, inversionco
 
 chordogram = computeChordogram(basegram, uppergram, chordmode);
 
-[outchordogram, outbassgram, outtreblegram, outboundaries] = gramGeneration(chordogram, Shc);
+% the chord-level gestalt process
+rootgram = chordogram(1,:); bassgram = chordogram(2,:); treblegram = chordogram(3,:); bdrys = Shc;
 
-[outchordogram, outbassgram, outtreblegram, outboundaries] = combineSameChords(outchordogram, outbassgram,...
-    outtreblegram, outboundaries);
+[rootgram, bassgram, treblegram, bdrys] = combineSameChords(rootgram, bassgram, treblegram, bdrys);
 
-[outchordogram, outbassgram, outtreblegram, outboundaries] = eliminateShortChords(outchordogram, outbassgram,...
-    outtreblegram, outboundaries, grainsize); 
+[rootgram, bassgram, treblegram, bdrys] = eliminateShortChords(rootgram,...
+    bassgram, treblegram, bdrys, grainsize);
 
-[outchordogram, outbassgram, outtreblegram, outboundaries] = mergeSimilarChords(outchordogram, outbassgram,...
-    outtreblegram, outboundaries, chordmode);
+% compute note frequencies and tonic (dynamically), and do treble casting
+hwin = 5; nfSeq = calNoteFreq(bassgram, treblegram, chordmode, hwin);
+[bassgram, treblegram] = castChords(nfSeq, bassgram, treblegram, chordmode);
 
-if df
-myLinePlot(1:length(outbassgram), outbassgram, 'chord progression order', 'semitone',...
-    length(outbassgram), 12, 'o', 'outbassgram', 0:12, bassnotenames);
-myLinePlot(1:length(outboundaries), outboundaries, 'chord progression order', 'slice',...
-    length(outboundaries), nslices, 'o', 'outboundaries');
-
-visualizeChordProgression(outchordogram, outbassgram, outboundaries);
-end
-
-% ********************************************************** %
-% ********************* Feedback Once - A******************* %
-% ********************************************************** %
-
-display('feedback-A -- use chord boundaries information to do it again');
-
-ut = 1;
-nt = 0.25;
-[newbasegram, newuppergram] = updateBaseUpperGram(outboundaries, S, So, ut, nt);
-kh = 1:length(newbasegram);
-ph = 1:12;
-if df
-myLinePlot(kh, newbasegram(1,:), 'chord progression order', 'semitone', nchords, 12, 'o', 'newbasegram', 0:12, bassnotenames);
-myImagePlot(newuppergram, kh, ph, 'chord progression order', 'semitone', 'newuppergram', ph,treblenotenames);
-end
-
-% ****** feedback back end ****** %
-newchordogram = computeChordogram(newbasegram, newuppergram, chordmode);
-
-[newoutchordogram, newoutbassgram, newouttreblegram, newoutboundaries] = gramGeneration(newchordogram, outboundaries);
-
-[newoutchordogram, newoutbassgram, newouttreblegram, newoutboundaries] = combineSameChords(newoutchordogram, newoutbassgram,...
-    newouttreblegram, newoutboundaries);
-
-[newoutchordogram, newoutbassgram, newouttreblegram, newoutboundaries] = eliminateShortChords(newoutchordogram, newoutbassgram,...
-    newouttreblegram, newoutboundaries, grainsize);
-
-[newoutchordogram, newoutbassgram, newouttreblegram, newoutboundaries] = mergeSimilarChords(newoutchordogram, newoutbassgram,...
-    newouttreblegram, newoutboundaries, chordmode);
+[rootgram, bassgram, treblegram, bdrys] = mergeSimilarChords(rootgram,...
+    bassgram, treblegram, bdrys, chordmode);
 
 if df
-myLinePlot(1:length(newoutbassgram), newoutbassgram, 'chord progression order', 'semitone',...
-    length(newoutbassgram), 12, 'o', 'newoutbassgram', 0:12, bassnotenames);
-myLinePlot(1:length(newoutboundaries), newoutboundaries, 'chord progression order', 'slice',...
-    length(newoutboundaries), nslices, 'o', 'newoutboundaries');
-
-visualizeChordProgression(newoutchordogram, newoutbassgram, newoutboundaries);
+myLinePlot(1:length(rootgram), rootgram, 'chord progression order', 'semitone',...
+    length(rootgram), 12, 'o', 'rootgram', 0:12, bassnotenames);
+myLinePlot(1:length(bassgram), bassgram, 'chord progression order', 'semitone',...
+    length(bassgram), 12, 'o', 'bassgram', 0:12, bassnotenames);
+myLinePlot(1:length(bdrys), bdrys, 'chord progression order', 'slice',...
+    length(bdrys), nslices, 'o', 'boundaries');
+visualizeChordProgression(rootgram, bassgram, treblegram, bdrys, chordmode);
 end
+
+% % ********************************************************** %
+% % ********************* Feedback *************************** %
+% % ********************************************************** %
+% 
+% display('feedback...');
+% 
+% display('re-midend...');
+% ut = 1;
+% nt = 0.25;
+% [newbasegram, newuppergram] = updateBaseUpperGram(boundaries, S, So, ut, nt);
+% kh = 1:length(newbasegram);
+% ph = 1:12;
+% if df
+% myLinePlot(kh, newbasegram(1,:), 'chord progression order', 'semitone', nchords, 12, 'o', 'newbasegram', 0:12, bassnotenames);
+% myImagePlot(newuppergram, kh, ph, 'chord progression order', 'semitone', 'newuppergram', ph,treblenotenames);
+% end
+% 
+% display('re-backend...');
+% chordogram = computeChordogram(newbasegram, newuppergram, chordmode);
+% 
+% % the chord-level gestalt process
+% [chordogram, rootgram, bassgram, treblegram, boundaries] = gramGeneration(chordogram, boundaries);
+% 
+% [chordogram, rootgram, bassgram, treblegram, boundaries] = combineSameChords(chordogram, rootgram,...
+%     bassgram, treblegram, boundaries);
+% 
+% [chordogram, rootgram, bassgram, treblegram, boundaries] = eliminateShortChords(chordogram, rootgram,...
+%     bassgram, treblegram, boundaries,...
+%     grainsize);
+% 
+% [chordogram, rootgram, bassgram, treblegram, boundaries] = mergeSimilarChords(chordogram, rootgram,...
+%     bassgram, treblegram, boundaries,...
+%     chordmode);
+% 
+% if df
+% myLinePlot(1:length(rootgram), rootgram, 'chord progression order', 'semitone',...
+%     length(rootgram), 12, 'o', 'rootgram', 0:12, bassnotenames);
+% myLinePlot(1:length(bassgram), bassgram, 'chord progression order', 'semitone',...
+%     length(bassgram), 12, 'o', 'bassgram', 0:12, bassnotenames);
+% myLinePlot(1:length(boundaries), boundaries, 'chord progression order', 'slice',...
+%     length(boundaries), nslices, 'o', 'boundaries');
+% visualizeChordProgression(chordogram, bassgram, boundaries);
+% end
 
 % ********************************************************** %
 % ********************* Output ***************************** %
 % ********************************************************** %
 
 
-% ********************* End of System A ******************** %
 if isexamine
     break;
 else
+    display('output...');
     % compute note frequencies and tonic (dynamically)
     hwin = 5;
-    nfSeq = calNoteFreq(newoutbassgram, newouttreblegram, chordmode, hwin);
+    nfSeq = calNoteFreq(bassgram, treblegram, chordmode, hwin);
     scaleSeq = calNoteScale(nfSeq);
     tonicSeq = calTonic(scaleSeq);
     
     % write output
-    writeChordProgression(cpfolder, cppath, nslices, hopsize, fs, newoutchordogram, newoutboundaries, endtime,...
+    writeChordProgression(cpfolder, cppath, nslices, hopsize, fs, chordogram, bdrys, endtime,...
         enCast2MajMin, nfSeq);
     
-    display(strcat('end of system A recognizing:',audiopath));
     tline = fgetl(feval);
 end
 
@@ -369,16 +374,20 @@ end % pair with the very first while loop
 fclose(feval);
 
 % ********************************************************** %
-% ********************* Evaluation - A******************* %
+% ********************* Evaluation ************************* %
 % ********************************************************** %
 if runeval && ~isexamine
+    display('evaluation...');
     evaluate;
 end
 
 % ********************************************************** %
-% ********************* Piece Play - A********************** %
+% ********************* Playback *************************** %
 % ********************************************************** %
 if isexamine == 2
+    display('playback...');
     p = audioplayer(x,fs);
     play(p);
 end
+
+display(strcat('end of system analyzing...',audiopath));
