@@ -214,7 +214,12 @@ end
 % myImagePlot(Sg, kk, p, 'slice', 'semitone', 'gestalt note salience matrix');
 % end
 % end
-% 
+%
+
+% ********************************************************** %
+% ********************* Mid End **************************** %
+% ********************************************************** %
+display('midend...');
 
 Sg = Sgo; % interface to mid-end
 
@@ -246,11 +251,6 @@ myImagePlot(Shv, kk(1:nchords), p, 'chord progression order',...
 myLinePlot(1:length(Shc), Shc, 'chord progression order', 'slice',...
     nchords, nslices, 'o', 'haromonic change moments');
 end
-
-% ********************************************************** %
-% ********************* Mid End **************************** %
-% ********************************************************** %
-display('midend...');
 
 % compute basegram and uppergram (based on harmonic change matrix)
 basegram = computeBasegram(Shv);
@@ -306,66 +306,75 @@ end
 % % ********************************************************** %
 % % ********************* Feedback *************************** %
 % % ********************************************************** %
-% 
-% display('feedback...');
-% 
-% display('re-midend...');
-% ut = 1;
-% nt = 0.25;
-% [newbasegram, newuppergram] = updateBaseUpperGram(boundaries, S, So, ut, nt);
-% kh = 1:length(newbasegram);
-% ph = 1:12;
-% if df
-% myLinePlot(kh, newbasegram(1,:), 'chord progression order', 'semitone', nchords, 12, 'o', 'newbasegram', 0:12, bassnotenames);
-% myImagePlot(newuppergram, kh, ph, 'chord progression order', 'semitone', 'newuppergram', ph,treblenotenames);
-% end
-% 
-% display('re-backend...');
-% chordogram = computeChordogram(newbasegram, newuppergram, chordmode);
-% 
-% % the chord-level gestalt process
-% [chordogram, rootgram, bassgram, treblegram, boundaries] = gramGeneration(chordogram, boundaries);
-% 
-% [chordogram, rootgram, bassgram, treblegram, boundaries] = combineSameChords(chordogram, rootgram,...
-%     bassgram, treblegram, boundaries);
-% 
-% [chordogram, rootgram, bassgram, treblegram, boundaries] = eliminateShortChords(chordogram, rootgram,...
-%     bassgram, treblegram, boundaries,...
-%     grainsize);
-% 
-% [chordogram, rootgram, bassgram, treblegram, boundaries] = mergeSimilarChords(chordogram, rootgram,...
-%     bassgram, treblegram, boundaries,...
-%     chordmode);
-% 
-% if df
-% myLinePlot(1:length(rootgram), rootgram, 'chord progression order', 'semitone',...
-%     length(rootgram), 12, 'o', 'rootgram', 0:12, bassnotenames);
-% myLinePlot(1:length(bassgram), bassgram, 'chord progression order', 'semitone',...
-%     length(bassgram), 12, 'o', 'bassgram', 0:12, bassnotenames);
-% myLinePlot(1:length(boundaries), boundaries, 'chord progression order', 'slice',...
-%     length(boundaries), nslices, 'o', 'boundaries');
-% visualizeChordProgression(chordogram, bassgram, boundaries);
-% end
+
+fbn = 1; % feedback multiple times
+for i = 1:1:fbn
+    display(['feedback...' num2str(i)]);
+
+    display('re-midend...');
+    ut = 1;
+    nt = 0.25;
+    [basegram, uppergram] = updateBaseUpperGram(bdrys, S, So, ut, nt);
+    
+    % kh = 1:length(basegram);
+    % ph = 1:12;
+    % if df
+    % myLinePlot(kh, basegram(1,:), 'chord progression order', 'semitone',...
+    %   nchords, 12, 'o', 'newbasegram', 0:12, bassnotenames);
+    % myImagePlot(uppergram, kh, ph, 'chord progression order', 'semitone',...
+    %   'newuppergram', ph,treblenotenames);
+    % end
+
+    display('re-backend...');
+    chordogram = computeChordogram(basegram, uppergram, chordmode);
+
+    % the chord-level gestalt process
+    rootgram = chordogram(1,:); bassgram = chordogram(2,:); treblegram = chordogram(3,:);
+
+    [rootgram, bassgram, treblegram, bdrys] = combineSameChords(rootgram, bassgram, treblegram, bdrys);
+
+    [rootgram, bassgram, treblegram, bdrys] = eliminateShortChords(rootgram,...
+        bassgram, treblegram, bdrys, grainsize);
+
+    % compute note frequencies and tonic (dynamically), and do treble casting
+    hwin = 5; nfSeq = calNoteFreq(bassgram, treblegram, chordmode, hwin);
+    [bassgram, treblegram] = castChords(nfSeq, bassgram, treblegram, chordmode);
+
+    [rootgram, bassgram, treblegram, bdrys] = mergeSimilarChords(rootgram,...
+        bassgram, treblegram, bdrys, chordmode);
+end
+
+if df
+myLinePlot(1:length(rootgram), rootgram, 'chord progression order', 'semitone',...
+    length(rootgram), 12, 'o', 'rootgram', 0:12, bassnotenames);
+myLinePlot(1:length(bassgram), bassgram, 'chord progression order', 'semitone',...
+    length(bassgram), 12, 'o', 'bassgram', 0:12, bassnotenames);
+myLinePlot(1:length(bdrys), bdrys, 'chord progression order', 'slice',...
+    length(bdrys), nslices, 'o', 'boundaries');
+visualizeChordProgression(rootgram, bassgram, treblegram, bdrys, chordmode);
+end
+
+% ********************************************************** %
+% ***************** Tonic Computation ********************** %
+% ********************************************************** %
+
+% compute note frequencies and tonic (dynamically)
+hwin = 5;
+nfSeq = calNoteFreq(bassgram, treblegram, chordmode, hwin);
+scaleSeq = calNoteScale(nfSeq);
+tonicSeq = calTonic(scaleSeq);
+display('tonic sequence:');
+display(tonicSeq);
 
 % ********************************************************** %
 % ********************* Output ***************************** %
 % ********************************************************** %
 
-
 if isexamine
     break;
 else
     display('output...');
-    % compute note frequencies and tonic (dynamically)
-    hwin = 5;
-    nfSeq = calNoteFreq(bassgram, treblegram, chordmode, hwin);
-    scaleSeq = calNoteScale(nfSeq);
-    tonicSeq = calTonic(scaleSeq);
-    
-    % write output
-    writeChordProgression(cpfolder, cppath, nslices, hopsize, fs, chordogram, bdrys, endtime,...
-        enCast2MajMin, nfSeq);
-    
+    writeChordProgression(cpfolder, cppath, nslices, hopsize, fs, chordogram, bdrys, endtime);
     tline = fgetl(feval);
 end
 

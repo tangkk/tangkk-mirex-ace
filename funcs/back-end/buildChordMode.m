@@ -1,7 +1,9 @@
 % the chord mode is built this way with full chord notes
 % the order matters when there is a tie matching score
 %
-% --tchord--            --digit--     --dif--     --weight--    --type??--
+% --tchord--            --digit--     --dif--     --weight--    --stype--
+% 1->1 1               1                0            0          0
+
 % 1->b2 b2             1,2              1            1          0
 % 1->2 2               1,3              2            1          0
 % 1->b3 b3             1,4              3            1          2
@@ -92,6 +94,12 @@ ic = inversioncontrol; % inversion reduce factor
 chordmode = cell(4,50); %[dif; qual; weight; supertype]
 
 idx = 1;
+
+% ************************* no-chord *************************** %
+chordmode{1,idx} = 0;
+chordmode{2,idx} = '1';
+chordmode{3,idx} = 0;
+idx = idx + 1;
 
 % ************************* dyad ******************************* %
 if enDyad

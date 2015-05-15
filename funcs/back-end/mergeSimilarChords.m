@@ -1,46 +1,61 @@
-% this is a process to merge chords with same bass and similar type into
-% one chord. Assume there are two chords to be merged, the mergee is the one with
-% less notes, while the merger is the one with more notes; if both are with
-% the same number of notes, the second one is to be merged to the first one
-% there are totally three super chord types: 1. those with 3 (major
-% type), 2. those with 3b (minor type), 3. those without 3 or 3b (universal
-% type). Chords within same type can be merged. Type 1 and Type 2 can be
-% merged into type 3 or merge from type 3, but type 1 and type 2 cannot
-% be merged into each other.
-function [chordogram, bassgram, treblegram, boundaries] = mergeSimilarChords(chordogram, bassgram, treblegram, boundaries, chordmode)
+% merge similar chords
+% 1st pass: merge consecutive chords that share the same bass and same super type
+% 2nd pass: merge consecutive chords that share the same root and same treble type
+function [rootgram, bassgram, treblegram, bdrys] =...
+    mergeSimilarChords(rootgram, bassgram, treblegram, bdrys, chordmode)
 
-nchords = length(chordogram);
+nchords = size(rootgram,2);
+
+% 1st pass: merge consecutive chords that share the same bass and same super type
 for i = 1:1:nchords - 1
     cb = bassgram(i);
     ct = treblegram(i);
+    ctname = chordmode{2,ct};
+    cst = superTypeMapping(ctname);
+    
     nb = bassgram(i+1);
     nt = treblegram(i+1);
-    % first condition, current bass = next bass
-    if cb == nb && ct ~= 0 && nt ~= 0
-        cttn = chordmode{4,ct};
-        nttn = chordmode{4,nt};
-        ctt = cttn(1);
-        ctn = cttn(2);
-        ntt = nttn(1);
-        ntn = nttn(2);
-        % second condition: super type
-        if ctt == ntt && ctt ~= 0 && ntt ~= 0
-            % third condition, number of notes priority
-            if ctn > ntn
-                treblegram(i+1) = treblegram(i);
-                chordogram(i+1) = chordogram(i);
-            end
-            if ctn < ntn
-                treblegram(i) = treblegram(i+1);
-                chordogram(i) = chordogram(i+1);
-            end
-            if ctn == ntn
-                treblegram(i+1) = treblegram(i);
-                chordogram(i+1) = chordogram(i);
-            end
+    ntname = chordmode{2,nt};
+    nst = superTypeMapping(ntname);
+    
+    if cb == nb && cst ~= nst
+        % always merge to the supertype 3
+        if cst == 3 && nst ~= 3
+            treblegram(i+1) = treblegram(i);
+            rootgram(i+1) = rootgram(i);
+        elseif cst ~= 3 && nst == 3
+            treblegram(i) = treblegram(i+1);
+            rootgram(i) = rootgram(i+1);
+        else
+            continue;
+        end
+    end
+    
+end
+
+% 2nd pass: merge consecutive chords that share the same root and same treble type
+for i = 1:1:nchords - 1
+    cr = rootgram(i);
+    ct = treblegram(i);
+    ctname = chordmode{2,ct};
+    ctt = trebleTypeMapping(ctname);
+    
+    nr = rootgram(i+1);
+    nt = treblegram(i+1);
+    ntname = chordmode{2,nt};
+    ntt = trebleTypeMapping(ntname);
+    
+    if cr == nr %&& ctt == ntt %FIXME: should I consider trebletype here?
+        if isempty(strfind(ctname,'/'))
+            treblegram(i+1) = treblegram(i);
+            bassgram(i+1) = bassgram(i);
+        elseif isempty(strfind(ntname,'/'))
+            treblegram(i) = treblegram(i+1);
+            bassgram(i) = bassgram(i+1);
+        else
             continue;
         end
     end
 end
 
-[chordogram, bassgram, treblegram, boundaries] = combineSameChords(chordogram, bassgram, treblegram, boundaries);
+[rootgram, bassgram, treblegram, bdrys] = combineSameChords(rootgram, bassgram, treblegram, bdrys);

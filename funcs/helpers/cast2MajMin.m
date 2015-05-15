@@ -60,6 +60,9 @@ elseif ~isempty(strfind(ch,'dim'))
 elseif ~isempty(strfind(ch,'dim7')) || ~isempty(strfind(ch,'hdim7')) || ~isempty(strfind(ch,'minmaj7'))
     tokens = strsplit(ch,':');
     ch = [tokens{1} ':' 'min7'];
+elseif ~isempty(strfind(ch,'1'))
+    tokens = strsplit(ch,':');
+    ch = [tokens{1} ':' 'maj'];
 else
     ch = ch;
 end
