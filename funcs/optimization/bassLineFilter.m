@@ -1,4 +1,4 @@
-function Sb = bassLineFilter(S, bt, wb, cb)
+function Sb = bassLineFilter(S, bt, wgmax, cb)
 sizeS = size(S);
 Sb = zeros(1, sizeS(2)); % bassline vector
 for j = 1:1:sizeS(2)
@@ -17,7 +17,7 @@ for j = 1:1:sizeS(2)
         if Sb(j) == Sb(j-1)
             cb = cb+1;
         else
-            if cb < wb % if so, gestalize the outliers
+            if cb < wgmax % if so, gestalize the outliers
                 Sb(j - cb:j-1) = Sb(max(j-cb-1,1));
             end
             cb = 1;

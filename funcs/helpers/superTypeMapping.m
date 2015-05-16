@@ -5,6 +5,7 @@ function st = superTypeMapping(tname)
 % FIXME: how to deal with no-chord 'N'
 % FIXME: implement MIREX standard chord matching
 % FIXME: whether the whole reason behind the super treble type is correct?
+% FIXME: not every type is included in this file (may lead to bug)
 
 switch tname
     % type 1 cases:

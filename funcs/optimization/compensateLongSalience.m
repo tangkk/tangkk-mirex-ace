@@ -1,11 +1,12 @@
 function Sout = compensateLongSalience(Sin, wgmax, st, bb, isPre)
 
-Sout = Sin;
+Sout = zeros(size(Sin));
 if isPre
     upperbound = bb*3;
 else
     upperbound = size(Sin,1);
 end
+
 for i = 1:1:upperbound
     trackidx = 1;
     isblank = 0;
@@ -22,6 +23,7 @@ for i = 1:1:upperbound
                     wpg = 0;
                 end
             end
+            Sout(i,j) = Sin(i,j);
             isblank = 0;
             wpg = wpg + 1;
             trackidx = j;

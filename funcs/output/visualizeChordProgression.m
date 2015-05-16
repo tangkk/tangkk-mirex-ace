@@ -28,4 +28,4 @@ for i = 1:1:nchords
 end
 xlabel('slice');
 ylabel('chord');
-title('updated chordprogression vs. slice');
+title('chordprogression vs. slice');
