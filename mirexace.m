@@ -18,7 +18,7 @@ stereotomono = false;
 codec = 'mp3';
 
 % output control
-isexamine = 2; % 0: full evaluation, 1:examine range, 2: examine piece
+isexamine = 0; % 0: full evaluation, 1:examine range, 2: examine piece
 runeval = 1;
 examinerange = [15,30]; % start and endtime in unit of second
 if isexamine
@@ -335,7 +335,9 @@ if isexamine
     break;
 else
     display('output...');
+    if df
     visualizeTonicProgression(tonicSeq, bdrys);
+    end
     writeChordProgression(cpfolder, cppath, nslices, hopsize, fs,...
         rootgram, treblegram, bdrys, endtime, chordmode);
     display(strcat('end of analyzing...',audiopath));

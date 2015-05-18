@@ -56,21 +56,21 @@ evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
     ' --chords ' evaltype];
 system(evalcmd);
 
-% evaltype = 'MirexSevenths';
-% disp([evaltype '......']);
-% evalout = [outroot 'results' evaltype '/' sufix '.txt'];
-% evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
-%     testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
-%     ' --chords ' evaltype];
-% system(evalcmd);
-% 
-% evaltype = 'MirexSeventhsBass';
-% disp([evaltype '......']);
-% evalout = [outroot 'results' evaltype '/' sufix '.txt'];
-% evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
-%     testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
-%     ' --chords ' evaltype];
-% system(evalcmd);
+evaltype = 'MirexSevenths';
+disp([evaltype '......']);
+evalout = [outroot 'results' evaltype '/' sufix '.txt'];
+evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
+    testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+    ' --chords ' evaltype];
+system(evalcmd);
+
+evaltype = 'MirexSeventhsBass';
+disp([evaltype '......']);
+evalout = [outroot 'results' evaltype '/' sufix '.txt'];
+evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
+    testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+    ' --chords ' evaltype];
+system(evalcmd);
 
 evaltype = 'ChromaRecall';
 disp([evaltype '......']);
