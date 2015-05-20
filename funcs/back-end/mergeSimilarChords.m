@@ -2,74 +2,114 @@
 % 1st pass: merge consecutive chords that share the same bass and same super type
 % 2nd pass: merge consecutive chords if it follows 1->5 relationship
 % 3rd pass: merge consecutive chords that share the same root and same treble type
-function [rootgram, bassgram, treblegram, bdrys] =...
-    mergeSimilarChords(rootgram, bassgram, treblegram, bdrys, chordmode)
+% FIXME: also take care of the uppergram when merging (propagate/share
+% uppergrams to all mergees)
+% FIXME: do we need to care about supertype any more?
+% FIXME: do we need to care about trebletype any more?
+function [rootgram, bassgram, treblegram, uppergram, bdrys] =...
+    mergeSimilarChords(rootgram, bassgram, treblegram, uppergram, bdrys, nfSeq, chordmode)
 
 nchords = size(rootgram,2);
 
 % 1st pass: merge consecutive chords that share the same bass and same super type
-% 2nd pass: merge consecutive chords if it follows 1->5 relationship
+i = 1;
+while i < nchords
+    cb = bassgram(i);
+    ct = treblegram(i);
+    ctname = chordmode{2,ct};
+    cst = superTypeMapping(ctname);
+    
+    nmergees = 0;
+    for j = i + 1: 1: nchords
+        nb = bassgram(j);
+        nt = treblegram(j);
+        ntname = chordmode{2,nt};
+        nst = superTypeMapping(ntname);
+        if cb == nb && (cst == nst || cst == 3 || nst == 3)
+            nmergees = nmergees + 1;
+        elseif nmergees > 0
+            % propagate the uppergram and update other grams accordingly
+            upper = normalizeGram(sum(uppergram(:,i:i+nmergees),2));
+            bass = cb;
+            [tname, treble] = trebleMatching(bass, upper, chordmode);
+            root = bass2root(bass, tname);
+            rootgram(i:i+nmergees) = ones(1,nmergees+1)*root;
+            treblegram(i:i+nmergees) = castChords(nfSeq, bassgram(i:i+nmergees),...
+                ones(1,nmergees+1)*treble, chordmode);
+            break;
+        else
+            break;
+        end
+    end
+    i = i + nmergees + 1;
+end
 
+% 2nd pass: merge consecutive chords if it follows 1->5 relationship
 copybassgram = bassgram;
 for i = 1:1:nchords - 1
     cb = bassgram(i);
     ct = treblegram(i);
     ctname = chordmode{2,ct};
     cst = superTypeMapping(ctname);
-    % give special attention to the fifth
+    cu = uppergram(:,i);
+    
     cb5th = pitchTranspose(cb,7);
     
     nb = bassgram(i+1);
     nt = treblegram(i+1);
     ntname = chordmode{2,nt};
     nst = superTypeMapping(ntname);
+    nu = uppergram(:,i+1);
     
-    if cb == nb && cst ~= nst
-        % always merge to the supertype 3
-        if cst == 3 && nst ~= 3
-            treblegram(i+1) = treblegram(i);
-            rootgram(i+1) = rootgram(i);
-        elseif cst ~= 3 && nst == 3
-            treblegram(i) = treblegram(i+1);
-            rootgram(i) = rootgram(i+1);
-        else
-            continue;
-        end
-    end
-    
-    if cb5th == nb && cst ~= nst
-        % merge the 5 chord to the 1 chord
-        treblegram(i+1) = treblegram(i);
-        rootgram(i+1) = rootgram(i);
-        copybassgram(i+1) = bassgram(i);
+    if cb5th == nb && cst ~= nst % deal with two positions at a time
+        % propagate the uppergram and update other grams accordingly
+        upper = normalizeGram(cu + nu);
+        bass = cb;
+        [tname, treble] = trebleMatching(bass, upper, chordmode);
+        root = bass2root(bass, tname);
+        rootgram(i:i+1) = [root root];
+        treblegram(i:i+1) = castChords(nfSeq, [cb cb], [treble treble], chordmode);
+        copybassgram(i:i+1) = [cb cb];
     end
 end
 
 bassgram = copybassgram;
 
-% 2nd pass: merge consecutive chords that share the same root and same treble type
-for i = 1:1:nchords - 1
+% 3rd pass: merge consecutive chords that share the same root and same treble type
+i = 1;
+while i < nchords
+    cb = bassgram(i);
     cr = rootgram(i);
     ct = treblegram(i);
     ctname = chordmode{2,ct};
     ctt = trebleTypeMapping(ctname);
     
-    nr = rootgram(i+1);
-    nt = treblegram(i+1);
-    ntname = chordmode{2,nt};
-    ntt = trebleTypeMapping(ntname);
-    
-    if cr == nr && ctt == ntt %FIXME: should I consider trebletype here?
-        if isempty(strfind(ctname,'/'))
-            treblegram(i+1) = treblegram(i);
-            bassgram(i+1) = bassgram(i);
-        elseif isempty(strfind(ntname,'/'))
-            treblegram(i) = treblegram(i+1);
-            bassgram(i) = bassgram(i+1);
+    nmergees = 0;
+    for j = i+1:1:nchords
+        nb = bassgram(j);
+        nr = rootgram(j);
+        nt = treblegram(j);
+        ntname = chordmode{2,nt};
+        ntt = trebleTypeMapping(ntname);
+
+        if cr == nr && ctt == ntt
+            nmergees = nmergees + 1;
+        elseif nmergees > 0
+            % propagate the uppergram and update other grams accordingly
+            upper = normalizeGram(sum(uppergram(:,i:i+nmergees),2));
+            bass = mode(bassgram(i:i+nmergees));
+            [tname, treble] = trebleMatching(bass, upper, chordmode);
+            root = bass2root(bass, tname);
+            bassgram(i:i+nmergees) = ones(1,nmergees+1)*bass;
+            rootgram(i:i+nmergees) = ones(1,nmergees+1)*root;
+            treblegram(i:i+nmergees) = castChords(nfSeq, bassgram(i:i+nmergees),...
+                ones(1,nmergees+1)*treble, chordmode);
+            break;
         else
-            continue;
+            break;
         end
     end
+    i = i + nmergees + 1;
 end
 
-[rootgram, bassgram, treblegram, bdrys] = combineSameChords(rootgram, bassgram, treblegram, bdrys);
+[rootgram, bassgram, treblegram, uppergram, bdrys] = combineSameChords(rootgram, bassgram, treblegram, uppergram, bdrys);

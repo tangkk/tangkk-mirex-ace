@@ -1,6 +1,7 @@
 % cast the chords to mirex 2015 standard vocabulary
 % which contains, maj, min, maj7, min7, 7 and there inversions
-function [bassgram, treblegram] = castChords(nfSeq,...
+% note that the root and bass is unchanged, only treble is affected
+function treblegram = castChords(nfSeq,...
     bassgram, treblegram, chordmode)
 
 nchords = size(bassgram,2);

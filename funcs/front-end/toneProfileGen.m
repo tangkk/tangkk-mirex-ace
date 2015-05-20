@@ -7,6 +7,7 @@
 function [Ms,Mc] = toneProfileGen(wl, numtones, numsemitones, fmin, fmax, fratio, fs)
 
 w = hamming(wl);
+s = 0.9; % apply Gomez's s^(k-1) to generate complex tones
 Ms = zeros(numtones, wl/2); % simple tone profiles
 Mc = zeros(numtones, wl/2); % complex tone profiles
 staticbassbound = 30;
@@ -16,8 +17,8 @@ trebleboot = 0.8;
 for toneidx = 1:1:numtones
     ftone = fmin*(fratio^(toneidx-2));
     stone = sin(2*pi*(1:wl)*ftone/fs).*w';
-    ctone = (0.9*sin(2*pi*(1:wl)*ftone/fs) + 0.9^2*sin(2*pi*(1:wl)*2*ftone/fs) + ...
-        0.9^3*sin(2*pi*(1:wl)*3*ftone/fs) + 0.9^4*sin(2*pi*(1:wl)*4*ftone/fs)).*w';
+    ctone = (s^0*sin(2*pi*(1:wl)*ftone/fs) + s^1*sin(2*pi*(1:wl)*2*ftone/fs) + ...
+        s^2*sin(2*pi*(1:wl)*3*ftone/fs) + s^3*sin(2*pi*(1:wl)*4*ftone/fs)).*w';
     
     ffttone = abs(fft(stone));
     ffttone = ffttone(1:wl/2);

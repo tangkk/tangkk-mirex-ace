@@ -1,8 +1,8 @@
-function [treble, ctidx] = trebleMatching(bass,upper,template)
+function [tname, treble] = trebleMatching(bass,upper,template)
 
-if sum(upper) >= 8 % this is the 'no-chord' condition (too many light bins)
-    treble = '1';
-    ctidx = 1;
+if sum(upper) >= 10 % this is the 'no-chord' condition (too many light bins)
+    tname = '1';
+    treble = 1;
     return;
 end
 
@@ -16,10 +16,10 @@ for i = 1:1:nchordtype
     uppermode(pitchTranspose(bass, chordmode{1,i})) = chordmode{3,i};
     treblescore(i) = upper'*uppermode;
 end
-[maxscore,ctidx] = max(treblescore);
+[maxscore,treble] = max(treblescore);
 if maxscore > 0
-    treble = chordmode{2,ctidx};
+    tname = chordmode{2,treble};
 else
-    treble = '1'; % this is the 'no-chord' condition (no light bins)
-    ctidx = 1;
+    tname = '1'; % this is the 'no-chord' condition (no light bins)
+    treble = 1;
 end

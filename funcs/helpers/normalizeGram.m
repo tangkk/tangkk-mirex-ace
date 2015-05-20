@@ -1,3 +1,5 @@
+% normalize the input whatever gram, note that the gram should be in
+% column vector format
 function outgram = normalizeGram(ingram)
 
 sizeG = size(ingram);

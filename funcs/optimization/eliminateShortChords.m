@@ -1,7 +1,7 @@
 % eliminate chords with very short duration, update other grams
 % the eliminated chords should be replaced by the previous chords
-function [rootgram, bassgram, treblegram, bdrys] = ...
-    eliminateShortChords(rootgram, bassgram, treblegram, bdrys, grain)
+function [rootgram, bassgram, treblegram, uppergram, bdrys] = ...
+    eliminateShortChords(rootgram, bassgram, treblegram, uppergram, bdrys, grain)
 
 % chord beat duration calculation
 nchords = size(rootgram,2);
@@ -24,24 +24,25 @@ for i = 1:1:length(nonchords)
     end
 end
 
-elimiateidxes = [shortchordidx nonchordidx];
-if ~isempty(elimiateidxes)
-    if elimiateidxes(end) == nchords
+eliminateidxes = [shortchordidx nonchordidx];
+if ~isempty(eliminateidxes)
+    if eliminateidxes(end) == nchords
         % the last chord cannot be eliminate
-        elimiateidxes(end) = [];
+        eliminateidxes(end) = [];
     end
 end
-if ~isempty(elimiateidxes)
-    if elimiateidxes(1) == 1
+if ~isempty(eliminateidxes)
+    if eliminateidxes(1) == 1
         % the first chord cannot be eliminate
-        elimiateidxes(1) = [];
+        eliminateidxes(1) = [];
     end
 end
 
 % eliminate process
-rootgram(elimiateidxes) = [];
-bassgram(elimiateidxes) = [];
-treblegram(elimiateidxes) = [];
-bdrys(elimiateidxes) = []; % the bdrys indicates the start of a chord
+rootgram(eliminateidxes) = [];
+bassgram(eliminateidxes) = [];
+treblegram(eliminateidxes) = [];
+uppergram(:,eliminateidxes) = [];
+bdrys(eliminateidxes) = []; % the bdrys indicates the start of a chord
 % deleting at start of a chord makes it follows the previous chord
 

@@ -7,7 +7,7 @@
 path(path,genpath('.'));
 close all;
 clear;
-clc;
+clc; 
 
 % ********************************************************** %
 % ********************* Control Panel ********************** %
@@ -26,6 +26,23 @@ if isexamine
 else
     df = false;
 end
+
+% plot control
+enPlotSpectrogram = 0;
+enPlotToneProfiles = 0;
+enPlotToneSalienceMatrix = 1;
+enPlotNoiseReducedSalienceMatrix = 1;
+enPlotNoteSalienceMatrix = 1;
+enPlotGestaltizedSalienceMatrix = 1;
+enPlotOnsetMatrix = 0;
+enPlotBassline = 0;
+enPlotHarmonicFilteredMatrice = 0;
+enPlotBaseUpperGram = 0;
+enPlotChordogram = 0;
+enPlotChordProgression = 1;
+enPlotFBChordogram = 0;
+enPlotFBChordProgression = 1;
+enPlotTonicProgression = 0;
 
 % optimization control
 preGestaltCompensate = false;
@@ -107,7 +124,7 @@ endtime = (1/fs)*length(x);
 tk = (1/fs)*(1:length(x));
 kk = (1:nslices);
 ff = fs/2*linspace(0,1,wl/2);
-if df
+if df && enPlotSpectrogram
 myImagePlot(X, kk, ff, 'slice', 'Hz', 'spectrogram');
 end
 
@@ -117,7 +134,7 @@ fratio = 2^(1/(12*3));
 numnotes = 72;
 numtones = numnotes*3; % numsemitones = 3
 [Ms,Mc] = toneProfileGen(wl, numtones, 3, fmin, fmax, fratio, fs);
-if df
+if df && enPlotToneProfiles
 myImagePlot(Ms, wl/2, numtones, 'time', '1/3 semitone', 'simple tone profile');
 myImagePlot(Mc, wl/2, numtones, 'time', '1/3 semitone', 'complex tone profile');
 end
@@ -131,9 +148,9 @@ sizeM = size(Ms);
 ps = 1:sizeM(1);
 
 % tuning algorithm, assuming numsemitones = 3
-Sst = tuning(Ss);
-Sct = tuning(Sc);
-if df
+Sst = globalTuning(Ss);
+Sct = globalTuning(Sc);
+if df && enPlotToneSalienceMatrix
 myImagePlot(Ss, kk, ps, 'slice', '1/3 semitone', 'simple tone salience matrix');
 myImagePlot(Sst, kk, ps, 'slice', '1/3 semitone', 'tuned simple tone salience matrix');
 myImagePlot(Sc, kk, ps, 'slice', '1/3 semitone', 'complex tone salience matrix');
@@ -144,7 +161,7 @@ end
 nt = 0.1;
 Ssn = noteSalienceNoiseReduce(Sst, nt);
 Scn = noteSalienceNoiseReduce(Sct, nt);
-if df
+if df && enPlotNoiseReducedSalienceMatrix
 myImagePlot(Ssn, kk, ps, 'slice', '1/3 semitone', 'noised reduced simple tone salience matrix');
 myImagePlot(Scn, kk, ps, 'slice', '1/3 semitone', 'noised reduced complex tone salience matrix');
 end
@@ -161,9 +178,9 @@ sizeS = size(S);
 ntones = sizeS(1);
 S = normalizeGram(S);
 p = 1:ntones;
-if df
-myImagePlot(Sss, kk, ps, 'slice', '1/3 semitone', 'Ss note salience matrix');
-myImagePlot(Scc, kk, ps, 'slice', '1/3 semitone', 'Sc note salience matrix');
+if df && enPlotNoteSalienceMatrix
+myImagePlot(Sss, kk, p, 'slice', '1/3 semitone', 'Ss note salience matrix');
+myImagePlot(Scc, kk, p, 'slice', '1/3 semitone', 'Sc note salience matrix');
 myImagePlot(S, kk, p, 'slice', 'semitone', 'note salience matrix');
 end
 
@@ -172,7 +189,7 @@ Sgo = S; % interface to another gestalt process
 if gestaltCompensate
 st = 0.0;
 Sgo = compensateLongSalience(Sgo,wgmax,st,0,0);
-if df
+if df && enPlotGestaltizedSalienceMatrix
 myImagePlot(Sgo, kk, p, 'slice', 'semitone', 'positive gestalt note salience matrix');
 end
 end
@@ -180,7 +197,7 @@ end
 if gestaltReduce
 st = 0.0;
 Sgo = reduceShortSalience(Sgo,wgmax,st,0,0);
-if df
+if df && enPlotGestaltizedSalienceMatrix
 myImagePlot(Sgo, kk, p, 'slice', 'semitone', 'negative gestalt note salience matrix');
 end
 end
@@ -197,7 +214,7 @@ Sg = Sgo; % interface to mid-end
 ot = 0.0;
 wo = 10;
 So = noteOnsetFilter(Sg, ot, wo);
-if df
+if df && enPlotOnsetMatrix
 myImagePlot(So, kk, p, 'slice', 'semitone', 'note onset matrix');
 end
 
@@ -205,15 +222,15 @@ end
 bt = 0.0;
 cb = 1;
 Sb = bassLineFilter(Sg, bt, wgmax, cb);
-if df
-myLinePlot(1:length(Sb), Sb, 'slice', 'semitone',nslices, ntones, '*', 'rough bassline');
+if df && enPlotBassline
+myLinePlot(1:length(Sb), Sb, 'slice', 'semitone',nslices, ntones, '*', 'bassline');
 end
 
 % harmonic change filter (detect harmonic change boundaries)ht = 0.1;
 ht = 0.1;
 bc = 6;
 [Sh, Shv, Shc, nchords] = harmonicChangeFilter(Sg, Sb, So, ht, bc);
-if df
+if df && enPlotHarmonicFilteredMatrice
 myImagePlot(Sh, kk, p, 'slice', 'semitone', 'harmonic bounded salience matrix');
 myImagePlot(Shv, kk(1:nchords), p, 'chord progression order',...
     'semitone', 'harmonic change matrix');
@@ -228,7 +245,7 @@ bassnotenames = {'N','C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
 treblenotenames = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
 kh = 1:nchords;
 ph = 1:12;
-if df
+if df && enPlotBaseUpperGram
 myLinePlot(kh, basegram(1,:), 'chord progression order', 'semitone',...
     nchords, 12, 'o', 'basegram', 0:12, bassnotenames);
 myImagePlot(uppergram, kh, ph, 'chord progression order', 'semitone',...
@@ -250,28 +267,32 @@ chordogram = computeChordogram(basegram, uppergram, chordmode);
 % the chord-level gestalt process
 rootgram = chordogram(1,:); bassgram = chordogram(2,:); treblegram = chordogram(3,:); bdrys = Shc;
 
-[rootgram, bassgram, treblegram, bdrys] = combineSameChords(rootgram, bassgram, treblegram, bdrys);
+[rootgram, bassgram, treblegram, uppergram,bdrys] = combineSameChords(rootgram,...
+    bassgram, treblegram, uppergram, bdrys);
 
-[rootgram, bassgram, treblegram, bdrys] = eliminateShortChords(rootgram,...
-    bassgram, treblegram, bdrys, grainsize);
+[rootgram, bassgram, treblegram, uppergram, bdrys] = eliminateShortChords(rootgram,...
+    bassgram, treblegram, uppergram, bdrys, grainsize);
 
 % compute note frequencies and tonic (dynamically), and do treble casting
 if enCast2MajMin
 hwin = 5; nfSeq = calNoteFreq(bassgram, treblegram, chordmode, hwin);
-[bassgram, treblegram] = castChords(nfSeq, bassgram, treblegram, chordmode);
+treblegram = castChords(nfSeq, bassgram, treblegram, chordmode);
 end
 
-[rootgram, bassgram, treblegram, bdrys] = mergeSimilarChords(rootgram,...
-    bassgram, treblegram, bdrys, chordmode);
+[rootgram, bassgram, treblegram, uppergram, bdrys] = mergeSimilarChords(rootgram,...
+    bassgram, treblegram, uppergram, bdrys, nfSeq, chordmode);
 
-if df
+if df && enPlotChordogram
 myLinePlot(1:length(rootgram), rootgram, 'chord progression order', 'semitone',...
     length(rootgram), 12, 'o', 'rootgram', 0:12, bassnotenames);
 myLinePlot(1:length(bassgram), bassgram, 'chord progression order', 'semitone',...
     length(bassgram), 12, 'o', 'bassgram', 0:12, bassnotenames);
 myLinePlot(1:length(bdrys), bdrys, 'chord progression order', 'slice',...
     length(bdrys), nslices, 'o', 'boundaries');
-visualizeChordProgression(rootgram, bassgram, treblegram, bdrys, chordmode);
+end
+
+if df && enPlotChordProgression
+    visualizeChordProgression(rootgram, bassgram, treblegram, bdrys, chordmode);
 end
 
 % % ********************************************************** %
@@ -291,29 +312,32 @@ for i = 1:1:fbn
     % the chord-level gestalt process
     rootgram = chordogram(1,:); bassgram = chordogram(2,:); treblegram = chordogram(3,:);
 
-    [rootgram, bassgram, treblegram, bdrys] = combineSameChords(rootgram, bassgram, treblegram, bdrys);
+    [rootgram, bassgram, treblegram, uppergram, bdrys] = combineSameChords(rootgram,...
+        bassgram, treblegram, uppergram, bdrys);
 
-    [rootgram, bassgram, treblegram, bdrys] = eliminateShortChords(rootgram,...
-        bassgram, treblegram, bdrys, grainsize);
+    [rootgram, bassgram, treblegram, uppergram, bdrys] = eliminateShortChords(rootgram,...
+    bassgram, treblegram, uppergram, bdrys, grainsize);
 
     % compute note frequencies and tonic (dynamically), and do treble casting
     if enCast2MajMin
     hwin = 5; nfSeq = calNoteFreq(bassgram, treblegram, chordmode, hwin);
-    [bassgram, treblegram] = castChords(nfSeq, bassgram, treblegram, chordmode);
+    treblegram = castChords(nfSeq, bassgram, treblegram, chordmode);
     end
 
-    [rootgram, bassgram, treblegram, bdrys] = mergeSimilarChords(rootgram,...
-        bassgram, treblegram, bdrys, chordmode);
+    [rootgram, bassgram, treblegram, uppergram, bdrys] = mergeSimilarChords(rootgram,...
+        bassgram, treblegram, uppergram, bdrys, nfSeq, chordmode);
 end
 
-if df
+if df && enPlotFBChordogram
 myLinePlot(1:length(rootgram), rootgram, 'chord progression order', 'semitone',...
     length(rootgram), 12, 'o', 'rootgram', 0:12, bassnotenames);
 myLinePlot(1:length(bassgram), bassgram, 'chord progression order', 'semitone',...
     length(bassgram), 12, 'o', 'bassgram', 0:12, bassnotenames);
 myLinePlot(1:length(bdrys), bdrys, 'chord progression order', 'slice',...
     length(bdrys), nslices, 'o', 'boundaries');
-visualizeChordProgression(rootgram, bassgram, treblegram, bdrys, chordmode);
+end
+if df && enPlotFBChordProgression
+    visualizeChordProgression(rootgram, bassgram, treblegram, bdrys, chordmode);
 end
 
 % ********************************************************** %
@@ -325,6 +349,9 @@ hwin = 5;
 nfSeq = calNoteFreq(bassgram, treblegram, chordmode, hwin);
 scaleSeq = calNoteScale(nfSeq);
 tonicSeq = calTonic(scaleSeq);
+if df && enPlotTonicProgression
+    visualizeTonicProgression(tonicSeq, bdrys);
+end
 
 % ********************************************************** %
 % ********************* Output ***************************** %
@@ -335,9 +362,6 @@ if isexamine
     break;
 else
     display('output...');
-    if df
-    visualizeTonicProgression(tonicSeq, bdrys);
-    end
     writeChordProgression(cpfolder, cppath, nslices, hopsize, fs,...
         rootgram, treblegram, bdrys, endtime, chordmode);
     display(strcat('end of analyzing...',audiopath));
