@@ -4,62 +4,39 @@
 % ********************************************************** %
 % ********************* Batch Input ************************ %
 % ********************************************************** %
-path(path,genpath('.'));
+installbnt;
+path(path,genpath(fullfile('./funcs')));
 close all;
 clear;
-clc; 
+clc;
 
 % ********************************************************** %
 % ********************* Control Panel ********************** %
 % ********************************************************** %
-
 % input control
 stereotomono = false;
 codec = 'mp3';
-
 % output control
-isexamine = 0; % 0: full evaluation, 1:examine range, 2: examine piece
-runeval = 1;
-examinerange = [15,30]; % start and endtime in unit of second
-if isexamine
-    df = true;
-else
-    df = false;
-end
-
+isexamine = 1; % 0: full evaluation, 1: examine piece
+enEval = 1;
 % plot control
-enPlotSpectrogram = 0;
-enPlotToneProfiles = 0;
-enPlotToneSalienceMatrix = 1;
-enPlotNoiseReducedSalienceMatrix = 1;
-enPlotNoteSalienceMatrix = 1;
-enPlotGestaltizedSalienceMatrix = 1;
-enPlotOnsetMatrix = 0;
-enPlotBassline = 0;
-enPlotHarmonicFilteredMatrice = 0;
-enPlotBaseUpperGram = 0;
-enPlotChordogram = 0;
-enPlotChordProgression = 1;
-enPlotFBChordogram = 0;
-enPlotFBChordProgression = 1;
-enPlotTonicProgression = 0;
-
-% optimization control
-preGestaltCompensate = false;
-preGestaltReduce = false;
-gestaltCompensate = true;
-gestaltReduce = true;
-wgmax = 10; % gestalt window size
-
+df = isexamine;
+enPlotFE = 1;
+enPlotME = 1;
+enPlotBE = 1;
+enPlotFB = 1;
+enPlotTS = 1;
+% gestalt control
+enGesComp = true;
+enGesRed = true;
+wgmax = 10; 
 % chored grain size control
 grainsize = 1;
-
-% chord vocabulary control
-tetradcontrol = 0.3;
-pentacontrol = 0.3;
-hexacontrol = 0.3;
-inversioncontrol = 0.3;
-
+% chord vocabulary control (normalized according to # of notes)
+tetradcontrol = 1 / 3;
+pentacontrol = 1 / 4;
+hexacontrol = 1 / 5;
+inversioncontrol = 1 / 3;
 enDyad = 0;
 enMajMin = 1;
 enSusAdd = 1;
@@ -70,16 +47,13 @@ enAugDim = 1;
 enMajMinBass = 1;
 enSeventhBass = 1;
 enOtherSlash = 0;
-
 % chord casting control
 enCast2MajMin = 1; % in case we'd like to substitute others to maj or min
-
 % feedback control (how many times)
 fbn = 1;
 
 feval = fopen('evallist.txt','r');
 tline = fgetl(feval);
-
 while ischar(tline)
     
 % ********************************************************** %
@@ -89,168 +63,20 @@ while ischar(tline)
 % input stage
 display('input...');
 
-songpath = tline;
-pathtokens = strsplit(songpath,'/');
-artist = pathtokens{1};
-album = pathtokens{2};
-songtitle = pathtokens{3};
-
-audioroot = './audio/';
-audiofolder = strcat(audioroot, artist, '/', album);
-audiopath = [audiofolder '/' songtitle '.' codec];
-
-cproot = './cp/';
-cpfolder = strcat(cproot, artist, '/', album);
-cppath = [cpfolder '/' songtitle '.txt'];
-
-gtroot = './gt/';
-gtfolder = strcat(gtroot, artist, '/', album);
-gtpath = [gtfolder '/' songtitle '.lab']; % '.lab' is the ground-truth
-
-[x, fs] = myInput(audiopath, stereotomono, examinerange, isexamine);
+[audiofolder, audiopath, cpfolder, cppath, gtfolder, gtpath] = inputDecode(tline, codec);
 
 % ********************************************************** %
 % ********************* Front End ************************** %
 % ********************************************************** %
 display('frontend...');
 
-% transform time domain into frequency domain
-wl = 4096;
-hopsize = 512;
-X = mySpectrogram(x, wl, hopsize);
-sizeX = size(X);
-nslices = sizeX(2);
-endtime = (1/fs)*length(x);
-tk = (1/fs)*(1:length(x));
-kk = (1:nslices);
-ff = fs/2*linspace(0,1,wl/2);
-if df && enPlotSpectrogram
-myImagePlot(X, kk, ff, 'slice', 'Hz', 'spectrogram');
-end
-
-fmin = 27.5; % MIDI note 21, Piano key number 1
-fmax = 1661; % MIDI note 92, Piano key number numnotes
-fratio = 2^(1/(12*3));
-numnotes = 72;
-numtones = numnotes*3; % numsemitones = 3
-[Ms,Mc] = toneProfileGen(wl, numtones, 3, fmin, fmax, fratio, fs);
-if df && enPlotToneProfiles
-myImagePlot(Ms, wl/2, numtones, 'time', '1/3 semitone', 'simple tone profile');
-myImagePlot(Mc, wl/2, numtones, 'time', '1/3 semitone', 'complex tone profile');
-end
-
-% calculate note salience matrix of the stft spectrogram (cosine
-% similarity) (note that this is an additive approach, as contrast to
-% the nnls approach which is an deductive approach)
-Ss = Ms*X;
-Sc = Mc*X;
-sizeM = size(Ms);
-ps = 1:sizeM(1);
-
-% tuning algorithm, assuming numsemitones = 3
-Sst = globalTuning(Ss);
-Sct = globalTuning(Sc);
-if df && enPlotToneSalienceMatrix
-myImagePlot(Ss, kk, ps, 'slice', '1/3 semitone', 'simple tone salience matrix');
-myImagePlot(Sst, kk, ps, 'slice', '1/3 semitone', 'tuned simple tone salience matrix');
-myImagePlot(Sc, kk, ps, 'slice', '1/3 semitone', 'complex tone salience matrix');
-myImagePlot(Sct, kk, ps, 'slice', '1/3 semitone', 'tuned complex tone salience matrix');
-end
-
-% noise reduction process
-nt = 0.1;
-Ssn = noteSalienceNoiseReduce(Sst, nt);
-Scn = noteSalienceNoiseReduce(Sct, nt);
-if df && enPlotNoiseReducedSalienceMatrix
-myImagePlot(Ssn, kk, ps, 'slice', '1/3 semitone', 'noised reduced simple tone salience matrix');
-myImagePlot(Scn, kk, ps, 'slice', '1/3 semitone', 'noised reduced complex tone salience matrix');
-end
-
-% computer note salience matrix by combining 1/3 semitones into semitones
-Sss = zeros(numnotes,nslices);
-Scc = zeros(numnotes,nslices);
-for i = 1:1:3
-    Sss = Sss + Ssn(i:3:end,:);
-    Scc = Scc + Scn(i:3:end,:);
-end
-S = Sss.*Scc;
-sizeS = size(S);
-ntones = sizeS(1);
-S = normalizeGram(S);
-p = 1:ntones;
-if df && enPlotNoteSalienceMatrix
-myImagePlot(Sss, kk, p, 'slice', '1/3 semitone', 'Ss note salience matrix');
-myImagePlot(Scc, kk, p, 'slice', '1/3 semitone', 'Sc note salience matrix');
-myImagePlot(S, kk, p, 'slice', 'semitone', 'note salience matrix');
-end
-
-Sgo = S; % interface to another gestalt process
-
-if gestaltCompensate
-st = 0.0;
-Sgo = compensateLongSalience(Sgo,wgmax,st,0,0);
-if df && enPlotGestaltizedSalienceMatrix
-myImagePlot(Sgo, kk, p, 'slice', 'semitone', 'positive gestalt note salience matrix');
-end
-end
-
-if gestaltReduce
-st = 0.0;
-Sgo = reduceShortSalience(Sgo,wgmax,st,0,0);
-if df && enPlotGestaltizedSalienceMatrix
-myImagePlot(Sgo, kk, p, 'slice', 'semitone', 'negative gestalt note salience matrix');
-end
-end
-
+[fs, hopsize, nslices, endtime, S] = frontEndDecode(audiopath, stereotomono, df, enPlotFE);
 
 % ********************************************************** %
 % ********************* Mid End **************************** %
 % ********************************************************** %
-display('midend...');
 
-Sg = Sgo; % interface to mid-end
-
-% onset filter (roughly detect the note onsets)
-ot = 0.0;
-wo = 10;
-So = noteOnsetFilter(Sg, ot, wo);
-if df && enPlotOnsetMatrix
-myImagePlot(So, kk, p, 'slice', 'semitone', 'note onset matrix');
-end
-
-% bassline filter (roughly set the dynamic bass bounds)
-bt = 0.0;
-cb = 1;
-Sb = bassLineFilter(Sg, bt, wgmax, cb);
-if df && enPlotBassline
-myLinePlot(1:length(Sb), Sb, 'slice', 'semitone',nslices, ntones, '*', 'bassline');
-end
-
-% harmonic change filter (detect harmonic change boundaries)ht = 0.1;
-ht = 0.1;
-bc = 6;
-[Sh, Shv, Shc, nchords] = harmonicChangeFilter(Sg, Sb, So, ht, bc);
-if df && enPlotHarmonicFilteredMatrice
-myImagePlot(Sh, kk, p, 'slice', 'semitone', 'harmonic bounded salience matrix');
-myImagePlot(Shv, kk(1:nchords), p, 'chord progression order',...
-    'semitone', 'harmonic change matrix');
-myLinePlot(1:length(Shc), Shc, 'chord progression order', 'slice',...
-    nchords, nslices, 'o', 'haromonic change moments');
-end
-
-% compute basegram and uppergram (based on harmonic change matrix)
-basegram = computeBasegram(Shv);
-uppergram = computeUppergram(Shv);
-bassnotenames = {'N','C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
-treblenotenames = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
-kh = 1:nchords;
-ph = 1:12;
-if df && enPlotBaseUpperGram
-myLinePlot(kh, basegram(1,:), 'chord progression order', 'semitone',...
-    nchords, 12, 'o', 'basegram', 0:12, bassnotenames);
-myImagePlot(uppergram, kh, ph, 'chord progression order', 'semitone',...
-    'uppergram', ph,treblenotenames);
-end
+[So, Sb, Shc, basegram, uppergram] = midEndDecode(S, wgmax, df, enGesComp, enGesRed, enPlotME);
 
 % ********************************************************** %
 % ********************* Back End *************************** %
@@ -262,96 +88,27 @@ chordmode = buildChordMode(tetradcontrol, pentacontrol, hexacontrol, inversionco
     enSixth, enSeventh, enExtended, enAugDim,...
     enMajMinBass, enSeventhBass, enOtherSlash);
 
-chordogram = computeChordogram(basegram, uppergram, chordmode);
-
-% the chord-level gestalt process
-rootgram = chordogram(1,:); bassgram = chordogram(2,:); treblegram = chordogram(3,:); bdrys = Shc;
-
-[rootgram, bassgram, treblegram, uppergram,bdrys] = combineSameChords(rootgram,...
-    bassgram, treblegram, uppergram, bdrys);
-
-[rootgram, bassgram, treblegram, uppergram, bdrys] = eliminateShortChords(rootgram,...
-    bassgram, treblegram, uppergram, bdrys, grainsize);
-
-% compute note frequencies and tonic (dynamically), and do treble casting
-if enCast2MajMin
-hwin = 5; nfSeq = calNoteFreq(bassgram, treblegram, chordmode, hwin);
-treblegram = castChords(nfSeq, bassgram, treblegram, chordmode);
-end
-
-[rootgram, bassgram, treblegram, uppergram, bdrys] = mergeSimilarChords(rootgram,...
-    bassgram, treblegram, uppergram, bdrys, nfSeq, chordmode);
-
-if df && enPlotChordogram
-myLinePlot(1:length(rootgram), rootgram, 'chord progression order', 'semitone',...
-    length(rootgram), 12, 'o', 'rootgram', 0:12, bassnotenames);
-myLinePlot(1:length(bassgram), bassgram, 'chord progression order', 'semitone',...
-    length(bassgram), 12, 'o', 'bassgram', 0:12, bassnotenames);
-myLinePlot(1:length(bdrys), bdrys, 'chord progression order', 'slice',...
-    length(bdrys), nslices, 'o', 'boundaries');
-end
-
-if df && enPlotChordProgression
-    visualizeChordProgression(rootgram, bassgram, treblegram, bdrys, chordmode);
-end
+[rootgram, bassgram, treblegram, bdrys] = backEndDecode(Shc, chordmode,...
+    basegram, uppergram, grainsize, enCast2MajMin, nslices, df, enPlotBE);
 
 % % ********************************************************** %
 % % ********************* Feedback *************************** %
 % % ********************************************************** %
 for i = 1:1:fbn
-    display(['feedback...' num2str(i)]);
+display(['re-midend...' num2str(i)]);
+[basegram, uppergram] = updateBaseUpperGram(bdrys, S, So, 1, 0.25);
 
-    display('re-midend...');
-    ut = 1;
-    nt = 0.25;
-    [basegram, uppergram] = updateBaseUpperGram(bdrys, S, So, ut, nt);
-
-    display('re-backend...');
-    chordogram = computeChordogram(basegram, uppergram, chordmode);
-
-    % the chord-level gestalt process
-    rootgram = chordogram(1,:); bassgram = chordogram(2,:); treblegram = chordogram(3,:);
-
-    [rootgram, bassgram, treblegram, uppergram, bdrys] = combineSameChords(rootgram,...
-        bassgram, treblegram, uppergram, bdrys);
-
-    [rootgram, bassgram, treblegram, uppergram, bdrys] = eliminateShortChords(rootgram,...
-    bassgram, treblegram, uppergram, bdrys, grainsize);
-
-    % compute note frequencies and tonic (dynamically), and do treble casting
-    if enCast2MajMin
-    hwin = 5; nfSeq = calNoteFreq(bassgram, treblegram, chordmode, hwin);
-    treblegram = castChords(nfSeq, bassgram, treblegram, chordmode);
-    end
-
-    [rootgram, bassgram, treblegram, uppergram, bdrys] = mergeSimilarChords(rootgram,...
-        bassgram, treblegram, uppergram, bdrys, nfSeq, chordmode);
-end
-
-if df && enPlotFBChordogram
-myLinePlot(1:length(rootgram), rootgram, 'chord progression order', 'semitone',...
-    length(rootgram), 12, 'o', 'rootgram', 0:12, bassnotenames);
-myLinePlot(1:length(bassgram), bassgram, 'chord progression order', 'semitone',...
-    length(bassgram), 12, 'o', 'bassgram', 0:12, bassnotenames);
-myLinePlot(1:length(bdrys), bdrys, 'chord progression order', 'slice',...
-    length(bdrys), nslices, 'o', 'boundaries');
-end
-if df && enPlotFBChordProgression
-    visualizeChordProgression(rootgram, bassgram, treblegram, bdrys, chordmode);
+display(['re-backend...' num2str(i)]);
+[rootgram, bassgram, treblegram, bdrys] = backEndDecode(bdrys, chordmode,...
+    basegram, uppergram, grainsize, enCast2MajMin, nslices, df, enPlotFB);
 end
 
 % ********************************************************** %
 % ***************** Tonic Computation ********************** %
 % ********************************************************** %
+[scaleSeq, tonicSeq] = tonicDecode(bassgram, treblegram, bdrys, chordmode,...
+    df, enPlotTS);
 
-% compute note frequencies and tonic (dynamically)
-hwin = 5;
-nfSeq = calNoteFreq(bassgram, treblegram, chordmode, hwin);
-scaleSeq = calNoteScale(nfSeq);
-tonicSeq = calTonic(scaleSeq);
-if df && enPlotTonicProgression
-    visualizeTonicProgression(tonicSeq, bdrys);
-end
 
 % ********************************************************** %
 % ********************* Output ***************************** %
@@ -375,7 +132,7 @@ fclose(feval);
 % ********************************************************** %
 % ********************* Evaluation ************************* %
 % ********************************************************** %
-if runeval && ~isexamine
+if enEval && ~isexamine
     display('evaluation...');
     evaluate;
 end
@@ -383,8 +140,8 @@ end
 % ********************************************************** %
 % ********************* Playback *************************** %
 % ********************************************************** %
-if isexamine == 2
-    display('playback...');
-    p = audioplayer(x,fs);
-    play(p);
-end
+% if isexamine
+%     display('playback...');
+%     p = audioplayer(x,fs);
+%     play(p);
+% end
