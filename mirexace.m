@@ -4,8 +4,10 @@
 % ********************************************************** %
 % ********************* Batch Input ************************ %
 % ********************************************************** %
+warning off;
 installbnt;
 path(path,genpath(fullfile('./funcs')));
+warning on;
 close all;
 clear;
 clc;
@@ -21,11 +23,11 @@ isexamine = 1; % 0: full evaluation, 1: examine piece
 enEval = 1;
 % plot control
 df = isexamine;
-enPlotFE = 1;
+enPlotFE = 0;
 enPlotME = 1;
-enPlotBE = 1;
-enPlotFB = 1;
-enPlotTS = 1;
+enPlotBE = 0;
+enPlotFB = 0;
+enPlotTS = 0;
 % gestalt control
 enGesComp = true;
 enGesRed = true;
@@ -88,6 +90,17 @@ chordmode = buildChordMode(tetradcontrol, pentacontrol, hexacontrol, inversionco
     enSixth, enSeventh, enExtended, enAugDim,...
     enMajMinBass, enSeventhBass, enOtherSlash);
 
+% ********************************************************** %
+% *************** Probabilistic Back End ******************* %
+% ********************************************************** %
+bnet = dbnSetup(chordmode);
+cp = dbnInference(bnet, chordmode, basegram, uppergram);
+display(cp);
+return;
+% ********************************************************** %
+% ***************** Non-Prob Back End ********************** %
+% ********************************************************** %
+
 [rootgram, bassgram, treblegram, bdrys] = backEndDecode(Shc, chordmode,...
     basegram, uppergram, grainsize, enCast2MajMin, nslices, df, enPlotBE);
 
@@ -108,7 +121,6 @@ end
 % ********************************************************** %
 [scaleSeq, tonicSeq] = tonicDecode(bassgram, treblegram, bdrys, chordmode,...
     df, enPlotTS);
-
 
 % ********************************************************** %
 % ********************* Output ***************************** %
