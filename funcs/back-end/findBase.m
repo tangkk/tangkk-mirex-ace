@@ -1,7 +1,7 @@
 % find the base of a specific salience range
 % count the lowest pitch salience, with priority emphasized on a onset salience
 % that comes at the very beginning of the region
-function base = findBase(Sw, Swo)
+function [base, bstg] = findBase(Sw, Swo)
 
 ntones = size(Sw,1);
 nslices = size(Sw,2);
@@ -26,9 +26,11 @@ end
 basevec = basevec ./ max(basevec);
 basevec(basevec <= 0.5) = 0;
 base = 0;
+bstg = 0;
 for i = 1:1:ntones
     if basevec(i) > 0
         base = i;
+        bstg = sum(Swo(i,1:floor(nslices/4))) / sum(Swo(i,floor(1:nslices/4)) > 0);
         break;
     end
 end

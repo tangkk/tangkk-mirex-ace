@@ -3,13 +3,14 @@ function [basegram, uppergram] = updateBaseUpperGram(bdrys, S, So, ut, nt)
 
 nchords = length(bdrys) - 1;
 
-basegram = zeros(1,nchords);
+basegram = zeros(2,nchords);
 for i = 1:1:nchords
     wb = bdrys(i):bdrys(i+1);
     Sw = S(:,wb);
     Swo = So(:,wb);
-    base = findBase(Sw, Swo);
-    basegram(i) = pitchTranspose(base,9);
+    [base, bstg] = findBase(Sw, Swo);
+    basegram(1,i) = pitchTranspose(base,9);
+    basegram(2,i) = bstg;
 end
 
 uppergram = zeros(12,nchords);

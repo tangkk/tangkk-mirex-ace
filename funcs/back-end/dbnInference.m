@@ -1,14 +1,18 @@
-function cp = dbnInference(bnet, chordmode, basegram, uppergram)
+function [rootgram, bassgram, treblegram] = dbnInference(bnet, chordmode, basegram, uppergram,...
+    bdrys, df, enPlot)
 
 % inference
 T = size(basegram,2);
 nct = size(chordmode,2);
+rootgram = zeros(1,T);
+bassgram = zeros(1,T);
+treblegram = zeros(1,T);
 jengine = smoother_engine(jtree_2TBN_inf_engine(bnet));
 evidence = cell(2,T);
 for i  = 1:1:T
     bg = basegram(:,i);
     ug = uppergram(:,i);
-    bass = bg(1); bweight = bg(3);
+    bass = bg(1); bweight = bg(2);
     evb = zeros(12,1); evb(bass) = bweight;
     evu = ug;
     ev = [evb;evu];
@@ -17,13 +21,18 @@ end
 [jengine,llj] = enter_evidence(jengine, evidence);
 mpe = find_mpe(jengine, evidence);
 
-cp = cell(1,size(mpe,2));
-for i = 1:1:length(cp)
+for i = 1:1:T
     cn = cell2num(mpe(1,i));
-    bn = ceil(cn/(nct-1)); % bass number
-    tstr = chordmode{2,mod(cn,nct-1)+1};
+    bn = ceil(cn/(nct-1));
+    tn = mod(cn,nct-1)+1;
+    tstr = chordmode{2,tn};
     rn = bass2root(bn, tstr);
-    rstr = num2note(rn);
-    chstr = strcat(rstr, tstr);
-    cp{i} = chstr;
+    rootgram(i) = rn;
+    bassgram(i) = bn;
+    treblegram(i) = tn;
+end
+
+if df & enPlot
+    visualizeChordMPE(mpe, chordmode);
+    visualizeChordProgression(rootgram, bassgram, treblegram, bdrys, chordmode);
 end

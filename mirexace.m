@@ -25,7 +25,7 @@ enEval = 1;
 df = isexamine;
 enPlotFE = 0;
 enPlotME = 1;
-enPlotBE = 0;
+enPlotBE = 1;
 enPlotFB = 0;
 enPlotTS = 0;
 % gestalt control
@@ -54,6 +54,19 @@ enCast2MajMin = 1; % in case we'd like to substitute others to maj or min
 % feedback control (how many times)
 fbn = 1;
 
+% ********************************************************** %
+% ********************* Setup ****************************** %
+% ********************************************************** %
+chordmode = buildChordMode(tetradcontrol, pentacontrol, hexacontrol, inversioncontrol,...
+    enDyad, enMajMin, enSusAdd,...
+    enSixth, enSeventh, enExtended, enAugDim,...
+    enMajMinBass, enSeventhBass, enOtherSlash);
+bnet = dbnSetup(chordmode);
+
+
+% ********************************************************** %
+% ****************** Batch Process ************************* %
+% ********************************************************** %
 feval = fopen('evallist.txt','r');
 tline = fgetl(feval);
 while ischar(tline)
@@ -84,24 +97,13 @@ display('frontend...');
 % ********************* Back End *************************** %
 % ********************************************************** %
 display('backend...');
+bdrys = Shc;
 
-chordmode = buildChordMode(tetradcontrol, pentacontrol, hexacontrol, inversioncontrol,...
-    enDyad, enMajMin, enSusAdd,...
-    enSixth, enSeventh, enExtended, enAugDim,...
-    enMajMinBass, enSeventhBass, enOtherSlash);
+[rootgram, bassgram, treblegram] = dbnInference(bnet, chordmode, basegram, uppergram,...
+    bdrys, df, enPlotBE);
+return; % temp return here for testing
 
-% ********************************************************** %
-% *************** Probabilistic Back End ******************* %
-% ********************************************************** %
-bnet = dbnSetup(chordmode);
-cp = dbnInference(bnet, chordmode, basegram, uppergram);
-display(cp);
-return;
-% ********************************************************** %
-% ***************** Non-Prob Back End ********************** %
-% ********************************************************** %
-
-[rootgram, bassgram, treblegram, bdrys] = backEndDecode(Shc, chordmode,...
+[rootgram, bassgram, treblegram, bdrys] = backEndDecode(bdrys, chordmode,...
     basegram, uppergram, grainsize, enCast2MajMin, nslices, df, enPlotBE);
 
 % % ********************************************************** %
