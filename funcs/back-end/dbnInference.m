@@ -1,5 +1,4 @@
-function [rootgram, bassgram, treblegram] = dbnInference(bnet, chordmode, basegram, uppergram,...
-    bdrys, df, enPlot)
+function [rootgram, bassgram, treblegram] = dbnInference(bnet, chordmode, basegram, uppergram)
 
 % inference
 T = size(basegram,2);
@@ -30,9 +29,4 @@ for i = 1:1:T
     rootgram(i) = rn;
     bassgram(i) = bn;
     treblegram(i) = tn;
-end
-
-if df & enPlot
-    visualizeChordMPE(mpe, chordmode);
-    visualizeChordProgression(rootgram, bassgram, treblegram, bdrys, chordmode);
 end

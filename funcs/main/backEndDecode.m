@@ -1,25 +1,11 @@
-function [rootgram, bassgram, treblegram, bdrys] = backEndDecode(bdrys, chordmode,...
-    basegram, uppergram, grainsize, enCast2MajMin, nslices, df, enPlot)
+function [rootgram, bassgram, treblegram, bdrys] = backEndDecode(bnet, chordmode,...
+    basegram, uppergram, bdrys, grainsize, enCast2MajMin, nslices, df, enPlot)
 
-chordogram = computeChordogram(basegram, uppergram, chordmode);
+% [rootgram, bassgram, treblegram] = simChordMatching(basegram, uppergram, chordmode);
+[rootgram, bassgram, treblegram] = dbnInference(bnet, chordmode, basegram, uppergram);
 
-% the chord-level gestalt process
-rootgram = chordogram(1,:); bassgram = chordogram(2,:); treblegram = chordogram(3,:);
-
-[rootgram, bassgram, treblegram, uppergram,bdrys] = combineSameChords(rootgram,...
-    bassgram, treblegram, uppergram, bdrys);
-
-[rootgram, bassgram, treblegram, uppergram, bdrys] = eliminateShortChords(rootgram,...
-    bassgram, treblegram, uppergram, bdrys, grainsize);
-
-% compute note frequencies and tonic (dynamically), and do treble casting
-if enCast2MajMin
-hwin = 5; nfSeq = calNoteFreq(bassgram, treblegram, chordmode, hwin);
-treblegram = castChords(nfSeq, bassgram, treblegram, chordmode);
-end
-
-[rootgram, bassgram, treblegram, uppergram, bdrys] = mergeSimilarChords(rootgram,...
-    bassgram, treblegram, uppergram, bdrys, nfSeq, chordmode);
+[rootgram, bassgram, treblegram, uppergram, bdrys] = ...
+    chordLevelGestalt(rootgram, bassgram, treblegram, uppergram,bdrys, grainsize, enCast2MajMin, chordmode);
 
 bassnotenames = {'N','C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
 if df && enPlot

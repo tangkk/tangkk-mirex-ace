@@ -112,18 +112,22 @@ mu(:,H) = ones(O,1);
 % set the sigma (or sigma^2), similarly, loop over the 12 pitch classes
 % and $nct - 1 chord types and set sigma^2 for both treble and bass,
 % notice the special consideration for bass, especially the non-chord-bass
+sigma2Treble = 0.2;
+sigma2CBass = 0.1;
+sigma2NCBass = 0.2;
+sigma2NoChord = 0.2;
 for i = 1:1:12
     for j = 2:1:nct
         ps = [0 chordmode{1,j}];
-        sigmaij = [ones(O/2,1)*sqrt(0.1) ; ones(O/2,1)*sqrt(0.2)];
+        sigmaij = [ones(O/2,1)*sqrt(sigma2CBass) ; ones(O/2,1)*sqrt(sigma2Treble)];
         for k = 2:1:length(ps) % only loop non-chord-bass pitch
             p = pitchTranspose(i,ps(k));
-            sigmaij(p) = sqrt(0.2);
+            sigmaij(p) = sqrt(sigma2NCBass);
         end
         sigma(:,:,(i - 1) * (nct - 1) + j - 1) = diag(sigmaij);
     end
 end
-sigma(:,:,H) = eye(O)*sqrt(0.2);
+sigma(:,:,H) = eye(O)*sqrt(sigma2NoChord);
 
 % transition probabilities
 % not only self transtional prob is different from others

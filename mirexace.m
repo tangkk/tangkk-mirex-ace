@@ -26,7 +26,7 @@ df = isexamine;
 enPlotFE = 0;
 enPlotME = 1;
 enPlotBE = 1;
-enPlotFB = 0;
+enPlotFB = 1;
 enPlotTS = 0;
 % gestalt control
 enGesComp = true;
@@ -52,7 +52,7 @@ enOtherSlash = 0;
 % chord casting control
 enCast2MajMin = 1; % in case we'd like to substitute others to maj or min
 % feedback control (how many times)
-fbn = 1;
+fbn = 2;
 
 % ********************************************************** %
 % ********************* Setup ****************************** %
@@ -99,12 +99,8 @@ display('frontend...');
 display('backend...');
 bdrys = Shc;
 
-[rootgram, bassgram, treblegram] = dbnInference(bnet, chordmode, basegram, uppergram,...
-    bdrys, df, enPlotBE);
-return; % temp return here for testing
-
-[rootgram, bassgram, treblegram, bdrys] = backEndDecode(bdrys, chordmode,...
-    basegram, uppergram, grainsize, enCast2MajMin, nslices, df, enPlotBE);
+[rootgram, bassgram, treblegram, bdrys] = backEndDecode(bnet, chordmode,...
+    basegram, uppergram, bdrys, grainsize, enCast2MajMin, nslices, df, enPlotBE);
 
 % % ********************************************************** %
 % % ********************* Feedback *************************** %
@@ -114,8 +110,8 @@ display(['re-midend...' num2str(i)]);
 [basegram, uppergram] = updateBaseUpperGram(bdrys, S, So, 1, 0.25);
 
 display(['re-backend...' num2str(i)]);
-[rootgram, bassgram, treblegram, bdrys] = backEndDecode(bdrys, chordmode,...
-    basegram, uppergram, grainsize, enCast2MajMin, nslices, df, enPlotFB);
+[rootgram, bassgram, treblegram, bdrys] = backEndDecode(bnet, chordmode,...
+    basegram, uppergram, bdrys, grainsize, enCast2MajMin, nslices, df, enPlotFB);
 end
 
 % ********************************************************** %
