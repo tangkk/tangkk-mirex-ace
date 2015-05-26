@@ -16,6 +16,7 @@ if df && enPlot
 myImagePlot(X, kk, ff, 'slice', 'Hz', 'spectrogram');
 end
 
+% note dictionary
 fmin = 27.5; % MIDI note 21, Piano key number 1
 fmax = 1661; % MIDI note 92, Piano key number numnotes
 fratio = 2^(1/(12*3));
@@ -23,8 +24,8 @@ numnotes = 72;
 numtones = numnotes*3; % numsemitones = 3
 [Ms,Mc] = toneProfileGen(wl, numtones, 3, fmin, fmax, fratio, fs);
 if df && enPlot
-myImagePlot(Ms, wl/2, numtones, 'time', '1/3 semitone', 'simple tone profile');
-myImagePlot(Mc, wl/2, numtones, 'time', '1/3 semitone', 'complex tone profile');
+myImagePlot(Ms, 1:wl/2, 1:numtones, 'time', '1/3 semitone', 'simple tone profile');
+myImagePlot(Mc, 1:wl/2, 1:numtones, 'time', '1/3 semitone', 'complex tone profile');
 end
 
 % calculate note salience matrix of the stft spectrogram (cosine

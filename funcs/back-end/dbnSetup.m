@@ -63,7 +63,28 @@ bnet = mk_dbn(intra, inter, ns, 'discrete', dnodes, 'observed', cnodes,...
 % set CPDs: CPD{1} <- prior; CPD{2} <- emission; CPD{3} <- transition
 
 % prior probabilities
-prior = normalise(ones(1,H));
+% prior = normalise(ones(1,H)); % uniform distribution
+% set prior prob according to Ashley's paper
+prior = ones(1,H);
+for i = 1:1:12
+    for j = 2:1:nct
+        cstr = chordmode{2,j};
+        cidx = (i - 1) * (nct - 1) + j - 1;
+        switch cstr
+            case 'maj'
+                prior(cidx) = prior(cidx) * 10;
+            case 'min'
+                prior(cidx) = prior(cidx) * 5;
+            case '7'
+                prior(cidx) = prior(cidx) * 3;
+            case 'min7'
+                prior(cidx) = prior(cidx) * 2;
+            case 'maj7'
+                prior(cidx) = prior(cidx) * 2;
+        end
+    end
+end
+prior = normalise(prior);
 
 % emission probabilities
 % for reference, in mauch's thesis:
@@ -132,7 +153,7 @@ sigma(:,:,H) = eye(O)*sqrt(sigma2NoChord);
 % transition probabilities
 % not only self transtional prob is different from others
 transmat = ones(H,H);
-st = 5; % the self transition factor, with larger value yields stronger smoothy.
+st = 2.5; % the self transition factor, with larger value yields stronger smoothy.
 for i = 1:1:H
     transmat(i,i) = transmat(i,i) * st;
 end

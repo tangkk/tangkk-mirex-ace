@@ -23,7 +23,7 @@ isexamine = 1; % 0: full evaluation, 1: examine piece
 enEval = 1;
 % plot control
 df = isexamine;
-enPlotFE = 0;
+enPlotFE = 1;
 enPlotME = 1;
 enPlotBE = 1;
 enPlotFB = 1;
@@ -52,7 +52,7 @@ enOtherSlash = 0;
 % chord casting control
 enCast2MajMin = 1; % in case we'd like to substitute others to maj or min
 % feedback control (how many times)
-fbn = 2;
+fbn = 0;
 
 % ********************************************************** %
 % ********************* Setup ****************************** %
@@ -61,6 +61,7 @@ chordmode = buildChordMode(tetradcontrol, pentacontrol, hexacontrol, inversionco
     enDyad, enMajMin, enSusAdd,...
     enSixth, enSeventh, enExtended, enAugDim,...
     enMajMinBass, enSeventhBass, enOtherSlash);
+
 bnet = dbnSetup(chordmode);
 
 
@@ -83,6 +84,7 @@ display('input...');
 % ********************************************************** %
 % ********************* Front End ************************** %
 % ********************************************************** %
+% ****** solves the least square problem ******%
 display('frontend...');
 
 [fs, hopsize, nslices, endtime, S] = frontEndDecode(audiopath, stereotomono, df, enPlotFE);
@@ -90,14 +92,16 @@ display('frontend...');
 % ********************************************************** %
 % ********************* Mid End **************************** %
 % ********************************************************** %
+% ****** solves the segmentation problem ******%
 
-[So, Sb, Shc, basegram, uppergram] = midEndDecode(S, wgmax, df, enGesComp, enGesRed, enPlotME);
+[So, Sb, bdrys, basegram, uppergram] = midEndDecode(S, wgmax, df, enGesComp, enGesRed, enPlotME);
 
 % ********************************************************** %
 % ********************* Back End *************************** %
 % ********************************************************** %
+% ****** solves the optimal path problem ******%
+
 display('backend...');
-bdrys = Shc;
 
 [rootgram, bassgram, treblegram, bdrys] = backEndDecode(bnet, chordmode,...
     basegram, uppergram, bdrys, grainsize, enCast2MajMin, nslices, df, enPlotBE);
@@ -105,11 +109,12 @@ bdrys = Shc;
 % % ********************************************************** %
 % % ********************* Feedback *************************** %
 % % ********************************************************** %
-for i = 1:1:fbn
-display(['re-midend...' num2str(i)]);
-[basegram, uppergram] = updateBaseUpperGram(bdrys, S, So, 1, 0.25);
+% ****** reiterate the process until converge ******%
 
-display(['re-backend...' num2str(i)]);
+for i = 1:1:fbn
+display(['feedback...' num2str(i)]);
+[basegram, uppergram] = updateBaseUpperGram(bassgram, bdrys, S, So, 1, 0.25);
+
 [rootgram, bassgram, treblegram, bdrys] = backEndDecode(bnet, chordmode,...
     basegram, uppergram, bdrys, grainsize, enCast2MajMin, nslices, df, enPlotFB);
 end
@@ -117,6 +122,7 @@ end
 % ********************************************************** %
 % ***************** Tonic Computation ********************** %
 % ********************************************************** %
+% ****** key progression by-product ******%
 [scaleSeq, tonicSeq] = tonicDecode(bassgram, treblegram, bdrys, chordmode,...
     df, enPlotTS);
 
