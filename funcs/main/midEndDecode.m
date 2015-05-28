@@ -1,4 +1,4 @@
-function [So, Sb, Shc, basegram, uppergram] = midEndDecode(S, wgmax, df, enCom, enRed, enPlot)
+function [So, Sb, bdrys, basegram, uppergram] = midEndDecode(S, wgmax, df, enCom, enRed, enPlot)
 
 nslices = size(S, 2);
 ntones = size(S, 1);
@@ -53,16 +53,33 @@ myLinePlot(1:length(Shc), Shc, 'chord progression order', 'slice',...
     nchords, nslices, 'o', 'haromonic change moments');
 end
 
+% segment the piece according to the median value of dif boundaries
+mdifbdry = round(median(Shc(2:end) - Shc(1:end-1)));
+segSg = zeros(size(Sg,1), ceil(size(Sg,2)/mdifbdry));
+for j = 1:size(segSg,2)
+    segSg(:,j) = mean(Sg(:,(j-1) * mdifbdry + 1 : min(j*mdifbdry,size(Sg,2))),2);
+end
+if df && enPlot
+myImagePlot(segSg, 1:size(segSg,2), p, 'segmentation',...
+    'semitone', 'note salience segmentation matrix');
+end
+
+if mod(Shc(end),mdifbdry) == 0
+    bdrys = 1:mdifbdry:Shc(end);
+else
+    bdrys = [1:mdifbdry:Shc(end) Shc(end)];
+end
+
 % compute basegram and uppergram (based on harmonic change matrix)
-basegram = computeBasegram(Shv);
-uppergram = computeUppergram(Shv);
-bassnotenames = {'N','C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
+basegram = computeBasegram(segSg); uppergram = computeUppergram(segSg);
+% basegram = computeBasegram(Shv); uppergram = computeUppergram(Shv);
+bassnotenames = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
 treblenotenames = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
 kh = 1:nchords;
 ph = 1:12;
 if df && enPlot
-myLinePlot(kh, basegram(1,:), 'chord progression order', 'semitone',...
-    nchords, 12, 'o', 'basegram', 0:12, bassnotenames);
+myImagePlot(basegram, kh, ph, 'chord progression order', 'semitone',...
+    'basegram', ph, bassnotenames);
 myImagePlot(uppergram, kh, ph, 'chord progression order', 'semitone',...
-    'uppergram', ph,treblenotenames);
+    'uppergram', ph, treblenotenames);
 end

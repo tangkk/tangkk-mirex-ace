@@ -22,7 +22,7 @@ codec = 'mp3';
 isexamine = 1; % 0: full evaluation, 1: examine piece
 enEval = 1;
 % plot control
-df = isexamine;
+df = 1;
 enPlotFE = 1;
 enPlotME = 1;
 enPlotBE = 1;
@@ -42,10 +42,10 @@ inversioncontrol = 1 / 3;
 enDyad = 0;
 enMajMin = 1;
 enSusAdd = 1;
-enSixth = 0;
+enSixth = 1;
 enSeventh = 1;
 enExtended = 1;
-enAugDim = 0;
+enAugDim = 1;
 enMajMinBass = 1;
 enSeventhBass = 1;
 enOtherSlash = 0;
@@ -61,8 +61,6 @@ chordmode = buildChordMode(tetradcontrol, pentacontrol, hexacontrol, inversionco
     enDyad, enMajMin, enSusAdd,...
     enSixth, enSeventh, enExtended, enAugDim,...
     enMajMinBass, enSeventhBass, enOtherSlash);
-
-bnet = dbnSetup(chordmode);
 
 
 % ********************************************************** %
@@ -103,7 +101,7 @@ display('frontend...');
 
 display('backend...');
 
-[rootgram, bassgram, treblegram, bdrys] = backEndDecode(bnet, chordmode,...
+[rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode,...
     basegram, uppergram, bdrys, grainsize, enCast2MajMin, nslices, df, enPlotBE);
 
 % % ********************************************************** %
@@ -115,7 +113,7 @@ for i = 1:1:fbn
 display(['feedback...' num2str(i)]);
 [basegram, uppergram] = updateBaseUpperGram(bassgram, bdrys, S, So, 1, 0.25);
 
-[rootgram, bassgram, treblegram, bdrys] = backEndDecode(bnet, chordmode,...
+[rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode,...
     basegram, uppergram, bdrys, grainsize, enCast2MajMin, nslices, df, enPlotFB);
 end
 

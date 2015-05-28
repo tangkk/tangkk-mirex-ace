@@ -1,11 +1,13 @@
-function [rootgram, bassgram, treblegram, bdrys] = backEndDecode(bnet, chordmode,...
+function [rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode,...
     basegram, uppergram, bdrys, grainsize, enCast2MajMin, nslices, df, enPlot)
+
+bnet = dbnSetup(chordmode);
 
 % [rootgram, bassgram, treblegram] = simChordMatching(basegram, uppergram, chordmode);
 [rootgram, bassgram, treblegram] = dbnInference(bnet, chordmode, basegram, uppergram);
 
 [rootgram, bassgram, treblegram, uppergram, bdrys] = ...
-    chordLevelGestalt(rootgram, bassgram, treblegram, uppergram,bdrys, grainsize, enCast2MajMin, chordmode);
+    chordLevelGestalt(rootgram, bassgram, treblegram, uppergram, bdrys, grainsize, enCast2MajMin, chordmode);
 
 bassnotenames = {'N','C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
 if df && enPlot

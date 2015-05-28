@@ -55,11 +55,11 @@ myImagePlot(Ss, kk, ps, 'slice', '1/3 semitone', 'tuned simple tone salience mat
 % myImagePlot(Sc, kk, ps, 'slice', '1/3 semitone', 'tuned complex tone salience matrix');
 end
 
-% suppress percussive moments
-Ss = pcsSuppress(Ss, 40);
-if df && enPlot
-myImagePlot(Ss, kk, ps, 'slice', '1/3 semitone', 'pcs Suppressed simple tone salience matrix');
-end
+% % suppress percussive moments
+% Ss = pcsSuppress(Ss, 40);
+% if df && enPlot
+% myImagePlot(Ss, kk, ps, 'slice', '1/3 semitone', 'pcs Suppressed simple tone salience matrix');
+% end
 
 % % standardization (Y(k,m) - mu(k,m)) / sigma(k,m)
 % wl = 9; % 3 * 12 / 2

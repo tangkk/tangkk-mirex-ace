@@ -1,7 +1,7 @@
 % The following evaluator is built and executed from Johan's source code:
 % https://github.com/jpauwels/MusOOEvaluator
 
-sufix = 'TheBeatles-3fb';
+sufix = 'TheBeatles-dbn0.1';
 evallist = 'evallist.txt';
 
 gtroot = './gt/';

@@ -11,8 +11,7 @@ evidence = cell(2,T);
 for i  = 1:1:T
     bg = basegram(:,i);
     ug = uppergram(:,i);
-    bass = bg(1); bweight = bg(2);
-    evb = zeros(12,1); evb(bass) = bweight;
+    evb = bg;
     evu = ug;
     ev = [evb;evu];
     evidence(2,i) = num2cell(ev,1);

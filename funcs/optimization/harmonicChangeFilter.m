@@ -1,3 +1,5 @@
+% this process does the segmentation job according to bass onsets
+
 function [Sh, Shv, Shc, nchords] = harmonicChangeFilter(Sg, Sb, So, ht, bc)
 
 sizeS = size(Sg);
