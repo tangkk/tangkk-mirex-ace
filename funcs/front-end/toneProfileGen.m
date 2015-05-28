@@ -4,16 +4,11 @@
 % e.g. A4 is bin 49*numsemitones-1 = 146, C4 is bin 40*numsemitones-1 = 119 (note that notenum is
 % not midinum, note num is the index of the key on an 88 key piano with A0 = 1)
 % therefore notenum = (binnum+1) / numsemitones if the tuning is correct.
-function [Ms,Mc] = toneProfileGen(wl, numtones, numsemitones, fmin, fmax, fratio, fs)
+function [Ms,Mc] = toneProfileGen(s, wl, numtones, numsemitones, fmin, fmax, fratio, fs)
 
 w = hamming(wl);
-s = 0.9; % apply Gomez's s^(k-1) to generate complex tones
 Ms = zeros(numtones, wl/2); % simple tone profiles
 Mc = zeros(numtones, wl/2); % complex tone profiles
-staticbassbound = 30;
-statictreblebound = 60;
-bassboot = 1.5;
-trebleboot = 0.8;
 for toneidx = 1:1:numtones
     ftone = fmin*(fratio^(toneidx-2));
     stone = sin(2*pi*(1:wl)*ftone/fs).*w';
@@ -27,16 +22,7 @@ for toneidx = 1:1:numtones
     fftctone = abs(fft(ctone));
     fftctone = fftctone(1:wl/2);
     fftctone = fftctone / norm(fftctone,2);
-    
-    % bass and treble boot (cut)
-    if toneidx < staticbassbound*numsemitones
-        ffttone = ffttone * bassboot;
-        fftctone = fftctone * bassboot;
-    end
-    if toneidx > statictreblebound*numsemitones
-        ffttone = ffttone * trebleboot;
-        fftctone = fftctone * trebleboot;
-    end
+
     Ms(toneidx,:) = ffttone;
     Mc(toneidx,:) = fftctone;
 end

@@ -31,7 +31,7 @@ enPlotTS = 0;
 % gestalt control
 enGesComp = true;
 enGesRed = true;
-wgmax = 10; 
+wgmax = 10;
 % chored grain size control
 grainsize = 1;
 % chord vocabulary control (normalized according to # of notes)
@@ -42,10 +42,10 @@ inversioncontrol = 1 / 3;
 enDyad = 0;
 enMajMin = 1;
 enSusAdd = 1;
-enSixth = 1;
+enSixth = 0;
 enSeventh = 1;
 enExtended = 1;
-enAugDim = 1;
+enAugDim = 0;
 enMajMinBass = 1;
 enSeventhBass = 1;
 enOtherSlash = 0;
@@ -71,7 +71,7 @@ bnet = dbnSetup(chordmode);
 feval = fopen('evallist.txt','r');
 tline = fgetl(feval);
 while ischar(tline)
-    
+
 % ********************************************************** %
 % ********************* Input ****************************** %
 % ********************************************************** %

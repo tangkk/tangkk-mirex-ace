@@ -150,10 +150,33 @@ for i = 1:1:12
 end
 sigma(:,:,H) = eye(O)*sqrt(sigma2NoChord);
 
+% set off-diagonal sigmas (full covariance matrix) 
+% fifths(+7) 0.2, third(+4) 0.1, others 0
+% sigma13 = 0.02;
+% sigma15 = 0.05;
+% for i = 1:1:12
+%     firstb = i;
+%     thirdb = pitchTranspose(firstb,4);
+%     fifthb = pitchTranspose(firstb,7);
+%     firstt = firstb + 12;
+%     thirdt = thirdb + 12;
+%     fiftht = fifthb + 12;
+%     
+%     sigma(firstb,thirdb,:) = sigma13;
+%     sigma(thirdb,firstb,:) = sigma13;
+%     sigma(firstb,fifthb,:) = sigma15;
+%     sigma(fifthb,firstb,:) = sigma15;
+%     
+%     sigma(firstt,thirdt,:) = sigma13;
+%     sigma(thirdt,firstt,:) = sigma13;
+%     sigma(firstt,fiftht,:) = sigma15;
+%     sigma(fiftht,firstt,:) = sigma15;
+% end
+
 % transition probabilities
 % not only self transtional prob is different from others
 transmat = ones(H,H);
-st = 2.5; % the self transition factor, with larger value yields stronger smoothy.
+st = 3; % the self transition factor, with larger value yields stronger smoothy.
 for i = 1:1:H
     transmat(i,i) = transmat(i,i) * st;
 end
