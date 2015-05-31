@@ -1,7 +1,7 @@
 % The following evaluator is built and executed from Johan's source code:
 % https://github.com/jpauwels/MusOOEvaluator
 
-sufix = 'TheBeatles-dbn0.1';
+sufix = 'pleasepleaseme-dbn0.3';
 evallist = 'evallist.txt';
 
 gtroot = './gt/';
@@ -73,27 +73,27 @@ evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
     ' --chords ' evaltype];
 system(evalcmd);
 
-evaltype = 'ChromaRecall';
-disp([evaltype '......']);
-evalout = [outroot 'results' evaltype '/' sufix '.txt'];
-evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
-    testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
-    ' --chords ' evaltype];
-system(evalcmd);
-
-evaltype = 'ChromaPrecision';
-disp([evaltype '......']);
-evalout = [outroot 'results' evaltype '/' sufix '.txt'];
-evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
-    testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
-    ' --chords ' evaltype];
-system(evalcmd);
-
-evaltype = 'ChromaFmeasure';
-disp([evaltype '......']);
-evalout = [outroot 'results' evaltype '/' sufix '.txt'];
-evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
-    testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
-    ' --chords ' evaltype];
-system(evalcmd);
+% evaltype = 'ChromaRecall';
+% disp([evaltype '......']);
+% evalout = [outroot 'results' evaltype '/' sufix '.txt'];
+% evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
+%     testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+%     ' --chords ' evaltype];
+% system(evalcmd);
+% 
+% evaltype = 'ChromaPrecision';
+% disp([evaltype '......']);
+% evalout = [outroot 'results' evaltype '/' sufix '.txt'];
+% evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
+%     testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+%     ' --chords ' evaltype];
+% system(evalcmd);
+% 
+% evaltype = 'ChromaFmeasure';
+% disp([evaltype '......']);
+% evalout = [outroot 'results' evaltype '/' sufix '.txt'];
+% evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
+%     testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+%     ' --chords ' evaltype];
+% system(evalcmd);
 

@@ -12,4 +12,5 @@ end
 uppergram = [uppergram(4:end,:) ; uppergram(1:3,:)];
 
 % normalize uppergram
-uppergram = normalizeGram(uppergram);
+% uppergram = normalizeGram(uppergram);
+uppergram = uppergram ./ max(max(uppergram));

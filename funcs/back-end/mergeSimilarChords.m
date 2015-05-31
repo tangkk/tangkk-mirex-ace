@@ -44,36 +44,36 @@ while i < nchords
     i = i + nmergees + 1;
 end
 
-% 2nd pass: merge consecutive chords if it follows 1->5 relationship
-copybassgram = bassgram;
-for i = 1:1:nchords - 1
-    cb = bassgram(i);
-    ct = treblegram(i);
-    ctname = chordmode{2,ct};
-    cst = superTypeMapping(ctname);
-    cu = uppergram(:,i);
-    
-    cb5th = pitchTranspose(cb,7);
-    
-    nb = bassgram(i+1);
-    nt = treblegram(i+1);
-    ntname = chordmode{2,nt};
-    nst = superTypeMapping(ntname);
-    nu = uppergram(:,i+1);
-    
-    if cb5th == nb && cst ~= nst % deal with two positions at a time
-        % propagate the uppergram and update other grams accordingly
-        upper = normalizeGram(cu + nu);
-        bass = cb;
-        [tname, treble] = trebleMatching(bass, upper, chordmode);
-        root = bass2root(bass, tname);
-        rootgram(i:i+1) = [root root];
-        treblegram(i:i+1) = castChords(nfSeq, [cb cb], [treble treble], chordmode);
-        copybassgram(i:i+1) = [cb cb];
-    end
-end
-
-bassgram = copybassgram;
+% % 2nd pass: merge consecutive chords if it follows 1->5 relationship
+% copybassgram = bassgram;
+% for i = 1:1:nchords - 1
+%     cb = bassgram(i);
+%     ct = treblegram(i);
+%     ctname = chordmode{2,ct};
+%     cst = superTypeMapping(ctname);
+%     cu = uppergram(:,i);
+%     
+%     cb5th = pitchTranspose(cb,7);
+%     
+%     nb = bassgram(i+1);
+%     nt = treblegram(i+1);
+%     ntname = chordmode{2,nt};
+%     nst = superTypeMapping(ntname);
+%     nu = uppergram(:,i+1);
+%     
+%     if cb5th == nb && cst ~= nst % deal with two positions at a time
+%         % propagate the uppergram and update other grams accordingly
+%         upper = normalizeGram(cu + nu);
+%         bass = cb;
+%         [tname, treble] = trebleMatching(bass, upper, chordmode);
+%         root = bass2root(bass, tname);
+%         rootgram(i:i+1) = [root root];
+%         treblegram(i:i+1) = castChords(nfSeq, [cb cb], [treble treble], chordmode);
+%         copybassgram(i:i+1) = [cb cb];
+%     end
+% end
+% 
+% bassgram = copybassgram;
 
 % 3rd pass: merge consecutive chords that share the same root and same treble type
 i = 1;

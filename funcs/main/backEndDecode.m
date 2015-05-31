@@ -1,7 +1,7 @@
-function [rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode,...
+function [rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode, dbnparam,...
     basegram, uppergram, bdrys, grainsize, enCast2MajMin, nslices, df, enPlot)
 
-bnet = dbnSetup(chordmode);
+bnet = dbnSetup(chordmode, dbnparam);
 
 % [rootgram, bassgram, treblegram] = simChordMatching(basegram, uppergram, chordmode);
 [rootgram, bassgram, treblegram] = dbnInference(bnet, chordmode, basegram, uppergram);

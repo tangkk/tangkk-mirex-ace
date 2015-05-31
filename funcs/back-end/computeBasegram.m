@@ -15,14 +15,14 @@ for j = 1:1:nchords
         if Shv(i,j) > 0
             % revise the order to be starting from C
             bgram(pitchTranspose(i,9)) = Shv(i,j);
+%             bgram(pitchTranspose(i,9)) = (3 - count) * Shv(i,j);
             count = count + 1;
             if count == 3
                 break;
             end
         end
     end
-    if norm(bgram) > 0
-        bgram = bgram./norm(bgram);
-    end
     basegram(:,j) = bgram;
 end
+
+basegram = basegram ./ max(max(basegram));

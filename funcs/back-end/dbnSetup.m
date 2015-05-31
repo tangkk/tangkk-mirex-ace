@@ -1,4 +1,4 @@
-function bnet = dbnSetup(chordmode)
+function bnet = dbnSetup(chordmode, dbnparam)
 % HMM specification:
 % HMM for automatic chord estimation backend (one integrated model)
 % 1 -> 3 -> 5 -> ...
@@ -122,33 +122,33 @@ for i = 1:1:12
         muij = zeros(O,1);
         for k = 1:1:length(ps)
             p = pitchTranspose(i,ps(k));
-            muij(p) = 1; % bass range
-            muij(p+12) = 1; % treble range
+            if k == 1
+                muij(p) = dbnparam.muCBass; % bass range: chord bass
+            else
+                muij(p) = dbnparam.muNCBass; % bass range: non-chord-bass
+            end
+            muij(p+12) = dbnparam.muTreble; % treble range
         end
         mu(:, (i - 1) * (nct - 1) + j - 1) = muij;
     end
 end
-mu(:,H) = ones(O,1);
+mu(:,H) = ones(O,1).* dbnparam.muNoChord;
 
 % set the sigma (or sigma^2), similarly, loop over the 12 pitch classes
 % and $nct - 1 chord types and set sigma^2 for both treble and bass,
 % notice the special consideration for bass, especially the non-chord-bass
-sigma2Treble = 0.2;
-sigma2CBass = 0.5;
-sigma2NCBass = 1;
-sigma2NoChord = 0.2;
 for i = 1:1:12
     for j = 2:1:nct
         ps = [0 chordmode{1,j}];
-        sigmaij = [ones(O/2,1)*sqrt(sigma2CBass) ; ones(O/2,1)*sqrt(sigma2Treble)];
+        sigmaij = [ones(O/2,1)*sqrt(dbnparam.sigma2CBass) ; ones(O/2,1)*sqrt(dbnparam.sigma2Treble)];
         for k = 2:1:length(ps) % only loop non-chord-bass pitch
             p = pitchTranspose(i,ps(k));
-            sigmaij(p) = sqrt(sigma2NCBass);
+            sigmaij(p) = sqrt(dbnparam.sigma2NCBass);
         end
         sigma(:,:,(i - 1) * (nct - 1) + j - 1) = diag(sigmaij);
     end
 end
-sigma(:,:,H) = eye(O)*sqrt(sigma2NoChord);
+sigma(:,:,H) = eye(O)*sqrt(dbnparam.sigma2NoChord);
 
 % set off-diagonal sigmas (full covariance matrix) 
 % fifths(+7) 0.2, third(+4) 0.1, others 0
@@ -176,9 +176,8 @@ sigma(:,:,H) = eye(O)*sqrt(sigma2NoChord);
 % transition probabilities
 % not only self transtional prob is different from others
 transmat = ones(H,H);
-st = 1.2; % the self transition factor, with larger value yields stronger smoothy.
 for i = 1:1:H
-    transmat(i,i) = transmat(i,i) * st;
+    transmat(i,i) = transmat(i,i) * dbnparam.selfTrans;
 end
 transmat = mk_stochastic(transmat);
 

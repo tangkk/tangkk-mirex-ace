@@ -32,6 +32,6 @@ S = S.*sigma; % (Y(k,m) - mu(k,m)) / sigma(k,m);
 
 S = S ./ max(max(S));
 
-myImagePlot(mu, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'mu of simple tone salience matrix');
-myImagePlot(sigma, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'sigma of simple tone salience matrix');
-myImagePlot(S, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'standardize simple tone salience matrix');
+% myImagePlot(mu, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'mu of simple tone salience matrix');
+% myImagePlot(sigma, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'sigma of simple tone salience matrix');
+% myImagePlot(S, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'standardize simple tone salience matrix');

@@ -15,26 +15,59 @@ clc;
 % ********************************************************** %
 % ********************* Control Panel ********************** %
 % ********************************************************** %
-% input control
-stereotomono = false;
+% ****** input control ****** %
 codec = 'mp3';
-% output control
-isexamine = 1; % 0: full evaluation, 1: examine piece
+% ****** front-end control ****** %
+feparam = struct(...
+    'wl',4096,...
+    'hopsize',512,...
+    'overtoneS', 0.5,...
+    'enNNLS', 0,...
+    'enNNLSPlus', 1,...
+    'enCenterbin', 0,...
+    'enPcsSuppress', 0,...
+    'enStandardization', 0,...
+    'enPeakNoiseRed', 1,...
+    'tuningBefore', 1,...
+    'globalTuning', 1,...
+    'stereotomono', 0);
+% ****** Mid-end control ****** %
+mdparam = struct(...
+    'enGesComp',1,...
+    'enGesRed',1,...
+    'wgmax',10,...
+    'useBassSegment',0,...
+    'useWindowSegment',0,...
+    'useOriginalSalience',1);
+% ****** Back-end control ****** %
+% chord grainsize
+grainsize = 1;
+enCast2MajMin = 1; % in case we'd like to substitute others to maj or min
+% dbn parameters
+dbnparam = struct(...
+    'muCBass',1,...
+    'muNCBass',1,...
+    'muTreble',1,...
+    'muNoChord',1,...
+    'sigma2Treble',0.2,...
+    'sigma2CBass',0.1,...
+    'sigma2NCBass',0.2,...
+    'sigma2NoChord',0.2,...
+    'selfTrans', 1.5);
+% ****** feedback control ****** %
+fbn = 0;
+% ****** output control ****** %
+isexamine = 0; % 0: full evaluation, 1: examine segments
 enEval = 1;
-% plot control
-df = 1;
+% ****** plot control ****** %
+df = isexamine;
 enPlotFE = 1;
 enPlotME = 1;
 enPlotBE = 1;
 enPlotFB = 1;
-enPlotTS = 0;
-% gestalt control
-enGesComp = true;
-enGesRed = true;
-wgmax = 10;
-% chored grain size control
-grainsize = 1;
-% chord vocabulary control (normalized according to # of notes)
+enPlotTS = 1;
+
+% chordmode parameters
 tetradcontrol = 1 / 3;
 pentacontrol = 1 / 4;
 hexacontrol = 1 / 5;
@@ -49,19 +82,10 @@ enAugDim = 1;
 enMajMinBass = 1;
 enSeventhBass = 1;
 enOtherSlash = 0;
-% chord casting control
-enCast2MajMin = 1; % in case we'd like to substitute others to maj or min
-% feedback control (how many times)
-fbn = 0;
-
-% ********************************************************** %
-% ********************* Setup ****************************** %
-% ********************************************************** %
 chordmode = buildChordMode(tetradcontrol, pentacontrol, hexacontrol, inversioncontrol,...
     enDyad, enMajMin, enSusAdd,...
     enSixth, enSeventh, enExtended, enAugDim,...
     enMajMinBass, enSeventhBass, enOtherSlash);
-
 
 % ********************************************************** %
 % ****************** Batch Process ************************* %
@@ -85,14 +109,15 @@ display('input...');
 % ****** solves the least square problem ******%
 display('frontend...');
 
-[fs, hopsize, nslices, endtime, S] = frontEndDecode(audiopath, stereotomono, df, enPlotFE);
+[fs, nslices, endtime, S] = frontEndDecode(audiopath, feparam, df, enPlotFE);
 
 % ********************************************************** %
 % ********************* Mid End **************************** %
 % ********************************************************** %
 % ****** solves the segmentation problem ******%
+display('midend...');
 
-[So, Sb, bdrys, basegram, uppergram] = midEndDecode(S, wgmax, df, enGesComp, enGesRed, enPlotME);
+[So, Sb, bdrys, basegram, uppergram] = midEndDecode(S, mdparam, df, enPlotME);
 
 % ********************************************************** %
 % ********************* Back End *************************** %
@@ -101,7 +126,7 @@ display('frontend...');
 
 display('backend...');
 
-[rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode,...
+[rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode, dbnparam,...
     basegram, uppergram, bdrys, grainsize, enCast2MajMin, nslices, df, enPlotBE);
 
 % % ********************************************************** %
@@ -113,7 +138,7 @@ for i = 1:1:fbn
 display(['feedback...' num2str(i)]);
 [basegram, uppergram] = updateBaseUpperGram(bassgram, bdrys, S, So, 1, 0.25);
 
-[rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode,...
+[rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode, dbnparam,...
     basegram, uppergram, bdrys, grainsize, enCast2MajMin, nslices, df, enPlotFB);
 end
 
@@ -133,7 +158,7 @@ if isexamine
     break;
 else
     display('output...');
-    writeChordProgression(cpfolder, cppath, nslices, hopsize, fs,...
+    writeChordProgression(cpfolder, cppath, nslices, feparam.hopsize, fs,...
         rootgram, treblegram, bdrys, endtime, chordmode);
     display(strcat('end of analyzing...',audiopath));
     tline = fgetl(feval);
