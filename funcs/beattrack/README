@@ -1,0 +1,16 @@
+To perform the analysis call:
+
+out = getmeasures2(fname,ts);
+ts is an optional input parameter to specify the number of beats per bar
+
+out is a struct with the following data
+
+out.beats - beat times in seconds
+out.measures - bar boundaries in seconds
+out.timesig - estimate of the number of beats per bar (will = ts if specified)
+out.df - the onset detection function
+
+
+The code is set to downsample the audio file to 11025Hz before processing
+This speeds up the calculation of the onset detection function but has
+negligible effect on the output of the beat tracker.

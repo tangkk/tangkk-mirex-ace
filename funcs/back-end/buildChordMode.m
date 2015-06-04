@@ -80,15 +80,12 @@
 % annotations.” In Proceedings of the 6th International Society for Music
 % Information Retrieval Conference (ISMIR), 66–71.
 
-function chordmode = buildChordMode(tetradcontrol, pentacontrol, hexacontrol, inversioncontrol,...
-    enDyad, enMajMin, enSusAdd,...
-    enSixth, enSeventh, enExtended, enAugDim,...
-    enMajMinBass, enSeventhBass, enOtherSlash)
+function chordmode = buildChordMode(chordmodeparam)
 
-tc = tetradcontrol; % tetrad reduce factor
-pc = pentacontrol; % pentachord reduce factor
-hc = hexacontrol; % hexachord reduce factor
-ic = inversioncontrol; % inversion reduce factor
+tc = chordmodeparam.tetradcontrol; % tetrad reduce factor
+pc = chordmodeparam.pentacontrol; % pentachord reduce factor
+hc = chordmodeparam.hexacontrol; % hexachord reduce factor
+ic = chordmodeparam.inversioncontrol; % inversion reduce factor
 
 chordmode = cell(4,50); %[dif; qual; weight; supertype]
 
@@ -101,7 +98,7 @@ chordmode{3,idx} = 0;
 idx = idx + 1;
 
 % ************************* dyad ******************************* %
-if enDyad
+if chordmodeparam.enDyad
 chordmode{1,idx} = 1;
 chordmode{2,idx} = 'b2';
 chordmode{3,idx} = 1;
@@ -158,7 +155,7 @@ chordmode{3,idx} = 1;
 idx = idx + 1;
 end
 % ************************* major and minor ************************ %
-if enMajMin
+if chordmodeparam.enMajMin
 chordmode{1,idx} = [4,7];
 chordmode{2,idx} = 'maj';
 chordmode{3,idx} = [1,1];
@@ -171,7 +168,7 @@ idx = idx + 1;
 end
 
 % ************************ suspend and add *************************** %
-if enSusAdd
+if chordmodeparam.enSusAdd
 chordmode{1,idx} = [2,7];
 chordmode{2,idx} = 'sus2';
 chordmode{3,idx} = [1,1];
@@ -234,7 +231,7 @@ idx = idx + 1;
 end
 
 % ************************ sixth ******************************* %
-if enSixth
+if chordmodeparam.enSixth
 chordmode{1,idx} = [4,7,9];
 chordmode{2,idx} = 'maj6';
 chordmode{3,idx} = [1-tc,1-tc,1-tc];
@@ -247,7 +244,7 @@ idx = idx + 1;
 end
 
 % ************************ sevenths ******************************* %
-if enSeventh
+if chordmodeparam.enSeventh
 chordmode{1,idx} = [4,7,11];
 chordmode{2,idx} = 'maj7';
 chordmode{3,idx} = [1-tc,1-tc,1-tc];
@@ -265,7 +262,7 @@ idx = idx + 1;
 end
 
 % ******************** Extended ************************%
-if enExtended
+if chordmodeparam.enExtended
 chordmode{1,idx} = [4,7,11,14];
 chordmode{2,idx} = 'maj9';
 chordmode{3,idx} = [1-pc,1-pc,1-pc,1-pc];
@@ -299,7 +296,7 @@ end
 
 % ******************** augmented and diminished ******************** %
 
-if enAugDim
+if chordmodeparam.enAugDim
 chordmode{1,idx} = [4,8];
 chordmode{2,idx} = 'aug';
 chordmode{3,idx} = [1,1];
@@ -327,7 +324,7 @@ idx = idx + 1;
 end
 
 % ******************** MajMinBass ************************%
-if enMajMinBass
+if chordmodeparam.enMajMinBass
 chordmode{1,idx} = [3,8];
 chordmode{2,idx} = 'maj/3';
 chordmode{3,idx} = [1,1];
@@ -350,7 +347,7 @@ idx = idx + 1;
 end
 
 % ******************** SeventhsBass ************************%
-if enSeventhBass
+if chordmodeparam.enSeventhBass
 chordmode{1,idx} = [3,7,8];
 chordmode{2,idx} = 'maj7/3';
 chordmode{3,idx} = [1-ic,1-ic,1-ic];
@@ -398,12 +395,11 @@ idx = idx + 1;
 end
 
 % ******************** Other Slash Chords ******************%
-if enOtherSlash
+if chordmodeparam.enOtherSlash
 chordmode{1,idx} = [2,5,10];
 chordmode{2,idx} = 'maj/2';
 chordmode{3,idx} = [1-ic,1-ic,1-ic];
 idx = idx + 1;
-
 
 chordmode{1,idx} = [1,5,10];
 chordmode{2,idx} = 'min/2';

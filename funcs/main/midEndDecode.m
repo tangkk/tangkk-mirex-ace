@@ -1,98 +1,108 @@
-function [So, Sb, bdrys, basegram, uppergram] = midEndDecode(S, mdparam, df, enPlot)
+ function [bdrys, basegram, uppergram] = midEndDecode(S, btrack, meparam, df, enPlot)
 
 nslices = size(S, 2);
 ntones = size(S, 1);
-kk = (1:nslices);
-p = 1:ntones;
 
-if mdparam.enGesComp
+% interface the original salience to a gestaltized salience
+Sg = S;
+
+if meparam.enGesComp
 st = 0.0;
-S = compensateLongSalience(S,mdparam.wgmax,st,0,0);
+Sg = compensateLongSalience(Sg,meparam.wgmax,st,0,0);
 if df && enPlot
-myImagePlot(S, kk, p, 'slice', 'semitone', 'positive gestalt note salience matrix');
+myImagePlot(Sg, 1:nslices, 1:ntones, 'slice', 'semitone', 'positive gestalt note salience matrix');
 end
 end
 
-if mdparam.enGesRed
+if meparam.enGesRed
 st = 0.0;
-S = reduceShortSalience(S,mdparam.wgmax,st,0,0);
+Sg = reduceShortSalience(Sg,meparam.wgmax,st,0,0);
 if df && enPlot
-myImagePlot(S, kk, p, 'slice', 'semitone', 'negative gestalt note salience matrix');
+myImagePlot(Sg, 1:nslices, 1:ntones, 'slice', 'semitone', 'negative gestalt note salience matrix');
 end
 end
 
-Sg = S; % interface to mid-end
-
-% onset filter (roughly detect the note onsets)
-ot = 0.0;
-wo = 10;
-So = noteOnsetFilter(Sg, ot, wo);
-if df && enPlot
-myImagePlot(So, kk, p, 'slice', 'semitone', 'note onset matrix');
+if meparam.useBassOnsetSegment || meparam.useBassOnsetMedianSegment
+Shc = harmonicSegmentation(Sg, meparam.wgmax, 0, enPlot);
 end
 
-% bassline filter (roughly set the dynamic bass bounds)
-bt = 0.0;
-cb = 1;
-Sb = bassLineFilter(Sg, bt, mdparam.wgmax, cb);
-if df && enPlot
-myLinePlot(1:length(Sb), Sb, 'slice', 'semitone',nslices, ntones, '*', 'bassline');
+if meparam.useOriginalSalience
+    SpreSeg = S;
+elseif meparam.useGestaltSalience
+    SpreSeg = Sg;
 end
 
-% harmonic change filter (detect harmonic change boundaries)ht = 0.1;
-ht = 0.1;
-bc = 6;
-[Sh, Shv, Shc, nchords] = harmonicChangeFilter(Sg, Sb, So, ht, bc);
-if df && enPlot
-myImagePlot(Sh, kk, p, 'slice', 'semitone', 'harmonic bounded salience matrix');
-myImagePlot(Shv, kk(1:nchords), p, 'chord progression order',...
-    'semitone', 'harmonic change matrix');
-myLinePlot(1:length(Shc), Shc, 'chord progression order', 'slice',...
-    nchords, nslices, 'o', 'haromonic change moments');
+% use different segmentation methods
+if meparam.useBassOnsetSegment
+    bdrys = Shc;
+elseif meparam.useWgSegment
+    bdrys = 1:meparam.wgmax:nslices;
+elseif meparam.useBeatSyncSegment
+    bdrys = btrack;
+elseif meparam.useBassOnsetMedianSegment
+    bdrys = 1:round(median(Shc(2:end) - Shc(1:end-1))):nslices;
 end
 
-if mdparam.useOriginalSalience
-    Ssegin = S;
-else
-    Ssegin = Sg;
+if bdrys(end) ~= nslices % including the end slice
+    bdrys = [bdrys nslices];
 end
 
-% segment the piece according to the median value of dif boundaries or
-% wgmax
-if mdparam.useWindowSegment
-    mdifbdry = mdparam.wgmax;
-else
-    mdifbdry = round(median(Shc(2:end) - Shc(1:end-1)));
-end
-
-Ssegout = zeros(size(Ssegin,1), ceil(size(Ssegin,2)/mdifbdry));
-for j = 1:size(Ssegout,2)
-    Ssegout(:,j) = mean(Ssegin(:,(j-1) * mdifbdry + 1 : min(j*mdifbdry,size(Ssegin,2))),2);
+Sseg = zeros(size(SpreSeg,1), length(bdrys) - 1);
+for j = 1:size(Sseg,2)
+    if meparam.useMeidanFilter
+        Sseg(:,j) = median(SpreSeg(:,bdrys(j):bdrys(j+1)),2);
+    else
+        Sseg(:,j) = mean(SpreSeg(:,bdrys(j):bdrys(j+1)),2);
+    end
 end
 if df && enPlot
-myImagePlot(Ssegout, 1:size(Ssegout,2), p, 'segmentation',...
+myImagePlot(Sseg, 1:size(Sseg,2), 1:ntones, 'segmentation',...
     'semitone', 'note salience segmentation matrix');
 end
 
-if mod(Shc(end),mdifbdry) == 0
-    bdrys = 1:mdifbdry:Shc(end);
-else
-    bdrys = [1:mdifbdry:Shc(end) Shc(end)];
+ntones = size(Sseg,1);
+nsegs = size(Sseg,2);
+if meparam.enProfiling
+ht = hamming(ntones);
+hb = [hamming(ntones/2);zeros(ntones/2,1)];
+mht = repmat(ht,1,nsegs);
+mhb = repmat(hb,1,nsegs);
+Stsegout = Sseg .* mht;
+Sbsegout = Sseg .* mhb;
+% Stsegout = normalizeGram(Stsegout);
+if df && enPlot
+myImagePlot(Stsegout, 1:nsegs, 1:ntones, 'slice', 'semitone', 'treble note salience matrix');
+end
+% Sbsegout = normalizeGram(Sbsegout);
+if df && enPlot
+myImagePlot(Sbsegout, 1:nsegs, 1:ntones, 'slice', 'semitone', 'bass note salience matrix');
+end
 end
 
 % compute basegram and uppergram (based on harmonic change matrix)
-if mdparam.useBassSegment
-    basegram = computeBasegram(Shv); uppergram = computeUppergram(Shv);
+if meparam.enProfiling && meparam.btchromagram
+    % note this is to compute chromagram
+    basegram = computeChromagram(Sbsegout);
+    uppergram = computeChromagram(Stsegout);
+elseif meparam.enProfiling
+    basegram = computeBasegram(Sbsegout);
+    uppergram = computeUppergram(Stsegout);
 else
-    basegram = computeBasegram(Ssegout); uppergram = computeUppergram(Ssegout);
+    basegram = computeBasegram(Sseg);
+    uppergram = computeUppergram(Sseg);
 end
+
+% normalize grams (whether global or local)
+uppergram = normalizeGram(uppergram);
+basegram = normalizeGram(basegram);
+% basegram = basegram ./ max(max(basegram));
+% uppergram = uppergram ./ max(max(uppergram));
+
 bassnotenames = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
 treblenotenames = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
-kh = 1:nchords;
-ph = 1:12;
 if df && enPlot
-myImagePlot(basegram, kh, ph, 'chord progression order', 'semitone',...
-    'basegram', ph, bassnotenames);
-myImagePlot(uppergram, kh, ph, 'chord progression order', 'semitone',...
-    'uppergram', ph, treblenotenames);
+myImagePlot(basegram, 1:nsegs, 1:12, 'segmentation progression order', 'semitone',...
+    'basegram', 1:12, bassnotenames);
+myImagePlot(uppergram, 1:nsegs, 1:12, 'segmentation progression order', 'semitone',...
+    'uppergram', 1:12, treblenotenames);
 end

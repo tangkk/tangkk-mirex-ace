@@ -1,50 +1,52 @@
-% generate a (3*numtone, numtone) matrix
-% this is a note profile in log-frequency domain
+% this matrix can transform original linear space DFT (Hz bin) to log-freq
+% space DFT (1/3 semitone bin) by means of cosine interpolations
+% this process is implemented as described in M. Mauch's thesis
+% first the original 2048-bin DFT is upsampled linearly 40 times
+% then the upsampled spectrum is downsampled non-linearly with a constant-Q
+function LE = logFreqNoteProfile(ntones, fmin, fratio, USR, fs, hopsize, nbins)
 
-function [EE, E, Ee] = logFreqNoteProfile(s, numnotes)
+df = fs / hopsize;
+fi = fs/2*linspace(0,1,nbins);
+ff = fs/2*linspace(0,1,nbins*USR);
+dff = ff ./ 51.94; % df(f) = f/Q, where Q = 36 / ln2 = 51.94
+fk = fmin*(fratio.^((1:ntones)-2));
 
-EE = zeros(3*numnotes, 3*numnotes); % 3*numnotes * 3*numnotes dict
-E = zeros(3*numnotes, numnotes); % 3*numnotes dict
-Ee = zeros(numnotes, numnotes); % numnotes dict
-for i = 1:numnotes
-    pr = zeros(3*numnotes,1);
-    pre = zeros(numnotes,1);
-    % all the way to the fourth overtone
-    note0 = i; % fundamental
-    note1 = note0 + 12; % first overtone (octave)
-    note2 = note1 + 7; % second overtone (octave + fifth)
-    note3 = note2 + 5; % third overtone (two octaves)
-    % note4 = note3 + 4; % fourth overtone (two octaves + third)
-    
-    % transform into 1/3 semitone scale, locate note in center bins
-    tone0 = 3*note0 - 1;
-    tone1 = 3*note1 - 1;
-    tone2 = 3*note2 - 1;
-    tone3 = 3*note3 - 1;
-    
-    if tone0 <= 3*numnotes
-        pr(tone0) = s^0;
-        pre(note0) = s^0;
-    end
-    if tone1 <= 3*numnotes
-        pr(tone1) = s^1;
-        pre(note1) = s^1;
-    end
-    if tone2 <= 3*numnotes
-        pr(tone2) = s^2;
-        pre(note2) = s^2;
-    end
-    if tone3 <= 3*numnotes
-        pr(tone3) = s^3;
-        pre(note3) = s^3;
-    end
-    
-    pr = pr ./ norm(pr);
-    pre = pre ./ norm(pre);
-    
-    E(:,i) = pr;
-    Ee(:,i) = pre;
-    EE(:,3*i-2) = [pr(2:end);0];
-    EE(:,3*i-1) = pr;
-    EE(:,3*i) = [0;pr(1:end-1)];
+% matrix to transform linear DFT to upsampled linear DFT
+% size of the matrix is numbins * (USR*numbins)
+% therefore by multiplying this matrix, a numbins DFT can be transformed to
+% an upsampled USR*numbins bins
+% every row of the matrix is the cosine interpolation of the correponding
+% bin
+h = zeros(nbins, USR * nbins);
+for i = 1:nbins
+    hf = zeros(1, USR*nbins);
+    LB = find(ff > fi(i) - df, 1, 'first');
+    RB = find(ff < fi(i) + df, 1, 'last');
+    hf(LB:RB) = cos(2.*pi.*(ff(LB:RB) - fi(i)) ./ df) ./ 2 + 1/2;
+    h(i,:) = hf;
+end
+
+% matrix to transform upsampled DFT to constant-Q DFT
+% size of the matrix is (USR*numbins) * numtones
+% by multiplying the matrix, a (USR*numbins) DFT can be transformed to a
+% numtones bin
+hl = zeros(USR*nbins, ntones);
+for i = 1:USR*nbins
+    hlf = zeros(1, ntones);
+    LB = find(fk > ff(i) - dff(i), 1, 'first');
+    RB = find(fk < ff(i) + dff(i), 1, 'last');
+    hlf(LB:RB) = cos(2.*pi.*(ff(i) - fk(LB:RB)) ./ dff(i)) ./ 2 + 1/2;
+    hl(i,:) = hlf;
+end
+
+% the final matrix is the product of the above two matrice,
+% which will be a matrix of size numbins * numtones
+% this matrix is a transformer to transform a vector of numbins into a
+% vector of numtones, which equals to linear freq to log freq.
+LE = (h * hl)';
+
+% normalize this transformation matrix row wise (use L1 norm)
+% FIXME: not sure whether this is reasonable under the constant-Q theory
+for i = 1:ntones
+    LE(i,:) = LE(i,:) ./ norm(LE(i,:),1);
 end
