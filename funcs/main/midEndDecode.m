@@ -93,10 +93,10 @@ else
 end
 
 % normalize grams (whether global or local)
-uppergram = normalizeGram(uppergram);
-basegram = normalizeGram(basegram);
-% basegram = basegram ./ max(max(basegram));
-% uppergram = uppergram ./ max(max(uppergram));
+% uppergram = normalizeGram(uppergram);
+% basegram = normalizeGram(basegram);
+basegram = basegram ./ max(max(basegram));
+uppergram = uppergram ./ max(max(uppergram));
 
 bassnotenames = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
 treblenotenames = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};

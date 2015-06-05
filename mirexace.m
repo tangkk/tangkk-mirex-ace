@@ -63,7 +63,7 @@ dbnparam = struct(...
     'sigma2CBass',0.1,...
     'sigma2NCBass',0.2,...
     'sigma2NoChord',0.2,...
-    'selfTrans', 2);
+    'selfTrans', 10);
 % ****** feedback control ****** %
 fbn = 0;
 % ****** output control ****** %
@@ -95,50 +95,29 @@ chordmodeparam = struct(...,
 chordmode = buildChordMode(chordmodeparam);
 
 % ********************************************************** %
-% ****************** Batch Process ************************* %
+% ********************* Process **************************** %
 % ********************************************************** %
 feval = fopen('evallist.txt','r');
 tline = fgetl(feval);
 while ischar(tline)
 
-% ********************************************************** %
-% ********************* Input ****************************** %
-% ********************************************************** %
-
-% input stage
 display('input...');
 
 [audiofolder, audiopath, cpfolder, cppath, gtfolder, gtpath] = inputDecode(tline, codec);
 
-% ********************************************************** %
-% ********************* Front End ************************** %
-% ********************************************************** %
-% ****** solves the least square problem ******%
 display('frontend...');
 
 [fs, nslices, endtime, S, btrack] = frontEndDecode(audiopath, feparam, df, enPlotFE);
 
-% ********************************************************** %
-% ********************* Mid End **************************** %
-% ********************************************************** %
-% ****** solves the segmentation problem ******%
 display('midend...');
 
 [bdrys, basegram, uppergram] = midEndDecode(S, btrack, meparam, df, enPlotME);
-
-% ********************************************************** %
-% ********************* Back End *************************** %
-% ********************************************************** %
-% ****** solves the optimal path problem ******%
 
 display('backend...');
 
 [rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode, dbnparam,...
     basegram, uppergram, bdrys, grainsize, enCast2MajMin, nslices, df, enPlotBE);
 
-% % ********************************************************** %
-% % ********************* Feedback *************************** %
-% % ********************************************************** %
 % ****** reiterate the process until converge ******%
 
 % for i = 1:1:fbn
@@ -149,16 +128,9 @@ display('backend...');
 %     basegram, uppergram, bdrys, grainsize, enCast2MajMin, nslices, df, enPlotFB);
 % end
 
-% ********************************************************** %
-% ***************** Tonic Computation ********************** %
-% ********************************************************** %
 % ****** key progression by-product ******%
 % [scaleSeq, tonicSeq] = tonicDecode(bassgram, treblegram, bdrys, chordmode,...
 %     df, enPlotTS);
-
-% ********************************************************** %
-% ********************* Output ***************************** %
-% ********************************************************** %
 
 if isexamine
     display(strcat('end of analyzing...',audiopath));

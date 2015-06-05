@@ -19,15 +19,13 @@ ntones = nnotes*3; % numsemitones = 3
 USR = 40; % upsampling rate
 
 % FIXME: if the parameter changes, delete the '.mat' files and run again
-if exist('E.mat','file') == 2
-load Ms.mat; load Mc.mat;
-load E.mat;
-load LE.mat;
+if exist('dict.mat','file') == 2
+load dict.mat;
 else
 [Ms,Mc] = toneProfileGen(feparam.overtoneS, feparam.wl, ntones, 3, fmin, fmax, fratio, fs);
 E = nnlsNoteProfile(feparam.overtoneS, nnotes);
 LE = logFreqNoteProfile(ntones, fmin, fratio, USR, fs, feparam.hopsize, feparam.wl/2);
-save Ms; save Mc; save E; save LE;
+save('dict.mat','Ms','Mc','E','LE');
 end
 
 if df && enPlot
@@ -49,20 +47,25 @@ end
 if df && enPlot
 myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'simple tone salience matrix');
 % myImagePlot(Sc, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'complex tone salience matrix');
-myImagePlot(Sl.*2, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'log-freq salience matrix');
 end
 
 if feparam.tuningBefore
 % tuning algorithm, assuming numsemitones = 3
 if feparam.globalTuning
     Ss = globalTuning(Ss);
+    if feparam.enCosSim
     Sc = globalTuning(Sc);
+    end
 else
     Ss = localTuning(Ss);
+    if feparam.enCosSim
     Sc = localTuning(Sc);
+    end
 end
 Ss = Ss ./ max(max(Ss)); % global normalize
+if feparam.enCosSim
 Sc = Sc ./ max(max(Sc)); % global normalize
+end
 if df && enPlot
 myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'tuned simple tone salience matrix');
 % myImagePlot(Sc, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'tuned complex tone salience matrix');
@@ -90,7 +93,9 @@ end
 if feparam.enPeakNoiseRed
 nt = 0.1;
 Ss = noteSalienceNoiseReduce(Ss, nt);
+if feparam.enCosSim
 Sc = noteSalienceNoiseReduce(Sc, nt);
+end
 if df && enPlot
 myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'noised reduced simple tone salience matrix');
 % myImagePlot(Sc, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'noised reduced complex tone salience matrix');
@@ -101,16 +106,24 @@ if ~feparam.tuningBefore
 % tuning algorithm, assuming numsemitones = 3
 if feparam.globalTuning
     Ss = globalTuning(Ss);
+    if feparam.enCosSim
     Sc = globalTuning(Sc);
+    end
 else
     Ss = localTuning(Ss);
+    if feparam.enCosSim
     Sc = localTuning(Sc);
+    end
 end
 Ss = Ss ./ max(max(Ss)); % global normalize
+if feparam.enCosSim
 Sc = Sc ./ max(max(Sc)); % global normalize
+end
 if df && enPlot
 myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'tuned simple tone salience matrix');
 % myImagePlot(Sc, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'tuned complex tone salience matrix');
+myImagePlot(SssC, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Ss note salience matrix (center bin)');
+% myImagePlot(SccC, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Sc note salience matrix (center bin)');
 end
 end
 
@@ -124,42 +137,41 @@ end
 
 % compute note salience matrix by combining 1/3 semitones into semitones
 
-% sum all 3 bins
+% sum all 3 bins, alternatively, we could just take every center bins
 Sss3 = zeros(nnotes,nslices);
-Scc3 = zeros(nnotes,nslices);
 for i = 1:1:3
     Sss3 = Sss3 + Ss(i:3:end,:);
+end
+SssC = Ss(2:3:end,:);
+if feparam.enCosSim
+Scc3 = zeros(nnotes,nslices);
+for i = 1:1:3
     Scc3 = Scc3 + Sc(i:3:end,:);
 end
-% S = Sss.*Scc;
+SccC = Sc(2:3:end,:);
+end
 if df && enPlot
 myImagePlot(Sss3, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Ss note salience matrix (sum 3 bins)');
 % myImagePlot(Scc3, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Sc note salience matrix (sum 3 bins)');
 end
 
-% alternatively, we could just take every center bins
-SssC = Ss(2:3:end,:);
-SccC = Sc(2:3:end,:);
-if df && enPlot
-myImagePlot(SssC, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Ss note salience matrix (center bin)');
-% myImagePlot(SccC, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Sc note salience matrix (center bin)');
-end
-
 % interface with output S
-if feparam.enNNLSPlus % nnls augmented
+if feparam.enNNLSPlus && feparam.enCosSim % nnls augmented
     if feparam.enCenterbin
         S = SssC.*Sapx + SssC.*SccC;
     else 
         S = Sss3.*Sapx + Sss3.*Scc3;
     end
 elseif feparam.enNNLS % nnls
-    S = Sapx;
-else % the baseline approach
+        S = Sapx;
+elseif feparam.enCosSim % the baseline approach
     if feparam.enCenterbin
         S = SssC.*SccC;
     else 
         S = Sss3.*Scc3;
     end
+else % guarding
+        S = Sss3;
 end
 
 if feparam.enProfiling
