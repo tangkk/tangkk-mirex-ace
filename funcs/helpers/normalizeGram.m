@@ -1,12 +1,14 @@
 % normalize the input whatever gram, note that the gram should be in
 % column vector format
-function outgram = normalizeGram(ingram)
+function outgram = normalizeGram(ingram, p)
 
-sizeG = size(ingram);
-ny = sizeG(1);
+outgram = zeros(size(ingram));
 
-maxG = ones(ny,1)*max(ingram,[],1);
-maxG(maxG == 0) = 1;
-
-outgram = ingram ./ maxG;
+for j = 1:size(ingram,2)
+    vec = ingram(:,j);
+    nVec = norm(vec,p);
+    if nVec ~= 0
+        outgram(:,j) = vec ./ nVec;
+    end
+end
 

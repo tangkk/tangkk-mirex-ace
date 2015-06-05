@@ -1,4 +1,4 @@
-function S = standardization(S, wl, enSTD, df)
+function S = standardization(S, wl, enSTD, specWTN, df)
 
 nslices = size(S,2);
 ntones = size(S,1);
@@ -40,11 +40,8 @@ if enSTD
 stemp = sort(sigma(:));
 minsigma = stemp(find(stemp > 0,1,'first'));
 sigma(sigma == 0) = minsigma;
-S = S./sigma; % (Y(k,m) - mu(k,m)) / sigma(k,m);
+S = S./(sigma.^specWTN); % (Y(k,m) - mu(k,m)) / sigma(k,m);
 end
-
-% S = S ./ max(max(S));
-S = normalizeGram(S);
 
 if df
 myImagePlot(mu, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'mu of simple tone salience matrix');

@@ -1,7 +1,7 @@
 % The following evaluator is built and executed from Johan's source code:
 % https://github.com/jpauwels/MusOOEvaluator
 
-sufix = 'pleasepleaseme-dbn0.3';
+sufix = 'pleasepleaseme-copychordino-1';
 evallist = 'evallist.txt';
 
 gtroot = './gt/';

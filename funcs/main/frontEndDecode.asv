@@ -83,20 +83,11 @@ end
 % % standardization (Y(k,m) - mu(k,m)) / sigma(k,m)
 if feparam.enSUB
 wl = 9; % 3 * 12 / 2
-Ss = standardization(Ss, wl, feparam.enSTD, feparam.specWhitening, df);
+Ss = standardization(Ss, wl, feparam.enSTD, df);
 if df && enPlot
 myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'standardized simple tone salience matrix');
 end
 end
-
-if feparam.specRollOn > 0
-Ss = specRollOn(Ss, feparam.specRollOn);
-if df && enPlot
-myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'spec-roll-on simple tone salience matrix');
-end
-end
-
-Ss = normalizeGram(Ss,feparam.normalization);
 
 % noise reduction process
 if feparam.enPeakNoiseRed
@@ -131,6 +122,8 @@ end
 if df && enPlot
 myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'tuned simple tone salience matrix');
 % myImagePlot(Sc, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'tuned complex tone salience matrix');
+myImagePlot(SssC, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Ss note salience matrix (center bin)');
+% myImagePlot(SccC, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Sc note salience matrix (center bin)');
 end
 end
 
@@ -160,8 +153,6 @@ end
 if df && enPlot
 myImagePlot(Sss3, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Ss note salience matrix (sum 3 bins)');
 % myImagePlot(Scc3, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Sc note salience matrix (sum 3 bins)');
-myImagePlot(SssC, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Ss note salience matrix (center bin)');
-% myImagePlot(SccC, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Sc note salience matrix (center bin)');
 end
 
 % interface with output S
@@ -200,13 +191,12 @@ myImagePlot(Sb, 1:nslices, 1:nnotes, 'slice', 'semitone', 'bass note salience ma
 end
 end
 
-S = normalizeGram(S,feparam.normalization);
+S = normalizeGram(S);
 if df && enPlot
 myImagePlot(S, 1:nslices, 1:nnotes, 'slice', 'semitone', 'note salience matrix');
 end
 
 % beat tracking
 btrackraw = getmeasures2(audiopath);
-btrack = round(btrackraw.beats.*fs./feparam.hopsize + 1);
-btrack(btrack > nslices) = nslices;
+btrack = round(btrackraw.beats.*fs./feparam.hopsize +);
 

@@ -29,7 +29,7 @@ while i < nchords
             nmergees = nmergees + 1;
         elseif nmergees > 0
             % propagate the uppergram and update other grams accordingly
-            upper = normalizeGram(sum(uppergram(:,i:i+nmergees),2));
+            upper = normalizeGram(sum(uppergram(:,i:i+nmergees),2),2);
             bass = cb;
             [tname, treble] = trebleMatching(bass, upper, chordmode);
             root = bass2root(bass, tname);
@@ -63,7 +63,7 @@ end
 %     
 %     if cb5th == nb && cst ~= nst % deal with two positions at a time
 %         % propagate the uppergram and update other grams accordingly
-%         upper = normalizeGram(cu + nu);
+%         upper = normalizeGram(cu + nu,2);
 %         bass = cb;
 %         [tname, treble] = trebleMatching(bass, upper, chordmode);
 %         root = bass2root(bass, tname);
@@ -96,7 +96,7 @@ while i < nchords
             nmergees = nmergees + 1;
         elseif nmergees > 0
             % propagate the uppergram and update other grams accordingly
-            upper = normalizeGram(sum(uppergram(:,i:i+nmergees),2));
+            upper = normalizeGram(sum(uppergram(:,i:i+nmergees),2),2);
             bass = mode(bassgram(i:i+nmergees));
             [tname, treble] = trebleMatching(bass, upper, chordmode);
             root = bass2root(bass, tname);

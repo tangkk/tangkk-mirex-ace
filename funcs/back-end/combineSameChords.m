@@ -29,7 +29,7 @@ for i = 2:1:nchords
     ct = intreblegram(i);
     cu = inuppergram(:,i);
     if pr == cr && pb == cb && pt == ct
-        pu = normalizeGram(pu + cu);
+        pu = normalizeGram(pu + cu, 2);
         outuppergram(:,outidx-1) = pu;
         continue;
     else

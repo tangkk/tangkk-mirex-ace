@@ -33,4 +33,4 @@ for i = 1:1:nchords
     uppergram(:,i) = upg;
 end
 
-uppergram = normalizeGram(uppergram);
+uppergram = normalizeGram(uppergram, 2);
