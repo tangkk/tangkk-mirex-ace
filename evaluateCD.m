@@ -1,19 +1,17 @@
 % The following evaluator is built and executed from Johan's source code:
 % https://github.com/jpauwels/MusOOEvaluator
 
-sufix = 'pleasepleaseme-copychordino-1';
+sufix = 'chordino';
 evallist = 'evallist.txt';
 
 gtroot = './gt/';
-cproot = './cp/';
-cdroot = './cd/'; % cd = chordino
+cdroot = './cd/';
 gtfolder = strcat(gtroot);
-cpfolder = strcat(cproot);
 cdfolder = strcat(cdroot);
 
-testfolder = cpfolder;
+testfolder = cdfolder;
 
-outroot = './out/';
+outroot = './outcd/';
 
 % **************** segmentation ****************
 evaltype = 'Inner';

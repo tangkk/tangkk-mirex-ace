@@ -100,6 +100,7 @@ chordmode = buildChordMode(chordmodeparam);
 % ********************************************************** %
 feval = fopen('evallist.txt','r');
 tline = fgetl(feval);
+
 while ischar(tline)
 
 display('input...');
@@ -152,7 +153,7 @@ fclose(feval);
 % ********************************************************** %
 if enEval && ~isexamine
     display('evaluation...');
-    evaluate;
+    evaluateCP;
 end
 
 % ********************************************************** %

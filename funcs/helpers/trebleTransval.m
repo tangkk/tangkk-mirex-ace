@@ -1,36 +1,37 @@
 function transval = trebleTransval(treble)
 
-transval = 0;
 tokens = strsplit(treble,'/'); % input must contain '/'
 if length(tokens) > 1
     token = tokens{2};
+else
+    token = tokens{1};
+end
 
-    switch token
-        case 'b2'
-            transval = 1;
-        case '2'
-            transval = 2;
-        case 'b3'
-            transval = 3;
-        case '3'
-            transval = 4;
-        case '4'
-            transval = 5;
-        case 'b5'
-            transval = 6;
-        case '5'
-            transval = 7;
-        case 'b6'
-            transval = 8;
-        case '6'
-            transval = 9;
-        case 'b7'
-            transval = 10;
-        case '7'
-            transval = 11;
-        otherwise
-            transval = 0;
-    end
+switch token
+    case 'b2'
+        transval = 1;
+    case '2'
+        transval = 2;
+    case 'b3'
+        transval = 3;
+    case '3'
+        transval = 4;
+    case '4'
+        transval = 5;
+    case 'b5'
+        transval = 6;
+    case '5'
+        transval = 7;
+    case 'b6'
+        transval = 8;
+    case '6'
+        transval = 9;
+    case 'b7'
+        transval = 10;
+    case '7'
+        transval = 11;
+    otherwise
+        transval = 0;
 end
 
 %     case 'maj/3'
