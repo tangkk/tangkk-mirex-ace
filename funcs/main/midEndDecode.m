@@ -69,11 +69,9 @@ mht = repmat(ht,1,nsegs);
 mhb = repmat(hb,1,nsegs);
 Stsegout = Sseg .* mht;
 Sbsegout = Sseg .* mhb;
-% Stsegout = normalizeGram(Stsegout);
 if df && enPlot
 myImagePlot(Stsegout, 1:nsegs, 1:ntones, 'slice', 'semitone', 'treble note salience matrix');
 end
-% Sbsegout = normalizeGram(Sbsegout);
 if df && enPlot
 myImagePlot(Sbsegout, 1:nsegs, 1:ntones, 'slice', 'semitone', 'bass note salience matrix');
 end
@@ -95,8 +93,6 @@ end
 % normalize grams (whether global or local)
 uppergram = normalizeGram(uppergram,meparam.normalization);
 basegram = normalizeGram(basegram,meparam.normalization);
-% basegram = basegram ./ max(max(basegram));
-% uppergram = uppergram ./ max(max(uppergram));
 
 bassnotenames = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
 treblenotenames = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};

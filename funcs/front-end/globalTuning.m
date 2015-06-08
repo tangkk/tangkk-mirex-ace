@@ -6,22 +6,36 @@
 
 function S =  globalTuning(S)
 
-len = size(S,2);
+% S = normalizeGram(S,inf);
+
+nslices = size(S,2);
 ntones = size(S,1);
 C = zeros(1,3);
-c = sum(S,2);
-for k = 1:1:3
-   C(k) = sum(c(k:3:end)); 
+cvec = [];
+mvec = [];
+for j = 1:nslices
+    % c = sum(S,2);
+    col = S(:,j);
+    for k = 1:1:3
+       C(k) = sum(col(k:3:end)); 
+    end
+    x = [0 1 2];
+    y = [C(1) C(2) C(3)];
+    p = polyfit(x,y,2); % quadratic fit
+    pvals = polyval(p,0:0.01:2);
+    [M,I] = max(pvals);
+    if M ~= 0
+        c = (I - 1) * 0.01 - 1;
+        cvec = [cvec c];
+        mvec = [mvec M];
+    end
 end
 
-x = [0 1 2];
-y = [C(1) C(2) C(3)];
-p = polyfit(x,y,2); % quadratic fit
-pvals = polyval(p,0:0.1:2);
-[~,I] = max(pvals);
-cen = (I - 1) * 0.1 - 1;
+mvec = mvec ./ norm(mvec,1);
+cen = cvec * mvec';
+% disp(cen);
 
-for j = 1:1:len
+for j = 1:1:nslices
     cj = S(:,j);
     x = (0:1:ntones+1)';
     xi = x + cen;

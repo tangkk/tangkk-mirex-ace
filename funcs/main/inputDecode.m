@@ -1,4 +1,5 @@
-function [audiofolder, audiopath, cpfolder, cppath, gtfolder, gtpath] = inputDecode(tline, codec)
+function [audiofolder, audiopath, cpfolder, cppath, gtfolder, gtpath,...
+    tunpath, vamptunpath] = inputDecode(tline, codec)
 
 songpath = tline;
 pathtokens = strsplit(songpath,'/');
@@ -17,3 +18,11 @@ cppath = [cpfolder '/' songtitle '.txt'];
 gtroot = './gt/';
 gtfolder = strcat(gtroot, artist, '/', album);
 gtpath = [gtfolder '/' songtitle '.lab'];
+
+tunroot = './tuning/';
+tunfolder = strcat(tunroot, artist, '/', album);
+tunpath = [tunfolder '/' songtitle '.tun'];
+
+vamptunroot = './vamp/tuning/';
+vamptunfolder = strcat(vamptunroot, artist, '/', album);
+vamptunpath = [vamptunfolder '/' songtitle '.txt'];

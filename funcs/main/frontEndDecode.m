@@ -1,4 +1,5 @@
-function [fs, nslices, endtime, S, btrack] = frontEndDecode(audiopath, feparam, df, enPlot)
+function [fs, nslices, endtime, S, btrack] = frontEndDecode(audiopath, tunpath, vamptunpath,...
+    feparam, df, enPlot)
 
 [x, fs] = myInput(audiopath, feparam.stereotomono);
 
@@ -13,9 +14,9 @@ end
 % note dictionary
 fmin = 27.5; % MIDI note 21, Piano key number 1 (A0)
 fmax = 3322; % MIDI note 104, Piano key number nnotes
-fratio = 2^(1/(12*3));
+fratio = 2^(1/(12*3)); % nsemitones = 3
 nnotes = 84;
-ntones = nnotes*3; % numsemitones = 3
+ntones = nnotes*3; % nsemitones = 3
 USR = 40; % upsampling rate
 
 % FIXME: if the parameter changes, delete the '.mat' files and run again
@@ -50,21 +51,32 @@ myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'simple tone salie
 end
 
 if feparam.tuningBefore
-% tuning algorithm, assuming numsemitones = 3
+% tuning algorithm, assuming nsemitones = 3
 if feparam.globalTuning
     Ss = globalTuning(Ss);
     if feparam.enCosSim
     Sc = globalTuning(Sc);
     end
-else
+elseif feparam.localTuning
     Ss = localTuning(Ss);
     if feparam.enCosSim
     Sc = localTuning(Sc);
     end
-end
-Ss = Ss ./ max(max(Ss)); % global normalize
-if feparam.enCosSim
-Sc = Sc ./ max(max(Sc)); % global normalize
+elseif feparam.phaseTuning
+    Ss = phaseTuning(Ss);
+    if feparam.enCosSim
+    Sc = phaseTuning(Sc);
+    end
+elseif feparam.gtTuning
+    Ss = gtTuning(Ss, tunpath);
+    if feparam.enCosSim
+    Sc = gtTuning(Sc);
+    end
+elseif feparam.vampTuning
+    Ss = vampTuning(Ss,vamptunpath);
+    if feparam.enCosSim
+    Sc = vampTuning(Sc);
+    end
 end
 if df && enPlot
 myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'tuned simple tone salience matrix');
@@ -75,6 +87,9 @@ end
 % suppress percussive moments
 if feparam.enPcsSuppress
 Ss = pcsSuppress(Ss, (max(sum(Ss))+mean(sum(Ss)))/2);
+if feparam.enCosSim
+Sc = pcsSuppress(Sc, (max(sum(Sc))+mean(sum(Sc)))/2);
+end
 if df && enPlot
 myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'pcs Suppressed simple tone salience matrix');
 end
@@ -84,19 +99,13 @@ end
 if feparam.enSUB
 wl = 9; % 3 * 12 / 2
 Ss = standardization(Ss, wl, feparam.enSTD, feparam.specWhitening, df);
+if feparam.enCosSim
+Sc = standardization(Sc, wl, feparam.enSTD, feparam.specWhitening, df);
+end
 if df && enPlot
 myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'standardized simple tone salience matrix');
 end
 end
-
-if feparam.specRollOn > 0
-Ss = specRollOn(Ss, feparam.specRollOn);
-if df && enPlot
-myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'spec-roll-on simple tone salience matrix');
-end
-end
-
-Ss = normalizeGram(Ss,feparam.normalization);
 
 % noise reduction process
 if feparam.enPeakNoiseRed
@@ -111,31 +120,38 @@ myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'noised reduced si
 end
 end
 
+% interface to pre-salience matrix
+if feparam.enCosSim
+    Ss = Ss.*Sc;
+end
+
+if feparam.specRollOn > 0
+Ss = specRollOn(Ss, feparam.specRollOn);
+if df && enPlot
+myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'spec-roll-on simple tone salience matrix');
+end
+end
+
 if ~feparam.tuningBefore
-% tuning algorithm, assuming numsemitones = 3
+% tuning algorithm, assuming nsemitones = 3
 if feparam.globalTuning
     Ss = globalTuning(Ss);
-    if feparam.enCosSim
-    Sc = globalTuning(Sc);
-    end
-else
+elseif feparam.localTuning
     Ss = localTuning(Ss);
-    if feparam.enCosSim
-    Sc = localTuning(Sc);
-    end
-end
-Ss = Ss ./ max(max(Ss)); % global normalize
-if feparam.enCosSim
-Sc = Sc ./ max(max(Sc)); % global normalize
+elseif feparam.phaseTuning
+    Ss = phaseTuning(Ss);
+elseif feparam.gtTuning
+    Ss = gtTuning(Ss, tunpath);
+elseif feparam.vampTuning
+    Ss = vampTuning(Ss,vamptunpath);
 end
 if df && enPlot
 myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'tuned simple tone salience matrix');
-% myImagePlot(Sc, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'tuned complex tone salience matrix');
 end
 end
 
 % nnls approximate note transcription - 3-semitones -> 1-semitone
-if feparam.enNNLS || feparam.enNNLSPlus
+if feparam.enNNLS
 Sapx = nnlsTrans(Ss,E,3);
 if df && enPlot
 myImagePlot(Sapx, 1:nslices, 1:nnotes, 'slice', 'semitone', 'nnls salience matrix');
@@ -143,44 +159,26 @@ end
 end
 
 % compute note salience matrix by combining 1/3 semitones into semitones
-
 % sum all 3 bins, alternatively, we could just take every center bins
-Sss3 = zeros(nnotes,nslices);
+Sss3bin = zeros(nnotes,nslices);
 for i = 1:1:3
-    Sss3 = Sss3 + Ss(i:3:end,:);
+    Sss3bin = Sss3bin + Ss(i:3:end,:);
 end
-SssC = Ss(2:3:end,:);
-if feparam.enCosSim
-Scc3 = zeros(nnotes,nslices);
-for i = 1:1:3
-    Scc3 = Scc3 + Sc(i:3:end,:);
-end
-SccC = Sc(2:3:end,:);
-end
+SssCen = Ss(2:3:end,:);
 if df && enPlot
-myImagePlot(Sss3, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Ss note salience matrix (sum 3 bins)');
-% myImagePlot(Scc3, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Sc note salience matrix (sum 3 bins)');
-myImagePlot(SssC, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Ss note salience matrix (center bin)');
-% myImagePlot(SccC, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Sc note salience matrix (center bin)');
+myImagePlot(Sss3bin, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Ss note salience matrix (sum 3 bins)');
+myImagePlot(SssCen, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Ss note salience matrix (center bin)');
 end
 
 % interface with output S
-if feparam.enNNLSPlus && feparam.enCosSim % nnls augmented
+if feparam.enCosSim % the baseline approach
     if feparam.enCenterbin
-        S = SssC.*Sapx + SssC.*SccC;
+        S = SssCen;
     else 
-        S = Sss3.*Sapx + Sss3.*Scc3;
+        S = Sss3bin;
     end
 elseif feparam.enNNLS % nnls
         S = Sapx;
-elseif feparam.enCosSim % the baseline approach
-    if feparam.enCenterbin
-        S = SssC.*SccC;
-    else 
-        S = Sss3.*Scc3;
-    end
-else % guarding
-        S = Sss3;
 end
 
 if feparam.enProfiling
@@ -190,16 +188,15 @@ mht = repmat(ht,1,nslices);
 mhb = repmat(hb,1,nslices);
 St = S .* mht;
 Sb = S .* mhb;
-% St = normalizeGram(St);
 if df && enPlot
 myImagePlot(St, 1:nslices, 1:nnotes, 'slice', 'semitone', 'treble note salience matrix');
 end
-% Sb = normalizeGram(Sb);
 if df && enPlot
 myImagePlot(Sb, 1:nslices, 1:nnotes, 'slice', 'semitone', 'bass note salience matrix');
 end
 end
 
+% final normalization
 S = normalizeGram(S,feparam.normalization);
 if df && enPlot
 myImagePlot(S, 1:nslices, 1:nnotes, 'slice', 'semitone', 'note salience matrix');
@@ -209,4 +206,5 @@ end
 btrackraw = getmeasures2(audiopath);
 btrack = round(btrackraw.beats.*fs./feparam.hopsize + 1);
 btrack(btrack > nslices) = nslices;
+btrack(btrack == 0) = 1;
 

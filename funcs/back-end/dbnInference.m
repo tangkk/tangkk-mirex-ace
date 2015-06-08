@@ -3,6 +3,7 @@ function [rootgram, bassgram, treblegram] = dbnInference(bnet, chordmode, basegr
 % inference
 T = size(basegram,2);
 nct = size(chordmode,2);
+NC = nct * 12 + 1;
 rootgram = zeros(1,T);
 bassgram = zeros(1,T);
 treblegram = zeros(1,T);
@@ -21,10 +22,16 @@ mpe = find_mpe(jengine, evidence);
 
 for i = 1:1:T
     cn = cell2num(mpe(1,i));
-    bn = ceil(cn/(nct-1));
-    tn = mod(cn,nct-1)+1;
-    tstr = chordmode{2,tn};
-    rn = bass2root(bn, tstr);
+    if cn == NC
+        rn = 0;
+        bn = 0;
+        tn = 0;
+    else
+        bn = ceil(cn/nct);
+        tn = mod(cn - 1,nct)+1;
+        tstr = chordmode{2,tn};
+        rn = bass2root(bn, tstr); 
+    end
     rootgram(i) = rn;
     bassgram(i) = bn;
     treblegram(i) = tn;

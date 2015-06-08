@@ -27,7 +27,11 @@ for i = 1:1:nchords
     timestr2 = num2str(sec2);
     root = rootgram(i);
     treble = treblegram(i);
-    chordstr = strcat(num2note(root), ':', chordmode{2,treble});
+    if root ~= 0 || treble ~= 0
+        chordstr = strcat(num2note(root), ':', chordmode{2,treble});
+    else
+        chordstr = 'N';
+    end
     s = [timestr1, ' ', timestr2, ' ', chordstr];
     fprintf(fw, formatSpec2, s);
 end

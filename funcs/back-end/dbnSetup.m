@@ -50,7 +50,7 @@ eclass = [eclass1 eclass2];
 % 7/3, 7/5, 7/b7
 % ...
 nct = size(chordmode,2); % number of chord types defined in ``chordmode''
-H = (nct - 1) * 12 + 1; % nct - 1 is due to no-chord
+H = nct * 12 + 1; % + 1 is the no-chord
 O = 24; % 12 for uppergram and 12 for basegram
 ns = [H O];
 dnodes = 1; % discrete node class
@@ -64,12 +64,13 @@ bnet = mk_dbn(intra, inter, ns, 'discrete', dnodes, 'observed', cnodes,...
 
 % prior probabilities
 prior = normalise(ones(1,H)); % uniform distribution
+
 % set prior prob according to Ashley's paper
 % prior = ones(1,H);
 % for i = 1:1:12
-%     for j = 2:1:nct
+%     for j = 1:1:nct
 %         cstr = chordmode{2,j};
-%         cidx = (i - 1) * (nct - 1) + j - 1;
+%         cidx = (i - 1) * (nct) + j;
 %         switch cstr
 %             case 'maj'
 %                 prior(cidx) = prior(cidx) * 10;
@@ -111,13 +112,29 @@ prior = normalise(ones(1,H)); % uniform distribution
 %
 % the mean of the no-chord will be set to all 1s, sigma^2 be all 0.2
 
+% to visualize some normal distributions, use the following commands:
+% x = 0:0.01:1;
+% figure;
+% hold;
+% plot(x,normpdf(x,0.6,0.2));
+% plot(x,normpdf(x,0.7,0.2));
+% plot(x,normpdf(x,0.8,0.2));
+% plot(x,normpdf(x,0.9,0.2));
+% plot(x,normpdf(x,1,0.2));
+% plot(x,normpdf(x,1.1,0.2));
+% plot(x,normpdf(x,1.2,0.2));
+% plot(x,normpdf(x,1.3,0.2));
+% ...
+% note that the observation values range only from 0 - 1
+% therefore the > 1 part of the curve will not have effect
+% for weighting purpose, we can actually increase the mean
 mu = zeros(O,H);
 sigma = zeros(O,O,H);
-% set the mu first, loop over 12 pitch classes and $nct - 1 chord types
-% totally there're (nct-1) * 12 mus set in the following loop
+% set the mu first, loop over 12 pitch classes and $nct chord types
+% totally there're nct * 12 mus set in the following loop
 % the ``no-chord'' mu is set outside the loop, which will be all 1s.
 for i = 1:1:12
-    for j = 2:1:nct % except for the no-chord
+    for j = 1:1:nct % except for the no-chord
         ps = [0 chordmode{1,j}];
         muij = zeros(O,1);
         for k = 1:1:length(ps)
@@ -129,23 +146,23 @@ for i = 1:1:12
             end
             muij(p+12) = dbnparam.muTreble; % treble range
         end
-        mu(:, (i - 1) * (nct - 1) + j - 1) = muij;
+        mu(:, (i - 1) * nct + j) = muij;
     end
 end
 mu(:,H) = ones(O,1).* dbnparam.muNoChord;
 
 % set the sigma (or sigma^2), similarly, loop over the 12 pitch classes
-% and $nct - 1 chord types and set sigma^2 for both treble and bass,
+% and $nct chord types and set sigma^2 for both treble and bass,
 % notice the special consideration for bass, especially the non-chord-bass
 for i = 1:1:12
-    for j = 2:1:nct
+    for j = 1:1:nct
         ps = [0 chordmode{1,j}];
         sigmaij = [ones(O/2,1)*sqrt(dbnparam.sigma2CBass) ; ones(O/2,1)*sqrt(dbnparam.sigma2Treble)];
         for k = 2:1:length(ps) % only loop non-chord-bass pitch
             p = pitchTranspose(i,ps(k));
             sigmaij(p) = sqrt(dbnparam.sigma2NCBass);
         end
-        sigma(:,:,(i - 1) * (nct - 1) + j - 1) = diag(sigmaij);
+        sigma(:,:,(i - 1) * nct + j) = diag(sigmaij);
     end
 end
 sigma(:,:,H) = eye(O)*sqrt(dbnparam.sigma2NoChord);

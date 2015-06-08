@@ -39,8 +39,8 @@ for i = 1:nnotes
         pre(note3) = s^3;
     end
     
-    pr = pr ./ norm(pr);
-    pre = pre ./ norm(pre);
+    pr = pr ./ norm(pr, 1);
+    pre = pre ./ norm(pre, 1);
     
     E(:,i) = pr;
     Ee(:,i) = pre;

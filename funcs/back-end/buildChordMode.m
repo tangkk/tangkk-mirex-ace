@@ -2,7 +2,7 @@
 % the order matters when there is a tie matching score
 %
 % --tchord--            --digit--     --dif--     --weight--    --stype--
-% ************************* nochord ******************************* %
+% ************************* uni ******************************** %
 % 1->1 1               1                0            0          0
 % ************************* dyad ******************************* %
 % 1->b2 b2             1,2              1            1          0
@@ -91,11 +91,13 @@ chordmode = cell(4,50); %[dif; qual; weight; supertype]
 
 idx = 1;
 
-% ************************* no-chord *************************** %
+% ************************* uni *************************** %
+if chordmodeparam.enUni
 chordmode{1,idx} = 0;
 chordmode{2,idx} = '1';
 chordmode{3,idx} = 0;
 idx = idx + 1;
+end
 
 % ************************* dyad ******************************* %
 if chordmodeparam.enDyad
