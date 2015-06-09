@@ -59,9 +59,9 @@ myImagePlot(Ss.*10, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'simple tone s
 % myImagePlot(Sc, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'complex tone salience matrix');
 end
 
-% % insert to test tunings
-% S = Ss; btrack = 0;
-% return;
+% insert to test tunings
+S = Ss; btrack = 0;
+return;
 
 if feparam.tuningBefore
 % tuning algorithm, assuming nsemitones = 3

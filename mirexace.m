@@ -110,7 +110,7 @@ enPlotME = 1;
 enPlotBE = 1;
 enPlotFB = 1;
 enPlotTS = 1;
-enEval = 1;
+enEval = 0;
 
 % ********************************************************** %
 % ********************* Process **************************** %
@@ -118,8 +118,8 @@ enEval = 1;
 feval = fopen('evallist.txt','r');
 tline = fgetl(feval);
 
-% tuns = cell(180,4);
-% tuni = 1;
+tuns = cell(180,5);
+tuni = 1;
 
 while ischar(tline)
 
@@ -133,20 +133,21 @@ display('frontend...');
 [fs, nslices, endtime, S, btrack] = frontEndDecode(audiopath, gttunpath, vamptunpath,...
     feparam, df, enPlotFE);
 
-% % just insert to test tunings:
-% display(audiopath);
-% tokens = strsplit(audiopath,'/');
-% audioname = tokens{5}; audioname = audioname(1:end-4);
-% [~,gttun] = gtTuning(S, gttunpath);
-% [~,phasetun] = phaseTuning(S);
-% [~,vamptunpath] = vampTuning(S, vamptunpath);
-% tuns{tuni,1} = audioname;
-% tuns{tuni,2} = gttun;
-% tuns{tuni,3} = phasetun;
-% tuns{tuni,4} = vamptunpath;
-% tuni = tuni + 1;
-% tline = fgetl(feval);
-% continue;
+% just insert to test tunings:
+display(audiopath);
+tokens = strsplit(audiopath,'/');
+audioname = tokens{5}; audioname = audioname(1:end-4);
+[~,gttun] = gtTuning(S, gttunpath);
+[~,phasetun] = phaseTuning(S);
+[~,vamptunpath] = vampTuning(S, vamptunpath);
+tuns{tuni,1} = audioname;
+tuns{tuni,2} = gttun;
+tuns{tuni,3} = phasetun;
+tuns{tuni,4} = vamptunpath;
+tuns{tuni,5} = fs;
+tuni = tuni + 1;
+tline = fgetl(feval);
+continue;
 
 display('midend...');
 

@@ -4,6 +4,9 @@ info = audioinfo(path);
 fs = info.SampleRate;
 
 [x,~] = audioread(path);
+x = resample(x, 44100, fs);
+
+fs = 44100;
 DSR = 4;
 if usemono
     x = (x(:,1)+x(:,2))/2;
