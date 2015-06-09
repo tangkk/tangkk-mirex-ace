@@ -25,4 +25,4 @@ tunpath = [tunfolder '/' songtitle '.tun'];
 
 vamptunroot = './vamp/tuning/';
 vamptunfolder = strcat(vamptunroot, artist, '/', album);
-vamptunpath = [vamptunfolder '/' songtitle '.txt'];
+vamptunpath = [vamptunfolder '/' songtitle '.lab'];

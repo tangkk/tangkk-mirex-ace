@@ -1,7 +1,7 @@
 % The following evaluator is built and executed from Johan's source code:
 % https://github.com/jpauwels/MusOOEvaluator
 
-sufix = 'fullBeatles-copychordino-1';
+sufix = 'fullBeatles-ccd';
 evallist = 'evallist.txt';
 
 gtroot = './gt/';

@@ -49,9 +49,9 @@ end
 
 Sseg = zeros(size(SpreSeg,1), length(bdrys) - 1);
 for j = 1:size(Sseg,2)
-    if meparam.useMeidanFilter
+    if meparam.useMedianFilter
         Sseg(:,j) = median(SpreSeg(:,bdrys(j):bdrys(j+1)),2);
-    else
+    elseif meparam.useMeanFilter
         Sseg(:,j) = mean(SpreSeg(:,bdrys(j):bdrys(j+1)),2);
     end
 end

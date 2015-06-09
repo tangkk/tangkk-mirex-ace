@@ -1,5 +1,5 @@
 % read the ground truth tuning from local folder
-function S = gtTuning(S, tunpath)
+function [S, et] = gtTuning(S, tunpath)
 
 ftun = fopen(tunpath,'r');
 tline = fgetl(ftun);

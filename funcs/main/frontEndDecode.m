@@ -3,14 +3,6 @@ function [fs, nslices, endtime, S, btrack] = frontEndDecode(audiopath, tunpath, 
 
 [x, fs] = myInput(audiopath, feparam.stereotomono);
 
-% transform time domain into frequency domain
-X = mySpectrogram(x, feparam.wl, feparam.hopsize);
-nslices = size(X,2);
-endtime = (1/fs)*length(x);
-if df && enPlot
-myImagePlot(X, 1:nslices, 1:feparam.wl/2, 'slice', 'bin', 'spectrogram');
-end
-
 % note dictionary
 fmin = 27.5; % MIDI note 21, Piano key number 1 (A0)
 fmax = 3322; % MIDI note 104, Piano key number nnotes
@@ -39,16 +31,37 @@ end
 % calculate note salience matrix of the stft spectrogram (cosine
 % similarity) (note that this is an additive approach, as contrast to
 % the nnls approach which is an deductive approach)
-if feparam.enCosSim
-Ss = Ms*X;
-Sc = Mc*X;
-elseif feparam.enlogFreq
-Ss = LE*X;
+if ~feparam.enCQT
+    % transform time domain into frequency domain
+    X = mySpectrogram(x, feparam.wl, feparam.hopsize);
+    nslices = size(X,2);
+    endtime = (1/fs)*length(x);
+    if df && enPlot
+    myImagePlot(X, 1:nslices, 1:feparam.wl/2, 'slice', 'bin', 'spectrogram');
+    end
+    
+    if feparam.enCosSim
+    Ss = Ms*X;
+    Sc = Mc*X;
+    elseif feparam.enlogFreq
+    Ss = LE*X;
+    end
+else
+    Xcq = cqt(x, 36, fs, fmin*2^(-1/(12*3)), fmax*2^(1/(12*3)), 'rasterize', 'piecewise');
+    Ss = full(abs(Xcq.c));
+    feparam.hopsize = Xcq.xlen / size(Ss,2);
+    nslices = size(Ss,2);
+    endtime = (1/fs)*length(x);
 end
+
 if df && enPlot
-myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'simple tone salience matrix');
+myImagePlot(Ss.*10, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'simple tone salience matrix');
 % myImagePlot(Sc, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'complex tone salience matrix');
 end
+
+% % insert to test tunings
+% S = Ss; btrack = 0;
+% return;
 
 if feparam.tuningBefore
 % tuning algorithm, assuming nsemitones = 3
@@ -63,19 +76,19 @@ elseif feparam.localTuning
     Sc = localTuning(Sc);
     end
 elseif feparam.phaseTuning
-    Ss = phaseTuning(Ss);
+    [Ss,~] = phaseTuning(Ss);
     if feparam.enCosSim
-    Sc = phaseTuning(Sc);
+    [Sc,~] = phaseTuning(Sc);
     end
 elseif feparam.gtTuning
-    Ss = gtTuning(Ss, tunpath);
+    [Ss,~] = gtTuning(Ss, tunpath);
     if feparam.enCosSim
-    Sc = gtTuning(Sc);
+    [Sc,~] = gtTuning(Sc);
     end
 elseif feparam.vampTuning
-    Ss = vampTuning(Ss,vamptunpath);
+    [Ss,~] = vampTuning(Ss,vamptunpath);
     if feparam.enCosSim
-    Sc = vampTuning(Sc);
+    [Sc,~] = vampTuning(Sc);
     end
 end
 if df && enPlot
@@ -106,6 +119,10 @@ if df && enPlot
 myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'standardized simple tone salience matrix');
 end
 end
+
+% % insert to test tunings
+% S = Ss; btrack = 0;
+% return;
 
 % noise reduction process
 if feparam.enPeakNoiseRed
@@ -139,11 +156,11 @@ if feparam.globalTuning
 elseif feparam.localTuning
     Ss = localTuning(Ss);
 elseif feparam.phaseTuning
-    Ss = phaseTuning(Ss);
+    [Ss,~] = phaseTuning(Ss);
 elseif feparam.gtTuning
-    Ss = gtTuning(Ss, tunpath);
+    [Ss,~] = gtTuning(Ss, tunpath);
 elseif feparam.vampTuning
-    Ss = vampTuning(Ss,vamptunpath);
+    [Ss,~] = vampTuning(Ss,vamptunpath);
 end
 if df && enPlot
 myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'tuned simple tone salience matrix');

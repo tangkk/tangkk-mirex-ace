@@ -1,4 +1,4 @@
-function S = vampTuning(S, vamptunpath)
+function [S, et] = vampTuning(S, vamptunpath)
 
 ftun = fopen(vamptunpath,'r');
 tline = fgetl(ftun);

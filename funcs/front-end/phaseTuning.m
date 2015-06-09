@@ -1,7 +1,7 @@
 % tuning based on phase information
 % assuming nsemitones = 3
 
-function S = phaseTuning(S)
+function [S, et] = phaseTuning(S)
 
 nslices = size(S,2);
 ntones = size(S,1);
