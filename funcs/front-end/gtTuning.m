@@ -5,8 +5,6 @@ ftun = fopen(tunpath,'r');
 tline = fgetl(ftun);
 fclose(ftun);
 
-nslices = size(S,2);
-ntones = size(S,1);
 st = 440;
 et = str2double(tline);
 
@@ -26,14 +24,5 @@ p = (log(et / st) / log(2)) * 36;
 % then we interpolate the original S at every x position throughout
 % nslices*ntones, the edge values are just interpolated as zeros
 
-for j = 1:nslices
-    % insert two zeros on both side to serve the possible p = +/- 1.5
-    % thus the orginal index x = [-1,0,1,2,...,ntones, ntones + 1, ntones + 2];
-    % and interpolation index xi = 1:ntones + p;
-    Y = [0;0;S(:,j);0;0];
-    x = (-1:ntones+2)';
-    xi = (1:ntones)' + p;
-    yi = interp1q(x,Y,xi);
-    S(:,j) = yi;
-end
+S = tuningUpdate(S,p);
 

@@ -9,7 +9,7 @@ fmax = 3322; % MIDI note 104, Piano key number nnotes
 fratio = 2^(1/(12*3)); % nsemitones = 3
 nnotes = 84;
 ntones = nnotes*3; % nsemitones = 3
-USR = 40; % upsampling rate
+USR = 160; % upsampling rate
 
 % FIXME: if the parameter changes, delete the '.mat' files and run again
 if exist('dict.mat','file') == 2
@@ -46,9 +46,13 @@ if ~feparam.enCQT
     elseif feparam.enlogFreq
     Ss = LE*X;
     end
-else
-    Xcq = cqt(x, 36, fs, fmin*2^(-1/(12*3)), fmax*2^(1/(12*3)), 'rasterize', 'piecewise');
+    % FIXME: CQT is not working as it should be
+elseif feparam.enCQT
+%     [~,et] = gtTuning([0;0;0], tunpath);
+%     ptun = (log(et / 440) / log(2)) * 36; % compensate for the tunings
+    Xcq = cqt(x, 36, fs, fmin*2^((-1)/(12*3)), fmax*2^((1)/(12*3)), 'rasterize', 'full');
     Ss = full(abs(Xcq.c));
+    Ss = [zeros(1,size(Ss,2));Ss];
     feparam.hopsize = Xcq.xlen / size(Ss,2);
     nslices = size(Ss,2);
     endtime = (1/fs)*length(x);
@@ -59,9 +63,9 @@ myImagePlot(Ss.*10, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'simple tone s
 % myImagePlot(Sc, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'complex tone salience matrix');
 end
 
-% insert to test tunings
-S = Ss; btrack = 0;
-return;
+% % insert to test tunings
+% S = Ss; btrack = 0;
+% return;
 
 if feparam.tuningBefore
 % tuning algorithm, assuming nsemitones = 3
@@ -83,12 +87,12 @@ elseif feparam.phaseTuning
 elseif feparam.gtTuning
     [Ss,~] = gtTuning(Ss, tunpath);
     if feparam.enCosSim
-    [Sc,~] = gtTuning(Sc);
+    [Sc,~] = gtTuning(Sc, tunpath);
     end
 elseif feparam.vampTuning
     [Ss,~] = vampTuning(Ss,vamptunpath);
     if feparam.enCosSim
-    [Sc,~] = vampTuning(Sc);
+    [Sc,~] = vampTuning(Sc,vamptunpath);
     end
 end
 if df && enPlot
@@ -199,8 +203,8 @@ elseif feparam.enNNLS % nnls
 end
 
 if feparam.enProfiling
-ht = hamming(nnotes);
-hb = [hamming(nnotes/2);zeros(nnotes/2,1)];
+ht = hann(nnotes);
+hb = [hann(nnotes/2);zeros(nnotes/2,1)];
 mht = repmat(ht,1,nslices);
 mhb = repmat(hb,1,nslices);
 St = S .* mht;
