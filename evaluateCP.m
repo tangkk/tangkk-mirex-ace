@@ -1,7 +1,7 @@
 % The following evaluator is built and executed from Johan's source code:
 % https://github.com/jpauwels/MusOOEvaluator
 
-sufix = 'pleasepleaseme-ccd';
+sufix = 'fullBeatles-ccd';
 evallist = 'evallist.txt';
 
 gtroot = './gt/';
@@ -63,20 +63,20 @@ evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
     ' --chords ' evaltype];
 system(evalcmd);
 
-% evaltype = 'MirexSeventhsBass';
-% disp([evaltype '......']);
-% evaloutseventhsbass = [outroot 'results' evaltype '/' sufix '.txt'];
-% evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
-%     testfolder ' --refext .lab --testext .txt --output ' evaloutseventhsbass ' --csv'...
-%     ' --chords ' evaltype];
-% system(evalcmd);
+evaltype = 'MirexSeventhsBass';
+disp([evaltype '......']);
+evaloutseventhsbass = [outroot 'results' evaltype '/' sufix '.txt'];
+evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
+    testfolder ' --refext .lab --testext .txt --output ' evaloutseventhsbass ' --csv'...
+    ' --chords ' evaltype];
+system(evalcmd);
 
 dbtype(evaloutbass,'3:7');
 dbtype(evaloutroot,'3:7');
 dbtype(evaloutmajmin,'3:7');
 dbtype(evaloutmajminbass,'3:7');
 dbtype(evaloutsevenths,'3:7');
-% dbtype(evaloutseventhsbass,'3:7');
+dbtype(evaloutseventhsbass,'3:7');
 dbtype(evaloutseg,'3:7');
 
 % evaltype = 'ChromaRecall';
