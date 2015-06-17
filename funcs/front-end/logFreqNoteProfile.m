@@ -3,9 +3,9 @@
 % this process is implemented as described in M. Mauch's thesis
 % first the original 2048-bin DFT is upsampled linearly 40 times
 % then the upsampled spectrum is downsampled non-linearly with a constant-Q
-function LE = logFreqNoteProfile(ntones, fmin, fratio, USR, fs, hopsize, nbins)
+function LE = logFreqNoteProfile(ntones, fmin, fratio, USR, fs, nbins)
 
-df = fs / hopsize;
+df = fs / nbins; % 2*nbins is the frame length of fft
 fi = fs/2*linspace(0,1,nbins);
 ff = fs/2*linspace(0,1,nbins*USR);
 dff = ff ./ 51.94; % df(f) = f/Q, where Q = 36 / ln2 = 51.94
@@ -47,6 +47,6 @@ LE = (h * hl)';
 
 % normalize this transformation matrix row wise (use L1 norm)
 % FIXME: not sure whether this is reasonable under the constant-Q theory
-for i = 1:ntones
-    LE(i,:) = LE(i,:) ./ norm(LE(i,:),1);
-end
+% for i = 1:ntones
+%     LE(i,:) = LE(i,:) ./ norm(LE(i,:),1);
+% end

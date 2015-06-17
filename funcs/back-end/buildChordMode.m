@@ -233,12 +233,14 @@ idx = idx + 1;
 end
 
 % ************************ sixth ******************************* %
-if chordmodeparam.enSixth
+if chordmodeparam.enSixthMaj
 chordmode{1,idx} = [4,7,9];
 chordmode{2,idx} = 'maj6';
 chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
+end
 
+if chordmodeparam.enSixthMin
 chordmode{1,idx} = [3,7,9];
 chordmode{2,idx} = 'min6';
 chordmode{3,idx} = [1-tc,1-tc,1-tc];
@@ -308,7 +310,9 @@ chordmode{1,idx} = [3,6];
 chordmode{2,idx} = 'dim';
 chordmode{3,idx} = [1,1];
 idx = idx + 1;
+end
 
+if chordmodeparam.enAugDim7
 chordmode{1,idx} = [3,6,9];
 chordmode{2,idx} = 'dim7';
 chordmode{3,idx} = [1-tc,1-tc,1-tc];
@@ -326,7 +330,7 @@ idx = idx + 1;
 end
 
 % ******************** MajMinBass ************************%
-if chordmodeparam.enMajMinBass
+if chordmodeparam.enMajBass
 chordmode{1,idx} = [3,8];
 chordmode{2,idx} = 'maj/3';
 chordmode{3,idx} = [1,1];
@@ -336,7 +340,9 @@ chordmode{1,idx} = [5,9];
 chordmode{2,idx} = 'maj/5';
 chordmode{3,idx} = [1,1];
 idx = idx + 1;
+end
 
+if chordmodeparam.enMinBass
 chordmode{1,idx} = [4,9];
 chordmode{2,idx} = 'min/b3';
 chordmode{3,idx} = [1,1];
@@ -349,7 +355,7 @@ idx = idx + 1;
 end
 
 % ******************** SeventhsBass ************************%
-if chordmodeparam.enSeventhBass
+if chordmodeparam.enMajSeventhBass
 chordmode{1,idx} = [3,7,8];
 chordmode{2,idx} = 'maj7/3';
 chordmode{3,idx} = [1-ic,1-ic,1-ic];
@@ -364,7 +370,9 @@ chordmode{1,idx} = [1,5,8];
 chordmode{2,idx} = 'maj7/7';
 chordmode{3,idx} = [1-ic,1-ic,1-ic];
 idx = idx + 1;
+end
 
+if chordmodeparam.enMinSeventhBass
 chordmode{1,idx} = [4,7,9];
 chordmode{2,idx} = 'min7/b3';
 chordmode{3,idx} = [1-ic,1-ic,1-ic];
@@ -379,7 +387,9 @@ chordmode{1,idx} = [2,5,9];
 chordmode{2,idx} = 'min7/b7';
 chordmode{3,idx} = [1-ic,1-ic,1-ic];
 idx = idx + 1;
+end
 
+if chordmodeparam.en7SeventhBass
 chordmode{1,idx} = [3,6,8];
 chordmode{2,idx} = '7/3';
 chordmode{3,idx} = [1-ic,1-ic,1-ic];

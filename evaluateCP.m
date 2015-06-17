@@ -1,7 +1,7 @@
 % The following evaluator is built and executed from Johan's source code:
 % https://github.com/jpauwels/MusOOEvaluator
 
-sufix = 'fullBeatles-ccd';
+sufix = 'pleasepleaseme-ccd';
 evallist = 'evallist.txt';
 
 gtroot = './gt/';

@@ -9,7 +9,7 @@ fmax = 3322; % MIDI note 104, Piano key number nnotes
 fratio = 2^(1/(12*3)); % nsemitones = 3
 nnotes = 84;
 ntones = nnotes*3; % nsemitones = 3
-USR = 160; % upsampling rate
+USR = 40; % upsampling rate
 
 % FIXME: if the parameter changes, delete the '.mat' files and run again
 if exist('dict.mat','file') == 2
@@ -17,7 +17,7 @@ load dict.mat;
 else
 [Ms,Mc] = toneProfileGen(feparam.overtoneS, feparam.wl, ntones, 3, fmin, fmax, fratio, fs);
 E = nnlsNoteProfile(feparam.overtoneS, nnotes);
-LE = logFreqNoteProfile(ntones, fmin, fratio, USR, fs, feparam.hopsize, feparam.wl/2);
+LE = logFreqNoteProfile(ntones, fmin, fratio, USR, fs, feparam.wl/2);
 save('dict.mat','Ms','Mc','E','LE');
 end
 
@@ -59,13 +59,9 @@ elseif feparam.enCQT
 end
 
 if df && enPlot
-myImagePlot(Ss.*10, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'simple tone salience matrix');
+myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'simple tone salience matrix');
 % myImagePlot(Sc, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'complex tone salience matrix');
 end
-
-% % insert to test tunings
-% S = Ss; btrack = 0;
-% return;
 
 if feparam.tuningBefore
 % tuning algorithm, assuming nsemitones = 3
@@ -114,19 +110,15 @@ end
 
 % % standardization (Y(k,m) - mu(k,m)) / sigma(k,m)
 if feparam.enSUB
-wl = 9; % 3 * 12 / 2
-Ss = standardization(Ss, wl, feparam.enSTD, feparam.specWhitening, df);
+wr = 9; % default 18 = 36 / 2;
+Ss = standardization(Ss, wr, feparam.enSTD, feparam.specWhitening, df);
 if feparam.enCosSim
-Sc = standardization(Sc, wl, feparam.enSTD, feparam.specWhitening, df);
+Sc = standardization(Sc, wr, feparam.enSTD, feparam.specWhitening, df);
 end
 if df && enPlot
 myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'standardized simple tone salience matrix');
 end
 end
-
-% % insert to test tunings
-% S = Ss; btrack = 0;
-% return;
 
 % noise reduction process
 if feparam.enPeakNoiseRed
@@ -202,30 +194,13 @@ elseif feparam.enNNLS % nnls
         S = Sapx;
 end
 
-if feparam.enProfiling
-ht = hann(nnotes);
-hb = [hann(nnotes/2);zeros(nnotes/2,1)];
-mht = repmat(ht,1,nslices);
-mhb = repmat(hb,1,nslices);
-St = S .* mht;
-Sb = S .* mhb;
-if df && enPlot
-myImagePlot(St, 1:nslices, 1:nnotes, 'slice', 'semitone', 'treble note salience matrix');
-end
-if df && enPlot
-myImagePlot(Sb, 1:nslices, 1:nnotes, 'slice', 'semitone', 'bass note salience matrix');
-end
-end
-
-% final normalization
-S = normalizeGram(S,feparam.normalization);
 if df && enPlot
 myImagePlot(S, 1:nslices, 1:nnotes, 'slice', 'semitone', 'note salience matrix');
 end
 
 % beat tracking
 btrackraw = getmeasures2(audiopath);
-btrack = round(btrackraw.beats.*fs./feparam.hopsize + 1);
+btrack = round(btrackraw.beats.*fs./feparam.hopsize);
 btrack(btrack > nslices) = nslices;
 btrack(btrack == 0) = 1;
 
