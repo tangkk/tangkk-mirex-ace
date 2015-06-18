@@ -14,7 +14,13 @@ hold off;
 div = (max(Y) - min(Y) - 1) / nchords;
 for i = 1:1:nchords
     x = bdrys(i);
-    ch = strcat(num2note(rootgram(i)),':',chordmode{2,treblegram(i)});
+    root = rootgram(i);
+    treble = treblegram(i);
+    if root ~= 0 || treble ~= 0
+        ch = strcat(num2note(root),':',chordmode{2,treble});
+    else
+        ch = 'N';
+    end
     if isempty(strfind(ch, '/'))
         chordstr = ch;
         text(x,10 - i*div,chordstr);

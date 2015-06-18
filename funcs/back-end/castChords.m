@@ -2,9 +2,9 @@
 % which contains, maj, min, maj7, min7, 7 and there inversions
 % note that the root and bass is unchanged, only treble is affected
 function treblegram = castChords(nfSeq,...
-    bassgram, treblegram, chordmode)
+    rootgram, treblegram, chordmode)
 
-nchords = size(bassgram,2);
+nchords = size(rootgram,2);
 
 % the table for MajMinSevenths chord
 castTarget = {'maj','min','maj7','min7','7'};
@@ -21,10 +21,16 @@ for i = 1:1:castlen
 end
 
 for i = 1:1:nchords
-    bass = bassgram(i);
+    % FIXME: here should be bass or root?
+    root = rootgram(i);
     treble = treblegram(i);
     
-    ch = strcat(num2note(bass),':',chordmode{2,treble});
+    if root ~= 0 || treble ~= 0
+        ch = strcat(num2note(root),':',chordmode{2,treble});
+    else
+        ch = 'N';
+    end
+    
     nch = cast2MajMin(ch, nfSeq);
     
     if ~strcmp(ch, nch)

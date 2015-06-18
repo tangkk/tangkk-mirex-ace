@@ -6,7 +6,7 @@ function [rootgram, bassgram, treblegram, uppergram, bdrys] = ...
 % compute note frequencies and tonic (dynamically), and do treble casting
 if enCast2MajMin
 hwin = 5; nfSeq = calNoteFreq(bassgram, treblegram, chordmode, hwin);
-treblegram = castChords(nfSeq, bassgram, treblegram, chordmode);
+treblegram = castChords(nfSeq, rootgram, treblegram, chordmode);
 end
 
 [rootgram, bassgram, treblegram, uppergram, bdrys] = combineSameChords(rootgram,...

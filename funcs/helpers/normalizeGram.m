@@ -9,9 +9,9 @@ if p == 0
 else
     for j = 1:size(ingram,2)
         vec = ingram(:,j);
-        nVec = norm(vec,p);
-        if nVec ~= 0
-            outgram(:,j) = vec ./ nVec;
+        normVec = norm(vec,p);
+        if normVec ~= 0
+            outgram(:,j) = vec ./ normVec;
         end
     end
 end

@@ -5,9 +5,9 @@
 % then the upsampled spectrum is downsampled non-linearly with a constant-Q
 function LE = logFreqNoteProfile(ntones, fmin, fratio, USR, fs, nbins)
 
-df = fs / nbins; % 2*nbins is the frame length of fft
-fi = fs/2*linspace(0,1,nbins);
-ff = fs/2*linspace(0,1,nbins*USR);
+df = fs / (nbins); % default is nbins
+fi = (fs/2)*linspace(0,1,nbins);
+ff = (fs/2)*linspace(0,1,nbins*USR);
 dff = ff ./ 51.94; % df(f) = f/Q, where Q = 36 / ln2 = 51.94
 fk = fmin*(fratio.^((1:ntones)-2));
 

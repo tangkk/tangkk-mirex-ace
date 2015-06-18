@@ -1,7 +1,7 @@
-function [fs, nslices, endtime, S, btrack] = frontEndDecode(audiopath, tunpath, vamptunpath,...
+function [nslices, endtime, S, btrack] = frontEndDecode(audiopath, tunpath, vamptunpath,...
     feparam, df, enPlot)
 
-[x, fs] = myInput(audiopath, feparam.stereotomono);
+x = myInput(audiopath, feparam.stereotomono, feparam.fs);
 
 % note dictionary
 fmin = 27.5; % MIDI note 21, Piano key number 1 (A0)
@@ -15,9 +15,9 @@ USR = 40; % upsampling rate
 if exist('dict.mat','file') == 2
 load dict.mat;
 else
-[Ms,Mc] = toneProfileGen(feparam.overtoneS, feparam.wl, ntones, 3, fmin, fmax, fratio, fs);
+[Ms,Mc] = toneProfileGen(feparam.overtoneS, feparam.wl, ntones, 3, fmin, fmax, fratio, feparam.fs);
 E = nnlsNoteProfile(feparam.overtoneS, nnotes);
-LE = logFreqNoteProfile(ntones, fmin, fratio, USR, fs, feparam.wl/2);
+LE = logFreqNoteProfile(ntones, fmin, fratio, USR, feparam.fs, feparam.wl/2);
 save('dict.mat','Ms','Mc','E','LE');
 end
 
@@ -35,7 +35,7 @@ if ~feparam.enCQT
     % transform time domain into frequency domain
     X = mySpectrogram(x, feparam.wl, feparam.hopsize);
     nslices = size(X,2);
-    endtime = (1/fs)*length(x);
+    endtime = (1/feparam.fs)*length(x);
     if df && enPlot
     myImagePlot(X, 1:nslices, 1:feparam.wl/2, 'slice', 'bin', 'spectrogram');
     end
@@ -50,12 +50,12 @@ if ~feparam.enCQT
 elseif feparam.enCQT
 %     [~,et] = gtTuning([0;0;0], tunpath);
 %     ptun = (log(et / 440) / log(2)) * 36; % compensate for the tunings
-    Xcq = cqt(x, 36, fs, fmin*2^((-1)/(12*3)), fmax*2^((1)/(12*3)), 'rasterize', 'full');
+    Xcq = cqt(x, 36, feparam.fs, fmin*2^((-1)/(12*3)), fmax*2^((1)/(12*3)), 'rasterize', 'full');
     Ss = full(abs(Xcq.c));
     Ss = [zeros(1,size(Ss,2));Ss];
     feparam.hopsize = Xcq.xlen / size(Ss,2);
     nslices = size(Ss,2);
-    endtime = (1/fs)*length(x);
+    endtime = (1/feparam.fs)*length(x);
 end
 
 if df && enPlot
@@ -200,7 +200,7 @@ end
 
 % beat tracking
 btrackraw = getmeasures2(audiopath);
-btrack = round(btrackraw.beats.*fs./feparam.hopsize);
+btrack = round(btrackraw.beats.*feparam.fs./feparam.hopsize);
 btrack(btrack > nslices) = nslices;
 btrack(btrack == 0) = 1;
 
