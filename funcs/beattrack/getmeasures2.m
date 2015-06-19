@@ -1,4 +1,4 @@
-function out = getmeasures2(fname,ts);
+function out = getmeasures2(fname,ts)
 
 if nargin<2
 	% optional argument to hand label the timesignature
