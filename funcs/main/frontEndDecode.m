@@ -197,8 +197,6 @@ elseif feparam.enNNLS % nnls
         S = Sapx;
 end
 
-S = normalizeGram(S, feparam.normalization);
-
 if df && enPlot
 myImagePlot(S, 1:nslices, 1:nnotes, 'slice', 'semitone', 'note salience matrix');
 end
