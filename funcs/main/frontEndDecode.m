@@ -15,8 +15,11 @@ USR = 40; % upsampling rate
 if exist('dict.mat','file') == 2
 load dict.mat;
 else
+
 [Ms,Mc] = toneProfileGen(feparam.overtoneS, feparam.wl, ntones, 3, fmin, fmax, fratio, feparam.fs);
 E = nnlsNoteProfile(feparam.overtoneS, nnotes);
+% note that the size of one col of the spectrogram will be nfft/2 + 1,
+% where nfft = feparam.wl (the hamming window size)
 LE = logFreqNoteProfile(ntones, fmin, fratio, USR, feparam.fs, feparam.wl/2);
 save('dict.mat','Ms','Mc','E','LE');
 end
@@ -34,10 +37,11 @@ end
 if ~feparam.enCQT
     % transform time domain into frequency domain
     X = mySpectrogram(x, feparam.wl, feparam.hopsize);
+%     X = abs(spectrogram(x, hann(feparam.wl), feparam.wl - feparam.hopsize));
     nslices = size(X,2);
     endtime = (1/feparam.fs)*length(x);
     if df && enPlot
-    myImagePlot(X, 1:nslices, 1:feparam.wl/2, 'slice', 'bin', 'spectrogram');
+    myImagePlot(X, 1:nslices, 1:feparam.wl/2+1, 'slice', 'bin', 'spectrogram');
     end
     
     if feparam.enCosSim
@@ -46,16 +50,16 @@ if ~feparam.enCQT
     elseif feparam.enlogFreq
     Ss = LE*X;
     end
-    % FIXME: CQT is not working as it should be
-elseif feparam.enCQT
-%     [~,et] = gtTuning([0;0;0], tunpath);
-%     ptun = (log(et / 440) / log(2)) * 36; % compensate for the tunings
-    Xcq = cqt(x, 36, feparam.fs, fmin*2^((-1)/(12*3)), fmax*2^((1)/(12*3)), 'rasterize', 'full');
-    Ss = full(abs(Xcq.c));
-    Ss = [zeros(1,size(Ss,2));Ss];
-    feparam.hopsize = Xcq.xlen / size(Ss,2);
-    nslices = size(Ss,2);
-    endtime = (1/feparam.fs)*length(x);
+% FIXME: CQT is not working as it should be
+% elseif feparam.enCQT
+% %     [~,et] = gtTuning([0;0;0], tunpath);
+% %     ptun = (log(et / 440) / log(2)) * 36; % compensate for the tunings
+%     Xcq = cqt(x, 36, feparam.fs, fmin*2^((-1)/(12*3)), fmax*2^((1)/(12*3)), 'rasterize', 'full');
+%     Ss = full(abs(Xcq.c));
+%     Ss = [zeros(1,size(Ss,2));Ss];
+%     feparam.hopsize = Xcq.xlen / size(Ss,2);
+%     nslices = size(Ss,2);
+%     endtime = (1/feparam.fs)*length(x);
 end
 
 if df && enPlot
@@ -110,10 +114,9 @@ end
 
 % % standardization (Y(k,m) - mu(k,m)) / sigma(k,m)
 if feparam.enSUB
-wr = 9; % default 18 = 36 / 2;
-Ss = standardization(Ss, wr, feparam.enSTD, feparam.specWhitening, df);
+Ss = standardization(Ss, feparam.stdwr, feparam.enSTD, feparam.specWhitening, df);
 if feparam.enCosSim
-Sc = standardization(Sc, wr, feparam.enSTD, feparam.specWhitening, df);
+Sc = standardization(Sc, feparam.stdwr, feparam.enSTD, feparam.specWhitening, df);
 end
 if df && enPlot
 myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'standardized simple tone salience matrix');
@@ -194,13 +197,15 @@ elseif feparam.enNNLS % nnls
         S = Sapx;
 end
 
+S = normalizeGram(S, feparam.normalization);
+
 if df && enPlot
 myImagePlot(S, 1:nslices, 1:nnotes, 'slice', 'semitone', 'note salience matrix');
 end
 
 % beat tracking
-btrackraw = getmeasures2(audiopath);
-btrack = round(btrackraw.beats.*feparam.fs./feparam.hopsize);
+btrackraw = getmeasures3(x,feparam.fs);
+btrack = round(btrackraw.beats ./ (feparam.hopsize * 44100 / feparam.fs));
 btrack(btrack > nslices) = nslices;
 btrack(btrack == 0) = 1;
 
