@@ -47,6 +47,6 @@ LE = (h * hl)';
 
 % normalize this transformation matrix row wise (use L1 norm)
 % FIXME: not sure whether this is reasonable under the constant-Q theory
-% for i = 1:ntones
-%     LE(i,:) = LE(i,:) ./ norm(LE(i,:),1);
-% end
+for i = 1:ntones
+    LE(i,:) = LE(i,:) ./ norm(LE(i,:),1);
+end

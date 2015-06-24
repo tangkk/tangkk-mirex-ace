@@ -63,8 +63,8 @@ end
 ntones = size(Sseg,1);
 nsegs = size(Sseg,2);
 if meparam.enProfiling
-ht = hann(ntones); ht = ht ./ norm(ht,inf);
-hb = [hann(ntones/2);zeros(ntones/2,1)]; hb = hb ./ norm(hb,inf);
+ht = hann(ntones); ht = ht ./ norm(ht,1);
+hb = [hann(ntones/2);zeros(ntones/2,1)]; hb = hb ./ norm(hb,1);
 mht = repmat(ht,1,nsegs);
 mhb = repmat(hb,1,nsegs);
 Stsegout = Sseg .* mht;
