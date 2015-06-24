@@ -8,5 +8,3 @@ if usemono
 else
     x = x(:,1);
 end
-songMax = max(abs(x));
-x = x / songMax;
