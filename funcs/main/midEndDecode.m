@@ -46,6 +46,9 @@ end
 if bdrys(end) ~= nslices % including the end slice
     bdrys = [bdrys nslices];
 end
+if bdrys(1) ~= 1
+    bdrys = [1 bdrys];
+end
 
 Sseg = zeros(size(SpreSeg,1), length(bdrys) - 1);
 for j = 1:size(Sseg,2)

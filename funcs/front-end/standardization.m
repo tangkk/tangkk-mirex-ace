@@ -21,6 +21,8 @@ for j = 1:nslices
     col = S(:,j);
     fftcol = fft(col);
     conv = ifft(fftwin.*fftcol);
+    conv(conv < 0) = 0;
+    conv = abs(conv);
     muj = [ones(pad,1)*conv(1+lenKernel);...
         conv(1+lenKernel:ntones);...
         ones(pad,1)*conv(ntones)];
@@ -29,7 +31,10 @@ for j = 1:nslices
     % compute running std
     scol = (S(:,j) - mu(:,j)).^2;
     fftscol = fft(scol);
-    sconv = sqrt(ifft(fftwin.*fftscol));
+    sconv = ifft(fftwin.*fftscol);
+    sconv(sconv < 0) = 0;
+    sconv = abs(sconv);
+    sconv = sqrt(sconv);
     sigmaj = [ones(pad,1)*sconv(1+lenKernel);...
         sconv(1+lenKernel:ntones);...
         ones(pad,1)*sconv(ntones)];
