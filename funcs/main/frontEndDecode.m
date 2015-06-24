@@ -17,7 +17,7 @@ load dict.mat;
 else
 
 [Ms,Mc] = toneProfileGen(feparam.overtoneS, feparam.wl, ntones, 3, fmin, fmax, fratio, feparam.fs);
-E = nnlsNoteProfile(feparam.overtoneS, nnotes);
+E = nnlsNoteProfile(feparam.overtoneS, nnotes, ntones);
 % note that the size of one col of the spectrogram will be nfft/2 + 1,
 % where nfft = feparam.wl (the hamming window size)
 LE = logFreqNoteProfile(ntones, fmin, fratio, USR, feparam.fs, feparam.wl/2);
@@ -168,7 +168,7 @@ end
 
 % nnls approximate note transcription - 3-semitones -> 1-semitone
 if feparam.enNNLS
-Sapx = nnlsTrans(Ss,E,3);
+Sapx = nnlsTrans(Ss,E,nnotes);
 if df && enPlot
 myImagePlot(Sapx, 1:nslices, 1:nnotes, 'slice', 'semitone', 'nnls salience matrix');
 end
@@ -176,15 +176,15 @@ end
 
 % compute note salience matrix by combining 1/3 semitones into semitones
 % sum all 3 bins, alternatively, we could just take every center bins
-Sss3bin = zeros(nnotes,nslices);
-for i = 1:1:3
-    Sss3bin = Sss3bin + Ss(i:3:end,:);
-end
-SssCen = Ss(2:3:end,:);
-if df && enPlot
-myImagePlot(Sss3bin, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Ss note salience matrix (sum 3 bins)');
-myImagePlot(SssCen, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Ss note salience matrix (center bin)');
-end
+% Sss3bin = zeros(nnotes,nslices);
+% for i = 1:1:3
+%     Sss3bin = Sss3bin + Ss(i:3:end,:);
+% end
+% SssCen = Ss(2:3:end,:);
+% if df && enPlot
+% myImagePlot(Sss3bin, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Ss note salience matrix (sum 3 bins)');
+% myImagePlot(SssCen, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Ss note salience matrix (center bin)');
+% end
 
 % interface with output S
 if feparam.enCosSim % the baseline approach

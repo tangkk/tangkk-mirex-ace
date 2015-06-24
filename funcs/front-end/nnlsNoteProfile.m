@@ -1,13 +1,13 @@
 % generate a (3*numtone, numtone) matrix
 % this is a note profile in log-frequency domain
 
-function E = nnlsNoteProfile(s, nnotes)
+function E = nnlsNoteProfile(s, nnotes, ntones)
 
-% EE = zeros(3*nnotes, 3*nnotes); % 3*nnotes * 3*nnotes dict
-E = zeros(3*nnotes, nnotes); % 3*nnotes dict
+% EE = zeros(ntones, ntones); % ntones * ntones dict
+E = zeros(ntones, nnotes); % ntones dict
 % Ee = zeros(nnotes, nnotes); % nnotes dict
 for i = 1:nnotes
-    pr = zeros(3*nnotes,1);
+    pr = zeros(ntones,1);
 %     pre = zeros(nnotes,1);
     % all the way to the fourth overtone
     note0 = i; % fundamental
@@ -22,19 +22,19 @@ for i = 1:nnotes
     tone2 = 3*note2 - 1;
     tone3 = 3*note3 - 1;
     
-    if tone0 <= 3*nnotes
+    if tone0 <= ntones
         pr(tone0) = s^0;
 %         pre(note0) = s^0;
     end
-    if tone1 <= 3*nnotes
+    if tone1 <= ntones
         pr(tone1) = s^1;
 %         pre(note1) = s^1;
     end
-    if tone2 <= 3*nnotes
+    if tone2 <= ntones
         pr(tone2) = s^2;
 %         pre(note2) = s^2;
     end
-    if tone3 <= 3*nnotes
+    if tone3 <= ntones
         pr(tone3) = s^3;
 %         pre(note3) = s^3;
     end

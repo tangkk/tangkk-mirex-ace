@@ -1,46 +1,53 @@
-function S = standardization(S, wl, enSTD, specWTN, df)
+function S = standardization(S, lenKernel, enSTD, specWTN, df)
 
 nslices = size(S,2);
 ntones = size(S,1);
 mu = zeros(size(S));
 sigma = zeros(size(S));
-len = 2^nextpow2(ntones);
-winh = hamming(2*wl);
-win = [winh./norm(winh,1);zeros(len - 2*wl,1)];
+len = ntones;
+winh = hamming(lenKernel);
+win = [winh./norm(winh,1);zeros(len - lenKernel,1)];
 fftwin = fft(win);
 
-comp = wl;
+% Special Convolution
+% special convolution is as long as the convolvee, i.e. the first argument.
+% in the valid core part of the convolution it contains the usual convolution
+% values, but the pads at the beginning (ending) have the same values
+% as the first (last) valid convolution bin.
+assert(mod(lenKernel,2) == 0, 'lenKernel invalid!');
+pad = lenKernel/2;
 for j = 1:nslices
     % compute running mean
     col = S(:,j);
-    col = [col;zeros(len - length(col),1)];
     fftcol = fft(col);
     conv = ifft(fftwin.*fftcol);
-    conv(conv < 0) = 0;
-    muj = conv(1+comp:min(ntones+comp,length(win)));
-    muj = [muj ; muj(end) .* ones(ntones+comp-length(win),1)];
+    muj = [ones(pad,1)*conv(1+lenKernel);...
+        conv(1+lenKernel:ntones);...
+        ones(pad,1)*conv(ntones)];
     mu(:,j) = muj;
     
     % compute running std
     scol = (S(:,j) - mu(:,j)).^2;
-    scol = [scol;zeros(len - length(scol),1)];
     fftscol = fft(scol);
-    sconv = ifft(fftwin.*fftscol);
-    sconv(sconv < 0) = 0;
-    sigmaj = sqrt(sconv(1+comp:min(ntones+comp,length(win))));
-    sigmaj = [sigmaj ; sigmaj(end) .* ones(ntones+comp-length(win),1)];
+    sconv = sqrt(ifft(fftwin.*fftscol));
+    sigmaj = [ones(pad,1)*sconv(1+lenKernel);...
+        sconv(1+lenKernel:ntones);...
+        ones(pad,1)*sconv(ntones)];
     sigma(:,j) = sigmaj;
 end
 
-% SUB
-S = S - mu; S(S<0) = 0; % Y(k,m) - mu(k,m);
-
-% STD
 if enSTD
-stemp = sort(sigma(:));
-minsigma = stemp(find(stemp > 0,1,'first'));
-sigma(sigma == 0) = minsigma;
-S = S./(sigma.^specWTN); % (Y(k,m) - mu(k,m)) / sigma(k,m);
+    % (Y(k,m) - mu(k,m)) / sigma(k,m);
+    Sp = S(sigma > 0);
+    mup = mu(sigma > 0);
+    sigmap = sigma(sigma > 0);
+    Sp = Sp - mup;
+    Sp(Sp < 0) = 0;
+    Sp = Sp./(sigmap.^specWTN);
+    S(sigma > 0) = Sp;
+else
+    % Y(k,m) - mu(k,m);
+    S = S - mu; S(S<0) = 0;
 end
 
 if df
