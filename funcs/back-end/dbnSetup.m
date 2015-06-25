@@ -6,7 +6,7 @@ function bnet = dbnSetup(chordmode, dbnparam)
 % v    v    v
 % 2    4    6    ...
 %
-% U = uppergram, B = basegram, Ch = chordogram (chord progression)
+% U = uppergram, B = basegram, Ch = chord progression
 % UB = uppergram stacked with basegram 24 dimensional observable vector
 % Ch(i-1) -> Ch(i) (Hidden states)
 %   |          |

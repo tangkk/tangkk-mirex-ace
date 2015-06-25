@@ -1,14 +1,23 @@
-function [rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode, dbnparam,...
-    basegram, uppergram, bdrys, grainsize, enCast2MajMin, nslices, df, enPlot)
+function [rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode, beparam, dbnparam, dbn2param,...
+    basegram, uppergram, bdrys, nslices, df, enPlot)
 
-bnet = dbnSetup(chordmode, dbnparam);
-
-% [rootgram, bassgram, treblegram] = simChordMatching(basegram, uppergram, chordmode);
-[rootgram, bassgram, treblegram] = dbnInference(bnet, chordmode, basegram, uppergram);
+if beparam.useDBN1
+    bnet = dbnSetup(chordmode, dbnparam);
+    % [rootgram, bassgram, treblegram] = simChordMatching(basegram, uppergram, chordmode);
+    [rootgram, bassgram, treblegram] = dbnInference(bnet, chordmode, basegram, uppergram);
+elseif beparam.useDBN2
+    bnet2 = dbnSetup2(chordmode, dbn2param);
+    chordogram = computeChordogram(basegram, uppergram, chordmode, dbn2param);
+    if df && enPlot
+    myImagePlot(chordogram, 1:size(chordogram,2), 1:size(chordogram,1),...
+        'chord progression order', 'chord', 'chordogram');
+    end
+    [rootgram, bassgram, treblegram] = dbnInference2(bnet2, chordmode, chordogram);
+end
 
 [rootgram, bassgram, treblegram, uppergram, bdrys] = ...
     chordLevelGestalt(rootgram, bassgram, treblegram, uppergram, bdrys,...
-    grainsize, enCast2MajMin, chordmode);
+    beparam.grainsize, beparam.enCast2MajMin, chordmode);
 
 bassnotenames = {'N','C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
 nchords = length(rootgram);

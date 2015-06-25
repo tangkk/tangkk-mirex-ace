@@ -1,5 +1,12 @@
 function transval = trebleTransval(treble)
 
+% if the treble is not a slash chord, no need to transform
+if isempty(strfind(treble,'/'))
+    transval = 0;
+    return;
+end
+
+% otherwise, transform
 tokens = strsplit(treble,'/'); % input must contain '/'
 if length(tokens) > 1
     token = tokens{2};
