@@ -15,6 +15,16 @@ clear;
 % ********************************************************** %
 % ********************* Control Panel ********************** %
 % ********************************************************** %
+% ****** output control ****** %
+isexamine = 0; % 0: full evaluation, 1: examine segments
+
+df = isexamine;
+enPlotFE = 1;
+enPlotME = 1;
+enPlotBE = 1;
+enPlotFB = 1;
+enPlotTS = 1;
+enEval = 1;
 % ****** input control ****** %
 codec = 'mp3';
 % ****** front-end control ****** %
@@ -26,7 +36,7 @@ feparam = struct(...
     'enlogFreq', 1,...
     'enCQT', 0,...
     ...
-    'overtoneS', 0.6,... % (default: 0.7)
+    'overtoneS', 0.7,... % (default: 0.7)
     'enPcsSuppress', 0,...
     'enSUB', 1,...
     'enSTD', 1,...
@@ -81,7 +91,7 @@ dbnparam = struct(...
     'sigma2NCBass',0.2,...
     'sigma2NoChord',0.2,...
     ...
-    'selfTrans', 10);
+    'selfTrans', 6);
 
 % chordmode parameters
 chordmodeparam = struct(...,
@@ -114,16 +124,6 @@ chordmode = buildChordMode(chordmodeparam);
 % ****** gestalt control ****** %
 grainsize = 1;
 fbn = 0;
-
-% ****** output control ****** %
-isexamine = 0; % 0: full evaluation, 1: examine segments
-df = isexamine;
-enPlotFE = 1;
-enPlotME = 1;
-enPlotBE = 1;
-enPlotFB = 1;
-enPlotTS = 1;
-enEval = 1;
 
 % ********************************************************** %
 % ********************* Process **************************** %

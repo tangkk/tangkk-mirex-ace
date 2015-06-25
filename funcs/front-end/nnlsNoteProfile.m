@@ -6,13 +6,11 @@ function E = nnlsNoteProfile(s, nnotes, ntones)
 E = zeros(ntones, nnotes); % ntones dict
 for i = 1:nnotes
     pr = zeros(ntones,1);
-%     pre = zeros(nnotes,1);
     % all the way to the fourth overtone
     note0 = i; % fundamental
     note1 = note0 + 12; % first overtone (octave)
     note2 = note1 + 7; % second overtone (octave + fifth)
     note3 = note2 + 5; % third overtone (two octaves)
-    % note4 = note3 + 4; % fourth overtone (two octaves + third)
     
     % transform into 1/3 semitone scale, locate note in center bins
     tone0 = 3*note0 - 1;
