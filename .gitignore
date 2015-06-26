@@ -50,8 +50,6 @@ out/
 outcd/
 eval/
 res/
-bnt/
-FullBNT-1.0.7/
 data/
 *.txt
 *.mat
