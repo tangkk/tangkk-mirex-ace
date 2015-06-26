@@ -33,7 +33,9 @@ elseif meparam.useGestaltSalience
 end
 
 % use different segmentation methods
-if meparam.useBassOnsetSegment
+if meparam.noSegmentation
+    bdrys = 1:nslices;
+elseif meparam.useBassOnsetSegment
     bdrys = Shc;
 elseif meparam.useWgSegment
     bdrys = 1:meparam.wgmax:nslices;
@@ -50,12 +52,16 @@ if bdrys(1) ~= 1
     bdrys = [1 bdrys];
 end
 
-Sseg = zeros(size(SpreSeg,1), length(bdrys) - 1);
-for j = 1:size(Sseg,2)
-    if meparam.useMedianFilter
-        Sseg(:,j) = median(SpreSeg(:,bdrys(j):bdrys(j+1)),2);
-    elseif meparam.useMeanFilter
-        Sseg(:,j) = mean(SpreSeg(:,bdrys(j):bdrys(j+1)),2);
+if meparam.noSegmentation
+    Sseg = SpreSeg;
+else
+    Sseg = zeros(size(SpreSeg,1), length(bdrys) - 1);
+    for j = 1:size(Sseg,2)
+        if meparam.useMedianFilter
+            Sseg(:,j) = median(SpreSeg(:,bdrys(j):bdrys(j+1)),2);
+        elseif meparam.useMeanFilter
+            Sseg(:,j) = mean(SpreSeg(:,bdrys(j):bdrys(j+1)),2);
+        end
     end
 end
 if df && enPlot

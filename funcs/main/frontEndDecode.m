@@ -9,7 +9,7 @@ fmax = 3322; % MIDI note 104, Piano key number nnotes
 fratio = 2^(1/(12*3)); % nsemitones = 3
 nnotes = 84;
 ntones = nnotes*3; % nsemitones = 3
-USR = 40; % upsampling rate
+USR = 80; % upsampling rate
 
 % FIXME: if the parameter changes, delete the '.mat' files and run again
 if exist('dict.mat','file') == 2
@@ -50,16 +50,16 @@ if ~feparam.enCQT
     elseif feparam.enlogFreq
     Ss = LE*X;
     end
-% FIXME: CQT is not working as it should be
-% elseif feparam.enCQT
-% %     [~,et] = gtTuning([0;0;0], tunpath);
-% %     ptun = (log(et / 440) / log(2)) * 36; % compensate for the tunings
-%     Xcq = cqt(x, 36, feparam.fs, fmin*2^((-1)/(12*3)), fmax*2^((1)/(12*3)), 'rasterize', 'full');
-%     Ss = full(abs(Xcq.c));
-%     Ss = [zeros(1,size(Ss,2));Ss];
-%     feparam.hopsize = Xcq.xlen / size(Ss,2);
-%     nslices = size(Ss,2);
-%     endtime = (1/feparam.fs)*length(x);
+elseif feparam.enCQT
+    % FIXME: CQT is not working as it should be
+%     [~,et] = gtTuning([0;0;0], tunpath);
+%     ptun = (log(et / 440) / log(2)) * 36; % compensate for the tunings
+    Xcq = cqt(x, 36, feparam.fs, fmin*2^((-1)/(12*3)), fmax*2^((1)/(12*3)), 'rasterize', 'full');
+    Ss = full(abs(Xcq.c));
+    Ss = [zeros(1,size(Ss,2));Ss];
+    feparam.hopsize = Xcq.xlen / size(Ss,2);
+    nslices = size(Ss,2);
+    endtime = (1/feparam.fs)*length(x);
 end
 
 if df && enPlot
@@ -169,7 +169,7 @@ end
 
 % nnls approximate note transcription - 3-semitones -> 1-semitone
 if feparam.enNNLS
-Sapx = nnlsTrans(Ss,E,nnotes);
+Sapx = nnlsTrans(Ss,E,nnotes,feparam.enSigifBins);
 if df && enPlot
 myImagePlot(Sapx, 1:nslices, 1:nnotes, 'slice', 'semitone', 'nnls salience matrix');
 end

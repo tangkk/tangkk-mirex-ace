@@ -28,8 +28,8 @@ for j = 1:nslices
         for ct = 1:nct % stands for chord type
             pc = pitchTranspose(b, [0 chordmode{1,ct}]);
             wc = chordmode{3,ct};
-            tscore = uj(pc)'*[wc(1) ; dbnparam.wCBass.*wc'.*ones(length(pc)-1,1)];
-            bscore = bj(pc)'*[wc(1) ; dbnparam.wNCBass.*wc'.*ones(length(pc)-1,1)];
+            tscore = uj(pc)'*[dbnparam.wTreble.*wc(1) ; dbnparam.wTreble.*wc'.*ones(length(pc)-1,1)];
+            bscore = bj(pc)'*[dbnparam.wCBass.*wc(1) ; dbnparam.wNCBass.*wc'.*ones(length(pc)-1,1)];
             
             ichord = (b - 1) * nct + ct;
             cgram(ichord) = tscore + bscore;

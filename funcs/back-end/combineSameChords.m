@@ -37,7 +37,12 @@ for i = 2:1:nchords
         outbassgram(outidx) = cb;
         outtreblegram(outidx) = ct;
         outuppergram(:,outidx) = cu;
-        outbdrys(outidx) = inbdrys(i);
+        % FIXME: where does the ``+4'' come from?
+        if inbdrys(i) + 4 < inbdrys(end)
+            outbdrys(outidx) = inbdrys(i) + 4;
+        else
+            outbdrys(outidx) = inbdrys(end);
+        end
         outidx = outidx + 1;
     end
     

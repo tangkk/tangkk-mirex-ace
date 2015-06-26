@@ -58,18 +58,18 @@
 % 1->3->6 min/b3       1,5,10           4,9          1,1        0
 % 1->4->b6 min/5       1,6,9            5,8          1,1        0
 % ************************ seventhbass *************************** %
-% 1->b3->5->b6 maj7/3  1,4,8,9          3,7,8        [1-ic]*3   0
-% 1->3->4->6 maj7/5    1,5,6,10         4,5,9        [1-ic]*3   0
-% 1->b2->4->b6 maj7/7  1,2,6,9          1,5,8        [1-ic]*3   0
-% 1->3->5->6 min7/b3   1,5,8,10         4,7,9        [1-ic]*3   0
-% 1->b3->4->b6 min7/5  1,4,6,9          3,5,8        [1-ic]*3   0
-% 1->2->4->6 min7/b7   1,3,6,10         2,5,9        [1-ic]*3   0
-% 1->b3->b5->b6 7/3    1,4,7,9          3,6,8        [1-ic]*3   0
-% 1->b3->4->6 7/5      1,4,6,10         3,5,9        [1-ic]*3   0
-% 1->2->b5->6 7/b7     1,3,7,10         2,6,9        [1-ic]*3   0
+% 1->b3->5->b6 maj7/3  1,4,8,9          3,7,8        [1-tc]*3   0
+% 1->3->4->6 maj7/5    1,5,6,10         4,5,9        [1-tc]*3   0
+% 1->b2->4->b6 maj7/7  1,2,6,9          1,5,8        [1-tc]*3   0
+% 1->3->5->6 min7/b3   1,5,8,10         4,7,9        [1-tc]*3   0
+% 1->b3->4->b6 min7/5  1,4,6,9          3,5,8        [1-tc]*3   0
+% 1->2->4->6 min7/b7   1,3,6,10         2,5,9        [1-tc]*3   0
+% 1->b3->b5->b6 7/3    1,4,7,9          3,6,8        [1-tc]*3   0
+% 1->b3->4->6 7/5      1,4,6,10         3,5,9        [1-tc]*3   0
+% 1->2->b5->6 7/b7     1,3,7,10         2,6,9        [1-tc]*3   0
 % ************************ otherslash *************************** %
-% 1->2->4->b7 maj/2    1,3,6,11         2,5,10       [1-ic]*3   0
-% 1->b2->4->b7 min/2   1,2,6,11         1,5,10       [1-ic]*3   0
+% 1->2->4->b7 maj/2    1,3,6,11         2,5,10       [1-tc]*3   0
+% 1->b2->4->b7 min/2   1,2,6,11         1,5,10       [1-tc]*3   0
 
 % if this file is modified, also check file "trebleTypeMapping.m" and
 % "cast2MajMin.m"
@@ -86,7 +86,6 @@ function chordmode = buildChordMode(chordmodeparam)
 % tc = chordmodeparam.tetradcontrol; % tetrad reduce factor
 % pc = chordmodeparam.pentacontrol; % pentachord reduce factor
 % hc = chordmodeparam.hexacontrol; % hexachord reduce factor
-% ic = chordmodeparam.inversioncontrol; % inversion reduce factor
 
 chordmode = cell(4,50); %[dif; qual; weight; supertype]
 
@@ -359,51 +358,51 @@ end
 if chordmodeparam.enMajSeventhBass
 chordmode{1,idx} = [3,7,8];
 chordmode{2,idx} = 'maj7/3';
-% chordmode{3,idx} = [1-ic,1-ic,1-ic];
+% chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 
 chordmode{1,idx} = [4,5,9];
 chordmode{2,idx} = 'maj7/5';
-% chordmode{3,idx} = [1-ic,1-ic,1-ic];
+% chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 
 chordmode{1,idx} = [1,5,8];
 chordmode{2,idx} = 'maj7/7';
-% chordmode{3,idx} = [1-ic,1-ic,1-ic];
+% chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 end
 
 if chordmodeparam.enMinSeventhBass
 chordmode{1,idx} = [4,7,9];
 chordmode{2,idx} = 'min7/b3';
-% chordmode{3,idx} = [1-ic,1-ic,1-ic];
+% chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 
 chordmode{1,idx} = [3,5,8];
 chordmode{2,idx} = 'min7/5';
-% chordmode{3,idx} = [1-ic,1-ic,1-ic];
+% chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 
 chordmode{1,idx} = [2,5,9];
 chordmode{2,idx} = 'min7/b7';
-% chordmode{3,idx} = [1-ic,1-ic,1-ic];
+% chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 end
 
 if chordmodeparam.en7SeventhBass
 chordmode{1,idx} = [3,6,8];
 chordmode{2,idx} = '7/3';
-% chordmode{3,idx} = [1-ic,1-ic,1-ic];
+% chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 
 chordmode{1,idx} = [3,5,9];
 chordmode{2,idx} = '7/5';
-% chordmode{3,idx} = [1-ic,1-ic,1-ic];
+% chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 
 chordmode{1,idx} = [2,6,9];
 chordmode{2,idx} = '7/b7';
-% chordmode{3,idx} = [1-ic,1-ic,1-ic];
+% chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 end
 
@@ -411,12 +410,12 @@ end
 if chordmodeparam.enOtherSlash
 chordmode{1,idx} = [2,5,10];
 chordmode{2,idx} = 'maj/2';
-% chordmode{3,idx} = [1-ic,1-ic,1-ic];
+% chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 
 chordmode{1,idx} = [1,5,10];
 chordmode{2,idx} = 'min/2';
-% chordmode{3,idx} = [1-ic,1-ic,1-ic];
+% chordmode{3,idx} = [1-tc,1-tc,1-tc];
 idx = idx + 1;
 end
 
