@@ -103,6 +103,10 @@ end
 uppergram = normalizeGram(uppergram,meparam.normalization);
 basegram = normalizeGram(basegram,meparam.normalization);
 
+% turn the zero columns to 1 columns
+uppergram = zero2one(uppergram);
+basegram = zero2one(basegram);
+
 bassnotenames = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
 treblenotenames = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
 if df && enPlot
