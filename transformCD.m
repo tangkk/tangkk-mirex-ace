@@ -1,16 +1,17 @@
 % transform chordino output .lab to the .txt that can be recognized by
 % evaluation tools
 
-target = './cd/TheBeatles/01_-_Please_Please_Me';
+target = './cd/TheBeatles/12_-_Let_It_Be';
 
-files = dir(target);
+files = dir(target); 
 
-for i = 3:size(files,1)
+for j = 3:size(files,1)
 
-filename = files(i).name;
+filename = files(j).name;
 filename = filename(1:end-4);
 fpath = [target '/' filename];
 
+qualityList = {'/b2','/2','/b3','/3','/4','/b5','/5','/b6','/6','/b7','/7'};
 in = [fpath '.lab'];
 out = [fpath '.txt'];
 fr = fopen(in,'r');
@@ -40,12 +41,11 @@ while ischar(tline)
         tokens = strsplit(ch,'dim7/');
         root = note2num(tokens{1});
         bass = note2num(tokens{2});
-        qualityList = {'b2','2','b3','3','4','b5','5','b6','6','b7','7'};
         newch = '?';
         for i = 1:1:length(qualityList)
             qual = qualityList{i};
             if root2bass(root,qual) == bass
-                newch = [num2note(root) ':dim7/' qual];
+                newch = [num2note(root) ':dim7' qual];
                 break;
             end
         end
@@ -53,12 +53,11 @@ while ischar(tline)
         tokens = strsplit(ch,'maj7/');
         root = note2num(tokens{1});
         bass = note2num(tokens{2});
-        qualityList = {'b2','2','b3','3','4','b5','5','b6','6','b7','7'};
         newch = '?';
         for i = 1:1:length(qualityList)
             qual = qualityList{i};
             if root2bass(root,qual) == bass
-                newch = [num2note(root) ':maj7/' qual];
+                newch = [num2note(root) ':maj7' qual];
                 break;
             end
         end
@@ -66,12 +65,11 @@ while ischar(tline)
         tokens = strsplit(ch,'min7/');
         root = note2num(tokens{1});
         bass = note2num(tokens{2});
-        qualityList = {'b2','2','b3','3','4','b5','5','b6','6','b7','7'};
         newch = '?';
         for i = 1:1:length(qualityList)
             qual = qualityList{i};
             if root2bass(root,qual) == bass
-                newch = [num2note(root) ':min7/' qual];
+                newch = [num2note(root) ':min7' qual];
                 break;
             end
         end
@@ -79,12 +77,11 @@ while ischar(tline)
         tokens = strsplit(ch,'7/');
         root = note2num(tokens{1});
         bass = note2num(tokens{2});
-        qualityList = {'b2','2','b3','3','4','b5','5','b6','6','b7','7'};
         newch = '?';
         for i = 1:1:length(qualityList)
             qual = qualityList{i};
             if root2bass(root,qual) == bass
-                newch = [num2note(root) ':7/' qual];
+                newch = [num2note(root) ':7' qual];
                 break;
             end
         end
@@ -92,12 +89,11 @@ while ischar(tline)
         tokens = strsplit(ch,'m/');
         root = note2num(tokens{1});
         bass = note2num(tokens{2});
-        qualityList = {'b2','2','b3','3','4','b5','5','b6','6','b7','7'};
         newch = '?';
         for i = 1:1:length(qualityList)
             qual = qualityList{i};
             if root2bass(root,qual) == bass
-                newch = [num2note(root) ':min/' qual];
+                newch = [num2note(root) ':min' qual];
                 break;
             end
         end 
@@ -105,12 +101,11 @@ while ischar(tline)
         tokens = strsplit(ch,'/');
         root = note2num(tokens{1});
         bass = note2num(tokens{2});
-        qualityList = {'b2','2','b3','3','4','b5','5','b6','6','b7','7'};
         newch = '?';
         for i = 1:1:length(qualityList)
             qual = qualityList{i};
             if root2bass(root,qual) == bass
-                newch = [num2note(root) '/' qual];
+                newch = [num2note(root) qual];
                 break;
             end
         end

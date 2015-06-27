@@ -1,7 +1,7 @@
 % The following evaluator is built and executed from Johan's source code:
 % https://github.com/jpauwels/MusOOEvaluator
 
-sufix = 'chordino';
+sufix = 'fullBeatles-chordino';
 evallist = 'evallist.txt';
 
 gtroot = './gt/';
@@ -16,60 +16,68 @@ outroot = './outcd/';
 % **************** segmentation ****************
 evaltype = 'Inner';
 disp([evaltype '......']);
-evalout = [outroot 'results' 'Segmentation' '/' sufix '.txt'];
+evaloutseg = [outroot 'results' 'Segmentation' '/' sufix '.txt'];
 evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
-    testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+    testfolder ' --refext .lab --testext .txt --output ' evaloutseg ' --csv'...
     ' --segmentation ' evaltype];
 system(evalcmd);
 
 % ************************ Chords *************************** %
 evaltype = 'Bass';
 disp([evaltype '......']);
-evalout = [outroot 'results' evaltype '/' sufix '.txt'];
+evaloutbass = [outroot 'results' evaltype '/' sufix '.txt'];
 evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
-    testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+    testfolder ' --refext .lab --testext .txt --output ' evaloutbass ' --csv'...
     ' --chords ' evaltype];
 system(evalcmd);
 
 evaltype = 'MirexRoot';
 disp([evaltype '......']);
-evalout = [outroot 'results' evaltype '/' sufix '.txt'];
+evaloutroot = [outroot 'results' evaltype '/' sufix '.txt'];
 evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
-    testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+    testfolder ' --refext .lab --testext .txt --output ' evaloutroot ' --csv'...
     ' --chords ' evaltype];
 system(evalcmd);
 
 evaltype = 'MirexMajMin';
 disp([evaltype '......']);
-evalout = [outroot 'results' evaltype '/' sufix '.txt'];
+evaloutmajmin = [outroot 'results' evaltype '/' sufix '.txt'];
 evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
-    testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+    testfolder ' --refext .lab --testext .txt --output ' evaloutmajmin ' --csv'...
     ' --chords ' evaltype];
 system(evalcmd);
 
 evaltype = 'MirexMajMinBass';
 disp([evaltype '......']);
-evalout = [outroot 'results' evaltype '/' sufix '.txt'];
+evaloutmajminbass = [outroot 'results' evaltype '/' sufix '.txt'];
 evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
-    testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+    testfolder ' --refext .lab --testext .txt --output ' evaloutmajminbass ' --csv'...
     ' --chords ' evaltype];
 system(evalcmd);
 
 evaltype = 'MirexSevenths';
 disp([evaltype '......']);
-evalout = [outroot 'results' evaltype '/' sufix '.txt'];
+evaloutsevenths = [outroot 'results' evaltype '/' sufix '.txt'];
 evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
-    testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+    testfolder ' --refext .lab --testext .txt --output ' evaloutsevenths ' --csv'...
     ' --chords ' evaltype];
 system(evalcmd);
 
 evaltype = 'MirexSeventhsBass';
 disp([evaltype '......']);
-evalout = [outroot 'results' evaltype '/' sufix '.txt'];
+evaloutseventhsbass = [outroot 'results' evaltype '/' sufix '.txt'];
 evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
-    testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+    testfolder ' --refext .lab --testext .txt --output ' evaloutseventhsbass ' --csv'...
     ' --chords ' evaltype];
 system(evalcmd);
+
+dbtype(evaloutroot,'3:7');
+dbtype(evaloutmajmin,'3:7');
+dbtype(evaloutmajminbass,'3:7');
+dbtype(evaloutsevenths,'3:7');
+dbtype(evaloutseventhsbass,'3:7');
+dbtype(evaloutseg,'3:7');
+dbtype(evaloutbass,'3:7');
 
 % evaltype = 'ChromaRecall';
 % disp([evaltype '......']);
