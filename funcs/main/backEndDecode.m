@@ -17,7 +17,8 @@ end
 if beparam.enChordGestalt
 [rootgram, bassgram, treblegram, bdrys] = ...
     chordLevelGestalt(rootgram, bassgram, treblegram, basegram, uppergram, bdrys,...
-    beparam.grainsize, beparam.enCast2MajMin, chordmode);
+    beparam.grainsize, beparam.enCast2MajMin, beparam.enCombSameChords, beparam.enBassCorrect,...
+    beparam.enEliminShortChords, chordmode);
 end
 
 bassnotenames = {'N','C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
