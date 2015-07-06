@@ -16,7 +16,7 @@ clear;
 % ********************* Control Panel ********************** %
 % ********************************************************** %
 % ****** output control ****** %
-isexamine = 0; % 0: full evaluation, 1: examine segments
+isexamine = 1; % 0: full evaluation, 1: examine segments
 
 df = isexamine;
 enPlotFE = 1;
