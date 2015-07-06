@@ -67,14 +67,6 @@ myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'simple tone salie
 % myImagePlot(Sc, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'complex tone salience matrix');
 end
 
-% spectral rollon
-if feparam.specRollOn > 0
-Ss = specRollOn(Ss, feparam.specRollOn);
-if df && enPlot
-myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'spec-roll-on simple tone salience matrix');
-end
-end
-
 if feparam.tuningBefore
 % tuning algorithm, assuming nsemitones = 3
 if feparam.globalTuning
@@ -109,6 +101,14 @@ myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'tuned simple tone
 end
 end
 
+% spectral rollon
+if feparam.specRollOn > 0
+Ss = specRollOn(Ss, feparam.specRollOn);
+if df && enPlot
+myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'spec-roll-on simple tone salience matrix');
+end
+end
+
 % suppress percussive moments
 if feparam.enPcsSuppress
 Ss = pcsSuppress(Ss, (max(sum(Ss))+mean(sum(Ss)))/2);
@@ -134,13 +134,13 @@ end
 % noise reduction process
 if feparam.enPeakNoiseRed
 nt = 0.1;
-Ss = noteSalienceNoiseReduce(Ss, nt);
+Ssn = noteSalienceNoiseReduce(Ss, nt);
 if feparam.enCosSim
-Sc = noteSalienceNoiseReduce(Sc, nt);
+Scn = noteSalienceNoiseReduce(Sc, nt);
 end
 if df && enPlot
-myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'noised reduced simple tone salience matrix');
-% myImagePlot(Sc, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'noised reduced complex tone salience matrix');
+myImagePlot(Ssn, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'noised reduced simple tone salience matrix');
+% myImagePlot(Scn, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'noised reduced complex tone salience matrix');
 end
 end
 
