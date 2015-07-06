@@ -13,13 +13,13 @@ nslices = size(rootgram,2);
 % reasonable value intuitively. It means the dominant bass of the 1/8 of
 % the harmonic stable region will be the chord bass of the whole harmonic
 % region
-bdb = 1/8; 
+bdb = 1/4;
 
 for j = 1:nslices
     bd1 = bdrys(j);
     bd2 = bdrys(j+1);
     % hsr = bd1:bd2; % harmonic stable region
-    hsrbdb = bd1:min(bd1 + ceil((bd2 - bd1)*bdb), bd2);
+    hsrbdb = bd1:min(bd1 + floor((bd2 - bd1 + 1)*bdb), bd2);
     bgbdb = basegram(:,hsrbdb);
     sumbg = sum(bgbdb,2);
     % cal new bass
@@ -39,15 +39,17 @@ for j = 1:nslices
     cr = rootgram(j);
     ct = treblegram(j);
     nb = bass;
-    if cb ~= 0 && nb ~= cb
-        % /3 case, indicating a wrong /3 recognition
+    if cb ~= 0 && nb ~= cb && cr ~= cb
+        % /3 case, indicating a wrong /3 recognition, bass should be the
+        % same as root
         if strcmp(chordmode{2,ct},'maj/3') && cr == nb
-            bassgram(j) = nb;
+            bassgram(j) = cr;
             treblegram(j) = tname2tnum('maj', chordmode);
         end
-        % /5 case, indicating a wrong /5 recognition
+        % /5 case, indicating a wrong /5 recognition, bass should be the
+        % same as root
         if strcmp(chordmode{2,ct},'maj/5') && cr == nb
-            bassgram(j) = nb;
+            bassgram(j) = cr;
             treblegram(j) = tname2tnum('maj', chordmode);
         end
 %         % non-inversion case, indicating a wrong maj recognition
