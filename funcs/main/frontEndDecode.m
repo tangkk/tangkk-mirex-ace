@@ -1,4 +1,4 @@
-function [nslices, endtime, S, btrack] = frontEndDecode(audiopath, tunpath, vamptunpath,...
+function [bdrys, basegram, uppergram, nslices, endtime] = frontEndDecode(audiopath, tunpath, vamptunpath,...
     feparam, df, enPlot)
 
 x = myInput(audiopath, feparam.stereotomono, feparam.fs);
@@ -120,17 +120,6 @@ myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'pcs Suppressed si
 end
 end
 
-% % standardization (Y(k,m) - mu(k,m)) / sigma(k,m)
-if feparam.enSUB
-Ss = standardization(Ss, feparam.stdwr, feparam.enSTD, feparam.specWhitening, df);
-if feparam.enCosSim
-Sc = standardization(Sc, feparam.stdwr, feparam.enSTD, feparam.specWhitening, df);
-end
-if df && enPlot
-myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'standardized simple tone salience matrix');
-end
-end
-
 % noise reduction process
 if feparam.enPeakNoiseRed
 nt = 0.1;
@@ -141,6 +130,17 @@ end
 if df && enPlot
 myImagePlot(Ssn, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'noised reduced simple tone salience matrix');
 % myImagePlot(Scn, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'noised reduced complex tone salience matrix');
+end
+end
+
+% % standardization (Y(k,m) - mu(k,m)) / sigma(k,m)
+if feparam.enSUB
+Ss = standardization(Ss, feparam.stdwr, feparam.enSTD, feparam.specWhitening, df);
+if feparam.enCosSim
+Sc = standardization(Sc, feparam.stdwr, feparam.enSTD, feparam.specWhitening, df);
+end
+if df && enPlot
+myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'standardized simple tone salience matrix');
 end
 end
 
@@ -175,18 +175,6 @@ myImagePlot(Sapx, 1:nslices, 1:nnotes, 'slice', 'semitone', 'nnls salience matri
 end
 end
 
-% compute note salience matrix by combining 1/3 semitones into semitones
-% sum all 3 bins, alternatively, we could just take every center bins
-% Sss3bin = zeros(nnotes,nslices);
-% for i = 1:1:3
-%     Sss3bin = Sss3bin + Ss(i:3:end,:);
-% end
-% SssCen = Ss(2:3:end,:);
-% if df && enPlot
-% myImagePlot(Sss3bin, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Ss note salience matrix (sum 3 bins)');
-% myImagePlot(SssCen, 1:nslices, 1:nnotes, 'slice', '1/3 semitone', 'Ss note salience matrix (center bin)');
-% end
-
 % interface with output S
 if feparam.enCosSim % the baseline approach
     if feparam.enCenterbin
@@ -202,9 +190,121 @@ if df && enPlot
 myImagePlot(S, 1:nslices, 1:nnotes, 'slice', 'semitone', 'note salience matrix');
 end
 
-% beat tracking
-btrackraw = getmeasures3(x,feparam.fs);
-btrack = round(btrackraw.beats ./ (feparam.hopsize * 44100 / feparam.fs));
-btrack(btrack > nslices) = nslices;
-btrack(btrack == 0) = 1;
 
+% interface the original salience to a gestaltized salience
+Sg = S;
+
+if feparam.enGesComp
+st = 0.0;
+Sg = compensateLongSalience(Sg,feparam.wgmax,st,0,0);
+if df && enPlot
+myImagePlot(Sg, 1:nslices, 1:nnotes, 'slice', 'semitone', 'positive gestalt note salience matrix');
+end
+end
+
+if feparam.enGesRed
+st = 0.0;
+Sg = reduceShortSalience(Sg,feparam.wgmax,st,0,0);
+if df && enPlot
+myImagePlot(Sg, 1:nslices, 1:nnotes, 'slice', 'semitone', 'negative gestalt note salience matrix');
+end
+end
+
+if feparam.useBassOnsetSegment || feparam.useBassOnsetMedianSegment
+Shc = harmonicSegmentation(Sg, feparam.wgmax, 0, enPlot);
+end
+
+if feparam.useOriginalSalience
+    SpreSeg = S;
+elseif feparam.useGestaltSalience
+    SpreSeg = Sg;
+end
+
+% use different segmentation methods
+if feparam.noSegmentation
+    bdrys = 1:nslices;
+elseif feparam.useBassOnsetSegment
+    bdrys = Shc;
+elseif feparam.useWgSegment
+    bdrys = 1:feparam.wgmax:nslices;
+elseif feparam.useBeatSyncSegment
+    % beat tracking
+    btrackraw = getmeasures3(x,feparam.fs);
+    btrack = round(btrackraw.beats ./ (feparam.hopsize * 44100 / feparam.fs));
+    btrack(btrack > nslices) = nslices;
+    btrack(btrack == 0) = 1;
+    bdrys = btrack;
+elseif feparam.useBassOnsetMedianSegment
+    bdrys = 1:round(median(Shc(2:end) - Shc(1:end-1))):nslices;
+end
+
+if bdrys(end) ~= nslices % including the end slice
+    bdrys = [bdrys nslices];
+end
+if bdrys(1) ~= 1
+    bdrys = [1 bdrys];
+end
+
+if feparam.noSegmentation
+    Sseg = SpreSeg;
+else
+    Sseg = zeros(size(SpreSeg,1), length(bdrys) - 1);
+    for j = 1:size(Sseg,2)
+        if feparam.useMedianFilter
+            Sseg(:,j) = median(SpreSeg(:,bdrys(j):bdrys(j+1)),2);
+        elseif feparam.useMeanFilter
+            Sseg(:,j) = mean(SpreSeg(:,bdrys(j):bdrys(j+1)),2);
+        end
+    end
+end
+if df && enPlot
+myImagePlot(Sseg, 1:size(Sseg,2), 1:nnotes, 'segmentation',...
+    'semitone', 'note salience segmentation matrix');
+end
+
+nnotes = size(Sseg,1);
+nsegs = size(Sseg,2);
+if feparam.enProfiling
+ht = hann(nnotes); ht = ht ./ norm(ht,1);
+hb = [hann(nnotes/2);zeros(nnotes/2,1)]; hb = hb ./ norm(hb,1);
+mht = repmat(ht,1,nsegs);
+mhb = repmat(hb,1,nsegs);
+Stsegout = Sseg .* mht;
+Sbsegout = Sseg .* mhb;
+if df && enPlot
+myImagePlot(Stsegout, 1:nsegs, 1:nnotes, 'slice', 'semitone', 'treble note salience matrix');
+end
+if df && enPlot
+myImagePlot(Sbsegout, 1:nsegs, 1:nnotes, 'slice', 'semitone', 'bass note salience matrix');
+end
+end
+
+% compute basegram and uppergram (based on harmonic change matrix)
+if feparam.enProfiling && feparam.btchromagram
+    % note this is to compute chromagram
+    basegram = computeChromagram(Sbsegout);
+    uppergram = computeChromagram(Stsegout);
+elseif feparam.enProfiling
+    basegram = computeBasegram(Sbsegout);
+    uppergram = computeUppergram(Stsegout);
+else
+    basegram = computeBasegram(Sseg);
+    uppergram = computeUppergram(Sseg);
+end
+
+% normalize grams (whether global or local)
+uppergram = normalizeGram(uppergram,feparam.normalization);
+basegram = normalizeGram(basegram,feparam.normalization);
+
+% turn the zero columns to 1 columns
+uppergram = zero2one(uppergram);
+basegram = zero2one(basegram);
+
+bassnotenames = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
+treblenotenames = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
+if df && enPlot
+myImagePlot(basegram, 1:nsegs, 1:12, 'segmentation progression order', 'semitone',...
+    'basegram', 1:12, bassnotenames);
+myImagePlot(uppergram, 1:nsegs, 1:12, 'segmentation progression order', 'semitone',...
+    'uppergram', 1:12, treblenotenames);
+end
