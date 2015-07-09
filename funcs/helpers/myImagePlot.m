@@ -1,6 +1,6 @@
 % plot various gram as an image with a scaling factor
 function myImagePlot(img, x, y, xl, yl, tit, ytl, ytlab)
-sfactor = 100;
+sfactor = 200;
 img = sfactor * globalNormalize(img);
 if nargin == 6
     scrsz = get(groot,'ScreenSize');

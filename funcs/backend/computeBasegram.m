@@ -2,10 +2,10 @@
 function basegram = computeBasegram(ingram)
 
 ntones = size(ingram, 1);
-nchords = size(ingram, 2);
-basegram = zeros(12,nchords);
+nslices = size(ingram, 2);
+basegram = zeros(12,nslices);
 
-for j = 1:1:nchords
+for j = 1:1:nslices
     count = 0;
     bgram = zeros(12,1);
     for i = 1:1:ntones

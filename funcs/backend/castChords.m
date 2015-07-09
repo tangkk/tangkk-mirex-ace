@@ -4,7 +4,7 @@
 function treblegram = castChords(nfSeq,...
     rootgram, treblegram, chordmode)
 
-nchords = size(rootgram,2);
+nslices = size(rootgram,2);
 
 % the table for MajMinSevenths chord
 castTarget = {'maj','min','maj7','min7','7'};
@@ -20,7 +20,7 @@ for i = 1:1:castlen
     end
 end
 
-for i = 1:1:nchords
+for i = 1:1:nslices
     % FIXME: here should be bass or root?
     root = rootgram(i);
     treble = treblegram(i);

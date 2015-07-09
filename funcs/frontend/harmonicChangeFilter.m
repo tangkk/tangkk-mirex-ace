@@ -1,6 +1,6 @@
 % this process does the segmentation job according to bass onsets
 
-function [Sh, Shv, Shc, nchords] = harmonicChangeFilter(Sg, Sb, So, ht, bc)
+function [Sh, Shv, Shc, nslices] = harmonicChangeFilter(Sg, Sb, So, ht, bc)
 
 sizeS = size(Sg);
 Sh = zeros(sizeS(1),sizeS(2)); % harmonic bounded salience matrix (one slice per col)
@@ -63,7 +63,7 @@ for j = 1:1:sizeS(2)
         end
     end
 end
-nchords = shidx - 1;
+nslices = shidx - 1;
 Shc(shidx) = sizeS(2);
-Shv = Shv(:,(1:nchords));
-Shc = Shc(:,(1:nchords+1)); % boundaries include the endtime
+Shv = Shv(:,(1:nslices));
+Shc = Shc(:,(1:nslices+1)); % boundaries include the endtime

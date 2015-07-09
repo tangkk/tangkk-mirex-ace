@@ -4,7 +4,7 @@ function [rootgram, bassgram, treblegram, bdrys] = ...
     eliminateShortChords(rootgram, bassgram, treblegram, bdrys, grain)
 
 % chord beat duration calculation
-nchords = size(rootgram,2);
+nslices = size(rootgram,2);
 difbdrys = bdrys(2:end) - bdrys(1:end-1);
 chordbeats = round(difbdrys ./ (median(difbdrys) / 4));
 
@@ -26,7 +26,7 @@ end
 
 eliminateidxes = [shortchordidx nonchordidx];
 if ~isempty(eliminateidxes)
-    if eliminateidxes(end) == nchords
+    if eliminateidxes(end) == nslices
         % the last chord cannot be eliminate
         eliminateidxes(end) = [];
     end

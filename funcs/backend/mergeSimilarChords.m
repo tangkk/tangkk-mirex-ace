@@ -9,18 +9,18 @@
 function [rootgram, bassgram, treblegram, uppergram, bdrys] =...
     mergeSimilarChords(rootgram, bassgram, treblegram, uppergram, bdrys, nfSeq, chordmode)
 
-nchords = size(rootgram,2);
+nslices = size(rootgram,2);
 
 % 1st pass: merge consecutive chords that share the same bass and same super type
 i = 1;
-while i < nchords
+while i < nslices
     cb = bassgram(i);
     ct = treblegram(i);
     ctname = chordmode{2,ct};
     cst = superTypeMapping(ctname);
     
     nmergees = 0;
-    for j = i + 1: 1: nchords
+    for j = i + 1: 1: nslices
         nb = bassgram(j);
         nt = treblegram(j);
         ntname = chordmode{2,nt};
@@ -46,7 +46,7 @@ end
 
 % % 2nd pass: merge consecutive chords if it follows 1->5 relationship
 % copybassgram = bassgram;
-% for i = 1:1:nchords - 1
+% for i = 1:1:nslices - 1
 %     cb = bassgram(i);
 %     ct = treblegram(i);
 %     ctname = chordmode{2,ct};
@@ -77,7 +77,7 @@ end
 
 % 3rd pass: merge consecutive chords that share the same root and same treble type
 i = 1;
-while i < nchords
+while i < nslices
     cb = bassgram(i);
     cr = rootgram(i);
     ct = treblegram(i);
@@ -85,7 +85,7 @@ while i < nchords
     ctt = trebleTypeMapping(ctname);
     
     nmergees = 0;
-    for j = i+1:1:nchords
+    for j = i+1:1:nslices
         nb = bassgram(j);
         nr = rootgram(j);
         nt = treblegram(j);

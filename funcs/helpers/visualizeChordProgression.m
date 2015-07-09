@@ -1,6 +1,6 @@
 function visualizeChordProgression(rootgram, bassgram, treblegram, bdrys, chordmode)
 
-nchords = length(rootgram);
+nslices = length(rootgram);
 
 scrsz = get(groot,'ScreenSize');
 figure('Position',[scrsz(3)/4 scrsz(4)/4 scrsz(3)/2 scrsz(4)/2]);
@@ -11,8 +11,8 @@ for i = 1:1:length(bdrys)
     plot(X,Y);
 end
 hold off;
-div = (max(Y) - min(Y) - 1) / nchords;
-for i = 1:1:nchords
+div = (max(Y) - min(Y) - 1) / nslices;
+for i = 1:1:nslices
     x = bdrys(i);
     root = rootgram(i);
     treble = treblegram(i);

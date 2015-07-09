@@ -19,8 +19,8 @@ if bdrys(1) ~= 1
     fprintf(fw, formatSpec2, s);
 end
 
-nchords = size(rootgram,2);
-for i = 1:1:nchords
+nslices = size(rootgram,2);
+for i = 1:1:nslices
     sec1 = tw(bdrys(i));
     timestr1 = num2str(sec1);
     sec2 = tw(bdrys(i+1));

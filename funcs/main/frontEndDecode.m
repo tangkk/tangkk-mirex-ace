@@ -3,6 +3,11 @@ function [bdrys, basegram, uppergram, nslices, endtime] = frontEndDecode(audiopa
 
 x = myInput(audiopath, feparam.stereotomono, feparam.fs);
 
+display('input done...');
+
+% we differentiate ''tone'' and ''note'' in this program
+% by ''tone'' we mean 1/3-semitone-wise frequency, by ''note'' we mean
+% semitone-wise frequency
 fmin = 27.5; % MIDI note 21, Piano key number 1 (A0)
 fmax = 3322; % MIDI note 104, Piano key number nnotes
 fratio = 2^(1/(12*3)); % nsemitones = 3
@@ -41,6 +46,15 @@ if df && enPlot
 myImagePlot(X, 1:nslices, 1:feparam.wl/2+1, 'slice', 'bin', 'spectrogram');
 end
 
+display('spectrogram done...');
+
+% note that using cosine similarity method there are both simple tone
+% matrix (Ms) and complex tone matrix (Mc), the two are multiplied together
+% to form the salience matrix. Thus CosSim is an additive process.
+% also note that using log frequency spectrum method there is only one
+% salience matrix at this stage, and this is just similar to the simple
+% tone salience matrix. And the nnls process will infer note salience
+% matrix from this later. Thus logFreq is an deductive process.
 if feparam.enCosSim
 Ss = Ms*X;
 Sc = Mc*X;
@@ -50,42 +64,32 @@ end
 
 if df && enPlot
 myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'simple tone salience matrix');
-% myImagePlot(Sc, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'complex tone salience matrix');
+if feparam.enCosSim
+myImagePlot(Sc, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'complex tone salience matrix');
+end
 end
 
+% tuning algorithms, assuming nsemitones = 3
 if feparam.tuningBefore
-% tuning algorithm, assuming nsemitones = 3
-if feparam.globalTuning
-    Ss = globalTuning(Ss);
-    if feparam.enCosSim
-    Sc = globalTuning(Sc);
-    end
-elseif feparam.localTuning
-    Ss = localTuning(Ss);
-    if feparam.enCosSim
-    Sc = localTuning(Sc);
-    end
-elseif feparam.phaseTuning
-    [Ss,~] = phaseTuning(Ss);
-    if feparam.enCosSim
-    [Sc,~] = phaseTuning(Sc);
-    end
+if feparam.phaseTuning
+    [Ss,et] = phaseTuning(Ss);
 elseif feparam.gtTuning
-    [Ss,~] = gtTuning(Ss, tunpath);
-    if feparam.enCosSim
-    [Sc,~] = gtTuning(Sc, tunpath);
-    end
+    [Ss,et] = gtTuning(Ss, tunpath);
 elseif feparam.vampTuning
-    [Ss,~] = vampTuning(Ss,vamptunpath);
-    if feparam.enCosSim
-    [Sc,~] = vampTuning(Sc,vamptunpath);
-    end
+    [Ss,et] = vampTuning(Ss,vamptunpath);
+end
+if feparam.enCosSim
+Sc = tuningUpdate(Sc,et);
 end
 if df && enPlot
 myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'tuned simple tone salience matrix');
-% myImagePlot(Sc, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'tuned complex tone salience matrix');
+if feparam.enCosSim
+myImagePlot(Sc, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'tuned complex tone salience matrix');
 end
 end
+end
+
+display('tuning done...');
 
 % spectral rollon
 if feparam.specRollOn > 0
@@ -106,50 +110,61 @@ myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'pcs Suppressed si
 end
 end
 
-% noise reduction process
+% noise reduction process, normalize the matrix before processing
 if feparam.enPeakNoiseRed
+warning('off','signal:findpeaks:largeMinPeakHeight');
 nt = 0.1;
+nf = inf; % global normalization
+[Ss, normVec] = normalizeGram(Ss, nf);
 Ss = noteSalienceNoiseReduce(Ss, nt);
+Ss = denormalizeGram(Ss, normVec);
 if feparam.enCosSim
+[Sc, normVec] = normalizeGram(Sc, nf);
 Sc = noteSalienceNoiseReduce(Sc, nt);
+Sc = denormalizeGram(Sc, normVec);
 end
+warning('on','signal:findpeaks:largeMinPeakHeight');
 if df && enPlot
 myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'noised reduced simple tone salience matrix');
-% myImagePlot(Scn, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'noised reduced complex tone salience matrix');
+if feparam.enCosSim
+myImagePlot(Sc, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'noised reduced complex tone salience matrix');
+end
 end
 end
 
-if feparam.enGesComp
+% interface to pre-salience matrix
+if feparam.enCosSim
+Ss = Ss.*Sc;
+if df && enPlot
+myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'tone salience matrix');
+end
+end
+
+if feparam.enToneGesComp
 st = 0.0;
 Ss = compensateLongSalience(Ss,feparam.wgmax,st,0,0);
 if df && enPlot
-myImagePlot(Ss, 1:nslices, 1:nnotes, 'slice', 'semitone', 'positive gestalt note salience matrix');
+myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'positive gestalt tone salience matrix');
 end
 end
 
-if feparam.enGesRed
+if feparam.enToneGesRed
 st = 0.0;
 Ss = reduceShortSalience(Ss,feparam.wgmax,st,0,0);
 if df && enPlot
-myImagePlot(Ss, 1:nslices, 1:nnotes, 'slice', 'semitone', 'negative gestalt note salience matrix');
+myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'negative gestalt tone salience matrix');
 end
 end
 
 % % standardization (Y(k,m) - mu(k,m)) / sigma(k,m)
 if feparam.enSUB
 Ss = standardization(Ss, feparam.stdwr, feparam.enSTD, feparam.specWhitening, df);
-if feparam.enCosSim
-Sc = standardization(Sc, feparam.stdwr, feparam.enSTD, feparam.specWhitening, df);
-end
 if df && enPlot
 myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'standardized simple tone salience matrix');
 end
 end
 
-% interface to pre-salience matrix
-if feparam.enCosSim
-    Ss = Ss.*Sc;
-end
+display('tonegram done...');
 
 % nnls approximate note transcription - 3-semitones -> 1-semitone
 if feparam.enNNLS
@@ -160,8 +175,26 @@ elseif feparam.enCenterbin
 S = Ss(2:3:end,:);
 end
 if df && enPlot
-myImagePlot(S, 1:nslices, 1:nnotes, 'slice', 'semitone', 'nnls salience matrix');
+myImagePlot(S, 1:nslices, 1:nnotes, 'slice', 'semitone', 'note salience matrix');
 end
+
+if feparam.enNoteGesComp
+st = 0.0;
+S = compensateLongSalience(S,feparam.wgmax,st,0,0);
+if df && enPlot
+myImagePlot(S, 1:nslices, 1:nnotes, 'slice', 'semitone', 'positive gestalt note salience matrix');
+end
+end
+
+if feparam.enNoteGesRed
+st = 0.0;
+S = reduceShortSalience(S,feparam.wgmax,st,0,0);
+if df && enPlot
+myImagePlot(S, 1:nslices, 1:nnotes, 'slice', 'semitone', 'negative gestalt note salience matrix');
+end
+end
+
+display('notegram done...');
 
 % use different segmentation methods
 if feparam.noSegmentation
@@ -209,37 +242,48 @@ end
 
 nnotes = size(Sseg,1);
 nsegs = size(Sseg,2);
-if feparam.enProfiling
+
+% compute basegram and uppergram (based on harmonic change matrix)
+if feparam.basstreblechromagram
+if feparam.enProfileHann
 ht = hann(nnotes); ht = ht ./ norm(ht,1);
 hb = [hann(nnotes/2);zeros(nnotes/2,1)]; hb = hb ./ norm(hb,1);
 mht = repmat(ht,1,nsegs);
 mhb = repmat(hb,1,nsegs);
 Stout = Sseg .* mht;
 Sbout = Sseg .* mhb;
+elseif feparam.enProfileHamming
+ht = hamming(nnotes); ht = ht ./ norm(ht,1);
+hb = [hamming(nnotes/2);zeros(nnotes/2,1)]; hb = hb ./ norm(hb,1);
+mht = repmat(ht,1,nsegs);
+mhb = repmat(hb,1,nsegs);
+Stout = Sseg .* mht;
+Sbout = Sseg .* mhb;
+elseif feparam.enProfileRayleigh
+ht = raylpdf((1:nnotes)', nnotes/2); ht = ht ./ norm(ht,1);
+hb = raylpdf((1:nnotes)', nnotes/5); hb = hb ./ norm(hb,1);
+mht = repmat(ht,1,nsegs);
+mhb = repmat(hb,1,nsegs);
+Stout = Sseg .* mht;
+Sbout = Sseg .* mhb;
+end
 if df && enPlot
 myImagePlot(Stout, 1:nsegs, 1:nnotes, 'slice', 'semitone', 'treble note salience matrix');
 end
 if df && enPlot
 myImagePlot(Sbout, 1:nsegs, 1:nnotes, 'slice', 'semitone', 'bass note salience matrix');
 end
-end
-
-% compute basegram and uppergram (based on harmonic change matrix)
-if feparam.enProfiling && feparam.btchromagram
-    % note this is to compute chromagram
-    basegram = computeChromagram(Sbout);
-    uppergram = computeChromagram(Stout);
-elseif feparam.enProfiling
-    basegram = computeBasegram(Sbout);
-    uppergram = computeUppergram(Stout);
-else
-    basegram = computeBasegram(Sseg);
-    uppergram = computeUppergram(Sseg);
+% note this is to compute chromagram
+basegram = computeChromagram(Sbout);
+uppergram = computeChromagram(Stout);
+elseif feparam.baseuppergram
+basegram = computeBasegram(Sseg);
+uppergram = computeUppergram(Sseg);
 end
 
 % normalize grams (whether global or local)
-uppergram = normalizeGram(uppergram,feparam.normalization);
-basegram = normalizeGram(basegram,feparam.normalization);
+[uppergram,~] = normalizeGram(uppergram,feparam.normalization);
+[basegram,~] = normalizeGram(basegram,feparam.normalization);
 
 % turn the zero columns to 1 columns
 uppergram = zero2one(uppergram);
@@ -253,3 +297,5 @@ myImagePlot(basegram, 1:nsegs, 1:12, 'segmentation progression order', 'semitone
 myImagePlot(uppergram, 1:nsegs, 1:12, 'segmentation progression order', 'semitone',...
     'uppergram', 1:12, treblenotenames);
 end
+
+display('chromagrams done...');

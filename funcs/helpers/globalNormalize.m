@@ -1,4 +1,5 @@
 % global normalize a matrix
-function out = globalNormalize(in)
+function [out, maxin] = globalNormalize(in)
 
-out = in ./ max(max(in));
+maxin = max(max(in));
+out = in ./ maxin;
