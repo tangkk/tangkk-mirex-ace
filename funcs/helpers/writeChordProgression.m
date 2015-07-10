@@ -1,15 +1,17 @@
 % write out the chord progression as txt file according to the MIREX
 % standard: http://www.music-ir.org/mirex/wiki/2015:Audio_Chord_Estimation
-function writeChordProgression(outfolder, outpath, nslices, hopsize, fs,...
+function writeChordProgression(outfolder, outpath, hopsize, fs,...
     rootgram, treblegram, bdrys, endtime, chordmode)
 
 if exist(outfolder, 'file') == 0
     mkdir(outfolder);
 end
 
+nslices = size(rootgram,2);
+
 fw = fopen(outpath,'w');
 formatSpec2 = '%s\n';
-tw = ((hopsize/fs)*(0:nslices));
+tw = ((hopsize/fs)*(0:bdrys(end)));
 
 % add non-chord before start if needed
 if bdrys(1) ~= 1
@@ -19,7 +21,6 @@ if bdrys(1) ~= 1
     fprintf(fw, formatSpec2, s);
 end
 
-nslices = size(rootgram,2);
 for i = 1:1:nslices
     sec1 = tw(bdrys(i));
     timestr1 = num2str(sec1);

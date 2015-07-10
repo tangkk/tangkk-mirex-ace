@@ -3,22 +3,16 @@ function basegram = computeBasegram(ingram)
 
 ntones = size(ingram, 1);
 nslices = size(ingram, 2);
-basegram = zeros(12,nslices);
+basegram = zeros(2,nslices);
 
 for j = 1:1:nslices
-    count = 0;
-    bgram = zeros(12,1);
     for i = 1:1:ntones
         % find out the lowest salience
         if ingram(i,j) > 0
             % revise the order to be starting from C
-            bgram(pitchTranspose(i,9)) = ingram(i,j);
-%             bgram(pitchTranspose(i,9)) = (3 - count) * Shv(i,j);
-            count = count + 1;
-            if count == 3
-                break;
-            end
+            basegram(1,j) = pitchTranspose(i,9);
+            basegram(2,j) = ingram(i,j);
+            break;
         end
     end
-    basegram(:,j) = bgram;
 end

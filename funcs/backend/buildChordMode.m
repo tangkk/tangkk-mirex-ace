@@ -170,7 +170,7 @@ idx = idx + 1;
 end
 
 % ************************ suspend and add *************************** %
-if chordmodeparam.enSusAdd
+if chordmodeparam.enSus
 chordmode{1,idx} = [2,7];
 chordmode{2,idx} = 'sus2';
 % chordmode{3,idx} = [1-trc, 1-trc];
@@ -180,7 +180,9 @@ chordmode{1,idx} = [5,7];
 chordmode{2,idx} = 'sus4';
 % chordmode{3,idx} = [1-trc, 1-trc];
 idx = idx + 1;
+end
 
+if chordmodeparam.enAdd
 chordmode{1,idx} = [2,4,7];
 chordmode{2,idx} = 'add9';
 % chordmode{3,idx} = [1-tc,1-tc,1-tc];

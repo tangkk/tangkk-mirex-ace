@@ -1,4 +1,4 @@
-function [bdrys, basegram, uppergram, nslices, endtime] = frontEndDecode(audiopath, tunpath, vamptunpath,...
+function [bdrys, basegram, uppergram, endtime] = frontEndDecode(audiopath, tunpath, vamptunpath,...
     feparam, df, enPlot)
 
 x = myInput(audiopath, feparam.stereotomono, feparam.fs);
@@ -200,10 +200,7 @@ display('notegram done...');
 if feparam.noSegmentation
     bdrys = 1:nslices;
 elseif feparam.useBassOnsetSegment
-    Shc = harmonicSegmentation(Ss, feparam.wgmax, 0, enPlot);
-    bdrys = Shc;
-elseif feparam.useWgSegment
-    bdrys = 1:feparam.wgmax:nslices;
+    bdrys = harmonicSegmentation(Ss, feparam.wgmax, 0, enPlot);
 elseif feparam.useBeatSyncSegment
     % beat tracking
     btrackraw = getmeasures3(x,feparam.fs);
@@ -211,18 +208,13 @@ elseif feparam.useBeatSyncSegment
     btrack(btrack > nslices) = nslices;
     btrack(btrack == 0) = 1;
     bdrys = btrack;
-elseif feparam.useBassOnsetMedianSegment
-    Shc = harmonicSegmentation(Ss, feparam.wgmax, 0, enPlot);
-    bdrys = 1:round(median(Shc(2:end) - Shc(1:end-1))):nslices;
 end
-
 if bdrys(end) ~= nslices % including the end slice
     bdrys = [bdrys nslices];
 end
 if bdrys(1) ~= 1
     bdrys = [1 bdrys];
 end
-
 if feparam.noSegmentation
     Sseg = S;
 else
@@ -245,55 +237,62 @@ nsegs = size(Sseg,2);
 
 % compute basegram and uppergram (based on harmonic change matrix)
 if feparam.basstreblechromagram
-if feparam.enProfileHann
-ht = hann(nnotes); ht = ht ./ norm(ht,1);
-hb = [hann(nnotes/2);zeros(nnotes/2,1)]; hb = hb ./ norm(hb,1);
-mht = repmat(ht,1,nsegs);
-mhb = repmat(hb,1,nsegs);
-Stout = Sseg .* mht;
-Sbout = Sseg .* mhb;
-elseif feparam.enProfileHamming
-ht = hamming(nnotes); ht = ht ./ norm(ht,1);
-hb = [hamming(nnotes/2);zeros(nnotes/2,1)]; hb = hb ./ norm(hb,1);
-mht = repmat(ht,1,nsegs);
-mhb = repmat(hb,1,nsegs);
-Stout = Sseg .* mht;
-Sbout = Sseg .* mhb;
-elseif feparam.enProfileRayleigh
-ht = raylpdf((1:nnotes)', nnotes/2); ht = ht ./ norm(ht,1);
-hb = raylpdf((1:nnotes)', nnotes/5); hb = hb ./ norm(hb,1);
-mht = repmat(ht,1,nsegs);
-mhb = repmat(hb,1,nsegs);
-Stout = Sseg .* mht;
-Sbout = Sseg .* mhb;
-end
-if df && enPlot
-myImagePlot(Stout, 1:nsegs, 1:nnotes, 'slice', 'semitone', 'treble note salience matrix');
-end
-if df && enPlot
-myImagePlot(Sbout, 1:nsegs, 1:nnotes, 'slice', 'semitone', 'bass note salience matrix');
-end
-% note this is to compute chromagram
-basegram = computeChromagram(Sbout);
-uppergram = computeChromagram(Stout);
+    if feparam.enProfileHann
+    ht = hann(nnotes); ht = ht ./ norm(ht,1);
+    hb = [hann(nnotes/2);zeros(nnotes/2,1)]; hb = hb ./ norm(hb,1);
+    mht = repmat(ht,1,nsegs);
+    mhb = repmat(hb,1,nsegs);
+    Stout = Sseg .* mht;
+    Sbout = Sseg .* mhb;
+    elseif feparam.enProfileHamming
+    ht = hamming(nnotes); ht = ht ./ norm(ht,1);
+    hb = [hamming(nnotes/2);zeros(nnotes/2,1)]; hb = hb ./ norm(hb,1);
+    mht = repmat(ht,1,nsegs);
+    mhb = repmat(hb,1,nsegs);
+    Stout = Sseg .* mht;
+    Sbout = Sseg .* mhb;
+    elseif feparam.enProfileRayleigh
+    ht = raylpdf((1:nnotes)', nnotes/2); ht = ht ./ norm(ht,1);
+    hb = raylpdf((1:nnotes)', nnotes/5); hb = hb ./ norm(hb,1);
+    mht = repmat(ht,1,nsegs);
+    mhb = repmat(hb,1,nsegs);
+    Stout = Sseg .* mht;
+    Sbout = Sseg .* mhb;
+    end
+    if df && enPlot
+    myImagePlot(Stout, 1:nsegs, 1:nnotes, 'slice', 'semitone', 'treble note salience matrix');
+    end
+    if df && enPlot
+    myImagePlot(Sbout, 1:nsegs, 1:nnotes, 'slice', 'semitone', 'bass note salience matrix');
+    end
+    % note this is to compute chromagram
+    basegram = computeChromagram(Sbout);
+    uppergram = computeChromagram(Stout);
+    % normalize grams (whether global or local)
+    [uppergram,~] = normalizeGram(uppergram,feparam.normalization);
+    [basegram,~] = normalizeGram(basegram,feparam.normalization);
+    % turn the zero columns to 1 columns
+    uppergram = zero2one(uppergram);
+    basegram = zero2one(basegram);
 elseif feparam.baseuppergram
-basegram = computeBasegram(Sseg);
-uppergram = computeUppergram(Sseg);
+    basegram = computeBasegram(Sseg);
+    uppergram = computeUppergram(Sseg);
+    [uppergram,~] = normalizeGram(uppergram,feparam.normalization);
 end
 
-% normalize grams (whether global or local)
-[uppergram,~] = normalizeGram(uppergram,feparam.normalization);
-[basegram,~] = normalizeGram(basegram,feparam.normalization);
 
-% turn the zero columns to 1 columns
-uppergram = zero2one(uppergram);
-basegram = zero2one(basegram);
 
 bassnotenames = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
 treblenotenames = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
 if df && enPlot
+if feparam.baseuppergram
+    myLinePlot(1:nsegs, basegram(1,:), 'segmentation progression order', 'semitone',...
+    nsegs, 12, 'o', 'basegram', 1:12, bassnotenames);
+end
+if feparam.basstreblechromagram
 myImagePlot(basegram, 1:nsegs, 1:12, 'segmentation progression order', 'semitone',...
     'basegram', 1:12, bassnotenames);
+end
 myImagePlot(uppergram, 1:nsegs, 1:12, 'segmentation progression order', 'semitone',...
     'uppergram', 1:12, treblenotenames);
 end

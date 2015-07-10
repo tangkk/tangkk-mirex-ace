@@ -112,4 +112,4 @@ while i < nslices
     i = i + nmergees + 1;
 end
 
-[rootgram, bassgram, treblegram, uppergram, bdrys] = combineSameChords(rootgram, bassgram, treblegram, uppergram, bdrys);
+[rootgram, bassgram, treblegram, bdrys] = combineSameChords(rootgram, bassgram, treblegram, bdrys);

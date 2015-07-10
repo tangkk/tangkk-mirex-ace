@@ -1,5 +1,5 @@
 function [rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode, beparam, dbnparam, dbn2param,...
-    basegram, uppergram, bdrys, nslices, df, enPlot)
+    basegram, uppergram, bdrys, df, enPlot)
 
 if beparam.useSIM1 % apply simple chord matching, works with a 1-D basegram
 [rootgram, bassgram, treblegram] = simChordMatching(basegram, uppergram, chordmode);
@@ -14,16 +14,14 @@ end
 
 if beparam.enChordGestalt
 [rootgram, bassgram, treblegram, bdrys] = ...
-    chordLevelGestalt(rootgram, bassgram, treblegram, basegram, uppergram, bdrys,...
-    beparam.grainsize, beparam.enCast2MajMin, beparam.enCombSameChords, beparam.enBassCorrect,...
-    beparam.enEliminShortChords, chordmode);
+    chordLevelGestalt(rootgram, bassgram, treblegram, basegram, uppergram, bdrys, beparam, chordmode);
 end
 
 display('chordogram done...');
 
 bassnotenames = {'N','C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
 nslices = length(rootgram);
-if beparam.useDBN2
+if beparam.useDBN2 && df && enPlot
 myImagePlot(chordogram, 1:size(chordogram,2), 1:size(chordogram,1),...
 'chord progression order', 'chord', 'chordogram');
 end
@@ -33,6 +31,6 @@ myLinePlot(1:nslices, rootgram, 'chord progression order', 'semitone',...
 myLinePlot(1:nslices, bassgram, 'chord progression order', 'semitone',...
     nslices, 12, 'o', 'bassgram', 0:12, bassnotenames);
 myLinePlot(1:nslices+1, bdrys, 'chord progression order', 'slice',...
-    nslices, nslices, 'o', 'boundaries');
+    nslices, bdrys(end), 'o', 'boundaries');
 visualizeChordProgression(rootgram, bassgram, treblegram, bdrys, chordmode);
 end
