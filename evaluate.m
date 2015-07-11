@@ -1,7 +1,7 @@
 % The following evaluator is built and executed from Johan's source code:
 % https://github.com/jpauwels/MusOOEvaluator
 
-sufix = 'pleasepleaseme';
+sufix = 'CP-1';
 evallist = 'evallist.txt';
 
 gtroot = './gt/';
@@ -16,13 +16,13 @@ testfolder = cpfolder;
 outroot = './out/';
 
 % ************************ Chords *************************** %
-% % evaltype = 'Root';
-% % disp([evaltype '......']);
-% % evalout = [outroot 'results' evaltype '/' sufix '.txt'];
-% % evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
-% %     testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
-% %     ' --chords ' evaltype];
-% % system(evalcmd);
+evaltype = 'Root';
+disp([evaltype '......']);
+evalout = [outroot 'results' evaltype '/' sufix '.txt'];
+evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
+    testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+    ' --chords ' evaltype];
+system(evalcmd);
 
 evaltype = 'Bass';
 disp([evaltype '......']);
@@ -96,31 +96,31 @@ evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
     ' --chords ' evaltype];
 system(evalcmd);
 
-% evaltype = 'Mirex2010';
-% disp([evaltype '......']);
-% evalout = [outroot 'results' evaltype '/' sufix '.txt'];
-% evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
-%     testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
-%     ' --chords ' evaltype];
-% system(evalcmd);
+evaltype = 'Mirex2010';
+disp([evaltype '......']);
+evalout = [outroot 'results' evaltype '/' sufix '.txt'];
+evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
+    testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+    ' --chords ' evaltype];
+system(evalcmd);
 
 % **************** segmentation ****************
 
-% evaltype = 'Onset';
-% disp([evaltype '......']);
-% evalout = [outroot 'results' evaltype '/' sufix '.txt'];
-% evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
-%     testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
-%     ' --segmentation ' evaltype];
-% system(evalcmd);
+evaltype = 'Onset';
+disp([evaltype '......']);
+evalout = [outroot 'results' evaltype '/' sufix '.txt'];
+evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
+    testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+    ' --segmentation ' evaltype];
+system(evalcmd);
 
-% evaltype = 'Offset';
-% disp([evaltype '......']);
-% evalout = [outroot 'results' evaltype '/' sufix '.txt'];
-% evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
-%     testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
-%     ' --segmentation ' evaltype];
-% system(evalcmd);
+evaltype = 'Offset';
+disp([evaltype '......']);
+evalout = [outroot 'results' evaltype '/' sufix '.txt'];
+evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
+    testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+    ' --segmentation ' evaltype];
+system(evalcmd);
 
 evaltype = 'Inner';
 disp([evaltype '......']);
@@ -130,11 +130,11 @@ evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
     ' --segmentation ' evaltype];
 system(evalcmd);
 
-% evaltype = 'Outer';
-% disp([evaltype '......']);
-% evalout = [outroot 'results' evaltype '/' sufix '.txt'];
-% evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
-%     testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
-%     ' --segmentation ' evaltype];
-% system(evalcmd);
+evaltype = 'Outer';
+disp([evaltype '......']);
+evalout = [outroot 'results' evaltype '/' sufix '.txt'];
+evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
+    testfolder ' --refext .lab --testext .txt --output ' evalout ' --csv'...
+    ' --segmentation ' evaltype];
+system(evalcmd);
 

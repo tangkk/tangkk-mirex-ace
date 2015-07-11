@@ -18,7 +18,7 @@ stereotomono = false;
 codec = 'mp3';
 
 % output control
-isexamine = 0; % 0: full evaluation, 1:examine range, 2: examine piece
+isexamine = 2; % 0: full evaluation, 1:examine range, 2: examine piece
 runeval = 1;
 examinerange = [15,30]; % start and endtime in unit of second
 if isexamine
@@ -363,8 +363,8 @@ hwin = 5;
 nfSeq = calNoteFreq(bassgram, treblegram, chordmode, hwin);
 scaleSeq = calNoteScale(nfSeq);
 tonicSeq = calTonic(scaleSeq);
-% display('tonic sequence:');
-% display(tonicSeq);
+display('tonic sequence:');
+display(tonicSeq);
 
 % ********************************************************** %
 % ********************* Output ***************************** %
@@ -374,8 +374,7 @@ if isexamine
     break;
 else
     display('output...');
-    writeChordProgression(cpfolder, cppath, nslices, hopsize, fs,...
-        rootgram, treblegram, bdrys, endtime, chordmode);
+    writeChordProgression(cpfolder, cppath, nslices, hopsize, fs, chordogram, bdrys, endtime);
     tline = fgetl(feval);
 end
 
