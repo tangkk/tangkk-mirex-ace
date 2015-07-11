@@ -52,15 +52,19 @@ for j = 1:nslices
             bassgram(j) = cr;
             treblegram(j) = tname2tnum('maj', chordmode);
         end
-%         % non-inversion case, indicating a wrong maj recognition
-%         if strcmp(chordmode{2,ct},'maj') && root2bass(cr, 'maj/3') == nb
-%             bassgram(j) = nb;
-%             treblegram(j) = tname2tnum('maj/3', chordmode);
-%         end
-%         % non-inversion case, indicating a wrong maj recognition
-%         if strcmp(chordmode{2,ct},'maj') && root2bass(cr, 'maj/5') == nb
-%             bassgram(j) = nb;
-%             treblegram(j) = tname2tnum('maj/5', chordmode);
-%         end
+    end
+    
+    if cb ~= 0 && nb ~= cb && cr == cb
+        % non-inversion case, indicating a wrong maj recognition
+        if strcmp(chordmode{2,ct},'maj') && root2bass(cr, 'maj/3') == nb
+            bassgram(j) = nb;
+            treblegram(j) = tname2tnum('maj/3', chordmode);
+        end
+        % non-inversion case, indicating a wrong maj recognition
+        if strcmp(chordmode{2,ct},'maj') && root2bass(cr, 'maj/5') == nb
+            bassgram(j) = nb;
+            treblegram(j) = tname2tnum('maj/5', chordmode);
+        end
+
     end
 end
