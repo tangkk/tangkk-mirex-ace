@@ -50,4 +50,6 @@ out/
 eval/
 res/
 data/
+bnt/
+*.mat
 *.txt
