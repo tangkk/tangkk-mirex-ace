@@ -16,7 +16,7 @@ end
 
 if beparam.enBassCorrect
 [rootgram, bassgram, treblegram] = bassCorrect(rootgram,...
-    bassgram, treblegram, basegram, bdrys, chordmode);
+    bassgram, treblegram, basegram, uppergram, bdrys, chordmode);
 end
 
 if beparam.enEliminShortChords
