@@ -1,21 +1,21 @@
-% update the basegram and uppergram based on the chord boundaries
-function [basegram, uppergram] = updateBaseUpperGram(bdrys, S, So, ut, nt)
+% part of the feedback route, update the basegram and uppergram
+function [newbasegram, newuppergram] = updateBaseUpperGram(chordboundaries, S, So, ut, nt)
 
-nchords = length(bdrys) - 1;
+nchords = length(chordboundaries) - 1;
 
-basegram = zeros(1,nchords);
+newbasegram = zeros(1,nchords);
 for i = 1:1:nchords
-    wb = bdrys(i):bdrys(i+1);
+    wb = chordboundaries(i):chordboundaries(i+1);
     Sw = S(:,wb);
     Swo = So(:,wb);
     base = findBase(Sw, Swo);
-    basegram(i) = pitchTranspose(base,9);
+    newbasegram(i) = pitchTranspose(base,9);
 end
 
-uppergram = zeros(12,nchords);
+newuppergram = zeros(12,nchords);
 for i = 1:1:nchords
     % update note salience matrix in terms of boundaries window
-    wb = bdrys(i):bdrys(i+1);
+    wb = chordboundaries(i):chordboundaries(i+1);
     % the first criteria is the sum of strength larger than ut
     Sw = S(:,wb);
     sm1 = sum(Sw,2);
@@ -28,7 +28,7 @@ for i = 1:1:nchords
     sm = sm1.*sm2;
     upg = sum(reshape(sm,12,6),2);
     upg = [upg(4:end);upg(1:3)];
-    uppergram(:,i) = upg;
+    newuppergram(:,i) = upg;
 end
 
-uppergram = normalizeGram(uppergram);
+newuppergram = normalizeGram(newuppergram);

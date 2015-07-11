@@ -9,9 +9,7 @@ function st = superTypeMapping(tname)
 switch tname
     % type 1 cases:
     case '0'
-        st = 1;
-    case '1'
-        st = 1;
+        st = 1; % 0 type of treble also 1
     case ''
         st = 1;
     case 'M'

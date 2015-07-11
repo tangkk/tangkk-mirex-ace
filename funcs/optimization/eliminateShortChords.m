@@ -1,5 +1,4 @@
 % eliminate chords with very short duration, update other grams
-% the eliminated chords should be replaced by the previous chords
 function [rootgram, bassgram, treblegram, bdrys] = ...
     eliminateShortChords(rootgram, bassgram, treblegram, bdrys, grain)
 
@@ -15,7 +14,7 @@ shortchords(shortchords <= grain) = 0;
 shortchordidx = find(shortchords == 0);
 
 % 2. findout non chord indexes that's with a relatively short duration
-nonchords = find(treblegram == 1);
+nonchords = find(treblegram == 0);
 nonchordidx = [];
 for i = 1:1:length(nonchords)
     nci = nonchords(i);
@@ -42,6 +41,5 @@ end
 rootgram(elimiateidxes) = [];
 bassgram(elimiateidxes) = [];
 treblegram(elimiateidxes) = [];
-bdrys(elimiateidxes) = []; % the bdrys indicates the start of a chord
-% deleting at start of a chord makes it follows the previous chord
+bdrys(elimiateidxes) = [];
 
