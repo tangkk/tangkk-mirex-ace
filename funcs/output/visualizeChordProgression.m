@@ -1,31 +1,59 @@
-function visualizeChordProgression(rootgram, bassgram, treblegram, bdrys, chordmode)
+function visualizeChordProgression(outchordogram, outbassgram, outboundaries, tt)
 
-nchords = length(rootgram);
-
-scrsz = get(groot,'ScreenSize');
-figure('Position',[scrsz(3)/4 scrsz(4)/4 scrsz(3)/2 scrsz(4)/2]);
-hold on;
-Y = -10:0.1:10;
-for i = 1:1:length(bdrys)
-    X = bdrys(1,i)*ones(size(Y));
-    plot(X,Y);
-end
-hold off;
-div = (max(Y) - min(Y) - 1) / nchords;
-for i = 1:1:nchords
-    x = bdrys(i);
-    ch = strcat(num2note(rootgram(i)),':',chordmode{2,treblegram(i)});
-    if isempty(strfind(ch, '/'))
-        chordstr = ch;
-        text(x,10 - i*div,chordstr);
-    else
-        originchordstr = strsplit(ch,'/');
-        treble = originchordstr{1};
-        bassstr = num2note(bassgram(i));
-        chordstr = strcat(treble, '/', bassstr);
-        text(x,10 - i*div,chordstr);
+if nargin == 3
+    scrsz = get(groot,'ScreenSize');
+    figure('Position',[scrsz(3)/4 scrsz(4)/4 scrsz(3)/2 scrsz(4)/2]);
+    hold on;
+    Y = -10:0.1:10;
+    for i = 1:1:length(outboundaries)
+        X = outboundaries(1,i)*ones(size(Y));
+        plot(X,Y);
     end
+    hold off;
+    div = (max(Y) - min(Y) - 1) / length(outchordogram);
+    for i = 1:1:length(outchordogram)
+        x = outboundaries(i);
+        if isempty(strfind(outchordogram{i}, '/'))
+            chordstr = outchordogram{i};
+            text(x,10 - i*div,chordstr);
+        else
+            originchordstr = strsplit(outchordogram{i},'/');
+            treble = originchordstr{1};
+            bassstr = num2note(outbassgram(i));
+            chordstr = strcat(treble, '/', bassstr);
+            text(x,10 - i*div,chordstr);
+        end
+    end
+    xlabel('slice');
+    ylabel('chord');
+    title('updated chordprogression vs. slice');
 end
-xlabel('slice');
-ylabel('chord');
-title('updated chordprogression vs. slice');
+
+if nargin == 4
+    scrsz = get(groot,'ScreenSize');
+    figure('Position',[scrsz(3)/4 scrsz(4)/4 scrsz(3)/2 scrsz(4)/2]);
+    hold on;
+    Y = -10:0.1:10;
+    for i = 1:1:length(outboundaries)
+        X = tt(outboundaries(1,i))*ones(size(Y));
+        plot(X,Y);
+    end
+    hold off;
+    div = (max(Y) - min(Y) - 1) / length(outchordogram);
+    for i = 1:1:length(outchordogram)
+        x = tt(outboundaries(i));
+        if isempty(strfind(outchordogram{i}, '/'))
+            chordstr = outchordogram{i};
+            text(x,10 - i*div,chordstr);
+        else
+            originchordstr = strsplit(outchordogram{i},'/');
+            treble = originchordstr{1};
+            bassstr = num2note(outbassgram(i));
+            chordstr = strcat(treble, '/', bassstr);
+            text(x,10 - i*div,chordstr);
+        end
+    end
+    xlabel('time');
+    ylabel('chord');
+    title('updated chordprogression vs. time');
+end
