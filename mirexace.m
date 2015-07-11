@@ -6,7 +6,7 @@
 % ********************* Batch Input ************************ %
 % ********************************************************** %
 warning off
-path(path,genpath('.'));
+path(path,genpath(fullfile('./funcs')));
 warning on
 
 close all;
@@ -22,7 +22,7 @@ stereotomono = false;
 codec = 'mp3';
 
 % output control
-isexamine = 2; % 0: turn off, 1:examine range, 2: examine piece
+isexamine = 0; % 0: turn off, 1:examine range, 2: examine piece
 runeval = 1;
 examinerange = [15,30]; % start and endtime in unit of second
 if isexamine
@@ -372,5 +372,5 @@ fclose(feval);
 % ********************* Evaluation - A******************* %
 % ********************************************************** %
 if runeval && ~isexamine
-    evaluate;
+    evaluateCP;
 end
