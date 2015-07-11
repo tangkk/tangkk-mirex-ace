@@ -1,7 +1,6 @@
 function myLinePlot(x, y, xlab, ylab, xl, yl, marker, tit, ytl, ytlab)
 if nargin == 8
-    scrsz = get(groot,'ScreenSize');
-    figure('Position',[scrsz(3)/4 scrsz(4)/4 scrsz(3)/2 scrsz(4)/2]);
+    figure;
     plot(x,y,marker);
     xlim([1 xl]);
     ylim([1 yl]);
@@ -10,8 +9,7 @@ if nargin == 8
     title(tit);
 end
 if nargin == 10
-    scrsz = get(groot,'ScreenSize');
-    figure('Position',[scrsz(3)/4 scrsz(4)/4 scrsz(3)/2 scrsz(4)/2]);
+    figure;
     plot(x,y,marker);
     xlim([1 xl]);
     ylim([1 yl]);
