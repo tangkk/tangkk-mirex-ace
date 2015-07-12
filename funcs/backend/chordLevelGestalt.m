@@ -14,14 +14,14 @@ if beparam.enCombSameChords
     bassgram, treblegram, bdrys);
 end
 
-if beparam.enBassCorrect
-[rootgram, bassgram, treblegram] = bassCorrect(rootgram,...
-    bassgram, treblegram, basegram, uppergram, bdrys, chordmode);
-end
-
 if beparam.enEliminShortChords
 [rootgram, bassgram, treblegram, bdrys] = eliminateShortChords(rootgram,...
     bassgram, treblegram, bdrys, beparam.grainsize);
+end
+
+if beparam.enBassTrebleCorrect
+[rootgram, bassgram, treblegram] = bassTrebleCorrect(rootgram,...
+    bassgram, treblegram, basegram, uppergram, bdrys, chordmode);
 end
 
 if beparam.enMergeSimilarChords
