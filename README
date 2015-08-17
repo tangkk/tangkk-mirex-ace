@@ -1,1 +1,21 @@
-This is left blank for the moment
+This is the README for MIREX 2015 ACE task:
+
+Command line calling format for all executables and an example formatted set of commands:
+- doChordID.sh testFileList.txt testout/ (on Linux)
+- doChordID-win.sh testFileList.txt testout/ (on Windows)
+- doChordID-osx.sh testFileList.txt testout/ (on Mac)
+- The inputs are specified in testFileList.txt
+- The analyzed results can be found in the testout/ folder
+
+Number of threads/cores used or whether this should be specified on the command line
+- Process files in a sequential way
+
+Expected memory footprint
+- N/A
+
+Expected runtime
+- N/A
+
+Any required environments (and versions), e.g. Python, Java, bash, MATLAB.
+- MATLAB R2015a or later
+- cygwin if run on windows

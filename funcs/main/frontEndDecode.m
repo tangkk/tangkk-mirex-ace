@@ -1,5 +1,4 @@
-function [bdrys, basegram, uppergram, endtime] = frontEndDecode(audiopath, tunpath, vamptunpath,...
-    feparam, df, enPlot)
+function [bdrys, basegram, uppergram, endtime] = frontEndDecode(audiopath, feparam, df, enPlot)
 
 x = myInput(audiopath, feparam.stereotomono, feparam.fs);
 
@@ -71,13 +70,7 @@ end
 
 % tuning algorithms, assuming nsemitones = 3
 if feparam.tuningBefore
-if feparam.phaseTuning
-    [Ss,et] = phaseTuning(Ss);
-elseif feparam.gtTuning
-    [Ss,et] = gtTuning(Ss, tunpath);
-elseif feparam.vampTuning
-    [Ss,et] = vampTuning(Ss,vamptunpath);
-end
+[Ss,et] = phaseTuning(Ss);
 if feparam.enCosSim
 Sc = tuningUpdate(Sc,et);
 end
@@ -96,17 +89,6 @@ if feparam.specRollOn > 0
 Ss = specRollOn(Ss, feparam.specRollOn);
 if df && enPlot
 myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'spec-roll-on simple tone salience matrix');
-end
-end
-
-% suppress percussive moments
-if feparam.enPcsSuppress
-Ss = pcsSuppress(Ss, (max(sum(Ss))+mean(sum(Ss)))/2);
-if feparam.enCosSim
-Sc = pcsSuppress(Sc, (max(sum(Sc))+mean(sum(Sc)))/2);
-end
-if df && enPlot
-myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'pcs Suppressed simple tone salience matrix');
 end
 end
 

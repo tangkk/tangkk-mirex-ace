@@ -50,5 +50,6 @@ out/
 outcd/
 res/
 data/
+testdata/
 *.txt
 *.mat
