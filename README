@@ -7,14 +7,21 @@ Command line calling format for all executables and an example formatted set of 
 - The inputs are specified in testFileList.txt
 - The analyzed results can be found in the testout/ folder
 
-Number of threads/cores used or whether this should be specified on the command line
-- Process files in a sequential way
-
-Expected memory footprint
+Number of threads/cores used or whether this should be specified on the command line:
 - N/A
 
-Expected runtime
-- N/A
+Expected memory footprint:
+- Here's a reference of the memory usage of MATLAB
+>> memory
+Maximum possible array:       32334 MB (3.390e+10 bytes) *
+Memory available for all arrays:       32334 MB (3.390e+10 bytes) *
+Memory used by MATLAB:        1225 MB (1.285e+09 bytes)
+Physical Memory (RAM):       32692 MB (3.428e+10 bytes)
+
+And the task manager shows a memory usage of about average 700 MB and maximum 1 GB during execution.
+
+Expected runtime:
+- For a 3 minutes song, executed with the MATLAB shell, the running time of the program is about 25 seconds on a 64bit windows machine with 32G RAM and E5-2650 @ 2.3GHz processor (the main bottleneck is multiple calls of "lsqnonneg" to solve many nnls problems)
 
 Any required environments (and versions), e.g. Python, Java, bash, MATLAB.
 - MATLAB R2015a or later
