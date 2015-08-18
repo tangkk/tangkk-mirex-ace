@@ -13,7 +13,7 @@ nslices = size(rootgram,2);
 % reasonable value intuitively. It means the dominant bass of the 1/8 of
 % the harmonic stable region will be the chord bass of the whole harmonic
 % region
-bdb = 1/4;
+bdb = 1/8;
 
 for j = 1:nslices
     bd1 = bdrys(j);
@@ -43,6 +43,8 @@ for j = 1:nslices
     cr = rootgram(j);
     ct = treblegram(j);
     nb = bass;
+    
+    % **************************case 1***********************************
     
     % subcase1 -> cr != cb && cr == nb, such as (Emaj/5 <- Emaj, Emaj/3 <- Emaj), use
     % basegram to judge
@@ -78,37 +80,39 @@ for j = 1:nslices
         end
     end
     
-    % subcase1 -> cr == cb && cr != nb, such as (Emaj <- Emaj/5, Emaj <- Emaj/3), use
-    % basegram to judge
-    if cb ~= 0 && cr == cb && cr ~= nb
-        if strcmp(chordmode{2,ct},'maj') && root2bass(cr, 'maj/3') == nb
-            bassgram(j) = nb;
-            treblegram(j) = tname2tnum('maj/3', chordmode);
-        end
-        if strcmp(chordmode{2,ct},'maj') && root2bass(cr, 'maj/5') == nb
-            bassgram(j) = nb;
-            treblegram(j) = tname2tnum('maj/5', chordmode);
-        end
-    end
-    
-    % subcase2 -> cr == cb && cb == nb, such as (Bmaj <- Emaj/5, G#min <- Emaj/3), use
-    % uppergram to judge
-    if cb ~= 0 && cr == cb && cb == nb
-        if strcmp(chordmode{2,ct},'min')
-            s1 = sumug(pitchTranspose(cb,3)) + sumug(pitchTranspose(cb,8)); % maj/3 upper
-            s2 = sumug(pitchTranspose(cb,3)) + sumug(pitchTranspose(cb,7)); % min upper
-            if s1 > s2
-                rootgram(j) = bass2root(cb,'maj/3');
-                treblegram(j) = tname2tnum('maj/3', chordmode);
-            end
-        end
-        if strcmp(chordmode{2,ct},'maj')
-            s1 = sumug(pitchTranspose(cb,5)) + sumug(pitchTranspose(cb,9)); % maj/5 upper
-            s2 = sumug(pitchTranspose(cb,4)) + sumug(pitchTranspose(cb,7)); % maj upper
-            if s1 > s2
-                rootgram(j) = bass2root(cb,'maj/5');
-                treblegram(j) = tname2tnum('maj/5', chordmode);
-            end
-        end
-    end
+%     % **************************case 2***********************************
+%     
+%     % subcase1 -> cr == cb && cr != nb, such as (Emaj <- Emaj/5, Emaj <- Emaj/3), use
+%     % basegram to judge
+%     if cb ~= 0 && cr == cb && cr ~= nb
+%         if strcmp(chordmode{2,ct},'maj') && root2bass(cr, 'maj/3') == nb
+%             bassgram(j) = nb;
+%             treblegram(j) = tname2tnum('maj/3', chordmode);
+%         end
+%         if strcmp(chordmode{2,ct},'maj') && root2bass(cr, 'maj/5') == nb
+%             bassgram(j) = nb;
+%             treblegram(j) = tname2tnum('maj/5', chordmode);
+%         end
+%     end
+%     
+%     % subcase2 -> cr == cb && cb == nb, such as (Bmaj <- Emaj/5, G#min <- Emaj/3), use
+%     % uppergram to judge
+%     if cb ~= 0 && cr == cb && cb == nb
+%         if strcmp(chordmode{2,ct},'min')
+%             s1 = sumug(pitchTranspose(cb,3)) + sumug(pitchTranspose(cb,8)); % maj/3 upper
+%             s2 = sumug(pitchTranspose(cb,3)) + sumug(pitchTranspose(cb,7)); % min upper
+%             if s1 > s2
+%                 rootgram(j) = bass2root(cb,'maj/3');
+%                 treblegram(j) = tname2tnum('maj/3', chordmode);
+%             end
+%         end
+%         if strcmp(chordmode{2,ct},'maj')
+%             s1 = sumug(pitchTranspose(cb,5)) + sumug(pitchTranspose(cb,9)); % maj/5 upper
+%             s2 = sumug(pitchTranspose(cb,4)) + sumug(pitchTranspose(cb,7)); % maj upper
+%             if s1 > s2
+%                 rootgram(j) = bass2root(cb,'maj/5');
+%                 treblegram(j) = tname2tnum('maj/5', chordmode);
+%             end
+%         end
+%     end
 end
