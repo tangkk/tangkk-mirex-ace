@@ -1,7 +1,12 @@
 % write out the chord progression as txt file according to the MIREX
 % standard: http://www.music-ir.org/mirex/wiki/2015:Audio_Chord_Estimation
-function writeOut(outpath, hopsize, fs,...
-    rootgram, treblegram, bdrys, endtime, chordmode)
+function writeOut(outpath, hopsize, fs, rootgram, treblegram, bdrys, endtime, chordmode)
+
+slashposes = strfind(outpath, '/');
+outfolder = outpath(1:slashposes(end)-1);
+if exist(outfolder, 'file') == 0
+    mkdir(outfolder);
+end
 
 nslices = size(rootgram,2);
 

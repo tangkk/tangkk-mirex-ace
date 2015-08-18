@@ -1,4 +1,4 @@
-% Automatic Chord Estimation
+% Automatic Chord Estimation - to be called by shell process
 % A ''bass centric + gestalt'' approach
 
 % this function process a batch of files at a time
