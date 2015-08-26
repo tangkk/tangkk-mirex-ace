@@ -1,9 +1,22 @@
 % transform sonic-visualizer annotation output .txt to .lab that can be recognized by
 % evaluation tools
 
-target = './gt/variousartist/inversions/test';
-in = [target '.txt'];
-out = [target '.lab'];
+
+target = './gt/variousartist/jaychou/';
+
+filelist = dir(target);
+
+ninv = 0; % count the total chord inversions
+nch = 0; % count total chords
+for i = 3:size(filelist,1)
+    
+filestruct = filelist(i);
+filename =filestruct.name;
+
+filepath = [target filename(1:end-4)];
+
+in = [filepath '.txt'];
+out = [filepath '.lab'];
 fr = fopen(in,'r');
 fw = fopen(out,'w');
 
@@ -14,6 +27,11 @@ while ischar(tline)
     ch1 = tokens{2};
     
     disp(ch1);
+    
+    nch = nch + 1;
+    if ~isempty(strfind(ch1,'/'))
+        ninv = ninv + 1;
+    end
     
     % get next line and append the endtime to the previous line
     tline = fgetl(fr);
@@ -31,3 +49,9 @@ end
     
 fclose(fr);
 fclose(fw);
+end
+
+disp('number of chords:');
+disp(nch);
+disp('number of inversions:');
+disp(ninv);
