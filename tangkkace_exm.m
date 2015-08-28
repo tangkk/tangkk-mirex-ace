@@ -20,7 +20,6 @@ df = 1;
 enPlotFE = 1;
 enPlotBE = 1;
 enEval = 1;
-codec = 'mp3';
 
 % ********************************************************** %
 % ********************* Process **************************** %
@@ -35,7 +34,7 @@ while ischar(tline)
 
 display('input...');
 
-[inputpath, outputpath] = inputDecode(tline, codec);
+[inputpath, outputpath] = inputDecode(tline);
 
 display('frontend...');
 

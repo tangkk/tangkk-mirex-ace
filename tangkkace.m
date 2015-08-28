@@ -15,7 +15,6 @@ clear;
 % ********************************************************** %
 % ********************* Process **************************** %
 % ********************************************************** %
-codec = 'mp3';
 [feparam, beparam, dbnparam, dbn2param, chordmode] = paramInit();
 
 feval = fopen('evallist.txt','r');
@@ -25,7 +24,7 @@ while ischar(tline)
 
     display('input...');
 
-    [inputpath, outputpath] = inputDecode(tline, codec);
+    [inputpath, outputpath] = inputDecode(tline);
 
     display('frontend...');
 

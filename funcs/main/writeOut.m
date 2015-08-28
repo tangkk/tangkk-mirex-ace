@@ -11,7 +11,11 @@ end
 nslices = size(rootgram,2);
 
 fw = fopen(outpath,'w');
-formatSpec = '%s\n';
+if ispc
+    formatSpec = '%s\r\n';
+else
+    formatSpec = '%s\n';
+end
 tw = ((hopsize/fs)*(0:bdrys(end)));
 
 % add non-chord before start if needed

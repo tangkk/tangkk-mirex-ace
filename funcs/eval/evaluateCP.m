@@ -1,8 +1,25 @@
 % The following evaluator is built and executed from Johan's source code:
 % https://github.com/jpauwels/MusOOEvaluator
 
-sufix = 'inversions-ccd';
-evallist = 'evallist.txt';
+fr = fopen('evallist.txt','r');
+fw = fopen('eval.txt','w');
+tline = fgetl(fr);
+if ispc
+    formatSpec = '%s\r\n';
+else
+    formatSpec = '%s\n';
+end
+while ischar(tline)
+    sufposes = strfind(tline,'.');
+    ntline = tline(1:sufposes(end)-1);
+    fprintf(fw, formatSpec, ntline);
+    tline = fgetl(fr);
+end
+fclose(fr);
+fclose(fw);
+
+sufix = 'jaychou-1';
+evallist = 'eval.txt';
 
 gtroot = './gt/';
 cproot = './cp/';

@@ -1,15 +1,17 @@
-function [audiopath, cppath] = inputDecode(tline, codec)
+function [audiopath, cppath] = inputDecode(tline)
 
 songpath = tline;
 pathtokens = strsplit(songpath,'/');
 artist = pathtokens{1};
 album = pathtokens{2};
-songtitle = pathtokens{3};
+songname = pathtokens{3};
 
 audioroot = './audio/';
 audiofolder = strcat(audioroot, artist, '/', album);
-audiopath = [audiofolder '/' songtitle '.' codec];
+audiopath = [audiofolder '/' songname];
 
+sufposes = strfind(songname,'.');
+songtitle = songname(1:sufposes(end-1));
 cproot = './cp/';
 cpfolder = strcat(cproot, artist, '/', album);
 cppath = [cpfolder '/' songtitle '.txt'];
