@@ -19,7 +19,7 @@ fclose(fr);
 fclose(fw);
 
 sufix = 'jaychou-chordino';
-evallist = 'evallist.txt';
+evallist = 'eval.txt';
 
 gtroot = './gt/';
 cdroot = './cd/';

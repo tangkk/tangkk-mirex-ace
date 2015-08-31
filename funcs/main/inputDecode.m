@@ -11,7 +11,7 @@ audiofolder = strcat(audioroot, artist, '/', album);
 audiopath = [audiofolder '/' songname];
 
 sufposes = strfind(songname,'.');
-songtitle = songname(1:sufposes(end-1));
+songtitle = songname(1:sufposes(end)-1);
 cproot = './cp/';
 cpfolder = strcat(cproot, artist, '/', album);
 cppath = [cpfolder '/' songtitle '.txt'];

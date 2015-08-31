@@ -1,7 +1,7 @@
 % transform chordino output .lab to the .txt that can be recognized by
 % evaluation tools
 
-target = './cd/TheBeatles/12_-_Let_It_Be';
+target = './cd/variousartist/jaychou';
 
 files = dir(target); 
 

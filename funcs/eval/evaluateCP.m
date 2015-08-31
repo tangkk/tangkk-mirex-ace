@@ -18,7 +18,7 @@ end
 fclose(fr);
 fclose(fw);
 
-sufix = 'jaychou-1';
+sufix = 'jaychou-2';
 evallist = 'eval.txt';
 
 gtroot = './gt/';
