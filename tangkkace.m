@@ -50,4 +50,4 @@ fclose(feval);
 % ********************* Evaluation ************************* %
 % ********************************************************** %
 display('evaluation...');
-evaluateCP;
+evaluateCP('jaychou-4');

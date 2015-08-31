@@ -1,5 +1,9 @@
 % this is the parameter set of the inversion detection system (target for
 % the Chinese pop song data set)
+% ***********************************************************************
+% peak noise reduction, gestalt process, cos similarity salience, DBN1
+% 
+%
 
 function [feparam, beparam, dbnparam, dbn2param, chordmode] = paramInit2()
 
