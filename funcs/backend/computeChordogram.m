@@ -37,12 +37,7 @@ for j = 1:nslices
     end
      
     % FIXME: is this the correct way to deal with no-chord?
-    cgram(end) = mean(uj+bj);
-    
-    % FIXME: is this the correct way to do cgram's normalization
-    if max(cgram) > 0
-        cgram = cgram ./ norm(cgram,inf);
-    end
+    cgram(end) = sum(uj)/2;
     
     chordogram(:,j) = cgram;
 end

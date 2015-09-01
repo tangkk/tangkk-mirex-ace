@@ -82,10 +82,10 @@
 
 function chordmode = buildChordMode(chordmodeparam)
 
-% trc = chordmodeparam.triadcontrol; % triad reduce factor
-% tc = chordmodeparam.tetradcontrol; % tetrad reduce factor
-% pc = chordmodeparam.pentacontrol; % pentachord reduce factor
-% hc = chordmodeparam.hexacontrol; % hexachord reduce factor
+triadc = chordmodeparam.triadcontrol; % triad reduce factor
+tetradc = chordmodeparam.tetradcontrol; % tetrad reduce factor
+pentac = chordmodeparam.pentacontrol; % pentachord reduce factor
+hexac = chordmodeparam.hexacontrol; % hexachord reduce factor
 
 chordmode = cell(4,50); %[dif; qual; weight; supertype]
 
@@ -95,7 +95,7 @@ idx = 1;
 if chordmodeparam.enUni
 chordmode{1,idx} = 0;
 chordmode{2,idx} = '1';
-% chordmode{3,idx} = 0;
+chordmode{3,idx} = 0;
 idx = idx + 1;
 end
 
@@ -103,69 +103,69 @@ end
 if chordmodeparam.enDyad
 chordmode{1,idx} = 1;
 chordmode{2,idx} = 'b2';
-% chordmode{3,idx} = 1;
+chordmode{3,idx} = 1;
 idx = idx + 1;
 
 chordmode{1,idx} = 2;
 chordmode{2,idx} = '2';
-% chordmode{3,idx} = 1;
+chordmode{3,idx} = 1;
 idx = idx + 1;
 
 chordmode{1,idx} = 3;
 chordmode{2,idx} = 'b3';
-% chordmode{3,idx} = 1;
+chordmode{3,idx} = 1;
 idx = idx + 1;
 
 chordmode{1,idx} = 4;
 chordmode{2,idx} = '3';
-% chordmode{3,idx} = 1;
+chordmode{3,idx} = 1;
 idx = idx + 1;
 
 chordmode{1,idx} = 5;
 chordmode{2,idx} = '4';
-% chordmode{3,idx} = 1;
+chordmode{3,idx} = 1;
 idx = idx + 1;
 
 chordmode{1,idx} = 6;
 chordmode{2,idx} = 'b5';
-% chordmode{3,idx} = 1;
+chordmode{3,idx} = 1;
 idx = idx + 1;
 
 chordmode{1,idx} = 7;
 chordmode{2,idx} = '5';
-% chordmode{3,idx} = 1;
+chordmode{3,idx} = 1;
 idx = idx + 1;
 
 chordmode{1,idx} = 8;
 chordmode{2,idx} = 'b6';
-% chordmode{3,idx} = 1;
+chordmode{3,idx} = 1;
 idx = idx + 1;
 
 chordmode{1,idx} = 9;
 chordmode{2,idx} = '6';
-% chordmode{3,idx} = 1;
+chordmode{3,idx} = 1;
 idx = idx + 1;
 
 chordmode{1,idx} = 10;
 chordmode{2,idx} = 'b7';
-% chordmode{3,idx} = 1;
+chordmode{3,idx} = 1;
 idx = idx + 1;
 
 chordmode{1,idx} = 11;
 chordmode{2,idx} = '7+';
-% chordmode{3,idx} = 1;
+chordmode{3,idx} = 1;
 idx = idx + 1;
 end
 % ************************* major and minor ************************ %
 if chordmodeparam.enMajMin
 chordmode{1,idx} = [4,7];
 chordmode{2,idx} = 'maj';
-% chordmode{3,idx} = [1-trc, 1-trc];
+chordmode{3,idx} = [1-triadc, 1-triadc];
 idx = idx + 1;
 
 chordmode{1,idx} = [3,7];
 chordmode{2,idx} = 'min';
-% chordmode{3,idx} = [1-trc, 1-trc];
+chordmode{3,idx} = [1-triadc, 1-triadc];
 idx = idx + 1;
 end
 
@@ -173,64 +173,64 @@ end
 if chordmodeparam.enSus
 chordmode{1,idx} = [2,7];
 chordmode{2,idx} = 'sus2';
-% chordmode{3,idx} = [1-trc, 1-trc];
+chordmode{3,idx} = [1-triadc, 1-triadc];
 idx = idx + 1;
 
 chordmode{1,idx} = [5,7];
 chordmode{2,idx} = 'sus4';
-% chordmode{3,idx} = [1-trc, 1-trc];
+chordmode{3,idx} = [1-triadc, 1-triadc];
 idx = idx + 1;
 end
 
 if chordmodeparam.enAdd
 chordmode{1,idx} = [2,4,7];
 chordmode{2,idx} = 'add9';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 
 chordmode{1,idx} = [2,3,7];
 chordmode{2,idx} = 'madd9';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 
 chordmode{1,idx} = [4,5,7];
 chordmode{2,idx} = 'add11';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 
 chordmode{1,idx} = [3,5,7];
 chordmode{2,idx} = 'madd11';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 
 chordmode{1,idx} = [2,7,11];
 chordmode{2,idx} = 'maj7sus2';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 
 chordmode{1,idx} = [2,7,10];
 chordmode{2,idx} = '7sus2';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 
 chordmode{1,idx} = [5,7,11];
 chordmode{2,idx} = 'maj7sus4';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 
 chordmode{1,idx} = [5,7,10];
 chordmode{2,idx} = '7sus4';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 
 chordmode{1,idx} = [5,7,11,14];
 chordmode{2,idx} = 'maj9sus4';
-% chordmode{3,idx} = [1-pc,1-pc,1-pc,1-pc];
+chordmode{3,idx} = [1-pentac,1-pentac,1-pentac,1-pentac];
 idx = idx + 1;
 
 chordmode{1,idx} = [5,7,10,14];
 chordmode{2,idx} = '9sus4';
-% chordmode{3,idx} = [1-pc,1-pc,1-pc,1-pc];
+chordmode{3,idx} = [1-pentac,1-pentac,1-pentac,1-pentac];
 idx = idx + 1;
 end
 
@@ -238,14 +238,14 @@ end
 if chordmodeparam.enSixthMaj
 chordmode{1,idx} = [4,7,9];
 chordmode{2,idx} = 'maj6';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 end
 
 if chordmodeparam.enSixthMin
 chordmode{1,idx} = [3,7,9];
 chordmode{2,idx} = 'min6';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 end
 
@@ -253,17 +253,17 @@ end
 if chordmodeparam.enSeventh
 chordmode{1,idx} = [4,7,11];
 chordmode{2,idx} = 'maj7';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 
 chordmode{1,idx} = [3,7,10];
 chordmode{2,idx} = 'min7';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 
 chordmode{1,idx} = [4,7,10];
 chordmode{2,idx} = '7';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 end
 
@@ -271,32 +271,32 @@ end
 if chordmodeparam.enExtended
 chordmode{1,idx} = [4,7,11,14];
 chordmode{2,idx} = 'maj9';
-% chordmode{3,idx} = [1-pc,1-pc,1-pc,1-pc];
+chordmode{3,idx} = [1-pentac,1-pentac,1-pentac,1-pentac];
 idx = idx + 1;
 
 chordmode{1,idx} = [3,7,10,14];
 chordmode{2,idx} = 'min9';
-% chordmode{3,idx} = [1-pc,1-pc,1-pc,1-pc];
+chordmode{3,idx} = [1-pentac,1-pentac,1-pentac,1-pentac];
 idx = idx + 1;
 
 chordmode{1,idx} = [4,7,10,14];
 chordmode{2,idx} = '9';
-% chordmode{3,idx} = [1-pc,1-pc,1-pc,1-pc];
+chordmode{3,idx} = [1-pentac,1-pentac,1-pentac,1-pentac];
 idx = idx + 1;
 
 chordmode{1,idx} = [4,7,11,14,17];
 chordmode{2,idx} = 'maj11';
-% chordmode{3,idx} = [1-hc,1-hc,1-hc,1-hc,1-hc];
+chordmode{3,idx} = [1-hexac,1-hexac,1-hexac,1-hexac,1-hexac];
 idx = idx + 1;
 
 chordmode{1,idx} = [3,7,10,14,17];
 chordmode{2,idx} = 'min11';
-% chordmode{3,idx} = [1-hc,1-hc,1-hc,1-hc,1-hc];
+chordmode{3,idx} = [1-hexac,1-hexac,1-hexac,1-hexac,1-hexac];
 idx = idx + 1;
 
 chordmode{1,idx} = [4,7,10,14,17];
 chordmode{2,idx} = '11';
-% chordmode{3,idx} = [1-hc,1-hc,1-hc,1-hc,1-hc];
+chordmode{3,idx} = [1-hexac,1-hexac,1-hexac,1-hexac,1-hexac];
 idx = idx + 1;
 end
 
@@ -305,29 +305,29 @@ end
 if chordmodeparam.enAugDim
 chordmode{1,idx} = [4,8];
 chordmode{2,idx} = 'aug';
-% chordmode{3,idx} = [1-trc, 1-trc];
+chordmode{3,idx} = [1-triadc, 1-triadc];
 idx = idx + 1;
 
 chordmode{1,idx} = [3,6];
 chordmode{2,idx} = 'dim';
-% chordmode{3,idx} = [1-trc, 1-trc];
+chordmode{3,idx} = [1-triadc, 1-triadc];
 idx = idx + 1;
 end
 
 if chordmodeparam.enAugDim7
 chordmode{1,idx} = [3,6,9];
 chordmode{2,idx} = 'dim7';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 
 chordmode{1,idx} = [3,6,10];
 chordmode{2,idx} = 'hdim7';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 
 chordmode{1,idx} = [3,7,11];
 chordmode{2,idx} = 'minmaj7';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 end
 
@@ -335,24 +335,24 @@ end
 if chordmodeparam.enMajBass
 chordmode{1,idx} = [3,8];
 chordmode{2,idx} = 'maj/3';
-% chordmode{3,idx} = [1-trc, 1-trc];
+chordmode{3,idx} = [1-triadc, 1-triadc];
 idx = idx + 1;
 
 chordmode{1,idx} = [5,9];
 chordmode{2,idx} = 'maj/5';
-% chordmode{3,idx} = [1-trc, 1-trc];
+chordmode{3,idx} = [1-triadc, 1-triadc];
 idx = idx + 1;
 end
 
 if chordmodeparam.enMinBass
 chordmode{1,idx} = [4,9];
 chordmode{2,idx} = 'min/b3';
-% chordmode{3,idx} = [1-trc, 1-trc];
+chordmode{3,idx} = [1-triadc, 1-triadc];
 idx = idx + 1;
 
 chordmode{1,idx} = [5,8];
 chordmode{2,idx} = 'min/5';
-% chordmode{3,idx} = [1-trc, 1-trc];
+chordmode{3,idx} = [1-triadc, 1-triadc];
 idx = idx + 1;
 end
 
@@ -360,51 +360,51 @@ end
 if chordmodeparam.enMajSeventhBass
 chordmode{1,idx} = [3,7,8];
 chordmode{2,idx} = 'maj7/3';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 
 chordmode{1,idx} = [4,5,9];
 chordmode{2,idx} = 'maj7/5';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 
 chordmode{1,idx} = [1,5,8];
 chordmode{2,idx} = 'maj7/7';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 end
 
 if chordmodeparam.enMinSeventhBass
 chordmode{1,idx} = [4,7,9];
 chordmode{2,idx} = 'min7/b3';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 
 chordmode{1,idx} = [3,5,8];
 chordmode{2,idx} = 'min7/5';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 
 chordmode{1,idx} = [2,5,9];
 chordmode{2,idx} = 'min7/b7';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 end
 
 if chordmodeparam.en7SeventhBass
 chordmode{1,idx} = [3,6,8];
 chordmode{2,idx} = '7/3';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 
 chordmode{1,idx} = [3,5,9];
 chordmode{2,idx} = '7/5';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 
 chordmode{1,idx} = [2,6,9];
 chordmode{2,idx} = '7/b7';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 end
 
@@ -412,18 +412,18 @@ end
 if chordmodeparam.enOtherSlash
 chordmode{1,idx} = [2,5,10];
 chordmode{2,idx} = 'maj/2';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 
 chordmode{1,idx} = [1,5,10];
 chordmode{2,idx} = 'min/2';
-% chordmode{3,idx} = [1-tc,1-tc,1-tc];
+chordmode{3,idx} = [1-tetradc,1-tetradc,1-tetradc];
 idx = idx + 1;
 end
 
 chordmode = chordmode(:,1:idx - 1);
 
 for i = 1:1:size(chordmode,2)
-    chordmode{3,i} = ones(1,length(chordmode{1,i})) ./ (length(chordmode{1,i}) + 1);
+%     chordmode{3,i} = ones(1,length(chordmode{1,i})) ./ (length(chordmode{1,i}) + 1);
     chordmode{4,i} = [trebleTypeMapping(chordmode{2,i}),length(chordmode{3,i})];
 end
