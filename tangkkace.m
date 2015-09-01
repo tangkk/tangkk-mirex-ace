@@ -49,5 +49,5 @@ fclose(feval);
 % ********************************************************** %
 % ********************* Evaluation ************************* %
 % ********************************************************** %
-display('evaluation...');
-evaluateCP('jaychou-4');
+% display('evaluation...');
+% evaluateCP('your suffix name');

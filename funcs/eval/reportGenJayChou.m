@@ -65,3 +65,6 @@ for i = 3:length(folderlist1)
         end
     end
 end
+
+assignin('base', 'ltable', ltable);
+assignin('base', 'htable', htable);

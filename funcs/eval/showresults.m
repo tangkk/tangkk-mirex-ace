@@ -1,6 +1,6 @@
 % show the outputs
 
-function [nc, mmtable, mmbtable, stable, sbtable] = showresults(resultpath)
+function showresults(resultpath)
 
 tmp = dir([resultpath '/' 'results' 'Bass']);
 tmptxt = tmp(4).name;
@@ -29,17 +29,37 @@ dbtype(evaloutseg,'3:7');
 
 disp(suffix);
 
-% save the "correct no-chord" percentage
+% save the Bass percentage
 fr = fopen(evaloutroot,'r');
 tline = fgetl(fr);
 li = 1;
 while ischar(tline)
-    if li >= 15 && li <= 15
+    if li == 7
+        strtoks1 = strsplit(tline,':');
+        per = strtoks1{2};
+        rootscore = str2double(per(2:end-1)); % delete the '%' symbol
+    end
+    if li == 15
         strtoks1 = strsplit(tline,':');
         strtoks2 = strsplit(strtoks1{2},{'(',')'});
         per = strtoks2{2};
         dper = str2double(per(1:end-1)); % delete the '%' symbol
         nc = dper;
+    end
+    tline = fgetl(fr);
+    li = li+1;
+end
+fclose(fr);
+
+% save the Bass percentage
+fr = fopen(evaloutbass,'r');
+tline = fgetl(fr);
+li = 1;
+while ischar(tline)
+    if li >= 7 && li <= 7
+        strtoks1 = strsplit(tline,':');
+        per = strtoks1{2};
+        bassscore = str2double(per(2:end-1)); % delete the '%' symbol
     end
     tline = fgetl(fr);
     li = li+1;
@@ -52,6 +72,11 @@ tline = fgetl(fr);
 li = 1;
 mmtable = cell(2,2);
 while ischar(tline)
+    if li == 7
+        strtoks1 = strsplit(tline,':');
+        per = strtoks1{2};
+        majminscore = str2double(per(2:end-1)); % delete the '%' symbol
+    end
     if li >= 19 && li <= 20
         strtoks1 = strsplit(tline,':');
         ch = strtoks1{1};
@@ -74,6 +99,11 @@ tline = fgetl(fr);
 li = 1;
 mmbtable = cell(2,8);
 while ischar(tline)
+    if li == 7
+        strtoks1 = strsplit(tline,':');
+        per = strtoks1{2};
+        majminbassscore = str2double(per(2:end-1)); % delete the '%' symbol
+    end
     if li >= 19 && li <= 26
         strtoks1 = strsplit(tline,':');
         ch = strtoks1{1};
@@ -96,6 +126,11 @@ tline = fgetl(fr);
 li = 1;
 stable = cell(2,5);
 while ischar(tline)
+    if li == 7
+        strtoks1 = strsplit(tline,':');
+        per = strtoks1{2};
+        seventhsscore = str2double(per(2:end-1)); % delete the '%' symbol
+    end
     if li >= 19 && li <= 23
         strtoks1 = strsplit(tline,':');
         ch = strtoks1{1};
@@ -118,6 +153,11 @@ tline = fgetl(fr);
 li = 1;
 sbtable = cell(2,23);
 while ischar(tline)
+    if li == 7
+        strtoks1 = strsplit(tline,':');
+        per = strtoks1{2};
+        seventhsbassscore = str2double(per(2:end-1)); % delete the '%' symbol
+    end
     if li >= 19 && li <= 41
         strtoks1 = strsplit(tline,':');
         ch = strtoks1{1};
@@ -133,4 +173,31 @@ while ischar(tline)
     li = li+1;
 end
 fclose(fr);
+
+% save the Segmentation percentage
+fr = fopen(evaloutseg,'r');
+tline = fgetl(fr);
+li = 1;
+while ischar(tline)
+    if li >= 7 && li <= 7
+        strtoks1 = strsplit(tline,':');
+        per = strtoks1{2};
+        segmentationscore = str2double(per(2:end)); % delete the '%' symbol
+    end
+    tline = fgetl(fr);
+    li = li+1;
+end
+fclose(fr);
+
+os = cell(2,7);
+os(1,:) = {'Bass', 'MajMin', 'MajMinBass', 'Root', 'Seventh', 'SeventhBass', 'Segmentation'};
+os(2,:) = {bassscore, majminscore, majminbassscore, rootscore, seventhsscore, seventhsbassscore, segmentationscore};
+
+assignin('base', 'nc', nc);
+assignin('base', 'mm', mmtable);
+assignin('base', 'mmb', mmbtable);
+assignin('base', 's', stable);
+assignin('base', 'sb', sbtable);
+assignin('base', 'all', [sbtable,{[];[];[]},stable,{[];[];[]},mmbtable,{[];[];[]},mmtable,{[];[];[]},{'nc';nc;[]}]);
+assignin('base', 'os', os);
 
