@@ -45,6 +45,7 @@ while ischar(tline)
 end % pair with the very first while loop
 
 fclose(feval);
+clear;
 
 % ********************************************************** %
 % ********************* Evaluation ************************* %
