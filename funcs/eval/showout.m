@@ -1,6 +1,6 @@
 % show the outputs
 
-function showresults(resultpath)
+function showout(resultpath)
 
 tmp = dir([resultpath '/' 'results' 'Bass']);
 tmptxt = tmp(4).name;
