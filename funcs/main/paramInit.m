@@ -20,4 +20,8 @@ function [feparam, beparam, dbnparam, dbn2param, chordmode] = paramInit()
 
 % [feparam, beparam, dbnparam, dbn2param, chordmode] = paramInit10();
 
-[feparam, beparam, dbnparam, dbn2param, chordmode] = paramInit11();
+% [feparam, beparam, dbnparam, dbn2param, chordmode] = paramInit11();
+
+% [feparam, beparam, dbnparam, dbn2param, chordmode] = paramInit12();
+
+[feparam, beparam, dbnparam, dbn2param, chordmode] = paramInit13();

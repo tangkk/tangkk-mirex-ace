@@ -17,7 +17,12 @@ end
 
 if beparam.enChordGestalt
 [rootgram, bassgram, treblegram, bdrys] = ...
-    chordLevelGestalt(rootgram, bassgram, treblegram, basegram, uppergram, bdrys, beparam, chordmode);
+    chordLevelGestalt(rootgram, bassgram, treblegram, bdrys, beparam, chordmode);
+end
+
+if beparam.enBassTrebleCorrect
+[rootgram, bassgram, treblegram] = bassTrebleCorrect(rootgram,...
+    bassgram, treblegram, basegram, uppergram, bdrys, chordmode, beparam.btcVersion);
 end
 
 display('chordogram done...');
