@@ -7,6 +7,7 @@ rootgram = zeros(1,T);
 bassgram = zeros(1,T);
 treblegram = zeros(1,T);
 jengine = hmm_inf_engine(bnet);
+% jengine = smoother_engine(jtree_2TBN_inf_engine(bnet));
 evidence = cell(2,T);
 for i  = 1:1:T
     cd = chordogram(:,i);
