@@ -1,6 +1,8 @@
 % The following evaluator is built and executed from Johan's source code:
 % https://github.com/jpauwels/MusOOEvaluator
 
+function evaluateCD(suffix)
+
 fr = fopen('evallist.txt','r');
 fw = fopen('eval.txt','w');
 tline = fgetl(fr);
@@ -18,7 +20,6 @@ end
 fclose(fr);
 fclose(fw);
 
-suffix = 'jaychou-chordino';
 evallist = 'eval.txt';
 
 gtroot = './gt/';
@@ -44,54 +45,60 @@ dbtype(evaloutseg,'3:7');
 evaltype = 'Bass';
 disp([evaltype '......']);
 evaloutbass = [outroot 'results' evaltype '/' suffix '.txt'];
+confbass = [outroot 'results' evaltype '/' suffix '.con.csv'];
 evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
     testfolder ' --refext .lab --testext .txt --output ' evaloutbass ' --csv'...
-    ' --chords ' evaltype];
+    ' --chords ' evaltype ' --confusion ' confbass];
 system(evalcmd);
 dbtype(evaloutbass,'3:7');
 
 evaltype = 'MirexRoot';
 disp([evaltype '......']);
 evaloutroot = [outroot 'results' evaltype '/' suffix '.txt'];
+confroot = [outroot 'results' evaltype '/' suffix '.con.csv'];
 evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
     testfolder ' --refext .lab --testext .txt --output ' evaloutroot ' --csv'...
-    ' --chords ' evaltype];
+    ' --chords ' evaltype ' --confusion ' confroot];
 system(evalcmd);
 dbtype(evaloutroot,'3:7');
 
 evaltype = 'MirexMajMin';
 disp([evaltype '......']);
 evaloutmajmin = [outroot 'results' evaltype '/' suffix '.txt'];
+confmajmin = [outroot 'results' evaltype '/' suffix '.con.csv'];
 evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
     testfolder ' --refext .lab --testext .txt --output ' evaloutmajmin ' --csv'...
-    ' --chords ' evaltype];
+    ' --chords ' evaltype ' --confusion ' confmajmin];
 system(evalcmd);
 dbtype(evaloutmajmin,'3:7');
 
 evaltype = 'MirexMajMinBass';
 disp([evaltype '......']);
 evaloutmajminbass = [outroot 'results' evaltype '/' suffix '.txt'];
+confmajminbass = [outroot 'results' evaltype '/' suffix '.con.csv'];
 evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
     testfolder ' --refext .lab --testext .txt --output ' evaloutmajminbass ' --csv'...
-    ' --chords ' evaltype];
+    ' --chords ' evaltype ' --confusion ' confmajminbass];
 system(evalcmd);
 dbtype(evaloutmajminbass,'3:7');
 
 evaltype = 'MirexSevenths';
 disp([evaltype '......']);
 evaloutsevenths = [outroot 'results' evaltype '/' suffix '.txt'];
+confsevenths = [outroot 'results' evaltype '/' suffix '.con.csv'];
 evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
     testfolder ' --refext .lab --testext .txt --output ' evaloutsevenths ' --csv'...
-    ' --chords ' evaltype];
+    ' --chords ' evaltype ' --confusion ' confsevenths];
 system(evalcmd);
 dbtype(evaloutsevenths,'3:7');
 
 evaltype = 'MirexSeventhsBass';
 disp([evaltype '......']);
 evaloutseventhsbass = [outroot 'results' evaltype '/' suffix '.txt'];
+confseventhsbass = [outroot 'results' evaltype '/' suffix '.con.csv'];
 evalcmd = ['eval --list ' evallist ' --refdir ' gtfolder ' --testdir '...
     testfolder ' --refext .lab --testext .txt --output ' evaloutseventhsbass ' --csv'...
-    ' --chords ' evaltype];
+    ' --chords ' evaltype ' --confusion ' confseventhsbass];
 system(evalcmd);
 dbtype(evaloutseventhsbass,'3:7');
 
