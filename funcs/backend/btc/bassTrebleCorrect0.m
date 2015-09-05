@@ -1,8 +1,4 @@
-% correct the bassgram based on the first 1/8 of the harmonic regions of
-% the basegram, and update rootgram and treblegram accordingly.
-% The dominant bass of the 1/8 of
-% the harmonic stable region will be the chord bass of the whole harmonic
-% region
+% recompute bass-treble assuming the current bass is correct
 
 function [rootgram, bassgram, treblegram] = bassTrebleCorrect0(rootgram,...
     bassgram, treblegram, basegram, uppergram, bdrys, chordmode)
