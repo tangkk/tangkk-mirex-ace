@@ -10,16 +10,7 @@ wNCBass = 0.5;
 nslices = size(rootgram,2);
 load('revconf.mat');
 chordnames = revconf(:,1);
-chordnums = cell(length(chordnames),1);
-for i = 1:length(chordnames)
-    ch = chordnames{i};
-    strtoks = strsplit(ch,':');
-    root = strtoks{1};
-    treble = strtoks{2};
-    cr = note2num(root);
-    ct = tname2tnum(treble, chordmode);
-    chordnums{i} = strcat(num2str(cr),':',num2str(ct));
-end
+chordnums = chnames2chnums(chordnames, chordmode);
 
 for j = 1:nslices
     bd1 = bdrys(j);
@@ -51,6 +42,7 @@ for j = 1:nslices
             for k = 1:length(confs)
                 ch = confs{k};
                 if ~isempty(ch)
+                    % FIXME: should include N chord in the future
                     if ~isempty(strfind(ch,'X')) || strcmp(ch,'N') % skip 'N' and X:(X) chords
                         chscorearr(sidx) = 0;
                         sidx = sidx + 1;

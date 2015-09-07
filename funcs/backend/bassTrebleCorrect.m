@@ -29,4 +29,8 @@ switch bassTrebleVersion
     case 5
         [rootgram, bassgram, treblegram] = bassTrebleCorrect5(rootgram,...
             bassgram, treblegram, basegram, uppergram, bdrys, chordmode);
+    
+    case 6
+        [rootgram, bassgram, treblegram] = bassTrebleCorrect6(rootgram,...
+            bassgram, treblegram, basegram, uppergram, bdrys, chordmode);
 end
