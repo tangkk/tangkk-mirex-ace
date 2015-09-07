@@ -1,12 +1,12 @@
 % a 3-hidden-layer neural network
-function nn3(datapath, hs1, hs2, hs3)
+function nn3(datapath, hs1, hs2, hs3, maxiter, lambda)
 
 load(datapath);
 
 input_layer_size  = size(X,2);
-hidden_layer_1_size = str2double(hs1);
-hidden_layer_2_size = str2double(hs2);
-hidden_layer_3_size = str2double(hs3);
+hidden_layer_1_size = hs1;
+hidden_layer_2_size = hs2;
+hidden_layer_3_size = hs3;
 num_labels = max(y);
 
 m = size(X, 1);
@@ -28,10 +28,10 @@ fprintf('\nTraining Neural Network... \n')
 
 %  After you have completed the assignment, change the MaxIter to a larger
 %  value to see how more training helps.
-options = optimset('MaxIter', 50);
+options = optimset('MaxIter', maxiter);
 
-%  You should also try different values of lambda
-lambda = 1;
+% %  You should also try different values of lambda
+% lambda = 1;
 
 % Create "short hand" for the cost function to be minimized
 costFunction = @(p) nn3CostFunction(p, ...

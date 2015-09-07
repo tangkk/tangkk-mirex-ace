@@ -1,10 +1,10 @@
 % a 1-hidden-layer neural network
-function nn1(datapath, hs1)
+function nn1(datapath, hs1, maxiter, lambda)
 
 load(datapath); % data must conform with X, y format
 
 input_layer_size  = size(X,2);
-hidden_layer_size = str2double(hs1);
+hidden_layer_size = hs1;
 num_labels = max(y);  
 
 m = size(X, 1);
@@ -22,10 +22,10 @@ fprintf('\nTraining Neural Network... \n')
 
 %  After you have completed the assignment, change the MaxIter to a larger
 %  value to see how more training helps.
-options = optimset('MaxIter', 50);
+options = optimset('MaxIter', maxiter);
 
-%  You should also try different values of lambda
-lambda = 1;
+% %  You should also try different values of lambda
+% lambda = 1;
 
 % Create "short hand" for the cost function to be minimized
 costFunction = @(p) nn1CostFunction(p, ...
