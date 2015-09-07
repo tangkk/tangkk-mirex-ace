@@ -2,7 +2,7 @@
 % enNNLS, specWhitening, enProfileRayleigh, DBN1
 %
 % tetradcontrol = 0.25
-% btVersion = 3
+% btVersion = 3 - simple bass correct
 %
 % enMajMin, enSixthMaj, enSixthMin, enSeventh, enMajBass, enMinBass,
 % enSeventhBass

@@ -1,6 +1,7 @@
 function [rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode, beparam, dbnparam, dbn2param,...
     basegram, uppergram, bdrys, df, enPlot)
 
+display('chord decoding...');
 if beparam.useSIM1 % apply simple chord matching, works with a 1-D basegram
 [rootgram, bassgram, treblegram] = simChordMatching(basegram, uppergram, chordmode);
 
@@ -20,12 +21,13 @@ if beparam.enChordGestalt
     chordLevelGestalt(rootgram, bassgram, treblegram, bdrys, beparam, chordmode);
 end
 
+display('chord correcting...');
 if beparam.enBassTrebleCorrect
 [rootgram, bassgram, treblegram] = bassTrebleCorrect(rootgram,...
     bassgram, treblegram, basegram, uppergram, bdrys, chordmode, beparam.btcVersion);
 end
 
-display('chordogram done...');
+
 
 bassnotenames = {'N','C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
 nslices = length(rootgram);
@@ -42,3 +44,5 @@ myLinePlot(1:nslices+1, bdrys, 'chord progression order', 'slice',...
     nslices, bdrys(end), 'o', 'boundaries');
 visualizeChordProgression(rootgram, bassgram, treblegram, bdrys, chordmode);
 end
+
+display('chord progression done...');

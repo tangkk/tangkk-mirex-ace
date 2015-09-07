@@ -1,8 +1,7 @@
 function [bdrys, basegram, uppergram, endtime] = frontEndDecode(audiopath, feparam, df, enPlot)
 
+display('input in progress...');
 x = myInput(audiopath, feparam.stereotomono, feparam.fs);
-
-display('input done...');
 
 % we differentiate ''tone'' and ''note'' in this program
 % by ''tone'' we mean 1/3-semitone-wise frequency, by ''note'' we mean
@@ -38,14 +37,13 @@ end
 % similarity) (note that this is an additive approach, as contrast to
 % the nnls approach which is an deductive approach)
 % transform time domain into frequency domain
+display('computing spectrogram...');
 X = mySpectrogram(x, feparam.wl, feparam.hopsize);
 nslices = size(X,2);
 endtime = (1/feparam.fs)*length(x);
 if df && enPlot
 myImagePlot(X, 1:nslices, 1:feparam.wl/2+1, 'slice', 'bin', 'spectrogram');
 end
-
-display('spectrogram done...');
 
 % note that using cosine similarity method there are both simple tone
 % matrix (Ms) and complex tone matrix (Mc), the two are multiplied together
@@ -54,6 +52,7 @@ display('spectrogram done...');
 % salience matrix at this stage, and this is just similar to the simple
 % tone salience matrix. And the nnls process will infer note salience
 % matrix from this later. Thus logFreq is an deductive process.
+display('computing salience matrix...');
 if feparam.enCosSim
 Ss = Ms*X;
 Sc = Mc*X;
@@ -69,6 +68,7 @@ end
 end
 
 % tuning algorithms, assuming nsemitones = 3
+display('tuning...');
 if feparam.tuningBefore
 [Ss,et] = phaseTuning(Ss);
 if feparam.enCosSim
@@ -81,8 +81,6 @@ myImagePlot(Sc, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'tuned complex ton
 end
 end
 end
-
-display('tuning done...');
 
 % spectral rollon
 if feparam.specRollOn > 0
@@ -139,6 +137,7 @@ end
 end
 
 % % standardization (Y(k,m) - mu(k,m)) / sigma(k,m)
+display('standardizing...');
 if feparam.enSUB
 Ss = standardization(Ss, feparam.stdwr, feparam.enSTD, feparam.specWhitening, df);
 if df && enPlot
@@ -146,9 +145,8 @@ myImagePlot(Ss, 1:nslices, 1:ntones, 'slice', '1/3 semitone', 'standardized simp
 end
 end
 
-display('tonegram done...');
-
 % nnls approximate note transcription - 3-semitones -> 1-semitone
+display('solving NNLS...');
 if feparam.enNNLS
 S = nnlsTrans(Ss,E,nnotes,feparam.enSigifBins);
 elseif feparam.en3bin
@@ -175,8 +173,6 @@ if df && enPlot
 myImagePlot(S, 1:nslices, 1:nnotes, 'slice', 'semitone', 'negative gestalt note salience matrix');
 end
 end
-
-display('notegram done...');
 
 % use different segmentation methods
 if feparam.noSegmentation
@@ -218,6 +214,7 @@ nnotes = size(Sseg,1);
 nsegs = size(Sseg,2);
 
 % compute basegram and uppergram (based on harmonic change matrix)
+display('computing bass-treble chromagram...');
 if feparam.basstreblechromagram
     if feparam.enProfileHann
     ht = hann(nnotes); ht = ht ./ norm(ht,1);
@@ -279,4 +276,4 @@ myImagePlot(uppergram, 1:nsegs, 1:12, 'segmentation progression order', 'semiton
     'uppergram', 1:12, treblenotenames);
 end
 
-display('chromagrams done...');
+display('chromagram done...');
