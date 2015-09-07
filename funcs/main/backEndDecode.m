@@ -21,10 +21,11 @@ if beparam.enChordGestalt
     chordLevelGestalt(rootgram, bassgram, treblegram, bdrys, beparam, chordmode);
 end
 
-display('chord correcting...');
+
 if beparam.enBassTrebleCorrect
-[rootgram, bassgram, treblegram] = bassTrebleCorrect(rootgram,...
-    bassgram, treblegram, basegram, uppergram, bdrys, chordmode, beparam.btcVersion);
+display('chord correcting...');
+[rootgram, bassgram, treblegram] = feval(['bassTrebleCorrect',num2str(beparam.btcVersion)],rootgram,...
+    bassgram, treblegram, basegram, uppergram, bdrys, chordmode);
 end
 
 

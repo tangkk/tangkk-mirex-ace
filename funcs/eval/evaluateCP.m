@@ -1,10 +1,10 @@
 % The following evaluator is built and executed from Johan's source code:
 % https://github.com/jpauwels/MusOOEvaluator
 
-function evaluateCP(suffix)
+function evaluateCP(suffix, evallistin)
 
-fr = fopen('evallist.txt','r');
-fw = fopen('eval.txt','w');
+fr = fopen(evallistin,'r');
+fw = fopen(['e' evallistin],'w+');
 tline = fgetl(fr);
 if ispc
     formatSpec = '%s\r\n';
@@ -20,7 +20,7 @@ end
 fclose(fr);
 fclose(fw);
 
-evallist = 'eval.txt';
+evallist = ['e' evallistin];
 
 gtroot = './gt/';
 cproot = './cp/';

@@ -1,17 +1,15 @@
 % Generate training data based on the ground truth files
 % this process leverages the frontend and the ground truth data
 
-warning off;
-path(path,genpath(fullfile(['.' '/' 'funcs'])));
-warning on;
+acepath;
 close all;
 clear;
 
 trainingDataName = 'trainingData-TheBeatles180.mat';
 
-[feparam, ~, ~, ~, chordmode] = paramInit();
-feval = fopen('datalist.txt','r');
-tline = fgetl(feval);
+[feparam, ~, ~, ~, chordmode] = paramInit10();
+fe = fopen('datalist.txt','r');
+tline = fgetl(fe);
 
 % the size of the training data is unknown yet. Will grow.
 trainingDataX1 = zeros(1,252);
@@ -184,7 +182,7 @@ while ischar(tline)
         tidx = tidx + 1;
     end
     fclose(fg);
-    tline = fgetl(feval);
+    tline = fgetl(fe);
 end
 
 % generate other training data for all 12 keys for every training data

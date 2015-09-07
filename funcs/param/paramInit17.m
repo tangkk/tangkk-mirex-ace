@@ -1,8 +1,7 @@
 % ***********************************************************************
 % enNNLS, specWhitening, enProfileRayleigh, DBN1
 %
-% tetradcontrol = 0.1
-% btVersion = 6 - neural network for post classification
+% btVersion = 6 - neural network for post classification - nn1(data-J-1-key.mat,544,1000,1)-73.82
 %
 % enMajMin, enSixthMaj, enSixthMin, enSeventh, enMajBass, enMinBass,
 % enSeventhBass

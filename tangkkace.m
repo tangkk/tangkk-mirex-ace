@@ -1,30 +1,23 @@
 % Automatic Chord Estimation - with evaluation
-% A ''bass centric + gestalt'' approach
 
-% ********************************************************** %
-% ********************* Batch Input ************************ %
-% ********************************************************** %
-warning off;
-installbnt;
-path(path,genpath(fullfile(['.' '/' 'funcs'])));
-warning on;
-close all;
-clear;
-% clc;
+function tangkkace(paramN, acelist)
 
 % ********************************************************** %
 % ********************* Process **************************** %
 % ********************************************************** %
-[feparam, beparam, dbnparam, dbn2param, chordmode] = paramInit();
+if ischar(paramN)
+    [feparam, beparam, dbnparam, dbn2param, chordmode] = feval(strcat('paramInit',paramN));
+else
+    [feparam, beparam, dbnparam, dbn2param, chordmode] = feval(strcat('paramInit',num2str(paramN)));
+end
 
-feval = fopen('evallist.txt','r');
-tline = fgetl(feval);
+fe = fopen(acelist,'r');
+tline = fgetl(fe);
 
 while ischar(tline)
 
-    display('input...');
-
-    [inputpath, outputpath] = inputDecode(tline);
+    [inputpath, outputpath, songtitle] = inputDecode(tline);
+    disp(['now start to analyze ' songtitle ' ......']);
 
     display('frontend...');
 
@@ -39,16 +32,9 @@ while ischar(tline)
     writeOut(outputpath, feparam.hopsize, feparam.fs,...
         rootgram, treblegram, bdrys, endtime, chordmode);
 
-    display(strcat('finish analyzing...',inputpath));
-    tline = fgetl(feval);
+    display(strcat('finish analyzing...',songtitle, ' !'));
+    tline = fgetl(fe);
 
 end % pair with the very first while loop
 
-fclose(feval);
-clear;
-
-% ********************************************************** %
-% ********************* Evaluation ************************* %
-% ********************************************************** %
-% display('evaluation...');
-% evaluateCP('your suffix name');
+fclose(fe);

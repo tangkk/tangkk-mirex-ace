@@ -1,4 +1,4 @@
-function [audiopath, cppath] = inputDecode(tline)
+function [audiopath, cppath, songtitle] = inputDecode(tline)
 
 songpath = tline;
 pathtokens = strsplit(songpath,'/');
