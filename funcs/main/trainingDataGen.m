@@ -18,9 +18,6 @@ trainingDataX1 = zeros(1,252);
 trainingDataX2 = zeros(1,24);
 trainingDatay = zeros(1,1);
 tidx = 1;
-trainingDataX12 = zeros(1,24);
-trainingDatay12 = zeros(1,1);
-t12idx = 1;
 
 % transfer chordnames to chord nums
 load chordnames.mat;
@@ -181,38 +178,41 @@ while ischar(tline)
         [~,tlabel] = ismember(chnum,chordnums);
         trainingDataX1(tidx,:) = tcase1';
         trainingDataX2(tidx,:) = tcase2';
-        trainingDatay(tidx, :) = tlabel;
+        trainingDatay(tidx,:) = tlabel;
         
         gline = fgetl(fg);
         tidx = tidx + 1;
     end
     fclose(fg);
-    
-    % generate other training data for all 12 keys for every training data
-    % entry in X2
-    len = size(trainingDataX2,1);
-    for j = 1:len
-        ocase = trainingDataX2(j,:);
-        y = trainingDatay(j);
-        for i = 0:11 % generate all other 11 keys (except for N chord)
-            bcase = circshift(ocase(1:12)',i,1);
-            ucase = circshift(ocase(13:24)',i,1);
-            % generate a new data and a new label
-            ncase = [bcase;ucase];
-            if y ~= 0
-                ochnum = chordnums{y};
-            else
-                ochnum = '0:0';
-            end
-            nchnum = chTranspose(ochnum, i);
-            [~,nlabel] = ismember(nchnum,chordnums);
-            trainingDataX12(t12idx,:) = ncase';
-            trainingDatay12(t12idx,:) = nlabel;
-            t12idx = t12idx + 1;
-        end
-    end
-    
     tline = fgetl(feval);
+end
+
+% generate other training data for all 12 keys for every training data
+% entry in X2
+display('collecting training data for all 12 keys......');
+trainingDataX12 = zeros(1,24);
+trainingDatay12 = zeros(1,1);
+t12idx = 1;
+len = size(trainingDataX2,1);
+for j = 1:len
+    ocase = trainingDataX2(j,:);
+    y = trainingDatay(j);
+    for i = 0:11 % generate all other 11 keys (except for N chord)
+        bcase = circshift(ocase(1:12)',i,1);
+        ucase = circshift(ocase(13:24)',i,1);
+        % generate a new data and a new label
+        ncase = [bcase;ucase];
+        if y ~= 0
+            ochnum = chordnums{y};
+        else
+            ochnum = '0:0';
+        end
+        nchnum = chTranspose(ochnum, i);
+        [~,nlabel] = ismember(nchnum,chordnums);
+        trainingDataX12(t12idx,:) = ncase';
+        trainingDatay12(t12idx,:) = nlabel;
+        t12idx = t12idx + 1;
+    end
 end
 
 % set label 0 to label length(chordnames)+1
@@ -220,4 +220,7 @@ trainingDatay(trainingDatay == 0) = length(chordnames)+1;
 trainingDatay12(trainingDatay12 == 0) = length(chordnames)+1;
 
 % save all the training data set collected
+display('saving results......');
 save(trainingDataName,'trainingDataX1','trainingDataX2','trainingDatay', 'trainingDataX12', 'trainingDatay12');
+
+display('done......');
