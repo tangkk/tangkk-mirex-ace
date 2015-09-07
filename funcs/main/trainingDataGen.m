@@ -7,7 +7,7 @@ warning on;
 close all;
 clear;
 
-trainingDataName = 'trainingData-JayChou29.mat';
+trainingDataName = 'trainingData-TheBeatles180.mat';
 
 [feparam, ~, ~, ~, chordmode] = paramInit();
 feval = fopen('datalist.txt','r');
