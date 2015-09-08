@@ -22,3 +22,6 @@ tangkkace('18','TheBeatles180List.txt');evaluateCP thebeatles-18 TheBeatles180Li
 tangkkace('19','TheBeatles180List.txt');evaluateCP thebeatles-19 TheBeatles180List.txt;
 tangkkace('20','TheBeatles180List.txt');evaluateCP thebeatles-20 TheBeatles180List.txt;
 
+% run full model chord correction (language model + acoustic model) on both
+% data set
+tangkkace('21','JayChou29List.txt');evaluateCP jaychou-21 JayChou29List.txt;
