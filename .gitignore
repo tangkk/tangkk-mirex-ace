@@ -53,3 +53,4 @@ data/
 testdata/
 *.txt
 *.exe
+*.asv

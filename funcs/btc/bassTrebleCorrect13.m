@@ -1,13 +1,13 @@
 % recompute the whole sequence using another probabilistic model:
-% acoustic model - nn2(data-J-12-key.mat,120,544,1000,1)-71.6
+% acoustic model - nn2(data-B-12-key.mat,120,544,1000,1)-62.84
 % language model - LM-B
 
-function [rootgram, bassgram, treblegram] = bassTrebleCorrect10(rootgram,...
+function [rootgram, bassgram, treblegram] = bassTrebleCorrect13(rootgram,...
     bassgram, treblegram, basegram, uppergram, bdrys, chordmode)
 
 
 nslices = size(rootgram,2);
-load('nn2(data-J-12-key.mat,120,544,1000,1)-71.6.mat');
+load('nn2(data-B-12-key.mat,120,544,1000,1)-62.84.mat');
 load('LM-B.mat');
 load('chordnames.mat');
 chordnums = [chnames2chnums(chordnames, chordmode);'0:0'];

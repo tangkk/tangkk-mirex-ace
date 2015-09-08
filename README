@@ -1,5 +1,3 @@
-This is the README for MIREX 2015 ACE task:
-
 Command line calling format for all executables and an example formatted set of commands:
 - doChordID.sh testFileList.txt testout/ (on Linux)
 - doChordID-win.sh testFileList.txt testout/ (on Windows)
@@ -26,3 +24,20 @@ Expected runtime:
 Any required environments (and versions), e.g. Python, Java, bash, MATLAB.
 - MATLAB R2015a or later
 - cygwin if run on windows
+
+
+System Settings -
+
+For details about the settings of the systems, refer to:
+- ''paramInitX.m'' (X = system version number)
+- ''bassTrebleCorrectY.m'' (Y = btVersion Specified in the paramInitX.m file)
+
+system 20 - baseline approach without chord correction
+system 10 - heuristic based chord correction
+system 15 - chord confusion matrix based chord correction (revconf-J-10)
+system 23 - chord confusion matrix based chord correction (revconf-B-10)
+system 19 - neural network chord correction (nn2(data-J-12-key.mat,120,544,1000,1)-71.6)
+system 21 - neural network with language model (nn2(data-J-12-key.mat,120,544,1000,1)-71.6 + LM-J)
+system 22 - neural network with language model (nn2(data-J-12-key.mat,120,544,1000,1)-71.6 + LM-B)
+system 24 - neural network chord correction (nn2(data-B-12-key.mat,120,544,1000,1)-62.84)
+system 25 - neural network with language model (nn2(data-B-12-key.mat,120,544,1000,1)-62.84 + LM-B)

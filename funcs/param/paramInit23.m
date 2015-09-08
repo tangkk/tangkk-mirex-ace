@@ -2,12 +2,12 @@
 % enNNLS, specWhitening, enProfileRayleigh, DBN1
 %
 % tetradcontrol = 0.15
-% btVersion = 5 - reverse confusion matrix - revconf-J-10
+% btVersion = 11 - reverse confusion matrix - revconf-B-10
 %
 % enMajMin, enSixthMaj, enSixthMin, enSeventh, enMajBass, enMinBass,
 % enSeventhBass
 
-function [feparam, beparam, dbnparam, dbn2param, chordmode] = paramInit15()
+function [feparam, beparam, dbnparam, dbn2param, chordmode] = paramInit23()
 
 % ****** front-end control ****** %
 feparam = struct(...
@@ -77,7 +77,7 @@ beparam = struct(...
     ...
     ...
     'enBassTrebleCorrect', 1,... % work together with 'noSegmentation'
-    'btcVersion', 5);
+    'btcVersion', 11);
 dbnparam = struct(...
     'muCBass',1,...
     'muNCBass',1,...
