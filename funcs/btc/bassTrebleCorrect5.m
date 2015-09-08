@@ -1,4 +1,5 @@
-% recompute bass-treble using the confusion matrix information
+% recompute bass-treble using the confusion matrix information -
+% revconf-J-10
 
 function [rootgram, bassgram, treblegram] = bassTrebleCorrect5(rootgram,...
     bassgram, treblegram, basegram, uppergram, bdrys, chordmode)
@@ -8,7 +9,7 @@ wCBass = 1;
 wNCBass = 0.5;
 
 nslices = size(rootgram,2);
-load('revconf.mat');
+load('revconf-J-10.mat');
 chordnames = revconf(:,1);
 chordnums = chnames2chnums(chordnames, chordmode);
 

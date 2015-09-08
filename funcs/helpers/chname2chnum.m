@@ -4,7 +4,7 @@ chordnum = '0:0';
 
 % FIXME: should include N chord in the future
 if ~strcmp(chordname,'N') % skip the N chord
-    if isempty(strfind(chordname,':'))
+    if isempty(strfind(chordname,':')) % add ':maj' to maj chords
         root = chordname;
         treble = 'maj';
     else

@@ -1,7 +1,7 @@
 % transpose a chord using chord numbers
 function nchnum = chTranspose(ochnum, transval)
 
-nchnum = '0:0';
+nchnum = '0:0'; % 'N' chord will always be transposed as 'N' chord
 
 if ~strcmp(ochnum,'0:0') % skip the N chord
     strtoks = strsplit(ochnum,':');
