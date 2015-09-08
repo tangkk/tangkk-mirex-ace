@@ -1,6 +1,6 @@
 % generate a table containing the overall performance for the result folder
 
-function [ltable, htable] = reportGenJayChou(resultpath)
+function reportGenJayChou(resultpath)
 
 ltable = cell(30,7); % totally 30 songs
 ltable(1,:) = {'Bass','MajMin','MajMinBass','Root','Seventh','SeventhBass','Segmentation'};

@@ -1,7 +1,6 @@
 % compute simple statistics of the chord confusion matrix
-clear;
+function chconfusion (confpath, savename)
 
-confpath = './out/resultsMirexSeventhsBass/jaychou-10.con.csv';
 fr = fopen(confpath,'r');
 conf = cell(1,1); % compute 4-th order
 linenum = 0;
@@ -41,7 +40,6 @@ while ischar(tline)
                                 break;
                             end
                         end
-                        
                     end
                 end
             end
@@ -54,4 +52,4 @@ end
 
 fclose(fr);
 
-save('revconf.mat','revconf');
+save(savename,'revconf');

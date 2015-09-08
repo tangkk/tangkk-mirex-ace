@@ -1,4 +1,6 @@
 % a 2-hidden-layer neural network
+% call convention example:
+% nn2('data-J-12-key.mat',120,544,1000,1)
 function nn2(datapath, hs1, hs2, maxiter, lambda)
 
 load(datapath); % data must conform with X, y format

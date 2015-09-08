@@ -2,9 +2,6 @@
 
 function tangkkace(paramN, acelist)
 
-% ********************************************************** %
-% ********************* Process **************************** %
-% ********************************************************** %
 if ischar(paramN)
     [feparam, beparam, dbnparam, dbn2param, chordmode] = feval(strcat('paramInit',paramN));
 else

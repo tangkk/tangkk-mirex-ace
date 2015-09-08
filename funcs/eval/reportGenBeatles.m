@@ -1,7 +1,7 @@
 % generate a table containing the overall performance for every albums included in the
-% result folder
+% resultpath folder
 
-result = 'res/full-TheBeatles-ccd-0.6-bc';
+function reportGenBeatles(resultpath)
 
 % # of albums and # of songs in each album
 nalbums = 13;
@@ -19,16 +19,16 @@ htable(1,:) = {'Bass','MajMin','MajMinBass','Root','Seventh','SeventhBass','Segm
 validfoldernames = 'resultsBassresultsMirexMajMinresultsMirexMajMinBassresultsMirexRootresultsMirexSeventhsresultsMirexSeventhsBassresultsSegmentation';
 
 % it's a three folded folder structure
-folderlist1 = dir(result);
+folderlist1 = dir(resultpath);
 for i = 3:length(folderlist1)
     folder1 = folderlist1(i);
     folder1name = folder1.name;
     if ~isempty(strfind(validfoldernames,folder1name))
-        folderlist2 = dir([result '/' folder1name]);
+        folderlist2 = dir([resultpath '/' folder1name]);
         for k = 3:length(folderlist2)
             file = folderlist2(k);
             filename = file.name;
-            filepath = [result '/' folder1name '/' filename];
+            filepath = [resultpath '/' folder1name '/' filename];
             fr = fopen(filepath,'r');
             pairwise = zeros(180,1);
             duration = zeros(180,1); % this is for calculating weighted average
@@ -95,7 +95,7 @@ for i = 3:length(folderlist1)
                     mtable{12,i-2} = mean(d11);
                     mtable{13,i-2} = mean(d12);
                     mtable{14,i-2} = mean(d13);
-                    % for segmentation result, $duration is combined harmonic
+                    % for segmentation resultpath, $duration is combined harmonic
                     % hamming distance
                     htable{2,i-2} = mean(duration);
                 else
@@ -112,7 +112,7 @@ for i = 3:length(folderlist1)
                     mtable{12,i-2} = p11'*d11 / sum(d11);
                     mtable{13,i-2} = p12'*d12 / sum(d12);
                     mtable{14,i-2} = p13'*d13 / sum(d13);
-                    % for segmentation result, $duration is combined harmonic
+                    % for segmentation resultpath, $duration is combined harmonic
                     % hamming distance
                     htable{2,i-2} = pairwise'*duration / sum(duration);
                 end
@@ -126,3 +126,7 @@ for i = 3:length(folderlist1)
         end
     end
 end
+
+assignin('base', 'ltable', ltable);
+assignin('base', 'mtable', mtable);
+assignin('base', 'htable', htable);

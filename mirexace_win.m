@@ -1,25 +1,23 @@
 % Automatic Chord Estimation - to be called by shell process
-% A ''bass centric + gestalt'' approach
 
 % this function process a batch of files at a time
 
-function mirexace_win(inFileList, outFileDir)
+function mirexace_win(inFileList, outFileDir, paramN)
 
-% ********************************************************** %
-% ********************* Batch Input ************************ %
-% ********************************************************** %
-warning off;
-installbnt;
-path(path,genpath(fullfile(['.' '/' 'funcs'])));
-warning on;
+acepath;
 
-[feparam, beparam, dbnparam, dbn2param, chordmode] = paramInit();
+if ischar(paramN)
+    [feparam, beparam, dbnparam, dbn2param, chordmode] = feval(strcat('paramInit',paramN));
+else
+    [feparam, beparam, dbnparam, dbn2param, chordmode] = feval(strcat('paramInit',num2str(paramN)));
+end
 
 % batch processing
-feval = fopen(inFileList,'r');
-inFile = fgetl(feval);
+fe = fopen(inFileList,'r');
+inFile = fgetl(fe);
 while ischar(inFile)
 
+display(strcat('start analyzing...', inFile));
 [bdrys, basegram, uppergram, endtime] = frontEndDecode(inFile, feparam, 0, 0);
 
 [rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode, beparam, dbnparam, dbn2param,...
@@ -30,7 +28,7 @@ writeOut(outFile, feparam.hopsize, feparam.fs,...
     rootgram, treblegram, bdrys, endtime, chordmode);
 
 display(strcat('finish analyzing...', inFile));
-inFile = fgetl(feval);
+inFile = fgetl(fe);
 end
 
 exit;

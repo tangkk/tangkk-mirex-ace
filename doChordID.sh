@@ -16,7 +16,7 @@ while read infile; do
 		echo Processing file "$infile"
 		echo " "
 		outfile="$outputdir"/`basename "$infile"`.txt
-		matlab -nosplash -nodesktop -nojvm -r mirexace\(\'"$infile"\',\'"$outfile"\'\)
+		matlab -nosplash -nodesktop -nojvm -r mirexace\(\'"$infile"\',\'"$outfile"\',\'"10"\'\)
 		after="$(date +%s)"
 		elapsed_seconds="$(expr $after - $before)"
 		echo "  -->" time elapsed: $elapsed_seconds seconds

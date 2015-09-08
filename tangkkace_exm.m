@@ -1,57 +1,34 @@
-% Automatic Chord Estimation - Examine only
-% A ''bass centric + gestalt'' approach
+% Automatic Chord Estimation - examine only
 
-% ********************************************************** %
-% ********************* Batch Input ************************ %
-% ********************************************************** %
-warning off;
-installbnt;
-path(path,genpath(fullfile(['.' '/' 'funcs'])));
-warning on;
-close all;
-clear;
-% clc;
+function tangkkace(paramN, acelist)
 
-% ********************************************************** %
-% ********************* Control Panel ********************** %
-% ********************************************************** %
-% ****** output control ****** %
-df = 1;
-enPlotFE = 1;
-enPlotBE = 1;
-enEval = 1;
+if ischar(paramN)
+    [feparam, beparam, dbnparam, dbn2param, chordmode] = feval(strcat('paramInit',paramN));
+else
+    [feparam, beparam, dbnparam, dbn2param, chordmode] = feval(strcat('paramInit',num2str(paramN)));
+end
 
-% ********************************************************** %
-% ********************* Process **************************** %
-% ********************************************************** %
-
-[feparam, beparam, dbnparam, dbn2param, chordmode] = paramInit();
-
-feval = fopen('evallist.txt','r');
-tline = fgetl(feval);
+fe = fopen(acelist,'r');
+tline = fgetl(fe);
 
 while ischar(tline)
 
-display('input...');
+	[inputpath, outputpath, songtitle] = inputDecode(tline);
+	disp(['now start to analyze ' songtitle ' ......']);
 
-[inputpath, outputpath] = inputDecode(tline);
+	display('frontend...');
 
-display('frontend...');
+	[bdrys, basegram, uppergram, endtime] = frontEndDecode(inputpath, feparam, 1, 1);
 
-[bdrys, basegram, uppergram, endtime] = frontEndDecode(inputpath, feparam, df, enPlotFE);
+	display('backend...');
 
-display('backend...');
+	[rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode, beparam, dbnparam, dbn2param,...
+		basegram, uppergram, bdrys, 1, 1);
 
-[rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode, beparam, dbnparam, dbn2param,...
-    basegram, uppergram, bdrys, df, enPlotBE);
-
-display(strcat('finish analyzing...',inputpath));
-break;
+	display(strcat('finish analyzing...',inputpath));
+	
+	break; % just examine once
 
 end
 
-fclose(feval);
-
-% ********************************************************** %
-% ********************* No Evaluation ********************** %
-% ********************************************************** %
+fclose(fe);

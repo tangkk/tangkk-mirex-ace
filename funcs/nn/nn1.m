@@ -1,4 +1,6 @@
 % a 1-hidden-layer neural network
+% call convention example:
+% nn1('data-B-12-key.mat',544,1000,1)
 function nn1(datapath, hs1, maxiter, lambda)
 
 load(datapath); % data must conform with X, y format
