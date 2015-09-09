@@ -12,7 +12,7 @@ echo "_____________________________________________________"
 echo " "
 echo Processing file "$listfile"
 echo " "
-matlab -nosplash -nodesktop -nojvm -wait -r mirexace_win\(\'"$listfile"\',\'"$outputdir"\',\'"$10"\'\)
+matlab -nosplash -nodesktop -nojvm -wait -r mirexace_win\(\'"$listfile"\',\'"$outputdir"\',\'"10"\'\)
 after="$(date +%s)"
 elapsed_seconds="$(expr $after - $before)"
 echo "  -->" time elapsed: $elapsed_seconds seconds
