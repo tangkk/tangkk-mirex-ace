@@ -1,7 +1,7 @@
 Command line calling format for all executables and an example formatted set of commands:
-- doChordID.sh testFileList.txt testout/ (on Linux)
-- doChordID-win.sh testFileList.txt testout/ (on Windows)
-- doChordID-osx.sh testFileList.txt testout/ (on Mac)
+- ./doChordID.sh testFileList.txt testout/ (on Linux)
+- ./doChordID-win.sh testFileList.txt testout/ (on Windows)
+- ./doChordID-osx.sh testFileList.txt testout/ (on Mac)
 - The inputs are specified in testFileList.txt
 - The analyzed results can be found in the testout/ folder
 
@@ -23,7 +23,8 @@ Expected runtime:
 
 Any required environments (and versions), e.g. Python, Java, bash, MATLAB.
 - MATLAB R2015a or later
-- cygwin if run on windows
+- Cygwin if run on Windows
+- The system has only been tested under Windows with MATLAB R2015a and Cygwin. (That is, only ''doChordID-win.sh'' script has been tested)
 
 
 System Settings -
