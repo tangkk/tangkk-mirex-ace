@@ -25,6 +25,7 @@ Any required environments (and versions), e.g. Python, Java, bash, MATLAB.
 - MATLAB R2015a or later
 - Cygwin if run on Windows
 - The system has only been tested under Windows with MATLAB R2015a and Cygwin. (That is, only ''doChordID-win.sh'' script has been tested)
+- Run the system on Windows if possible
 
 
 System Settings -

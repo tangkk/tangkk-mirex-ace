@@ -12,8 +12,6 @@ else
     [feparam, beparam, dbnparam, dbn2param, chordmode] = feval(strcat('paramInit',num2str(paramN)));
 end
 
-[feparam, beparam, dbnparam, dbn2param, chordmode] = paramInit();
-
 display(strcat('start analyzing...', inFile));
 
 [bdrys, basegram, uppergram, endtime] = frontEndDecode(inFile, feparam, 0, 0);
@@ -25,3 +23,5 @@ writeOut(outFile, feparam.hopsize, feparam.fs,...
     rootgram, treblegram, bdrys, endtime, chordmode);
 	
 display(strcat('finish analyzing...', inFile));
+
+exit;
