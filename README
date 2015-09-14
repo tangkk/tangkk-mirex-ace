@@ -2,6 +2,7 @@ Command line calling format for all executables and an example formatted set of 
 - ./doChordID.sh testFileList.txt testout/ (on Linux)
 - ./doChordID-win.sh testFileList.txt testout/ (on Windows)
 - ./doChordID-osx.sh testFileList.txt testout/ (on Mac)
+- make sure there is a new line at the end of the "testFileList.txt"
 - The inputs are specified in testFileList.txt
 - The analyzed results can be found in the testout/ folder
 
