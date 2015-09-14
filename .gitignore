@@ -54,3 +54,7 @@ testdata/
 *.txt
 *.exe
 *.asv
+data.mat
+datagen.m
+data-J*.mat
+data-B*.mat
