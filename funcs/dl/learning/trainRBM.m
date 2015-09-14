@@ -3,7 +3,7 @@ function model = trainRBM(model_shape, gradient_function, training_data, learnin
     momentum_speed = zeros(model_shape);
     start_of_next_mini_batch = 1;
     for iteration_number = 1:n_iterations,
-        if mod(iteration_number,1000) == 0
+        if mod(iteration_number,100) == 0
             disp(['iteration: ' num2str(iteration_number)]);
         end
         % stochastic mini-batch: randomly pick $mini_batch_size cases

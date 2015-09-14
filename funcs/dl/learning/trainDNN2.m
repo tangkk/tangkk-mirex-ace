@@ -8,8 +8,13 @@ function model = trainDNN2(model_shape, gradient_function, training_data, input_
     momentum_speed_hid_to_class = zeros(size(model.hid_2_to_class));
     start_of_next_mini_batch = 1;
     for iteration_number = 1:n_iterations,
-        if mod(iteration_number,1000) == 0
+        if mod(iteration_number,100) == 0
             disp(['iteration: ' num2str(iteration_number)]);
+			if size(hid_1_to_hid_2,1) ~= model_shape(2)
+                loss_2_bias(model,training_data);
+            else
+                loss_2(model,training_data);
+            end
         end
         % mini_batch = extract_mini_batch_in_out(training_data, start_of_next_mini_batch, mini_batch_size);
         % start_of_next_mini_batch = mod(start_of_next_mini_batch + mini_batch_size, size(training_data.inputs, 2));
