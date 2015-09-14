@@ -2,7 +2,7 @@
 
 function languageModelGen(savename, gtList)
 
-[~, ~, ~, ~, chordmode] = paramInit10();
+chordmode =  chordTypesGen;
 load chordnames.mat;
 chordnums = chnames2chnums(chordnames, chordmode);
 nchords = length(chordnums) + 1; % including the 'N' chord

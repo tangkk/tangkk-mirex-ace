@@ -3,7 +3,8 @@
 
 function trainingDataGen(savename, gtList)
 
-[feparam, ~, ~, ~, chordmode] = paramInit10();
+[feparam, ~, ~, ~, ~] = paramInit10();
+chordmode =  chordTypesGen;
 fe = fopen(gtList,'r');
 tline = fgetl(fe);
 
