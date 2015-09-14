@@ -1,5 +1,4 @@
 #!/bin/bash
-echo "hello"
 listfile="$1"
 if [ $# -gt 2 ]; then
 	outputdir="$3"
