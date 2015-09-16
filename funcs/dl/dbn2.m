@@ -7,7 +7,7 @@
 % it contains a struct, with a field called "data".
 % the "data" field is also a struct, containing structs "training", "validation"
 % and "test", where each of which contains "inputs" and "targets" matrix
-function dbn2(n_hid_1, n_hid_2, nclass, lr_rbm, lr_classification, mini_batch_size, n_iterations, name_dataset)
+function dbn2(n_hid_1, n_hid_2, nclass, lr_rbm, lr_classification, wd, mini_batch_size, n_iterations, name_dataset)
     % load data
     temp = load(name_dataset);
     data_sets = temp.data;
@@ -64,11 +64,13 @@ function dbn2(n_hid_1, n_hid_2, nclass, lr_rbm, lr_classification, mini_batch_si
     hid_2_to_class = 0;
     
     % train DNN
-    data_2.inputs = data_sets.training.inputs;
-    data_2.targets = data_sets.training.targets;
+    data_t.inputs = data_sets.training.inputs;
+    data_t.targets = data_sets.training.targets;
+    data_v.inputs = data_sets.validation.inputs;
+    data_v.targets = data_sets.validation.targets;
     disp('discrimination fine-tuning...');
-    model = trainDNN2([size(data_sets.training.targets,1), n_hid_2], @(model_, data) d_loss_by_d_model_2(model_, data, 0),...
-        data_2, input_to_hid_1, hid_1_to_hid_2, hid_2_to_class, lr_classification, mini_batch_size, n_iterations);
+    model = trainDNN2([size(data_sets.training.targets,1), n_hid_2], @(model_, data) d_loss_by_d_model_2(model_, data, wd),...
+        data_t, data_v, input_to_hid_1, hid_1_to_hid_2, hid_2_to_class, lr_classification, wd, mini_batch_size, n_iterations);
     input_to_hid_1 = model.input_to_hid_1;
     hid_1_to_hid_2 = model.hid_1_to_hid_2;
     hid_2_to_class = model.hid_2_to_class;

@@ -21,8 +21,8 @@ function ret = d_loss_by_d_model_bias(model, data, wd_coefficient)
   
   Theta1_grad = delta2*a1';
   Theta2_grad = delta3*a2';
-  Theta1_grad = Theta1_grad ./ m + (lambda) .* [zeros(size(Theta1,1),1) Theta1(:,2:end)];
-  Theta2_grad = Theta2_grad ./ m + (lambda) .* [zeros(size(Theta2,1),1) Theta2(:,2:end)];
+  Theta1_grad = Theta1_grad ./ m + (lambda./m) .* [zeros(size(Theta1,1),1) Theta1(:,2:end)];
+  Theta2_grad = Theta2_grad ./ m + (lambda./m) .* [zeros(size(Theta2,1),1) Theta2(:,2:end)];
   
   ret.input_to_hid = Theta1_grad;
   ret.hid_to_class = Theta2_grad;

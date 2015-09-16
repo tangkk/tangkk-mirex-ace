@@ -1,4 +1,4 @@
-function model = trainDNN1(model_shape, gradient_function, training_data, input_to_hid, hid_to_class, learning_rate, mini_batch_size, n_iterations)
+function model = trainDNN1(model_shape, gradient_function, training_data, validation_data, input_to_hid, hid_to_class, learning_rate, wd, mini_batch_size, n_iterations)
     model.input_to_hid = input_to_hid;
 %     model.hid_to_class = hid_to_class;
     model.hid_to_class = (rand(model_shape) * 2 - 1) * 0.1;
@@ -9,9 +9,15 @@ function model = trainDNN1(model_shape, gradient_function, training_data, input_
         if mod(iteration_number,100) == 0
             disp(['iteration: ' num2str(iteration_number)]);
             if size(input_to_hid,1) ~= model_shape(2)
-                loss_bias(model,training_data);
+                fprintf('for training data:');
+                loss_bias(model,training_data, wd);
+                fprintf('for validation data:');
+                loss_bias(model,validation_data, wd);
             else
-                loss(model,training_data);
+                fprintf('for training data:');
+                loss(model,training_data, wd);
+                fprintf('for validation data:');
+                loss(model,validation_data, wd);
             end
         end
         % mini_batch = extract_mini_batch_in_out(training_data, start_of_next_mini_batch, mini_batch_size);
