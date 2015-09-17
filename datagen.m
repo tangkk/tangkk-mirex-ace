@@ -8,16 +8,16 @@ mB = size(dataB.y,1);
 pB = floor(mB/3); % fix partition
 
 % use JayChou Set alone as training set
-data.training.inputs = [dataJ.X]';
-data.training.targets = [dataJ.y]';
+% data.training.inputs = [dataJ.X]';
+% data.training.targets = [dataJ.y]';
 
 % % using Beatles Set only
 % data.training.inputs = dataB.X(1:pB,:)';
 % data.training.targets = dataB.y(1:pB,:)';
 
 % % using JayChou set and 1/3 of Beatles set as training set (Both supervised and unsupervised)
-% data.training.inputs = [dataJ.X; dataB.X(1:pB,:)]';
-% data.training.targets = [dataJ.y; dataB.y(1:pB,:)]';
+data.training.inputs = [dataJ.X; dataB.X(1:pB,:)]';
+data.training.targets = [dataJ.y; dataB.y(1:pB,:)]';
 
 % using part of Beatles as validation set
 data.validation.inputs = dataB.X(pB+1:2*pB,:)';

@@ -46,7 +46,12 @@ if isempty(init_model)
 	initial_Theta2 = randInitializeWeights(hidden_layer_size, num_labels);
 else
 	initial_Theta1 = init_model.input_to_hid;
-	initial_Theta2 = init_model.hid_to_class;
+    % whether the last layer is also pre-trained
+    if isempty(init_model.hid_to_class)
+        initial_Theta2 = randInitializeWeights(hidden_layer_size, num_labels);
+    else
+        initial_Theta2 = init_model.hid_to_class;
+    end
 end
 
 % Unroll parameters

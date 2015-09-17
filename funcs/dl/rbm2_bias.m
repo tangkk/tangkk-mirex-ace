@@ -1,7 +1,7 @@
 % use RBM to do unsupervised pre-train
 % 2 RBMs
 
-function model = rbm2_bias(n_hid_1, n_hid_2, nclass, lr_rbm, mini_batch_size, n_iterations, name_dataset)
+function model = rbm2_bias(n_hid_1, n_hid_2, nclass, lr_rbm, mini_batch_size, n_iterations, name_dataset, lastlayer)
     % load data
     temp = load(name_dataset);
     data_sets = temp.data;
@@ -51,13 +51,18 @@ function model = rbm2_bias(n_hid_1, n_hid_2, nclass, lr_rbm, mini_batch_size, n_
     hid_1_to_hid_2 = rbm_w_2;
     hidden_2_representation = logistic(hid_1_to_hid_2 * [ones(1,ncase);hidden_1_representation]);
     
-    disp('restricted Boltzmann machine 3 training...');
-    rbm_w_3 = trainRBM([nclass, size(hidden_2_representation,1)+1], ...
-                     @(rbm_w_3, data) cd1_bias(rbm_w_3, data), ...  % discard labels
-                     hidden_2_representation, ...
-                     lr_rbm, mini_batch_size,...
-                     n_iterations);
-    hid_2_to_class = rbm_w_3;
+    if lastlayer == 1
+        disp('restricted Boltzmann machine 3 training...');
+        rbm_w_3 = trainRBM([nclass, size(hidden_2_representation,1)+1], ...
+                         @(rbm_w_3, data) cd1_bias(rbm_w_3, data), ...  % discard labels
+                         hidden_2_representation, ...
+                         lr_rbm, mini_batch_size,...
+                         n_iterations);
+        hid_2_to_class = rbm_w_3;
+    else
+        % don't pre-train the last layer
+        hid_2_to_class = [];
+    end
 	
 	model.input_to_hid_1 = input_to_hid_1;
 	model.hid_1_to_hid_2 = hid_1_to_hid_2;
