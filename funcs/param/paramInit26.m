@@ -3,8 +3,8 @@
 %
 % btVersion = 14
 % full model:
-% acoustic model - dbn2(500,500,277,.02,.1,1000,10000,data-J-12-key)
-% language model - LM-J
+% acoustic model - rbm2_bias(120,544,277,0.02,1000,10000,'data-JB-12',0)-nn2_bias(120,544,277,1000,1,init_model,'data-JB-12')
+% language model - no
 %
 % and no sixth chord
 %

@@ -1,24 +1,20 @@
 % recompute the whole sequence using another probabilistic model:
 % note that the acoustic model has no bias units
-% acoustic model - dbn2(500,500,277,.02,.1,1000,10000,data-J-12-key)
-% language model - LM-J
+% acoustic model - rbm2_bias(120,544,277,0.02,1000,10000,data-JB-12,0)-nn2_bias(120,544,277,1000,1,init_model,data-JB-12)
 
 function [rootgram, bassgram, treblegram] = bassTrebleCorrect14(rootgram,...
     bassgram, treblegram, basegram, uppergram, bdrys, chordmode)
 
 
 nslices = size(rootgram,2);
-load('dbn2(500,500,277,.02,.1,1000,10000,data-J-12-key).mat');
-load('LM-J.mat');
+load('rbm2_bias(120,544,277,0.02,1000,10000,data-JB-12,0)-nn2_bias(120,544,277,1000,1,init_model,data-JB-12).mat');
 load('chordnames.mat');
 chordnums = [chnames2chnums(chordnames, chordmode);'0:0'];
-nchords = length(chordnums);
 
 Theta1 = model.input_to_hid_1;
 Theta2 = model.hid_1_to_hid_2;
 Theta3 = model.hid_2_to_class;
 
-chordogram = zeros(nchords,nslices); % create a 1*nslices chordogram
 for j = 1:nslices
     bd1 = bdrys(j);
     bd2 = bdrys(j+1);
@@ -28,16 +24,19 @@ for j = 1:nslices
     bj = median(bgbdb,2);
     uj = median(ugbdb,2);
     
-    X = normalizeGram([bj;uj],inf);
-    
-    h1 = sigmoid(X' * Theta1');
-    h2 = sigmoid(h1 * Theta2');
-    h3 = sigmoid(h2 * Theta3');
-    
-    chordogram(:,j) = h3';
+    in = normalizeGram([bj;uj],inf);
+    out = predictNN2(Theta1, Theta2, Theta3, in');
+    chnum = chordnums{out};
+    strtoks = strsplit(chnum,':');
+    root = str2double(strtoks{1});
+    treble = str2double(strtoks{2});
+    if root ~= 0 && treble ~= 0
+        rootgram(j) = root;
+        treblegram(j) = treble;
+        bassgram(j) = root2bass(root,chordmode{2,treble});
+    else
+        rootgram(j) = 0;
+        treblegram(j) = 0;
+        bassgram(j) = 0;
+    end
 end
-
-% setup an 1D -> nchordC HMM (1-dim discrete node -> nchord-dim continous node)
-bnet3 = dbnSetup3(LM); % LM is the language model
-[rootgram, bassgram, treblegram] = dbnInference3(bnet3, chordnums, chordmode, chordogram);
-
