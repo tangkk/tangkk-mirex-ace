@@ -7,7 +7,7 @@
 % it contains a struct, with a field called "data".
 % the "data" field is also a struct, containing structs "training", "validation"
 % and "test", where each of which contains "inputs" and "targets" matrix
-function dbn2_bias(n_hid_1, n_hid_2, nclass, lr_rbm, lr_classification, wd, mini_batch_size, n_iterations, name_dataset)
+function model = dbn2_bias(n_hid_1, n_hid_2, nclass, lr_rbm, lr_classification, wd, mini_batch_size, n_iterations, name_dataset)
     % load data
     temp = load(name_dataset);
     data_sets = temp.data;
@@ -78,8 +78,6 @@ function dbn2_bias(n_hid_1, n_hid_2, nclass, lr_rbm, lr_classification, wd, mini
     hid_2_to_class = model.hid_2_to_class;
     
     % report results
-%     fid = fopen('log.txt','a');
-%     fprintf(fid,'dbn2(%d,%d,%d)\n',n_hid_1,n_hid_2,nclass);
     for data_details = reshape({'training', data_sets.training, 'validation', data_sets.validation, 'test', data_sets.test}, [2, 3]),
         data_name = data_details{1};
         data = data_details{2};
@@ -95,6 +93,4 @@ function dbn2_bias(n_hid_1, n_hid_2, nclass, lr_rbm, lr_classification, wd, mini
         loss = -mean(sum(log_class_prob .* data.targets, 1)); % scalar. select the right log class probability using that sum; then take the mean over all data cases.
         fprintf('For the %s data, the classification cross-entropy loss is %f, and the classification error rate (i.e. the misclassification rate) is %f\n', data_name, loss, error_rate);
     end
-%     fclose(fid);
-    save('dbn2model.mat','model');
 end

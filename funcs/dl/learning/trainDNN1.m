@@ -1,7 +1,8 @@
 function model = trainDNN1(model_shape, gradient_function, training_data, validation_data, input_to_hid, hid_to_class, learning_rate, wd, mini_batch_size, n_iterations)
     model.input_to_hid = input_to_hid;
+    model.hid_to_class = randInitializeWeights_nb(model_shape(2),model_shape(1));
+%     model.hid_to_class = (rand(model_shape) * 2 - 1) * 0.1;
 %     model.hid_to_class = hid_to_class;
-    model.hid_to_class = (rand(model_shape) * 2 - 1) * 0.1;
     momentum_speed_input_to_hid = zeros(size(model.input_to_hid));
     momentum_speed_hid_to_class = zeros(size(model.hid_to_class));
     start_of_next_mini_batch = 1;

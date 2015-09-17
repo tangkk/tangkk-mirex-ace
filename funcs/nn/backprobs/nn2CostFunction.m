@@ -49,9 +49,15 @@ a3 = [ones(1,m);sigmoid(z3)]; % a3 will be of size 21*5000
 z4 = Theta3*a3; % z4 will be of size 10*5000
 a4 = sigmoid(z4); % a4 will be of size 10*5000
 % ****** pre-processing output labels ******
-yi = zeros(num_labels, m);
-ass = 0:num_labels:num_labels*(m-1); % indexing different cols
-yi(y'+ass) = 1; % yi will be of size 10*5000
+% convert to one-hot labels if needed
+if size(y,2) == 1
+    yi = zeros(num_labels, m);
+    ass = 0:num_labels:num_labels*(m-1); % indexing different cols
+    yi(y'+ass) = 1; % yi will be of size 10*5000
+else
+    yi = y';
+end
+
 % ****** compute cost ******
 sumJ = sum(sum(-yi.*log(a4) - (1 - yi).*log(1-a4))); % sumJ is a scalar
 J = sumJ / m;

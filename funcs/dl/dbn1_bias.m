@@ -7,7 +7,7 @@
 % it contains a struct, with a field called "data".
 % the "data" field is also a struct, containing structs "training", "validation"
 % and "test", where each of which contains "inputs" and "targets" matrix
-function dbn1_bias(n_hid, nclass, lr_rbm, lr_classification, wd, mini_batch_size, n_iterations, name_dataset)
+function model = dbn1_bias(n_hid, nclass, lr_rbm, lr_classification, wd, mini_batch_size, n_iterations, name_dataset)
     % load data
     temp = load(name_dataset);
     data_sets = temp.data;
@@ -49,7 +49,7 @@ function dbn1_bias(n_hid, nclass, lr_rbm, lr_classification, wd, mini_batch_size
     
 %     disp('restricted Boltzmann machine 2 training...');
 %     rbm_w_2 = trainRBM([nclass, size(hidden_representation,1)], ...
-%                      @(rbm_w_2, data) cd1(rbm_w_2, data), ...  % discard labels
+%                      @(rbm_w_2, data) cd1_bias(rbm_w_2, data), ...  % discard labels
 %                      hidden_representation, ...
 %                      lr_rbm, mini_batch_size, ...
 %                      n_iterations);
@@ -66,10 +66,7 @@ function dbn1_bias(n_hid, nclass, lr_rbm, lr_classification, wd, mini_batch_size
     input_to_hid = model.input_to_hid;
     hid_to_class = model.hid_to_class;
     
-    % report results
-%     fid = fopen('log.txt','a');
-%     fprintf(fid,'dbn1(%d,%d)\n',n_hid,nclass);
-    
+    % report results  
     for data_details = reshape({'training', data_sets.training, 'validation', data_sets.validation, 'test', data_sets.test}, [2, 3]),
         data_name = data_details{1};
         data = data_details{2};
@@ -83,6 +80,4 @@ function dbn1_bias(n_hid, nclass, lr_rbm, lr_classification, wd, mini_batch_size
         loss = -mean(sum(log_class_prob .* data.targets, 1)); % scalar. select the right log class probability using that sum; then take the mean over all data cases.
         fprintf('For the %s data, the classification cross-entropy loss is %f, and the classification error rate (i.e. the misclassification rate) is %f\n', data_name, loss, error_rate);
     end
-%     fclose(fid);
-    save('dbn1model.mat','model');
 end
