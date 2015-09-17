@@ -4,7 +4,7 @@
 % 23 revconf-B-10 system
 % 24 nn2(data-B-12-key.mat,120,544,1000,1)-62.84 system
 % 25 nn2(data-B-12-key.mat,120,544,1000,1)-62.84 + LM-B system
-% 26 dbn2(500,500,277,.02,.1,1000,10000,data-J-12-key) system
+% 26 rbm2_bias(120,544,277,0.02,1000,10000,data-JB-12,0)-nn2_bias(120,544,277,1000,1,init_model,data-JB-12) system
 
 % tangkkace('22','tempList.txt');evaluateCP tempList-22 tempList.txt;
 % tangkkace('23','tempList.txt');evaluateCP tempList-23 tempList.txt;
@@ -28,7 +28,7 @@ tangkkace('26','tempList.txt');evaluateCP tempList-26 tempList.txt;
 % tangkkace('25','JayChou29List.txt');evaluateCP jaychou-25 JayChou29List.txt;
 % tangkkace('25','TheBeatles180List.txt');evaluateCP thebeatles-25 TheBeatles180List.txt;
 
-% run dbn2(500,500,277,.02,.1,1000,10000,data-J-12-key) system
+% run rbm2_bias(120,544,277,0.02,1000,10000,data-JB-12,0)-nn2_bias(120,544,277,1000,1,init_model,data-JB-12) system
 tangkkace('26','JayChou29List.txt');evaluateCP jaychou-26 JayChou29List.txt;
 tangkkace('26','TheBeatles180List.txt');evaluateCP thebeatles-26 TheBeatles180List.txt;
 
