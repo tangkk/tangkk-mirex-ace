@@ -5,12 +5,14 @@
 % 24 nn2(data-B-12-key.mat,120,544,1000,1)-62.84 system
 % 25 nn2(data-B-12-key.mat,120,544,1000,1)-62.84 + LM-B system
 % 26 rbm2_bias(120,544,277,0.02,1000,10000,data-JB-12,0)-nn2_bias(120,544,277,1000,1,init_model,data-JB-12) system
+% 27 rbm2_bias(120,544,277,0.02,1000,10000,data-J-12,0)-nn2_bias(120,544,277,1000,1,init_model,data-J-12) system
 
 % tangkkace('22','tempList.txt');evaluateCP tempList-22 tempList.txt;
 % tangkkace('23','tempList.txt');evaluateCP tempList-23 tempList.txt;
 % tangkkace('24','tempList.txt');evaluateCP tempList-24 tempList.txt;
 % tangkkace('25','tempList.txt');evaluateCP tempList-25 tempList.txt;
-tangkkace('26','tempList.txt');evaluateCP tempList-26 tempList.txt;
+% tangkkace('26','tempList.txt');evaluateCP tempList-26 tempList.txt;
+tangkkace('27','tempList.txt');evaluateCP tempList-27 tempList.txt;
 
 % % run nn2(data-J-12-key.mat,120,544,1000,1)-71.6 + LM-B system
 % tangkkace('22','JayChou29List.txt');evaluateCP jaychou-22 JayChou29List.txt;
@@ -29,8 +31,12 @@ tangkkace('26','tempList.txt');evaluateCP tempList-26 tempList.txt;
 % tangkkace('25','TheBeatles180List.txt');evaluateCP thebeatles-25 TheBeatles180List.txt;
 
 % run rbm2_bias(120,544,277,0.02,1000,10000,data-JB-12,0)-nn2_bias(120,544,277,1000,1,init_model,data-JB-12) system
-tangkkace('26','JayChou29List.txt');evaluateCP jaychou-26 JayChou29List.txt;
-tangkkace('26','TheBeatles180List.txt');evaluateCP thebeatles-26 TheBeatles180List.txt;
+% tangkkace('26','JayChou29List.txt');evaluateCP jaychou-26 JayChou29List.txt;
+% tangkkace('26','TheBeatles180List.txt');evaluateCP thebeatles-26 TheBeatles180List.txt;
+
+% run rbm2_bias(120,544,277,0.02,1000,10000,data-J-12,0)-nn2_bias(120,544,277,1000,1,init_model,data-J-12) system
+tangkkace('27','JayChou29List.txt');evaluateCP jaychou-27 JayChou29List.txt;
+tangkkace('27','TheBeatles180List.txt');evaluateCP thebeatles-27 TheBeatles180List.txt;
 
 % disp('dbntest');
 % dbn1(1000,13,.02,.1,100,1000,'dbntest');
