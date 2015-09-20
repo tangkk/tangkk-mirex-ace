@@ -45,3 +45,4 @@ system 22 - feedforward neural network with language model (nn2(data-J-12-key.ma
 system 24 - feedforward neural network chord correction (nn2(data-B-12-key.mat,120,544,1000,1)-62.84)
 system 25 - feedforward neural network with language model (nn2(data-B-12-key.mat,120,544,1000,1)-62.84 + LM-B)
 system 26 - neural network RBM + DNN based chord correction. rbm2_bias(120,544,277,0.02,1000,10000,data-JB-12,0)-nn2_bias(120,544,277,1000,1,init_model,data-JB-12)
+system 27 - neural network RBM + DNN based chord correction. rbm2_bias(120,544,277,0.02,1000,10000,data-J-12,0)-nn2_bias(120,544,277,1000,1,init_model,data-J-12)
