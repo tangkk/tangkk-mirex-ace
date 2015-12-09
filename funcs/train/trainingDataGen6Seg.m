@@ -1,7 +1,7 @@
 % Generate training data based on the ground truth files
 % this process leverages the frontend and the ground truth data
 
-function trainingDataGen(savename, gtList)
+function trainingDataGen6Seg(savename, gtList)
 
 [feparam, ~, ~, ~, ~] = paramInit10();
 chordmode =  chordTypesGen;
@@ -9,8 +9,8 @@ fe = fopen(gtList,'r');
 tline = fgetl(fe);
 
 % the size of the training data is unknown yet. Will grow.
-trainingDataX1 = zeros(1,252);
-trainingDataX2 = zeros(1,24);
+trainingDataX1 = zeros(1,252*6);
+trainingDataX2 = zeros(1,24*6);
 trainingDatay = zeros(1,1);
 tidx = 1;
 
@@ -167,8 +167,24 @@ while ischar(tline)
         % FIXME: tlabel 0 is for "N"
         Sm1 = Strain1(:,sb:eb);
         Sm2 = Strain2(:,sb:eb);
-        tcase1 = normalizeGram(median(Sm1,2),inf); % feature normalization
-        tcase2 = normalizeGram(median(Sm2,2),inf);
+        Sm16 = zeros(252,6);
+        Sm26 = zeros(24,6);
+        
+        % seperate each segment into 6 sections (along time axis) and take average upon the
+        % segments
+        lenseg = eb-sb+1; % length of the whole segment
+        lensec = floor(lenseg / 6); % length of each section
+        for i = 1:6
+            Sm1sec = mean(Sm1(:,(i-1)*lensec+1: min(i*lensec,lenseg)),2);
+            Sm2sec = mean(Sm2(:,(i-1)*lensec+1: min(i*lensec,lenseg)),2);
+            Sm16(:,i) = Sm1sec;
+            Sm26(:,i) = Sm2sec;
+        end
+        
+        % unroll the feature matrix to become a feature vector
+        tcase1 = Sm16(:);
+        tcase2 = Sm26(:);
+        
         chnum = chname2chnum(nch, chordmode);
         [~,tlabel] = ismember(chnum,chordnums);
         trainingDataX1(tidx,:) = tcase1';
@@ -183,21 +199,81 @@ while ischar(tline)
 end
 
 % generate other training data for all 12 keys for every training data
-% entry in X2
-% use "keyGen.m" to generate all 12 key data for entries in X1
-display('collecting training data for all 12 keys......');
-trainingDataX12 = zeros(1,24);
-trainingDatay12 = zeros(1,1);
+% entry in X1 (252 dim feature - note salience)
+display('collecting training data for all 12 keys in trainingDataX1......');
+
+len = size(trainingDataX1,1);
+trainingDataX11 = [];
+trainingDatay11 = [];
+idx = 1;
+for i = 1:len
+    Xi = trainingDataX1(i,:);
+    yi = trainingDatay(i);
+    if yi ~= 0
+        ynum = chordnums{yi};
+    else
+        ynum = '0:0';
+    end
+    
+    % non transpose
+    trainingDataX11(idx,:) = Xi;
+    trainingDatay11(idx,:) = yi;
+    idx = idx + 1;
+    
+    % neg transpose
+    for j = 1:5
+        TXi = [];
+        for k = 1:6 % transpose for all 6 sections
+            Xt = Xi((k-1)*252+1:(k)*252);
+            padlen = j*3;
+            pad = zeros(1,padlen);
+            TXt = [Xt(1+padlen:end) pad];
+            TXi = [TXi TXt];
+        end
+        trainingDataX11(idx,:) = TXi;
+        nynum = chTranspose(ynum, -j);
+        [~,nyi] = ismember(nynum,chordnums);
+        trainingDatay11(idx,:) = nyi;
+        idx = idx + 1;
+    end
+    
+    % pos transpose
+    for j = 1:6
+        TXi = [];
+        for k = 1:6
+            Xt = Xi((k-1)*252+1:(k)*252);
+            padlen = j*3;
+            pad = zeros(1,padlen);
+            TXt = [pad Xt(1:end-padlen)];
+            TXi = [TXi TXt];
+        end
+        trainingDataX11(idx,:) = TXi;
+        nynum = chTranspose(ynum, j);
+        [~,nyi] = ismember(nynum,chordnums);
+        trainingDatay11(idx) = nyi;
+        idx = idx + 1;
+    end
+end
+
+% generate other training data for all 12 keys for every training data
+% entry in X2 (24 dim feature - basstreble chroma)
+display('collecting training data for all 12 keys in trainingDataX2......');
+trainingDataX22 = zeros(1,24*6);
+trainingDatay22 = zeros(1,1);
 t12idx = 1;
 len = size(trainingDataX2,1);
 for j = 1:len
     ocase = trainingDataX2(j,:);
     y = trainingDatay(j);
     for i = 0:11 % generate all other 11 keys (except for N chord)
-        bcase = circshift(ocase(1:12)',i,1);
-        ucase = circshift(ocase(13:24)',i,1);
-        % generate a new data and a new label
-        ncase = [bcase;ucase];
+        ncase = zeros(24,6);
+        for k = 1:6 % generate for all 6 segments
+            bcase = circshift(ocase(1+(k-1)*24:12+(k-1)*24)',i,1);
+            ucase = circshift(ocase(13+(k-1)*24:24+(k-1)*24)',i,1);
+            % generate a new data and a new label
+            ncase(:,k) = [bcase;ucase];
+        end
+        
         if y ~= 0
             ochnum = chordnums{y};
         else
@@ -205,18 +281,44 @@ for j = 1:len
         end
         nchnum = chTranspose(ochnum, i);
         [~,nlabel] = ismember(nchnum,chordnums);
-        trainingDataX12(t12idx,:) = ncase';
-        trainingDatay12(t12idx,:) = nlabel;
+        trainingDataX22(t12idx,:) = ncase(:)';
+        trainingDatay22(t12idx,:) = nlabel;
         t12idx = t12idx + 1;
     end
 end
 
+% feature standardization
+% "to standardize the components of the input vectors to have mean 0 and
+% standard deviation 1 over the training set
+% note that each feature is layout as row vector (thus mean and std
+% should be taken along the first dimension)
+display('feature standardization......');
+mu1 = repmat(mean(trainingDataX1,1),[size(trainingDataX1,1),1]);
+sigma1 = repmat(std(trainingDataX1,0,1),[size(trainingDataX1,1),1]);
+
+mu11 = repmat(mean(trainingDataX11,1),[size(trainingDataX11,1),1]);
+sigma11 = repmat(std(trainingDataX11,0,1),[size(trainingDataX11,1),1]);
+
+mu2 = repmat(mean(trainingDataX2,1),[size(trainingDataX2,1),1]);
+sigma2 = repmat(std(trainingDataX2,0,1),[size(trainingDataX2,1),1]);
+
+mu22 = repmat(mean(trainingDataX22,1),[size(trainingDataX22,1),1]);
+sigma22 = repmat(std(trainingDataX22,0,1),[size(trainingDataX22,1),1]);
+
+trainingDataX1 = (trainingDataX1 - mu1) ./ sigma1;
+trainingDataX2 = (trainingDataX2 - mu2) ./ sigma2;
+trainingDataX11 = (trainingDataX11 - mu11) ./ sigma11;
+trainingDataX22 = (trainingDataX22 - mu22) ./ sigma22;
+
 % set label 0 to label length(chordnames)+1
 trainingDatay(trainingDatay == 0) = length(chordnames)+1;
-trainingDatay12(trainingDatay12 == 0) = length(chordnames)+1;
+trainingDatay11(trainingDatay11 == 0) = length(chordnames)+1;
+trainingDatay22(trainingDatay22 == 0) = length(chordnames)+1;
 
 % save all the training data set collected
 display('saving results......');
-save(savename,'trainingDataX1','trainingDataX2','trainingDatay', 'trainingDataX12', 'trainingDatay12');
+save(savename,'trainingDataX1','trainingDataX2','trainingDatay',...
+    'trainingDataX11', 'trainingDatay11',...
+    'trainingDataX22', 'trainingDatay22');
 
 display('done......');
