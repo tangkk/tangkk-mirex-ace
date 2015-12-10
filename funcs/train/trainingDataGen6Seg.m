@@ -127,12 +127,12 @@ while ischar(tline)
         % note this is to compute chromagram
         basegram = computeChromagram(Sbout);
         uppergram = computeChromagram(Stout);
-        % normalize grams (whether global or local)
-        [uppergram,~] = normalizeGram(uppergram,feparam.normalization);
-        [basegram,~] = normalizeGram(basegram,feparam.normalization);
-        % turn the zero columns to 1 columns
-        uppergram = zero2one(uppergram);
-        basegram = zero2one(basegram);
+%         % normalize grams (whether global or local)
+%         [uppergram,~] = normalizeGram(uppergram,feparam.normalization);
+%         [basegram,~] = normalizeGram(basegram,feparam.normalization);
+%         % turn the zero columns to 1 columns
+%         uppergram = zero2one(uppergram);
+%         basegram = zero2one(basegram);
     end
     
     % probing point for training data set 2
@@ -292,23 +292,23 @@ end
 % standard deviation 1 over the training set
 % note that each feature is layout as row vector (thus mean and std
 % should be taken along the first dimension)
-display('feature standardization......');
-mu1 = repmat(mean(trainingDataX1,1),[size(trainingDataX1,1),1]);
-sigma1 = repmat(std(trainingDataX1,0,1),[size(trainingDataX1,1),1]);
-
-mu11 = repmat(mean(trainingDataX11,1),[size(trainingDataX11,1),1]);
-sigma11 = repmat(std(trainingDataX11,0,1),[size(trainingDataX11,1),1]);
-
-mu2 = repmat(mean(trainingDataX2,1),[size(trainingDataX2,1),1]);
-sigma2 = repmat(std(trainingDataX2,0,1),[size(trainingDataX2,1),1]);
-
-mu22 = repmat(mean(trainingDataX22,1),[size(trainingDataX22,1),1]);
-sigma22 = repmat(std(trainingDataX22,0,1),[size(trainingDataX22,1),1]);
-
-trainingDataX1 = (trainingDataX1 - mu1) ./ sigma1;
-trainingDataX2 = (trainingDataX2 - mu2) ./ sigma2;
-trainingDataX11 = (trainingDataX11 - mu11) ./ sigma11;
-trainingDataX22 = (trainingDataX22 - mu22) ./ sigma22;
+% display('feature standardization......');
+% mu1 = repmat(mean(trainingDataX1,1),[size(trainingDataX1,1),1]);
+% sigma1 = repmat(std(trainingDataX1,0,1),[size(trainingDataX1,1),1]);
+% 
+% mu11 = repmat(mean(trainingDataX11,1),[size(trainingDataX11,1),1]);
+% sigma11 = repmat(std(trainingDataX11,0,1),[size(trainingDataX11,1),1]);
+% 
+% mu2 = repmat(mean(trainingDataX2,1),[size(trainingDataX2,1),1]);
+% sigma2 = repmat(std(trainingDataX2,0,1),[size(trainingDataX2,1),1]);
+% 
+% mu22 = repmat(mean(trainingDataX22,1),[size(trainingDataX22,1),1]);
+% sigma22 = repmat(std(trainingDataX22,0,1),[size(trainingDataX22,1),1]);
+% 
+% trainingDataX1 = (trainingDataX1 - mu1) ./ sigma1;
+% trainingDataX2 = (trainingDataX2 - mu2) ./ sigma2;
+% trainingDataX11 = (trainingDataX11 - mu11) ./ sigma11;
+% trainingDataX22 = (trainingDataX22 - mu22) ./ sigma22;
 
 % set label 0 to label length(chordnames)+1
 trainingDatay(trainingDatay == 0) = length(chordnames)+1;
