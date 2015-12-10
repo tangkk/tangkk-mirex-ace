@@ -51,6 +51,7 @@ outcd/
 res/
 data/
 testdata/
+nn/
 *.txt
 *.exe
 *.asv
@@ -58,3 +59,4 @@ data.mat
 data-J*.mat
 data-B*.mat
 dbn*.mat
+test*.mat
