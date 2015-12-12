@@ -173,10 +173,13 @@ while ischar(tline)
         % seperate each segment into 6 sections (along time axis) and take average upon the
         % segments
         lenseg = eb-sb+1; % length of the whole segment
-        lensec = floor(lenseg / 6); % length of each section
+        lensec = max(floor(lenseg / 6),1); % length of each section
         for i = 1:6
-            Sm1sec = mean(Sm1(:,(i-1)*lensec+1: min(i*lensec,lenseg)),2);
-            Sm2sec = mean(Sm2(:,(i-1)*lensec+1: min(i*lensec,lenseg)),2);
+            Sm1sec = mean(Sm1(:,min((i-1)*lensec+1,lenseg): min(i*lensec,lenseg)),2);
+            Sm2sec = mean(Sm2(:,min((i-1)*lensec+1,lenseg): min(i*lensec,lenseg)),2);
+            if ~isempty(find(isnan(Sm1sec),1))
+                fuck = 1;
+            end
             Sm16(:,i) = Sm1sec;
             Sm26(:,i) = Sm2sec;
         end
@@ -190,6 +193,9 @@ while ischar(tline)
         trainingDataX1(tidx,:) = tcase1';
         trainingDataX2(tidx,:) = tcase2';
         trainingDatay(tidx,:) = tlabel;
+        
+        display('length of trainingDataX1 so far');
+        display(size(trainingDataX1,1));
         
         gline = fgetl(fg);
         tidx = tidx + 1;
@@ -314,6 +320,12 @@ end
 trainingDatay(trainingDatay == 0) = length(chordnames)+1;
 trainingDatay11(trainingDatay11 == 0) = length(chordnames)+1;
 trainingDatay22(trainingDatay22 == 0) = length(chordnames)+1;
+
+% set NaN to zero (FIXME: find out where does the NaN comes from)
+% trainingDataX1(isnan(trainingDataX1)) = 0;
+% trainingDataX2(isnan(trainingDataX2)) = 0;
+% trainingDataX11(isnan(trainingDataX11)) = 0;
+% trainingDataX22(isnan(trainingDataX22)) = 0;
 
 % save all the training data set collected
 display('saving results......');
