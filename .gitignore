@@ -51,7 +51,11 @@ outcd/
 res/
 data/
 testdata/
-nn/
+nn/*.pyc
+nn/*/
+nn/*.perl
+nn/*.npz
+nn/*.pkl
 *.txt
 *.exe
 *.asv
