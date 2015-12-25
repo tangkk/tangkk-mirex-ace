@@ -19,7 +19,6 @@ References:
 
 """
 
-
 import os
 import sys
 import timeit
@@ -28,25 +27,36 @@ import numpy
 
 import theano
 import theano.tensor as T
+from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 
 from loadmat import loadmat
 from logistic import LogisticRegression
 
+
 # hyperparameters
-dataset = '../testnn.mat'
+dataset = '../data-B6-12-key-raw.mat'
+# norm = 0, no normalization
+# norm = 'l1', l1 norm, ='l2', l2 norm, ='max', max norm
+norm = 0
+# scaling = -1: not scaling at all;
+# scaling = 0, perform standardization along axis=0 - scaling input variables
+# scaling = 1, perform standardization along axis=1 - scaling input cases
+scaling = 1
+# robust = 1, robust scaling, = 0, not robust scaling
+robust = 0
 # 1 - shuffle the dataset in a random way; 0 - use the dataset as its original order
 shuffle = 1
-# 0 - no scaling, use original data; 1 - standardization(0 mean 1 var); 2 - [0,1] scaling; 3 - [-1,1] scaling
-scaling = 1
 # select a portion of data, max value is 1
 datasel = 1
 batch_size = 100
-hidden_layers_sizes = [1000]
+hidden_layers_sizes = [2000]
 
-n_epochs=250
+n_epochs=500
 learning_rate=0.01
-L1_reg=0.000
-L2_reg=0.001
+L1_reg=0.0000
+L2_reg=0.0000
+earlystop = False
+dropout = True
 
 # start-snippet-1
 class HiddenLayer(object):
@@ -156,7 +166,6 @@ class MLP(object):
         which the labels lie
 
         """
-        
         self.n_layers = len(hidden_layers_sizes)
         self.hiddenlayers = []
         self.params = []
@@ -226,14 +235,26 @@ class MLP(object):
         # keep track of model input
         self.input = input
 
-
+def dropout_layer(state_before, use_noise, trng, p):
+    # at training time, use_noise is set to 1,
+    # dropout is applied to layer, each unit of layer is presented at a chance of p
+    # at test/validation time, use_noise is set to 0,
+    # each unit of layer is always presented, and their activations are multiplied by p
+    # by default p=0.5 (can be changed)
+    # and different p can be applied to different layers, even the input layer
+    layer = T.switch(use_noise,
+                         (state_before *
+                          trng.binomial(state_before.shape,
+                                        p=p, n=1,
+                                        dtype=state_before.dtype)),
+                         state_before * p)
+    return layer
+    
 def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
              hidden_layers_sizes, dataset, batch_size, datasel, shuffle, scaling):
     """
     Demonstrate stochastic gradient descent optimization for a multilayer
     perceptron
-
-    This is demonstrated on MNIST.
 
     :type learning_rate: float
     :param learning_rate: learning rate used (factor for the stochastic
@@ -255,7 +276,7 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
 
 
    """
-    datasets = loadmat(dataset,shuffle=shuffle,datasel=datasel,scaling=scaling)
+    datasets = loadmat(dataset=dataset,shuffle=shuffle,datasel=datasel,scaling=scaling,robust=robust,norm=norm)
 
     train_set_x, train_set_y = datasets[0]
     valid_set_x, valid_set_y = datasets[1]
@@ -291,7 +312,15 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
         hidden_layers_sizes=hidden_layers_sizes,
         n_out=nclass
     )
-
+    
+    # dropout the hidden layers
+    trng = RandomStreams(1234)
+    use_noise = theano.shared(numpy.asarray(0., dtype=theano.config.floatX))
+    if dropout:
+        # classifier.input = dropout_layer(use_noise, classifier.input, trng, 0.8)
+        for i in range(classifier.n_layers):
+            classifier.hiddenlayers[i].output = dropout_layer(use_noise, classifier.hiddenlayers[i].output, trng, 0.5)
+            
     # start-snippet-4
     # the cost we minimize during training is the negative log likelihood of
     # the model plus the regularization terms (L1 and L2); cost is expressed
@@ -388,17 +417,21 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
     epoch = 0
     done_looping = False
 
-    #while (epoch < n_epochs) and (not done_looping):
     while (epoch < n_epochs):
+        if earlystop and done_looping:
+            print 'early-stopping'
+            break
+    # while (epoch < n_epochs):
         epoch = epoch + 1
         for minibatch_index in xrange(n_train_batches):
-
+            use_noise.set_value(1.) # use dropout
             minibatch_avg_cost = train_model(minibatch_index)
             # iteration number
             iter = (epoch - 1) * n_train_batches + minibatch_index
 
             if (iter + 1) % validation_frequency == 0:
                 # compute zero-one loss on validation set
+                use_noise.set_value(0.) # at validation/testing time, no dropout
                 validation_losses = [validate_model(i) for i
                                      in xrange(n_valid_batches)]
                 training_losses = [train_score(i) for i
@@ -450,7 +483,8 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
 
             if patience <= iter:
                 done_looping = True
-                #break
+                if earlystop:
+                    break
 
     end_time = timeit.default_timer()
     print(('Optimization complete. Best validation score of %f %% '

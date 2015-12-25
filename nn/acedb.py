@@ -3,6 +3,7 @@ import theano
 import scipy.io as sio
 import theano.tensor as T
 from sklearn import preprocessing
+from loadmat import standardize
 
 def prepare_data(seqs, labels, maxlen=None, dim_proj=None, fC='repeat'):
     """Create the matrices from the datasets.
@@ -57,7 +58,7 @@ def prepare_data(seqs, labels, maxlen=None, dim_proj=None, fC='repeat'):
 
 
 def load_data(dataset="../testnn.mat", valid_portion=0.1, maxlen=None,
-              sort_by_len=False, scaling=1):
+              sort_by_len=False, scaling=1, robust=0):
     '''Loads the dataset
 
     :type dataset: String
@@ -117,22 +118,7 @@ def load_data(dataset="../testnn.mat", valid_portion=0.1, maxlen=None,
     valid_set_x, valid_set_y = valid_set
     train_set_x, train_set_y = train_set
     
-    # standardization
-    if scaling == 1:
-        scaler = preprocessing.StandardScaler().fit(train_set_x)
-        train_set_x = scaler.transform(train_set_x)
-        valid_set_x = scaler.transform(valid_set_x)
-        test_set_x = scaler.transform(test_set_x)
-    elif scaling == 2:
-        scaler = preprocessing.MinMaxScaler().fit(train_set_x)
-        train_set_x = scaler.transform(train_set_x)
-        valid_set_x = scaler.transform(valid_set_x)
-        test_set_x = scaler.transform(test_set_x)
-    elif scaling == 3:
-        scaler = preprocessing.MaxAbsScaler().fit(train_set_x)
-        train_set_x = scaler.transform(train_set_x)
-        valid_set_x = scaler.transform(valid_set_x)
-        test_set_x = scaler.transform(test_set_x)
+    train_set_x, valid_set_x, test_set_x = standardize(train_set_x, valid_set_x, test_set_x, scaling, robust)
 
     def len_argsort(seq):
         return sorted(range(len(seq)), key=lambda x: len(seq[x]))

@@ -16,9 +16,11 @@ from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 from acedb import load_data, prepare_data
 
 dataset = "../data-J6-12-key-raw.mat"
-# datasets = {'acedb': (acedb.load_data, acedb.prepare_data)}
-# 0 - no scaling, use original data; 1 - standardization(0 mean 1 var); 2 - [0,1] scaling; 3 - [-1,1] scaling
-scaling=1
+# scaling = -1: not scaling at all;
+# scaling = 0, perform standardization along axis=0 - scaling input variables
+# scaling = 1, perform standardization along axis=1 - scaling input cases
+scaling=0
+robust=0
 
 # dim_proj
 # 1. for testnn.mat dataset (simple MNIST), the input feature vector dim is 400
@@ -34,10 +36,10 @@ scaling=1
 # fC = 'reshape'
 # dim_proj = 12
 fC = 'repeat'
-dim_proj=200
+dim_proj=100
 
 # dropout
-use_dropout=False
+use_dropout=True
 
 # gd
 max_epochs = 500 # give it long enough time to train
@@ -542,7 +544,7 @@ def train_lstm(
 
     print 'Loading data'
     train, valid, test = load_data(dataset=dataset, valid_portion=0.05,
-                                   maxlen=maxlen, scaling=scaling)
+                                   maxlen=maxlen, scaling=scaling, robust=robust)
                                    
     print 'data loaded'
     

@@ -6,66 +6,15 @@ import theano.tensor as T
 import numpy
 from sklearn import preprocessing
 
-def loadmat(dataset, shuffle=1, datasel=1, scaling=1, normalizing=0):
-    ''' Loads the dataset
-
-    :type dataset: string
-    :param dataset: the path to the dataset
-    '''
-
-    #############
-    # LOAD DATA #
-    #############
-
-    print '... loading data'
-
-    # Load the dataset
-    mat = sio.loadmat(dataset)
-    
-    # the data is in 'X' 'y' format, where 'X' contains the input features, and 'y' contains the output labels
-    X = mat['X']
-    y = mat['y']
-    # transpose the y so that it is a row array instead of a column array, which avoids the error:
-    # "cannot convert type tensortype(int32, matrix) into type tensortype(int32,vector)"
-    y = y.T[0]
-    
-    # put the max of y = 0 (conform with python indexing standard)
-    y[y==max(y)]=0
-    
-    # shuffle the samples
-    if shuffle:
-        ind = range(0,len(X))
-        numpy.random.shuffle(ind)
-        X = X[ind]
-        y = y[ind]
-        
-    X = X[0:len(X)*datasel]
-    y = y[0:len(y)*datasel]
-    
-    # normalization
-    if normalizing == 1:
-        X = preprocessing.normalize(X,norm='l1')
-    elif normalizing == 2:
-        X = preprocessing.normalize(X,norm='l2')
-    elif normalizing == 'max':
-        X = preprocessing.normalize(X,norm='max')
-    
-    #train_set, valid_set, test_set format: tuple(input, target)
-    #input is an numpy.ndarray of 2 dimensions (a matrix)
-    #witch row's correspond to an example. target is a
-    #numpy.ndarray of 1 dimensions (vector)) that have the same length as
-    #the number of rows in the input. It should give the target
-    #target to the example with the same index in the input.
-    
-    # train_set 80%, valid_set 10%, test_set 10% - tentatively
-    trainidx = len(X)*8/10
-    valididx = len(X)*9/10
-    testidx = len(X)
-    
-    train_X = numpy.asarray(X[0:trainidx],dtype=numpy.float32)
-    valid_X = numpy.asarray(X[trainidx:valididx],dtype=numpy.float32)
-    test_X = numpy.asarray(X[valididx:testidx],dtype=numpy.float32)
-    
+def standardize(train_X, valid_X, test_X, scaling=1, robust=0):
+    # FIXME: standardization process can be performed:
+    # 1. in terms of column (input variables)
+    # 2. in terms of row (input cases)
+    # when different features are in different scales, we need to perform 1
+    # when different features are in the same scale, but different cases have extranous variations, such as exposure, volumn, dynamics, etc., we need to perform 2.
+    # in the usage of ACE data preprocessing, we need to standardize in terms of cases rather than variables
+    # see http://www.faqs.org/faqs/ai-faq/neural-nets/part2/section-16.html for details
+    # for a general workable piece of code, we need to implement both kind of scaling
     ###########################################
     # standardization:
     # for every feature compenent x_i compute the mean(mu) and std(sigma) w.r.t. the whole training X
@@ -81,7 +30,39 @@ def loadmat(dataset, shuffle=1, datasel=1, scaling=1, normalizing=0):
     # test_X = (test_X - mu) / sigma
     ##########################################
     
-    # standardization 
+    # scaling = -1: not scaling at all;
+    # scaling = 0, perform standardization along axis=0 - scaling input variables
+    # scaling = 1, perform standardization along axis=1 - scaling input cases
+    if scaling == 0:
+        '''
+        for every feature compenent x_i compute the mean(mu) and std(sigma) w.r.t. X(:,i)
+        update x_i <= (x_i - mu) / sigma
+        standardize the validation and test set using the same mu and sigma of the training X's
+        both valid and test set need to reuse the scaler of training set
+        '''
+        if robust == 1:
+            scaler = preprocessing.RobustScaler().fit(train_X)
+        else:
+            scaler = preprocessing.StandardScaler().fit(train_X)
+        train_X = scaler.transform(train_X)
+        valid_X = scaler.transform(valid_X)
+        test_X = scaler.transform(test_X)
+    elif scaling == 1:
+        '''
+        for every training case X compute the mean(mu) and std(sigma) w.r.t. X(i,:)
+        update X_i <= (X_i - mu) / sigma
+        standardize the validation and test set using the same mu and sigma of the training X's
+        training, valid and test set are independently scaled, since scaling is performed in terms of cases
+        '''
+        if robust == 1:
+            train_X = preprocessing.robust_scale(train_X, axis=1)
+            valid_X = preprocessing.robust_scale(valid_X, axis=1)
+            test_X = preprocessing.robust_scale(test_X, axis=1)
+        else:
+            train_X = preprocessing.scale(train_X, axis=1)
+            valid_X = preprocessing.scale(valid_X, axis=1)
+            test_X = preprocessing.scale(test_X, axis=1)
+    '''
     if scaling == 1:
         scaler = preprocessing.StandardScaler().fit(train_X)
         train_X = scaler.transform(train_X)
@@ -99,6 +80,68 @@ def loadmat(dataset, shuffle=1, datasel=1, scaling=1, normalizing=0):
         train_X = max_abs_scaler.transform(train_X)
         valid_X = max_abs_scaler.transform(valid_X)
         test_X = max_abs_scaler.transform(test_X)
+    '''
+    return train_X, valid_X, test_X
+
+def loadmat(dataset, shuffle=1, datasel=1, scaling=1, robust=0, norm=0):
+    ''' Loads the dataset
+
+    :type dataset: string
+    :param dataset: the path to the dataset
+    '''
+
+    #############
+    # LOAD DATA #
+    #############
+
+    print '... loading data'
+
+    # Load the dataset
+    mat = sio.loadmat(dataset)
+    
+    # the data is in 'X' 'y' format, where 'X' contains the input features, and 'y' contains the output labels
+    X = mat['X']
+    # perform normalization if necessary
+    if norm != 0:
+        X = preprocessing.normalize(X,norm)
+    
+    y = mat['y']
+    # transpose the y so that it is a row array instead of a column array, which avoids the error:
+    # "cannot convert type tensortype(int32, matrix) into type tensortype(int32,vector)"
+    y = y.T[0]
+    # put the max of y = 0 (conform with python indexing standard)
+    # since originally the data are in .mat format, which conforms with the matlab indexing convention starting from 1
+    # rather than 0
+    y[y==max(y)]=0
+    
+    # shuffle the samples
+    if shuffle:
+        ind = range(0,len(X))
+        numpy.random.shuffle(ind)
+        X = X[ind]
+        y = y[ind]
+        
+    X = X[0:len(X)*datasel]
+    y = y[0:len(y)*datasel]
+    
+    
+    #train_set, valid_set, test_set format: tuple(input, target)
+    #input is an numpy.ndarray of 2 dimensions (a matrix)
+    #witch row's correspond to an example. target is a
+    #numpy.ndarray of 1 dimensions (vector)) that have the same length as
+    #the number of rows in the input. It should give the target
+    #target to the example with the same index in the input.
+    
+    # train_set 80%, valid_set 10%, test_set 10% - tentatively
+    trainidx = len(X)*8/10
+    valididx = len(X)*9/10
+    testidx = len(X)
+    
+    train_X = numpy.asarray(X[0:trainidx],dtype=numpy.float32)
+    valid_X = numpy.asarray(X[trainidx:valididx],dtype=numpy.float32)
+    test_X = numpy.asarray(X[valididx:testidx],dtype=numpy.float32)
+    
+    train_X, valid_X, test_X = standardize(train_X, valid_X, test_X, scaling, robust)
     
     # collect labels
     train_y = numpy.asarray(y[0:trainidx],dtype=numpy.int64)
@@ -109,8 +152,6 @@ def loadmat(dataset, shuffle=1, datasel=1, scaling=1, normalizing=0):
     train_set = (train_X, train_y)
     valid_set = (valid_X, valid_y)
     test_set = (test_X, test_y)
-    
-    # normalization and binarization
     
     print "train_X (%d,%d)"%train_X.shape
     print "valid_X (%d,%d)"%valid_X.shape

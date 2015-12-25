@@ -19,34 +19,37 @@ from loadmat import loadmat
 
 from logistic import LogisticRegression
 from mlp import HiddenLayer
-# from bbrbm import BBRBM
-# from gbrbm import GBRBM
-# from ggrbm import GGRBM
 from rbm import RBM
 from grbm import GRBM
 
 from utils import tile_raster_images
 
-dataset = '../testnn.mat'
+dataset = '../data-J6-12-key-raw.mat'
 # 1 - shuffle the dataset in a random way; 0 - use the dataset as its original order
 shuffle = 1
-# 0 - no scaling, use original data; 1 - standardization(0 mean 1 var); 2 - [0,1] scaling; 3 - [-1,1] scaling
+# scaling = -1: not scaling at all;
+# scaling = 0, perform standardization along axis=0 - scaling input variables
+# scaling = 1, perform standardization along axis=1 - scaling input cases
 scaling = 1
+robust = 0
 # select a portion of data, max value is 1
 datasel = 1
 batch_size = 100
-hidden_layers_sizes = [500]
+hidden_layers_sizes = [2000]
 first_layer = 'grbm'
 
 pretraining_epochs=10
-pretrain_lr=0.0001
-cdk=1
+pretrain_lr=0.001
+cdk=5
 usepersistent=True
 
-training_epochs=250
+training_epochs=500
 finetune_lr=0.01
 L1_reg=0.000
-L2_reg=0.001
+L2_reg=0.000
+earlystop=False
+dropout=True
+pretrain_dropout=True
 
 output_folder = 'dbn_train_plots'
 
@@ -380,6 +383,20 @@ class DBN(object):
 
         return train_fn, train_score, valid_score, test_score
 
+def dropout_layer(state_before, use_noise, trng, p):
+    # at training time, use_noise is set to 1,
+    # dropout is applied to layer, each unit of layer is presented at a chance of p
+    # at test/validation time, use_noise is set to 0,
+    # each unit of layer is always presented, and their activations are multiplied by p
+    # by default p=0.5 (can be changed)
+    # and different p can be applied to different layers, even the input layer
+    layer = T.switch(use_noise,
+                         (state_before *
+                          trng.binomial(state_before.shape,
+                                        p=p, n=1,
+                                        dtype=state_before.dtype)),
+                         state_before * p)
+    return layer
 
 def test_DBN(finetune_lr, pretraining_epochs,
              pretrain_lr, cdk, usepersistent, training_epochs,
@@ -404,14 +421,8 @@ def test_DBN(finetune_lr, pretraining_epochs,
     :type batch_size: int
     :param batch_size: the size of a minibatch
     """
-    
-    # another scaling dataset for pre-training
-    # datasets_ = loadmat(dataset, shuffle = shuffle, datasel=datasel, scaling=scaling)
-    # train_set_x_, train_set_y_ = datasets_[0]
-    # valid_set_x_, valid_set_y_ = datasets_[1]
-    # test_set_x_, test_set_y_ = datasets_[2]
-    
-    datasets = loadmat(dataset, shuffle=shuffle, datasel=datasel, scaling=scaling)
+      
+    datasets = loadmat(dataset=dataset, shuffle=shuffle, datasel=datasel, scaling=scaling, robust=robust)
     train_set_x, train_set_y = datasets[0]
     valid_set_x, valid_set_y = datasets[1]
     test_set_x, test_set_y = datasets[2]
@@ -432,11 +443,8 @@ def test_DBN(finetune_lr, pretraining_epochs,
               n_outs=nclass, L1_reg=L1_reg, L2_reg=L2_reg)
     print 'n_ins:%d'% train_set_x.get_value(borrow=True).shape[1]
     print 'n_outs:%d'% nclass
-
-    # start-snippet-2
-    #########################
-    # PRETRAINING THE MODEL #
-    #########################
+    
+    # getting pre-training and fine-tuning functions
     # save images of the weights(receptive fields) in this output folder
     if not os.path.isdir(output_folder):
         os.makedirs(output_folder)
@@ -446,6 +454,26 @@ def test_DBN(finetune_lr, pretraining_epochs,
     pretraining_fns = dbn.pretraining_functions(train_set_x=train_set_x,
                                                 batch_size=batch_size,
                                                 cdk=cdk, usepersistent=usepersistent)
+    # get the training, validation and testing function for the model
+    print '... getting the finetuning functions'
+
+    train_fn, train_model, validate_model, test_model = dbn.build_finetune_functions(
+        datasets=datasets,
+        batch_size=batch_size,
+        learning_rate=finetune_lr
+    )
+    
+    trng = MRG_RandomStreams(1234)
+    use_noise = theano.shared(numpy.asarray(0., dtype=theano.config.floatX))
+    if dropout:
+        # dbn.x = dropout_layer(use_noise, dbn.x, trng, 0.8)
+        for i in range(dbn.n_layers):
+            dbn.sigmoid_layers[i].output = dropout_layer(use_noise, dbn.sigmoid_layers[i].output, trng, 0.5)
+
+    # start-snippet-2
+    #########################
+    # PRETRAINING THE MODEL #
+    #########################
 
     print '... pre-training the model'
     plotting_time = 0.
@@ -454,6 +482,8 @@ def test_DBN(finetune_lr, pretraining_epochs,
     for i in xrange(dbn.n_layers):
         # go through pretraining epochs
         for epoch in xrange(pretraining_epochs):
+            if pretrain_dropout:
+                use_noise.set_value(1.) # use dropout at pre-training
             # go through the training set
             c = []
             for batch_index in xrange(n_train_batches):
@@ -495,15 +525,6 @@ def test_DBN(finetune_lr, pretraining_epochs,
     # FINETUNING THE MODEL #
     ########################
 
-    # get the training, validation and testing function for the model
-    print '... getting the finetuning functions'
-
-    train_fn, train_model, validate_model, test_model = dbn.build_finetune_functions(
-        datasets=datasets,
-        batch_size=batch_size,
-        learning_rate=finetune_lr
-    )
-
     print '... finetuning the model'
     # early-stopping parameters
     patience = 4 * n_train_batches  # look as this many examples regardless
@@ -524,16 +545,19 @@ def test_DBN(finetune_lr, pretraining_epochs,
     done_looping = False
     epoch = 0
 
-    #while (epoch < training_epochs) and (not done_looping):
+    # while (epoch < training_epochs) and (not done_looping):
     while (epoch < training_epochs):
+        if earlystop and done_looping:
+            print 'early-stopping'
+            break
         epoch = epoch + 1
         for minibatch_index in xrange(n_train_batches):
-
+            use_noise.set_value(1.) # use dropout at training time
             minibatch_avg_cost = train_fn(minibatch_index)
             iter = (epoch - 1) * n_train_batches + minibatch_index
 
             if (iter + 1) % validation_frequency == 0:
-
+                use_noise.set_value(0.) # stop dropout at validation/test time
                 validation_losses = validate_model()
                 training_losses = train_model()
                 this_validation_loss = numpy.mean(validation_losses)
@@ -584,7 +608,8 @@ def test_DBN(finetune_lr, pretraining_epochs,
 
             if patience <= iter:
                 done_looping = True
-                #break
+                if earlystop:
+                    break
 
     end_time = timeit.default_timer()
     print(

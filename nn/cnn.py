@@ -33,18 +33,50 @@ from theano.tensor.signal import downsample
 from theano.tensor.nnet import conv
 
 from logistic import LogisticRegression
-# from loadpkl import load_data
 from loadmat import loadmat
 from mlp import HiddenLayer
 
-dataset = '../testnn.mat'
+dataset = '../data-J6-12-key-raw.mat'
 # 1 - shuffle the dataset in a random way; 0 - use the dataset as its original order
 shuffle = 1
-# 0 - no scaling, use original data; 1 - standardization(0 mean 1 var); 2 - [0,1] scaling; 3 - [-1,1] scaling
+# scaling = -1: not scaling at all;
+# scaling = 0, perform standardization along axis=0 - scaling input variables
+# scaling = 1, perform standardization along axis=1 - scaling input cases
 scaling = 1
+robust = 0
 # select a portion of data, max value is 1
 datasel = 1
+# gd setting
+learning_rate = 0.01
+n_epochs = 500
+earlystop = True
 
+# lenet config
+# H - height; W - width
+nkerns = [10,10]
+# when the input is note salience matrix
+# idim0_H = 42
+# idim0_W = 36
+# fdim0_H = 6
+# fdim0_W = 6
+# when the input is chromagram
+idim0_H = 12
+idim0_W = 12
+fdim0_H = 2
+fdim0_W = 2
+pdim0_H = 2
+pdim0_W = 2
+
+idim1_H = (idim0_H - fdim0_H + 1) / 2
+idim1_W = (idim0_W - fdim0_W + 1) / 2
+fdim1_H = 2
+fdim1_W = 2
+pdim1_H = 2
+pdim1_W = 2
+
+idim2_H = (idim1_H - fdim1_H + 1) / 2
+idim2_W = (idim1_W - fdim1_W + 1) / 2
+fdim2 = 500
 
 class LeNetConvPoolLayer(object):
     """Pool Layer of a convolutional network """
@@ -146,7 +178,7 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=200,
     rng = numpy.random.RandomState(123)
 
     # datasets = load_data(dataset)
-    datasets = loadmat(dataset, shuffle=shuffle, datasel=datasel, scaling=scaling)
+    datasets = loadmat(dataset=dataset, shuffle=shuffle, datasel=datasel, scaling=scaling, robust=robust)
 
     train_set_x, train_set_y = datasets[0]
     valid_set_x, valid_set_y = datasets[1]
@@ -173,12 +205,11 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=200,
     ######################
     print '... building the model'
     
-    idim0 = 20
-    fdim0 = 5
+    # the below comments are examples of using this cnn to deal with MNIST with input feature size 784 = 28*28
     # Reshape matrix of rasterized images of shape (batch_size, 28 * 28)
     # to a 4D tensor, compatible with our LeNetConvPoolLayer
     # (28, 28) is the size of MNIST images.
-    layer0_input = x.reshape((batch_size, 1, idim0, idim0))
+    layer0_input = x.reshape((batch_size, 1, idim0_H, idim0_W))
 
     # Construct the first convolutional pooling layer:
     # filtering reduces the image size to (28-5+1 , 28-5+1) = (24, 24)
@@ -187,23 +218,22 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=200,
     layer0 = LeNetConvPoolLayer(
         rng,
         input=layer0_input,
-        image_shape=(batch_size, 1, idim0, idim0),
-        filter_shape=(nkerns[0], 1, 5, 5),
-        poolsize=(2, 2)
+        image_shape=(batch_size, 1, idim0_H, idim0_W),
+        filter_shape=(nkerns[0], 1, fdim0_H, fdim0_W),
+        poolsize=(pdim0_H, pdim0_W)
     )
 
     # Construct the second convolutional pooling layer
     # filtering reduces the image size to (12-5+1, 12-5+1) = (8, 8)
     # maxpooling reduces this further to (8/2, 8/2) = (4, 4)
     # 4D output tensor is thus of shape (batch_size, nkerns[1], 4, 4)
-    idim1 = (idim0 - fdim0 + 1) / 2
-    fdim1 = 5
+    
     layer1 = LeNetConvPoolLayer(
         rng,
         input=layer0.output,
-        image_shape=(batch_size, nkerns[0], idim1, idim1),
-        filter_shape=(nkerns[1], nkerns[0], 5, 5),
-        poolsize=(2, 2)
+        image_shape=(batch_size, nkerns[0], idim1_H, idim1_W),
+        filter_shape=(nkerns[1], nkerns[0], fdim1_H, fdim1_W),
+        poolsize=(pdim1_H, pdim1_W)
     )
 
     # the HiddenLayer being fully-connected, it operates on 2D matrices of
@@ -212,13 +242,12 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=200,
     # or (500, 50 * 4 * 4) = (500, 800) with the default values.
     layer2_input = layer1.output.flatten(2)
     
-    idim2 = (idim1 - fdim1 + 1) / 2
-    fdim2 = 200
+    
     # construct a fully-connected sigmoidal layer
     layer2 = HiddenLayer(
         rng,
         input=layer2_input,
-        n_in=nkerns[1] * idim2 * idim2,
+        n_in=nkerns[1] * idim2_H * idim2_W,
         n_out=fdim2,
         activation=T.tanh
     )
@@ -309,7 +338,10 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=200,
     epoch = 0
     done_looping = False
 
-    while (epoch < n_epochs) and (not done_looping):
+    while (epoch < n_epochs):
+        if earlystop and done_looping:
+            print 'early-stopping'
+            break
         epoch = epoch + 1
         for minibatch_index in xrange(n_train_batches):
 
@@ -360,7 +392,8 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=200,
 
             if patience <= iter:
                 done_looping = True
-                break
+                if earlystop:
+                    break
 
     end_time = timeit.default_timer()
     print('Optimization complete.')
@@ -372,8 +405,8 @@ def evaluate_lenet5(learning_rate=0.01, n_epochs=200,
                           ' ran for %.2fm' % ((end_time - start_time) / 60.))
 
 if __name__ == '__main__':
-    evaluate_lenet5()
+    evaluate_lenet5(dataset=dataset,learning_rate=learning_rate,n_epochs=n_epochs,nkerns=nkerns)
 
 
-def experiment(state, channel):
-    evaluate_lenet5(state.learning_rate, dataset=state.dataset)
+# def experiment(state, channel):
+    # evaluate_lenet5(state.learning_rate, dataset=state.dataset)
