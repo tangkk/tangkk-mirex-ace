@@ -1,7 +1,7 @@
 % Generate training data based on the ground truth files
 % this process leverages the frontend and the ground truth data
 
-function trainingDataGen6Seg(savename, gtList)
+function trainingDataGenNSeg(savename, gtList, nseg)
 
 [feparam, ~, ~, ~, ~] = paramInit10();
 chordmode =  chordTypesGen;
@@ -9,13 +9,24 @@ fe = fopen(gtList,'r');
 tline = fgetl(fe);
 
 % the size of the training data is unknown yet. Will grow.
-trainingDataX1 = zeros(1,252*6);
-trainingDataX2 = zeros(1,24*6);
+trainingDataX1 = zeros(1,252*nseg);
+trainingDataX2 = zeros(1,24*nseg);
 trainingDatay = zeros(1,1);
 tidx = 1;
 
 % transfer chordnames to chord nums
 load chordnames.mat;
+
+% delete the /1 chords except for maj/1
+% this piece of code delete unnecessary chord entries
+nchordnames = [];
+for i = 1:length(chordnames)
+    if ~(~cellfun(@isempty,(strfind(chordnames(i),'/1'))) && cellfun(@isempty,(strfind(chordnames(i),'maj/1'))))
+        nchordnames = [nchordnames; chordnames(i)];
+    end
+end
+chordnames = nchordnames;
+
 chordnums = chnames2chnums(chordnames, chordmode);
 
 while ischar(tline)
@@ -167,35 +178,32 @@ while ischar(tline)
         % FIXME: tlabel 0 is for "N"
         Sm1 = Strain1(:,sb:eb);
         Sm2 = Strain2(:,sb:eb);
-        Sm16 = zeros(252,6);
-        Sm26 = zeros(24,6);
+        Sm1nseg = zeros(252,nseg);
+        Sm2nseg = zeros(24,nseg);
         
-        % seperate each segment into 6 sections (along time axis) and take average upon the
+        % seperate each segment into nseg sections (along time axis) and take average upon the
         % segments
         lenseg = eb-sb+1; % length of the whole segment
-        lensec = max(floor(lenseg / 6),1); % length of each section
-        for i = 1:6
+        lensec = max(floor(lenseg / nseg),1); % length of each section
+        for i = 1:nseg
             Sm1sec = mean(Sm1(:,min((i-1)*lensec+1,lenseg): min(i*lensec,lenseg)),2);
             Sm2sec = mean(Sm2(:,min((i-1)*lensec+1,lenseg): min(i*lensec,lenseg)),2);
             if ~isempty(find(isnan(Sm1sec),1))
                 fuck = 1;
             end
-            Sm16(:,i) = Sm1sec;
-            Sm26(:,i) = Sm2sec;
+            Sm1nseg(:,i) = Sm1sec;
+            Sm2nseg(:,i) = Sm2sec;
         end
         
         % unroll the feature matrix to become a feature vector
-        tcase1 = Sm16(:);
-        tcase2 = Sm26(:);
+        tcase1 = Sm1nseg(:);
+        tcase2 = Sm2nseg(:);
         
         chnum = chname2chnum(nch, chordmode);
         [~,tlabel] = ismember(chnum,chordnums);
         trainingDataX1(tidx,:) = tcase1';
         trainingDataX2(tidx,:) = tcase2';
         trainingDatay(tidx,:) = tlabel;
-        
-        display('length of trainingDataX1 so far');
-        display(size(trainingDataX1,1));
         
         gline = fgetl(fg);
         tidx = tidx + 1;
@@ -229,7 +237,7 @@ for i = 1:len
     % neg transpose
     for j = 1:5
         TXi = [];
-        for k = 1:6 % transpose for all 6 sections
+        for k = 1:nseg % transpose for all nseg sections
             Xt = Xi((k-1)*252+1:(k)*252);
             padlen = j*3;
             pad = zeros(1,padlen);
@@ -246,7 +254,7 @@ for i = 1:len
     % pos transpose
     for j = 1:6
         TXi = [];
-        for k = 1:6
+        for k = 1:nseg
             Xt = Xi((k-1)*252+1:(k)*252);
             padlen = j*3;
             pad = zeros(1,padlen);
@@ -264,7 +272,7 @@ end
 % generate other training data for all 12 keys for every training data
 % entry in X2 (24 dim feature - basstreble chroma)
 display('collecting training data for all 12 keys in trainingDataX2......');
-trainingDataX22 = zeros(1,24*6);
+trainingDataX22 = zeros(1,24*nseg);
 trainingDatay22 = zeros(1,1);
 t12idx = 1;
 len = size(trainingDataX2,1);
@@ -272,8 +280,8 @@ for j = 1:len
     ocase = trainingDataX2(j,:);
     y = trainingDatay(j);
     for i = 0:11 % generate all other 11 keys (except for N chord)
-        ncase = zeros(24,6);
-        for k = 1:6 % generate for all 6 segments
+        ncase = zeros(24,nseg);
+        for k = 1:nseg % generate for all nseg segments
             bcase = circshift(ocase(1+(k-1)*24:12+(k-1)*24)',i,1);
             ucase = circshift(ocase(13+(k-1)*24:24+(k-1)*24)',i,1);
             % generate a new data and a new label

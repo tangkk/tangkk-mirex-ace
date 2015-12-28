@@ -6,12 +6,6 @@ function nch = castGtLabel(och)
 
 nch = och;
 
-% % skip sus chords
-% if ~isempty(strfind(och,'sus'))
-%     nch = 'N';
-%     return;
-% end
-
 % stripe off the content in between the brackets (including the brackets)
 if ~isempty(strfind(och,'('))
     pos1 = strfind(och,'(');
