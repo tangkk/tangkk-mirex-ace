@@ -49,7 +49,7 @@ shuffle = 1
 # select a portion of data, max value is 1
 datasel = 1
 batch_size = 100
-hidden_layers_sizes = [2000]
+hidden_layers_sizes = [2000,1000]
 
 n_epochs=500
 learning_rate=0.01

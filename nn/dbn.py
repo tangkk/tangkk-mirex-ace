@@ -24,7 +24,7 @@ from grbm import GRBM
 
 from utils import tile_raster_images
 
-dataset = '../data-J6-12-key-raw.mat'
+dataset = '../data-B6-12-key-raw.mat'
 # 1 - shuffle the dataset in a random way; 0 - use the dataset as its original order
 shuffle = 1
 # scaling = -1: not scaling at all;
@@ -40,13 +40,13 @@ first_layer = 'grbm'
 
 pretraining_epochs=10
 pretrain_lr=0.001
-cdk=5
+cdk=10
 usepersistent=True
 
 training_epochs=500
 finetune_lr=0.01
-L1_reg=0.000
-L2_reg=0.000
+L1_reg=0.0000
+L2_reg=0.0000
 earlystop=False
 dropout=True
 pretrain_dropout=True

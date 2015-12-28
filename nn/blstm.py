@@ -1,5 +1,5 @@
 '''
-A chord classifier based on LSTM
+A chord classifier based on Bidirectional LSTM
 '''
 
 from collections import OrderedDict
@@ -17,7 +17,6 @@ from acedb import load_data, prepare_data
 
 dataset = "../test-Jvar.mat"
 format = 'cell'
-# this is actually a smoothing factor to the raw data
 nseg = 6
 # scaling = -1: not scaling at all
 # scaling = 0, perform standardization along axis=0 - scaling input variables
@@ -39,7 +38,7 @@ fC = 'reshape'
 dim_proj = 24
 maxlen = None
 # fC = 'repeat'
-# dim_proj=24
+# dim_proj=100
 
 # dropout
 use_dropout=True
@@ -138,8 +137,13 @@ def init_params(options):
     params = get_layer(options['encoder'])[0](options,
                                               params,
                                               prefix=options['encoder'])
-    # classifier
-    params['U'] = 0.01 * numpy.random.randn(options['dim_proj'],
+    # classifier - note that this set of 'U' and 'b' is for log_regression layer
+    # params['U'] = 0.01 * numpy.random.randn(options['dim_proj'],
+                                            # options['ydim']).astype(config.floatX)
+    # params['b'] = numpy.zeros((options['ydim'],)).astype(config.floatX)
+    
+    # below is for Bidirectional LSTM, the logistic regression needs to accomondate length of 2*dim_proj
+    params['U'] = 0.01 * numpy.random.randn(2*options['dim_proj'],
                                             options['ydim']).astype(config.floatX)
     params['b'] = numpy.zeros((options['ydim'],)).astype(config.floatX)
 
@@ -180,7 +184,10 @@ def param_init_lstm(options, params, prefix='lstm'):
 
     :see: init_params
     """
+    # note that this set of 'W','U' and 'b' are for LSTM layer, thus they have prefix in their names
     # W are the input weights
+    
+    # these are for the forward pass
     W = numpy.concatenate([ortho_weight(options['dim_proj']),
                            ortho_weight(options['dim_proj']),
                            ortho_weight(options['dim_proj']),
@@ -195,7 +202,23 @@ def param_init_lstm(options, params, prefix='lstm'):
     # b are bias
     b = numpy.zeros((4 * options['dim_proj'],))
     params[_p(prefix, 'b')] = b.astype(config.floatX) # "lstm_b"
-
+    
+    # these are for the backward pass
+    Wb = numpy.concatenate([ortho_weight(options['dim_proj']),
+                           ortho_weight(options['dim_proj']),
+                           ortho_weight(options['dim_proj']),
+                           ortho_weight(options['dim_proj'])], axis=1)
+    params[_p(prefix, 'Wb')] = Wb # "lstm_Wb"
+    # U are recurrent weights
+    Ub = numpy.concatenate([ortho_weight(options['dim_proj']),
+                           ortho_weight(options['dim_proj']),
+                           ortho_weight(options['dim_proj']),
+                           ortho_weight(options['dim_proj'])], axis=1)
+    params[_p(prefix, 'Ub')] = Ub # "lstm_Ub"
+    # b are bias
+    bb = numpy.zeros((4 * options['dim_proj'],))
+    params[_p(prefix, 'bb')] = bb.astype(config.floatX) # "lstm_bb"
+    
     return params #[lstm_W, lstm_U, lstm_b]
 
 
@@ -248,12 +271,65 @@ def lstm_layer(tparams, state_below, options, prefix='lstm', mask=None):
                                                            dim_proj)],
                                 name=_p(prefix, '_layers'),
                                 n_steps=nsteps)
-    return rval[0] # why not rval[-1]? -1 or 0?
+    return rval[0] # why not rval[-1]?
 
+# this is the backward lstm layer (blstm), note that the param set are all ended with 'b'
+def blstm_layer(tparams, state_below, options, prefix='lstm', mask=None):
+    # state_below is word_embedding
+    nsteps = state_below.shape[0]
+    if state_below.ndim == 3:
+        n_samples = state_below.shape[1]
+    else:
+        n_samples = 1
+
+    assert mask is not None
+
+    def _slice(_x, n, dim):
+        if _x.ndim == 3:
+            return _x[:, :, n * dim:(n + 1) * dim]
+        return _x[:, n * dim:(n + 1) * dim]
+    
+    # m_ is the mast
+    # x_ is passed as the "state_below" (Wx+b)
+    def _step(m_, x_, h_, c_):
+        preact = T.dot(h_, tparams[_p(prefix, 'Ub')])
+        preact += x_
+
+        i = T.nnet.sigmoid(_slice(preact, 0, options['dim_proj']))
+        f = T.nnet.sigmoid(_slice(preact, 1, options['dim_proj']))
+        o = T.nnet.sigmoid(_slice(preact, 2, options['dim_proj']))
+        c = T.tanh(_slice(preact, 3, options['dim_proj']))
+
+        c = f * c_ + i * c
+        c = m_[:, None] * c + (1. - m_)[:, None] * c_
+
+        h = o * T.tanh(c)
+        h = m_[:, None] * h + (1. - m_)[:, None] * h_
+
+        return h, c
+
+    state_below = (T.dot(state_below, tparams[_p(prefix, 'Wb')]) +
+                   tparams[_p(prefix, 'bb')])
+
+    dim_proj = options['dim_proj']
+    # at first, only state_below and mask are available, h and c are not
+    rval, updates = theano.scan(_step,
+                                sequences=[mask, state_below],
+                                outputs_info=[T.alloc(numpy_floatX(0.),
+                                                           n_samples,
+                                                           dim_proj),
+                                              T.alloc(numpy_floatX(0.),
+                                                           n_samples,
+                                                           dim_proj)],
+                                name=_p(prefix, '_layers'),
+                                n_steps=nsteps)
+    return rval[0] # why not rval[-1]?
 
 # ff: Feed Forward (normal neural net), only useful to put after lstm
 #     before the classifier.
-layers = {'lstm': (param_init_lstm, lstm_layer)}
+# lstm_layer is the feedforward layer
+# blstm_layer is the backward layer
+layers = {'lstm': (param_init_lstm, lstm_layer, blstm_layer)}
 
 
 def sgd(lr, tparams, grads, x, mask, oh_mask, y, cost):
@@ -422,8 +498,12 @@ def build_model(tparams, options, fC):
     y = T.vector('y', dtype='int64')
     
     # this part is subject to change for different application domain
-    n_timesteps = x.shape[0] / options['dim_proj']
+    n_timesteps = x.shape[0] / options['dim_proj'] # x.shape[0] = 400
     n_samples = x.shape[1]
+    
+    # preparing for constructing backward pass for BLSTM
+    bmask = mask[::-1]
+    boh_mask = oh_mask[::-1]
     
     '''
     from https://en.wikipedia.org/wiki/Word_embedding
@@ -437,28 +517,46 @@ def build_model(tparams, options, fC):
         # reshape the feature vector to use LSTM
         emb = x.reshape([n_timesteps, options['dim_proj'], n_samples])
         emb = numpy.swapaxes(emb,1,2)
+        # 2. construct a fliped emb using the fliped input x
+        bemb = emb[::-1]
     elif fC == 'repeat':
         # simply repeat the feature vector to dim_proj to use LSTM
         emb = numpy.repeat(x[:, :, numpy.newaxis], options['dim_proj'], axis=2)
-                                               
+        bemb = emb[::-1]
+        
+    '''
+    try to do a bi-directional LSTM using both emb and bemb
+    '''
+    # forward LSTM pass - with emb and mask
+    # get_layer(options['encoder'])[1] gets the calling handle of lstm_layer
     proj = get_layer(options['encoder'])[1](tparams, emb, options,
                                             prefix=options['encoder'],
                                             mask=mask)
+                                            
+    # backward LSTM pass - with bemb and bmask
+    # get_layer(options['encoder'])[2] gets the calling handle of blstm_layer
+    bproj = get_layer(options['encoder'])[2](tparams, bemb, options,
+                                            prefix=options['encoder'],
+                                            mask=bmask)
                                             
     # proj is the return of lstm_layer function (rval[0])
     # proj is with the same dimension of emb (it's basically a 1-1 projection of emb?)
     # which is n_timesteps * n_samples * dim_proj
     # we can easily add another layer on top of this proj layer
     if options['encoder'] == 'lstm':
-        # this performs a last pooling using the oh_mask
+        # this performs a last pooling using oh_mask
         proj = (proj * oh_mask[:, :, None]).sum(axis=0)
+        bproj = (bproj * boh_mask[:, :, None]).sum(axis=0)
     
         # this performs a sum pooling using the mask
         # proj = (proj * mask[:, :, None]).sum(axis=0)
+        # bproj = (bproj * bmask[:, :, None]).sum(axis=0)
         
         # this performs a mean pooling using the mask
         # proj = (proj * mask[:, :, None]).sum(axis=0)
         # proj = proj / mask.sum(axis=0)[:, None]
+        # bproj = (bproj * bmask[:, :, None]).sum(axis=0)
+        # bproj = bproj / bmask.sum(axis=0)[:, None]
         
         # this performs a max pooling
         # proj = (proj * mask[:, :, None]).max(axis=0)
@@ -467,12 +565,21 @@ def build_model(tparams, options, fC):
         # in which the latter frames are influenced by former frames)
         # proj = (proj * mask[:, :, None])
         # proj = proj[-1]
-
+        # bproj = (bproj * bmask[:, :, None])
+        # bproj = bproj[-1] 
+        
     if options['use_dropout']:
         proj = dropout_layer(proj, use_noise, trng)
+        bproj = dropout_layer(bproj, use_noise, trng)
+    
+    # after the above step, both proj and bproj are with dimension n_samples*dim_proj
     
     # this is the logistic regression layer
-    pred = T.nnet.softmax(T.dot(proj, tparams['U']) + tparams['b'])
+    # pred = T.nnet.softmax(T.dot(proj, tparams['U']) + tparams['b'])
+    # we concatenate both proj and bproj to feed into the logistic regression layer
+    # after the concatenation, both cproj is with dimension n_samples*2*dim_proj
+    cproj = T.concatenate([proj,bproj],axis=1)
+    pred = T.nnet.softmax(T.dot(cproj, tparams['U']) + tparams['b'])
 
     f_pred_prob = theano.function([x, mask, oh_mask], pred, name='f_pred_prob')
     f_pred = theano.function([x, mask, oh_mask], pred.argmax(axis=1), name='f_pred')
@@ -486,7 +593,7 @@ def build_model(tparams, options, fC):
     return use_noise, x, mask, oh_mask, y, f_pred_prob, f_pred, cost
 
 
-def pred_probs(f_pred_prob, prepare_data, data, iterator, verbose=False):
+def pred_probs(f_pred_prob, prepare_data, data, iterator, verbose=False, maxlen=None):
     """ If you want to use a trained model, this is useful to compute
     the probabilities of new examples.
     """
@@ -498,7 +605,7 @@ def pred_probs(f_pred_prob, prepare_data, data, iterator, verbose=False):
     for _, valid_index in iterator:
         x, mask, oh_mask, y = prepare_data([data[0][t] for t in valid_index],
                                   numpy.array(data[1])[valid_index],
-                                  maxlen=None, dim_proj=dim_proj, fC=fC)
+                                  maxlen=maxlen, dim_proj=dim_proj, fC=fC)
         pred_probs = f_pred_prob(x, mask, oh_mask)
         probs[valid_index, :] = pred_probs
 
@@ -509,7 +616,7 @@ def pred_probs(f_pred_prob, prepare_data, data, iterator, verbose=False):
     return probs
 
 
-def pred_error(f_pred, prepare_data, data, iterator, verbose=False):
+def pred_error(f_pred, prepare_data, data, iterator, verbose=False, maxlen=None):
     """
     Just compute the error
     f_pred: Theano fct computing the prediction
@@ -519,7 +626,7 @@ def pred_error(f_pred, prepare_data, data, iterator, verbose=False):
     for _, valid_index in iterator:
         x, mask, oh_mask, y = prepare_data([data[0][t] for t in valid_index],
                                   numpy.array(data[1])[valid_index],
-                                  maxlen=None, dim_proj=dim_proj, fC=fC)
+                                  maxlen=maxlen, dim_proj=dim_proj, fC=fC)
         preds = f_pred(x, mask, oh_mask)
         targets = numpy.array(data[1])[valid_index]
         valid_err += (preds == targets).sum()
@@ -560,10 +667,12 @@ def train_lstm(
     # Model options
     model_options = locals().copy()
     print "model options", model_options
-    
+
+    #load_data, prepare_data = get_dataset(dataset)
+
     print 'Loading data'
     train, valid, test = load_data(dataset=dataset, valid_portion=0.05, test_portion=0.05,
-                                   maxlen=maxlen, scaling=scaling, robust=robust, format=format, fdim=dim_proj, nseg=nseg)
+                                   maxlen=None, scaling=scaling, robust=robust, format=format, fdim=dim_proj, nseg=nseg)
                                    
     print 'data loaded'
     
@@ -580,6 +689,7 @@ def train_lstm(
     
 
     ydim = numpy.max(train[1]) + 1
+    # ydim = numpy.max(train[1])
     print 'ydim = %d'%ydim
 
     model_options['ydim'] = ydim
@@ -600,7 +710,7 @@ def train_lstm(
     # use_noise is for dropout
     (use_noise, x, mask, oh_mask,
      y, f_pred_prob, f_pred, cost) = build_model(tparams, model_options, fC=fC)
-
+    
     if decay_c > 0.:
         decay_c = theano.shared(numpy_floatX(decay_c), name='decay_c')
         weight_decay = 0.
@@ -656,7 +766,7 @@ def train_lstm(
                 # Get the data in numpy.ndarray format
                 # This swap the axis!
                 # Return something of shape (minibatch maxlen, n samples)
-                x, mask, oh_mask, y = prepare_data(x, y, dim_proj=dim_proj, fC=fC)
+                x, mask, oh_mask, y = prepare_data(x, y, dim_proj=dim_proj, fC=fC, maxlen=maxlen)
                 n_samples += x.shape[1]
 
                 cost = f_grad_shared(x, mask, oh_mask, y)
@@ -683,9 +793,9 @@ def train_lstm(
 
                 if numpy.mod(uidx, validFreq) == 0:
                     use_noise.set_value(0.)
-                    train_err = pred_error(f_pred, prepare_data, train, kf)
-                    valid_err = pred_error(f_pred, prepare_data, valid, kf_valid)
-                    test_err = pred_error(f_pred, prepare_data, test, kf_test)
+                    train_err = pred_error(f_pred, prepare_data, train, kf, maxlen=None)
+                    valid_err = pred_error(f_pred, prepare_data, valid, kf_valid, maxlen=None)
+                    test_err = pred_error(f_pred, prepare_data, test, kf_test, maxlen=None)
 
                     history_errs.append([valid_err, test_err])
                     
@@ -747,10 +857,10 @@ if __name__ == '__main__':
     train_lstm(
         dim_proj=dim_proj,
         max_epochs=max_epochs,
-        maxlen=maxlen,
         scaling=scaling,
         dataset=dataset,
         use_dropout=use_dropout,
         batch_size=batch_size,
+        maxlen=maxlen,
         fC=fC
     )
