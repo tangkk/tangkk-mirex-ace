@@ -4,6 +4,8 @@ import scipy.io as sio
 import theano.tensor as T
 from sklearn import preprocessing
 from loadmat import standardize
+from acesongdb import load_matrix_data_h5py
+from acesongdb import load_cell_data_h5py_0
 
 def prepare_data(seqs, labels, maxlen=None, dim_proj=None, fC='repeat'):
     """Create the matrices from the datasets.
@@ -59,7 +61,6 @@ def prepare_data(seqs, labels, maxlen=None, dim_proj=None, fC='repeat'):
     x_oh_mask = x_mask
     return x, x_mask, x_oh_mask, labels
 
-
 def load_data(dataset="../testnn.mat", valid_portion=0.05, test_portion=0.05, maxlen=None,
               sort_by_len=False, scaling=1, robust=0, format = 'matrix', nseg=6, fdim=24):
     '''Loads the dataset
@@ -82,14 +83,20 @@ def load_data(dataset="../testnn.mat", valid_portion=0.05, test_portion=0.05, ma
     #############
     # LOAD DATA #
     #############
-    mat = sio.loadmat(dataset)
-    X = mat['X']
     
+    if format == 'matrix':
+        mat = sio.loadmat(dataset)
+        X = mat['X']
+        y = mat['y']
+        y = y.T[0]
+        y[y==max(y)]=0
     # have to convert back to normal format if input is cell array (varlen array)
-    if format == 'cell':
+    elif format == 'cell': # this is encoded by h5py
+        X = load_cell_data_h5py_0(dataset,'X')
+        X = X.T
         cX = []
         for i in range(len(X)):
-            xi = X[i][0][0]
+            xi = X[i][0]
             # reshape xi and then average every nseg in n_step
             xr = xi.reshape(len(xi)/fdim, fdim) # n_step * n_feature
             xm = []
@@ -103,12 +110,11 @@ def load_data(dataset="../testnn.mat", valid_portion=0.05, test_portion=0.05, ma
             xm = preprocessing.scale(xm)
             cX.append(xm)
         X = numpy.asarray(cX)
+        y = load_matrix_data_h5py(dataset,'y')
+        y = y.T[0]
+        y[y==max(y)]=0
     
-    y = mat['y']
-    # transpose the y so that it is a row array instead of a column array, which avoids the error:
-    # "cannot convert type tensortype(int32, matrix) into type tensortype(int32,vector)"
-    y = y.T[0]
-    y[y==max(y)]=0
+    
 
     train_set = (X,y)
     

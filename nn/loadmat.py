@@ -1,4 +1,5 @@
 # load a .mat file as training, validation, test dataset
+# note that scipy.io only deals with .mat file less than 2GB size
 
 import scipy.io as sio
 import theano

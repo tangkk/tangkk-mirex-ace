@@ -12,11 +12,21 @@
 % 28 rbm2_bias(120,544,277,0.02,1000,10000,data-J-12,0)-nn2_bias(120,544,277,1000,1,init_model,data-J-12)+LM-J
 % 29 rbm2_bias(120,544,277,0.02,1000,10000,data-J-12,0)-nn2_bias(120,544,277,1000,1,init_model,data-J-12)+LM-B
 
-tangkkace('28','tempList.txt');evaluateCP tempList-28 tempList.txt;
-tangkkace('29','tempList.txt');evaluateCP tempList-29 tempList.txt;
+% tangkkace('28','tempList.txt');evaluateCP tempList-28 tempList.txt;
+% tangkkace('29','tempList.txt');evaluateCP tempList-29 tempList.txt;
+% 
+% tangkkace('28','JayChou29List.txt');evaluateCP jaychou-28 JayChou29List.txt;
+% tangkkace('28','TheBeatles180List.txt');evaluateCP thebeatles-28 TheBeatles180List.txt;
+% 
+% tangkkace('29','JayChou29List.txt');evaluateCP jaychou-29 JayChou29List.txt;
+% tangkkace('29','TheBeatles180List.txt');evaluateCP thebeatles-29 TheBeatles180List.txt;
 
-tangkkace('28','JayChou29List.txt');evaluateCP jaychou-28 JayChou29List.txt;
-tangkkace('28','TheBeatles180List.txt');evaluateCP thebeatles-28 TheBeatles180List.txt;
+% trainingDataGenNSeg('raw1.mat','JayChou29List.txt',6, 1)% encoded in -v5
+% trainingDataGenVarLen('raw2.mat','JayChou29List.txt', 1)% encoded in -v7.3
+% trainingDataGenSongWise('raw3.mat','JayChou29List.txt', 1)% encoded in -v7.3
+% trainingDataGenNSeg('raw4.mat','TheBeatles180List.txt',6, 1)% encoded in -v5
+% trainingDataGenVarLen('raw5.mat','TheBeatles180List.txt', 1)% encoded in -v7.3
+% trainingDataGenSongWise('raw6.mat','TheBeatles180List.txt', 1)% encoded in -v7.3
 
-tangkkace('29','JayChou29List.txt');evaluateCP jaychou-29 JayChou29List.txt;
-tangkkace('29','TheBeatles180List.txt');evaluateCP thebeatles-29 TheBeatles180List.txt;
+% trainingDataGenVarLen('raw7.mat','JayChou29List.txt', 0)% encoded in -v7.3
+% trainingDataGenVarLen('raw8.mat','TheBeatles180List.txt', 0)% encoded in -v7.3
