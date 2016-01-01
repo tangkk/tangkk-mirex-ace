@@ -30,3 +30,4 @@
 
 % trainingDataGenVarLen('raw7.mat','JayChou29List.txt', 0)% encoded in -v7.3
 % trainingDataGenVarLen('raw8.mat','TheBeatles180List.txt', 0)% encoded in -v7.3
+trainingDataGenSongWise('raw9.mat','JayChou29List.txt', 0)% encoded in -v7.3

@@ -40,8 +40,7 @@ def load_cell_data_h5py_0(dataset=None,name=None):
     cX = numpy.asarray(cX).T
     return cX
     
-def load_data_nseg_h5py(dataset=None, dumppath=None):
-    nseg = 12
+def pkl_data_nseg_h5py(dataset=None, dumppath=None, nseg=6):
     
     #############
     # LOAD DATA #
@@ -97,7 +96,7 @@ def load_data_nseg_h5py(dataset=None, dumppath=None):
         
     return X,y
     
-def load_data_framewise_h5py(dataset=None, dumppath=None):
+def pkl_data_framewise_h5py(dataset=None, dumppath=None):
 
     #############
     # LOAD DATA #
@@ -150,8 +149,7 @@ def load_data_framewise_h5py(dataset=None, dumppath=None):
         
     return X,y
 
-def load_data_nseg(dataset=None, dumppath=None):
-    nseg = 12
+def pkl_data_nseg(dataset=None, dumppath=None, nseg=6):
     
     #############
     # LOAD DATA #
@@ -207,7 +205,7 @@ def load_data_nseg(dataset=None, dumppath=None):
         
     return X,y
 
-def load_data_framewise(dataset=None, dumppath=None):
+def pkl_data_framewise(dataset=None, dumppath=None):
 
     #############
     # LOAD DATA #
