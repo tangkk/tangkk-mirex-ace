@@ -65,3 +65,4 @@ data-B*.mat
 dbn*.mat
 test*.mat
 raw.mat
+*.pkl
