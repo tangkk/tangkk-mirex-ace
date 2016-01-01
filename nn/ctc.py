@@ -1,5 +1,5 @@
 '''
-A chord classifier based on LSTM
+A chord classifier based on unidirectional CTC
 '''
 
 from collections import OrderedDict
@@ -13,40 +13,20 @@ from theano import config
 import theano.tensor as T
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 
-from acedb import load_data, prepare_data
+from acesongdb import load_data
 
-dataset = "../test-Jseg.mat"
-format = 'matrix'
-# this is actually a smoothing factor to the raw data
-nseg = 6
-# scaling = -1: not scaling at all
-# scaling = 0, perform standardization along axis=0 - scaling input variables
-# scaling = 1, perform standardization along axis=1 - scaling input cases
-scaling=1
-robust=0
+dataset = "../test-Jsong.pkl"
 
-# dim_proj
-# 1. for testnn.mat dataset (simple MNIST), the input feature vector dim is 400
-#   which means it's a 20*20 square digit, we can make it 20*20
-# 2. for ACE 12-key dataset, the input feature vector dim is 144
-#   we can make it 12*12
-# 3. for ACE ns-12-key dataset, the input feature vector dim is 1512
-#   we can make it 12*256
-# param fC
-# feature control, either is repeat or reshape by dim_proj
-#
-fC = 'reshape'
 dim_proj = 24
+ydim = 277
 maxlen = None
-# fC = 'repeat'
-# dim_proj=24
 
 # dropout
 use_dropout=True
 
 # gd
-max_epochs = 500 # give it long enough time to train
-batch_size = 100
+max_epochs = 4000 # give it long enough time to train
+batch_size = 1000 # length of a sample training piece within a song in terms of number of frames
 
 # Set the random number generators' seeds for consistency
 SEED = 123
@@ -127,14 +107,6 @@ def init_params(options):
     Global (not LSTM) parameter. For the embeding and the classifier.
     """
     params = OrderedDict()
-    # embedding
-    '''
-    https://en.wikipedia.org/wiki/Word_embedding
-    Word embedding is the collective name for a set of language modeling and feature learning techniques in natural language processing where words from the vocabulary (and possibly phrases thereof) are mapped to vectors of real numbers in a low dimensional space, relative to the vocabulary size ("continuous space").
-    '''
-    # randn = numpy.random.rand(options['n_words'],
-                              # options['dim_proj'])
-    # params['Wemb'] = (0.01 * randn).astype(config.floatX)
     params = get_layer(options['encoder'])[0](options,
                                               params,
                                               prefix=options['encoder'])
@@ -199,24 +171,13 @@ def param_init_lstm(options, params, prefix='lstm'):
     return params #[lstm_W, lstm_U, lstm_b]
 
 
-def lstm_layer(tparams, x, options, prefix='lstm', mask=None):
-    # x is word_embedding
-    nsteps = x.shape[0]
-    if x.ndim == 3:
-        n_samples = x.shape[1]
-    else:
-        n_samples = 1
-
-    assert mask is not None
+def lstm_layer(tparams, x, y, use_noise, options, prefix='lstm'):
+    n_timesteps = x.shape[0]
 
     def _slice(_x, n, dim):
-        if _x.ndim == 3:
-            return _x[:, :, n * dim:(n + 1) * dim]
-        return _x[:, n * dim:(n + 1) * dim]
+        return _x[n * dim:(n + 1) * dim]
     
-    # m_ is the mast
-    # x_ is passed as the "x" (Wx+b)
-    def _step(m_, x_, h_, c_):
+    def _step(x_, h_, c_):
         preact = T.dot(h_, tparams[_p(prefix, 'U')])
         preact += T.dot(x_, tparams[_p(prefix, 'W')])
         preact += tparams[_p(prefix, 'b')]
@@ -227,29 +188,101 @@ def lstm_layer(tparams, x, options, prefix='lstm', mask=None):
         c = T.tanh(_slice(preact, 3, options['dim_proj']))
 
         c = f * c_ + i * c
-        c = m_[:, None] * c + (1. - m_)[:, None] * c_
-
         h = o * T.tanh(c)
-        h = m_[:, None] * h + (1. - m_)[:, None] * h_
-
-        return h, c
-
+        
+        # a single frame prediction given h - the posterior probablity
+        one_pred = T.nnet.softmax(T.dot(h, tparams['U']) + tparams['b'])
+        
+        return h, c, one_pred
+    
     dim_proj = options['dim_proj']
-    # at first, only x and mask are available, h and c are not
+    ydim = options['ydim']
+    # the scan function takse one dim_proj vector of x and one target of y at a time
+    # the output is:
+    # rval[0] -- n_timesteps of h -- n_timesteps * dim_proj
+    # rval[1] -- n_timesteps of c -- n_timesteps * dim_proj
+    # rval[2] -- n_timesteps of one_pred -- n_timesteps * ydim
     rval, updates = theano.scan(_step,
-                                sequences=[mask, x],
+                                sequences=[x],
                                 outputs_info=[T.alloc(numpy_floatX(0.),
-                                                           n_samples,
                                                            dim_proj),
                                               T.alloc(numpy_floatX(0.),
-                                                           n_samples,
-                                                           dim_proj)],
+                                                           dim_proj),
+                                              None],
                                 name=_p(prefix, '_layers'),
-                                n_steps=nsteps)
-    # rval has two values:
-    # rval[0] stands for a vector of h (lstm cell output value), as returned by scaning _step function
-    # rval[1] stands for a vector of c (lstm cell state value), as returned by _step function
-    return rval[0]
+                                n_steps=n_timesteps)
+    
+    pred = rval[2]
+    pred = T.flatten(pred,2)
+    
+    trng = RandomStreams(123)
+    if options['use_dropout']:
+        pred = dropout_layer(pred, use_noise, trng)
+    
+    '''
+    # CTC forward-backward pass, adapted from:
+    # https://blog.wtf.sg/2014/10/06/connectionist-temporal-classification-ctc-with-theano/
+    def recurrence_relation(size):
+        big_I = T.eye(size+2)
+        return T.eye(size) + big_I[2:,1:-1] + big_I[2:,:-2] * (T.arange(size) % 2)
+        
+    def _epslog(x):
+        return tensor.cast(tensor.log(tensor.clip(x, 1E-12, 1E12)),
+                           theano.config.floatX)
+
+    def log_add(a, b):
+        max_ = tensor.maximum(a, b)
+        return (max_ + tensor.log1p(tensor.exp(a + b - 2 * max_)))
+
+    def log_dot_matrix(x, z):
+        inf = 1E12
+        log_dot = tensor.dot(x, z)
+        zeros_to_minus_inf = (z.max(axis=0) - 1) * inf
+        return log_dot + zeros_to_minus_inf
+
+    def log_dot_tensor(x, z):
+        inf = 1E12
+        log_dot = (x.dimshuffle(1, 'x', 0) * z).sum(axis=0).T
+        zeros_to_minus_inf = (z.max(axis=0) - 1) * inf
+        return log_dot + zeros_to_minus_inf.T
+    
+    def path_probs(predict,Y):
+        P = predict[:,Y]
+        rr = recurrence_relation(Y.shape[0])
+        def step(p_curr,p_prev):
+            return (p_curr * T.dot(p_prev,rr)).astype(theano.config.floatX)
+        probs,_ = theano.scan(
+                step,
+                sequences = [P],
+                outputs_info = [T.eye(Y.shape[0])[0]]
+            )
+        return probs
+        
+    def ctc_cost(predict,Y):
+        forward_probs  = path_probs(predict,Y)
+        backward_probs = path_probs(predict[::-1],Y[::-1])[::-1,::-1]
+        probs = forward_probs * backward_probs / predict[:,Y]
+        total_prob = T.sum(probs)
+        return -T.log(total_prob)
+        
+    ctc cost - with DP
+    cost = ctc_cost(pred, y)
+    '''
+    
+    # pred will be -- n_timesteps * ydim posterior probs
+    f_pred_prob = theano.function([x], pred, name='f_pred_prob')
+    # pred.argmax(axis=1) will be -- n_timesteps * 1 one hot prediction
+    f_pred = theano.function([x], pred.argmax(axis=1), name='f_pred')
+    
+    # cost will be a scaler value
+    # compile a function for the cost for one frame given one_pred and one_y (or y_)
+    # cost is a scaler, where y is a n_timesteps * 1 target vector
+    # Each prediction is conditionally independent give x
+    # thus the posterior of p(pi|x) should be the product of each posterior
+    off = 1e-8
+    cost = -T.log(pred[T.arange(y.shape[0]), y] + off).mean()
+    
+    return f_pred_prob, f_pred, cost
 
 
 # ff: Feed Forward (normal neural net), only useful to put after lstm
@@ -257,7 +290,7 @@ def lstm_layer(tparams, x, options, prefix='lstm', mask=None):
 layers = {'lstm': (param_init_lstm, lstm_layer)}
 
 
-def sgd(lr, tparams, grads, x, mask, oh_mask, y, cost):
+def sgd(lr, tparams, grads, x, y, cost):
     """ Stochastic Gradient Descent
 
     :note: A more complicated version of sgd then needed.  This is
@@ -272,7 +305,7 @@ def sgd(lr, tparams, grads, x, mask, oh_mask, y, cost):
 
     # Function that computes gradients for a mini-batch, but do not
     # updates the weights.
-    f_grad_shared = theano.function([x, mask, oh_mask, y], cost, updates=gsup,
+    f_grad_shared = theano.function([x, y], cost, updates=gsup,
                                     name='sgd_f_grad_shared')
 
     pup = [(p, p - lr * g) for p, g in zip(tparams.values(), gshared)]
@@ -285,7 +318,7 @@ def sgd(lr, tparams, grads, x, mask, oh_mask, y, cost):
     return f_grad_shared, f_update
 
 
-def adadelta(lr, tparams, grads, x, mask, oh_mask, y, cost):
+def adadelta(lr, tparams, grads, x, y, cost):
     """
     An adaptive learning rate optimizer
 
@@ -299,8 +332,6 @@ def adadelta(lr, tparams, grads, x, mask, oh_mask, y, cost):
         Gradients of cost w.r.t to parameres
     x: Theano variable
         Model inputs
-    mask: Theano variable
-        Sequence mask
     y: Theano variable
         Targets
     cost: Theano variable
@@ -328,7 +359,7 @@ def adadelta(lr, tparams, grads, x, mask, oh_mask, y, cost):
     rg2up = [(rg2, 0.95 * rg2 + 0.05 * (g ** 2))
              for rg2, g in zip(running_grads2, grads)]
 
-    f_grad_shared = theano.function([x, mask, oh_mask, y], cost, updates=zgup + rg2up,
+    f_grad_shared = theano.function([x, y], cost, updates=zgup + rg2up,
                                     name='adadelta_f_grad_shared')
 
     updir = [-T.sqrt(ru2 + 1e-6) / T.sqrt(rg2 + 1e-6) * zg
@@ -346,7 +377,7 @@ def adadelta(lr, tparams, grads, x, mask, oh_mask, y, cost):
     return f_grad_shared, f_update
 
 
-def rmsprop(lr, tparams, grads, x, mask, oh_mask, y, cost):
+def rmsprop(lr, tparams, grads, x, y, cost):
     """
     A variant of  SGD that scales the step size by running average of the
     recent step norms.
@@ -361,8 +392,6 @@ def rmsprop(lr, tparams, grads, x, mask, oh_mask, y, cost):
         Gradients of cost w.r.t to parameres
     x: Theano variable
         Model inputs
-    mask: Theano variable
-        Sequence mask
     y: Theano variable
         Targets
     cost: Theano variable
@@ -392,7 +421,7 @@ def rmsprop(lr, tparams, grads, x, mask, oh_mask, y, cost):
     rg2up = [(rg2, 0.95 * rg2 + 0.05 * (g ** 2))
              for rg2, g in zip(running_grads2, grads)]
 
-    f_grad_shared = theano.function([x, mask, oh_mask, y], cost,
+    f_grad_shared = theano.function([x, y], cost,
                                     updates=zgup + rgup + rg2up,
                                     name='rmsprop_f_grad_shared')
 
@@ -411,120 +440,39 @@ def rmsprop(lr, tparams, grads, x, mask, oh_mask, y, cost):
     return f_grad_shared, f_update
 
 
-def build_model(tparams, options, fC):
+def build_model(tparams, options):
     trng = RandomStreams(SEED)
 
     # Used for dropout.
     use_noise = theano.shared(numpy_floatX(0.))
 
     x = T.matrix('x', dtype=config.floatX)
-    mask = T.matrix('mask', dtype=config.floatX)
-    oh_mask = T.matrix('oh_mask', dtype=config.floatX)
     y = T.vector('y', dtype='int64')
     
-    # this part is subject to change for different application domain
-    n_timesteps = x.shape[0] / options['dim_proj']
-    n_samples = x.shape[1]
-    
-    '''
-    from https://en.wikipedia.org/wiki/Word_embedding
-    Word embedding is the collective name for a set of language modeling and feature learning techniques in natural language processing where words from the vocabulary (and possibly phrases thereof) are mapped to vectors of real numbers in a low dimensional space, relative to the vocabulary size ("continuous space")
-    '''
-    # emb = tparams['Wemb'][x.flatten()].reshape([n_timesteps,
-                                                # n_samples,
-                                                # options['dim_proj']])
-    
-    if fC == 'reshape':
-        # reshape the feature vector to use LSTM
-        emb = x.reshape([n_timesteps, options['dim_proj'], n_samples])
-        emb = numpy.swapaxes(emb,1,2)
-    elif fC == 'repeat':
-        # simply repeat the feature vector to dim_proj to use LSTM
-        emb = numpy.repeat(x[:, :, numpy.newaxis], options['dim_proj'], axis=2)
-                                               
-    proj = get_layer(options['encoder'])[1](tparams, emb, options,
-                                            prefix=options['encoder'],
-                                            mask=mask)
-                                            
-    # proj is the return of lstm_layer function (rval[0])
-    # proj is with the same dimension of emb (it's basically a 1-1 projection of emb?)
-    # which is n_timesteps * n_samples * dim_proj
-    # we can easily add another layer on top of this proj layer
-    if options['encoder'] == 'lstm':
-        # this performs a last pooling using the oh_mask
-        proj = (proj * oh_mask[:, :, None]).sum(axis=0)
-    
-        # this performs a sum pooling using the mask
-        # proj = (proj * mask[:, :, None]).sum(axis=0)
-        
-        # this performs a mean pooling using the mask
-        # proj = (proj * mask[:, :, None]).sum(axis=0)
-        # proj = proj / mask.sum(axis=0)[:, None]
-        
-        # this performs a max pooling
-        # proj = (proj * mask[:, :, None]).max(axis=0)
-        
-        # this takes only the last non-zero lstm output (should be natural in modeling chord progression
-        # in which the latter frames are influenced by former frames)
-        # proj = (proj * mask[:, :, None])
-        # proj = proj[-1]
+    f_pred_prob, f_pred, cost = get_layer(options['encoder'])[1](tparams, x, y, use_noise, options,
+                                            prefix=options['encoder'])
+                                           
 
-    if options['use_dropout']:
-        proj = dropout_layer(proj, use_noise, trng)
-    
-    # this is the logistic regression layer
-    pred = T.nnet.softmax(T.dot(proj, tparams['U']) + tparams['b'])
-
-    f_pred_prob = theano.function([x, mask, oh_mask], pred, name='f_pred_prob')
-    f_pred = theano.function([x, mask, oh_mask], pred.argmax(axis=1), name='f_pred')
-
-    off = 1e-8
-    if pred.dtype == 'float16':
-        off = 1e-6
-    
-    cost = -T.log(pred[T.arange(y.shape[0]), y] + off).mean()
-
-    return use_noise, x, mask, oh_mask, y, f_pred_prob, f_pred, cost
+    return use_noise, x, y, f_pred_prob, f_pred, cost
 
 
-def pred_probs(f_pred_prob, prepare_data, data, iterator, verbose=False):
-    """ If you want to use a trained model, this is useful to compute
-    the probabilities of new examples.
-    """
-    n_samples = len(data[0])
-    probs = numpy.zeros((n_samples, 2)).astype(config.floatX)
-
-    n_done = 0
-
-    for _, valid_index in iterator:
-        x, mask, oh_mask, y = prepare_data([data[0][t] for t in valid_index],
-                                  numpy.array(data[1])[valid_index],
-                                  maxlen=None, dim_proj=dim_proj, fC=fC)
-        pred_probs = f_pred_prob(x, mask, oh_mask)
-        probs[valid_index, :] = pred_probs
-
-        n_done += len(valid_index)
-        if verbose:
-            print '%d/%d samples classified' % (n_done, n_samples)
-
-    return probs
-
-
-def pred_error(f_pred, prepare_data, data, iterator, verbose=False):
+def pred_error(f_pred, data, verbose=False):
     """
     Just compute the error
     f_pred: Theano fct computing the prediction
     prepare_data: usual prepare_data for that dataset.
     """
+    idx0 = numpy.random.randint(0,len(data[0]))
+    
     valid_err = 0
-    for _, valid_index in iterator:
-        x, mask, oh_mask, y = prepare_data([data[0][t] for t in valid_index],
-                                  numpy.array(data[1])[valid_index],
-                                  maxlen=None, dim_proj=dim_proj, fC=fC)
-        preds = f_pred(x, mask, oh_mask)
-        targets = numpy.array(data[1])[valid_index]
-        valid_err += (preds == targets).sum()
-    valid_err = 1. - numpy_floatX(valid_err) / len(data[0])
+    # on one whole random song
+    x = data[0][idx0]
+    y = data[1][idx0]
+
+    preds = f_pred(x)
+    targets = y
+    valid_err += (preds == targets).sum()
+    valid_err = 1. - numpy_floatX(valid_err) / len(y)
 
     return valid_err
 
@@ -555,7 +503,6 @@ def train_lstm(
     reload_model=None,  # Path to a saved model we want to start from.
     test_size=-1,  # If >0, we keep only this number of test example.
     scaling=1,
-    fC='reshape'
 ):
 
     # Model options
@@ -563,25 +510,12 @@ def train_lstm(
     print "model options", model_options
     
     print 'Loading data'
-    train, valid, test = load_data(dataset=dataset, valid_portion=0.05, test_portion=0.05,
-                                   maxlen=maxlen, scaling=scaling, robust=robust, format=format, fdim=dim_proj, nseg=nseg)
+    # the dateset is organized as:
+    # X - n_songs * n_timesteps * dim_proj (dim_proj = 24 for chromagram based dataset)
+    # y - n_songs * n_timesteps * 1
+    train, valid, test = load_data(dataset=dataset, valid_portion=0.05, test_portion=0.05)
                                    
     print 'data loaded'
-    
-    '''
-    if test_size > 0:
-        # The test set is sorted by size, but we want to keep random
-        # size example.  So we must select a random selection of the
-        # examples.
-        idx = numpy.arange(len(test[0]))
-        numpy.random.shuffle(idx)
-        idx = idx[:test_size]
-        test = ([test[0][n] for n in idx], [test[1][n] for n in idx])
-    '''
-    
-
-    ydim = numpy.max(train[1]) + 1
-    print 'ydim = %d'%ydim
 
     model_options['ydim'] = ydim
 
@@ -599,8 +533,11 @@ def train_lstm(
     tparams = init_tparams(params)
 
     # use_noise is for dropout
-    (use_noise, x, mask, oh_mask,
-     y, f_pred_prob, f_pred, cost) = build_model(tparams, model_options, fC=fC)
+    # the model takes input of:
+    # x -- n_timesteps * dim_proj * n_samples (in a simpler case, n_samples = 1 in ctc)
+    # y -- n_timesteps * 1 * n_samples (in a simpler case, n_samples = 1 in ctc)
+    (use_noise, x,
+     y, f_pred_prob, f_pred, cost) = build_model(tparams, model_options)
 
     if decay_c > 0.:
         decay_c = theano.shared(numpy_floatX(decay_c), name='decay_c')
@@ -609,19 +546,16 @@ def train_lstm(
         weight_decay *= decay_c
         cost += weight_decay
 
-    f_cost = theano.function([x, mask, oh_mask, y], cost, name='f_cost')
+    f_cost = theano.function([x, y], cost, name='f_cost')
 
     grads = T.grad(cost, wrt=tparams.values())
-    f_grad = theano.function([x, mask, oh_mask, y], grads, name='f_grad')
+    f_grad = theano.function([x, y], grads, name='f_grad')
 
     lr = T.scalar(name='lr')
     f_grad_shared, f_update = optimizer(lr, tparams, grads,
-                                        x, mask, oh_mask, y, cost)
+                                        x, y, cost)
 
     print 'Optimization'
-
-    kf_valid = get_minibatches_idx(len(valid[0]), valid_batch_size)
-    kf_test = get_minibatches_idx(len(test[0]), valid_batch_size)
 
     print "%d train examples" % len(train[0])
     print "%d valid examples" % len(valid[0])
@@ -631,11 +565,6 @@ def train_lstm(
     best_p = None
     bad_count = 0
 
-    if validFreq == -1:
-        validFreq = len(train[0]) / batch_size
-    if saveFreq == -1:
-        saveFreq = len(train[0]) / batch_size
-
     uidx = 0  # the number of update done
     estop = False  # early stop
     start_time = time.time()
@@ -643,75 +572,74 @@ def train_lstm(
         for eidx in xrange(max_epochs):
             n_samples = 0
 
-            # Get new shuffled index for the training set.
-            kf = get_minibatches_idx(len(train[0]), batch_size, shuffle=True)
+            # Get random sample a piece of length batch_size from a song
+            idx0 = numpy.random.randint(0,len(train[0]))
+            idx1 = numpy.random.randint(0,len(train[0][idx0])-batch_size) # 500 in our case
+            
+            uidx += 1
+            use_noise.set_value(1.)
+            
+            # Select the random examples for this minibatch
+            x = train[0][idx0][idx1:idx1+batch_size]
+            y = train[1][idx0][idx1:idx1+batch_size]
+            
+            # Get the data in numpy.ndarray format
+            # This swap the axis!
+            # Return something of shape (minibatch maxlen, n samples)
+            n_samples += 1
 
-            for _, train_index in kf:
-                uidx += 1
-                use_noise.set_value(1.)
+            cost = f_grad_shared(x, y)
+            f_update(lrate)
 
-                # Select the random examples for this minibatch
-                y = [train[1][t] for t in train_index]
-                x = [train[0][t] for t in train_index]
+            # if numpy.isnan(cost) or numpy.isinf(cost):
+                # print 'NaN detected'
+                # return 1., 1., 1.
 
-                # Get the data in numpy.ndarray format
-                # This swap the axis!
-                # Return something of shape (minibatch maxlen, n samples)
-                x, mask, oh_mask, y = prepare_data(x, y, dim_proj=dim_proj, fC=fC)
-                n_samples += x.shape[1]
+            if numpy.mod(uidx, dispFreq) == 0:
+                print 'Epoch ', eidx, 'Update ', uidx, 'Cost ', cost
 
-                cost = f_grad_shared(x, mask, oh_mask, y)
-                f_update(lrate)
+            if saveto and numpy.mod(uidx, saveFreq) == 0:
+                print 'Saving...',
+                
+                # save the best param set to date (best_p)
+                if best_p is not None:
+                    params = best_p
+                else:
+                    params = unzip(tparams)
+                numpy.savez(saveto, history_errs=history_errs, **params)
+                pkl.dump(model_options, open('%s.pkl' % saveto, 'wb'), -1)
+                print 'Done'
 
-                if numpy.isnan(cost) or numpy.isinf(cost):
-                    print 'NaN detected'
-                    return 1., 1., 1.
+            if numpy.mod(uidx, validFreq) == 0:
+                use_noise.set_value(0.)
+                train_err = pred_error(f_pred, train)
+                valid_err = pred_error(f_pred, valid)
+                test_err = pred_error(f_pred, test)
 
-                if numpy.mod(uidx, dispFreq) == 0:
-                    print 'Epoch ', eidx, 'Update ', uidx, 'Cost ', cost
+                history_errs.append([valid_err, test_err])
+                
+                # save param only if the validation error is less than the history minimum
+                if (uidx == 0 or
+                    valid_err <= numpy.array(history_errs)[:,
+                                                           0].min()):
 
-                if saveto and numpy.mod(uidx, saveFreq) == 0:
-                    print 'Saving...',
-                    
-                    # save the best param set to date (best_p)
-                    if best_p is not None:
-                        params = best_p
-                    else:
-                        params = unzip(tparams)
-                    numpy.savez(saveto, history_errs=history_errs, **params)
-                    pkl.dump(model_options, open('%s.pkl' % saveto, 'wb'), -1)
-                    print 'Done'
+                    best_p = unzip(tparams)
+                    bad_counter = 0
 
-                if numpy.mod(uidx, validFreq) == 0:
-                    use_noise.set_value(0.)
-                    train_err = pred_error(f_pred, prepare_data, train, kf)
-                    valid_err = pred_error(f_pred, prepare_data, valid, kf_valid)
-                    test_err = pred_error(f_pred, prepare_data, test, kf_test)
+                print ('Train ', train_err, 'Valid ', valid_err,
+                       'Test ', test_err)
+                
+                # early stopping
+                if (len(history_errs) > patience and
+                    valid_err >= numpy.array(history_errs)[:-patience,
+                                                           0].min()):
+                    bad_counter += 1
+                    if bad_counter > patience:
+                        print 'Early Stop!'
+                        estop = True
+                        break
 
-                    history_errs.append([valid_err, test_err])
-                    
-                    # save param only if the validation error is less than the history minimum
-                    if (uidx == 0 or
-                        valid_err <= numpy.array(history_errs)[:,
-                                                               0].min()):
-
-                        best_p = unzip(tparams)
-                        bad_counter = 0
-
-                    print ('Train ', train_err, 'Valid ', valid_err,
-                           'Test ', test_err)
-                    
-                    # early stopping
-                    if (len(history_errs) > patience and
-                        valid_err >= numpy.array(history_errs)[:-patience,
-                                                               0].min()):
-                        bad_counter += 1
-                        if bad_counter > patience:
-                            print 'Early Stop!'
-                            estop = True
-                            break
-
-            print 'Seen %d samples' % n_samples
+            # print 'Seen %d samples' % n_samples
 
             if estop:
                 break
@@ -726,10 +654,9 @@ def train_lstm(
         best_p = unzip(tparams)
 
     use_noise.set_value(0.)
-    kf_train_sorted = get_minibatches_idx(len(train[0]), batch_size)
-    train_err = pred_error(f_pred, prepare_data, train, kf_train_sorted)
-    valid_err = pred_error(f_pred, prepare_data, valid, kf_valid)
-    test_err = pred_error(f_pred, prepare_data, test, kf_test)
+    train_err = pred_error(f_pred, train)
+    valid_err = pred_error(f_pred, valid)
+    test_err = pred_error(f_pred, test)
 
     print 'Train ', train_err, 'Valid ', valid_err, 'Test ', test_err
     if saveto:
@@ -747,11 +674,8 @@ if __name__ == '__main__':
     # See function train for all possible parameter and there definition.
     train_lstm(
         dim_proj=dim_proj,
-        max_epochs=max_epochs,
-        maxlen=maxlen,
-        scaling=scaling,
         dataset=dataset,
+        max_epochs=max_epochs,
         use_dropout=use_dropout,
-        batch_size=batch_size,
-        fC=fC
+        batch_size=batch_size
     )

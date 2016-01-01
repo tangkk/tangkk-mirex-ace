@@ -271,7 +271,7 @@ def lstm_layer(tparams, state_below, options, prefix='lstm', mask=None):
                                                            dim_proj)],
                                 name=_p(prefix, '_layers'),
                                 n_steps=nsteps)
-    return rval[0] # why not rval[-1]?
+    return rval[0]
 
 # this is the backward lstm layer (blstm), note that the param set are all ended with 'b'
 def blstm_layer(tparams, state_below, options, prefix='lstm', mask=None):
@@ -323,7 +323,7 @@ def blstm_layer(tparams, state_below, options, prefix='lstm', mask=None):
                                                            dim_proj)],
                                 name=_p(prefix, '_layers'),
                                 n_steps=nsteps)
-    return rval[0] # why not rval[-1]?
+    return rval[0]
 
 # ff: Feed Forward (normal neural net), only useful to put after lstm
 #     before the classifier.
@@ -563,6 +563,7 @@ def build_model(tparams, options, fC):
         
         # this takes only the last non-zero lstm output (should be natural in modeling chord progression
         # in which the latter frames are influenced by former frames)
+        # the last of proj and first of bproj
         # proj = (proj * mask[:, :, None])
         # proj = proj[-1]
         # bproj = (bproj * bmask[:, :, None])
