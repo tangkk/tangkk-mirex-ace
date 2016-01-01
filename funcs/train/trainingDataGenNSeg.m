@@ -1,7 +1,7 @@
 % Generate training data based on the ground truth files
 % this process leverages the frontend and the ground truth data
 
-function trainingDataGenNSeg(savename, gtList, nseg)
+function trainingDataGenNSeg(savename, gtList, nseg, noinv)
 
 [feparam, ~, ~, ~, ~] = paramInit10();
 chordmode =  chordTypesGen;
@@ -14,18 +14,11 @@ trainingDataX2 = zeros(1,24*nseg);
 trainingDatay = zeros(1,1);
 tidx = 1;
 
-% transfer chordnames to chord nums
-load chordnames.mat;
-
-% delete the /1 chords except for maj/1
-% this piece of code delete unnecessary chord entries
-nchordnames = [];
-for i = 1:length(chordnames)
-    if ~(~cellfun(@isempty,(strfind(chordnames(i),'/1'))) && cellfun(@isempty,(strfind(chordnames(i),'maj/1'))))
-        nchordnames = [nchordnames; chordnames(i)];
-    end
+if noinv
+    load chordnames-noinv.mat;
+else
+    load chordnames-inv.mat;
 end
-chordnames = nchordnames;
 
 chordnums = chnames2chnums(chordnames, chordmode);
 
@@ -167,7 +160,7 @@ while ischar(tline)
         eb = databound(et, tw, 'et');
         % cast chord to standard chords
         % FIXME: sus chords will all be cast to maj/1 chords
-        nch = castGtLabel(ch);
+        nch = castGtLabel(ch,noinv);
         
         % grab data and make training point -
         % 1. salience matrix slices (take
@@ -328,12 +321,6 @@ end
 trainingDatay(trainingDatay == 0) = length(chordnames)+1;
 trainingDatay11(trainingDatay11 == 0) = length(chordnames)+1;
 trainingDatay22(trainingDatay22 == 0) = length(chordnames)+1;
-
-% set NaN to zero (FIXME: find out where does the NaN comes from)
-% trainingDataX1(isnan(trainingDataX1)) = 0;
-% trainingDataX2(isnan(trainingDataX2)) = 0;
-% trainingDataX11(isnan(trainingDataX11)) = 0;
-% trainingDataX22(isnan(trainingDataX22)) = 0;
 
 % save all the training data set collected
 display('saving results......');

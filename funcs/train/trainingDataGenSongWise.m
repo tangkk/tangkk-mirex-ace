@@ -1,7 +1,6 @@
 % Generate training data based on the ground truth files
 % this process leverages the frontend and the ground truth data
-
-function trainingDataGenVarLen(savename, gtList, noinv)
+function trainingDataGenSongWise(savename, gtList, noinv)
 
 [feparam, ~, ~, ~, ~] = paramInit10();
 chordmode =  chordTypesGen;
@@ -14,7 +13,7 @@ tline = fgetl(fe);
 % note that we still use vector to store targets (labels)
 trainingDataX1 = {};
 trainingDataX2 = {};
-trainingDatay = zeros(1,1);
+trainingDatay = {};
 
 if noinv
     load chordnames-noinv.mat;
@@ -22,11 +21,13 @@ else
     load chordnames-inv.mat;
 end
 
-
 chordnums = chnames2chnums(chordnames, chordmode);
 
 tidx = 1;
 while ischar(tline)
+    trainingDataOneSongX1 = [];
+    trainingDataOneSongX2 = [];
+    trainingDataOneSongy = [];
     
     songpath = tline;
     pathtokens = strsplit(songpath,'/');
@@ -179,114 +180,131 @@ while ischar(tline)
         % why
         tcase1 = Strain1(:,sb:eb);
         tcase2 = Strain2(:,sb:eb);
-        tcase1 = tcase1(:);
-        tcase2 = tcase2(:);
+        tcasey = ones(1,eb-sb+1) * tlabel;
         
         % store each segment (possibly of different length) into cells
-        trainingDataX1{tidx,1} = tcase1';
-        trainingDataX2{tidx,1} = tcase2';
-        trainingDatay(tidx,:) = tlabel;
+        trainingDataOneSongX1 = [trainingDataOneSongX1;tcase1'];
+        trainingDataOneSongX2 = [trainingDataOneSongX2;tcase2'];
+        trainingDataOneSongy = [trainingDataOneSongy;tcasey'];
         
         gline = fgetl(fg);
-        tidx = tidx + 1;
     end
     fclose(fg);
     tline = fgetl(fe);
+    % stack over per song training datas
+    % set label 0 to label length(chordnames)+1
+%     trainingDataOneSongy(trainingDataOneSongy == 0) = length(chordnames)+1;
+    
+    trainingDataX1 = [trainingDataX1;trainingDataOneSongX1];
+    trainingDataX2 = [trainingDataX2;trainingDataOneSongX2];
+    trainingDatay = [trainingDatay;trainingDataOneSongy];
 end
+
 
 % note that after the below process each entry of X will be flattened into one dim
 
 % generate other training data for all 12 keys for every training data
 % entry in X1 (252 dim feature - note salience)
-display('collecting training data for all 12 keys in trainingDataX1......');
+display('collecting training data for all 12 keys......');
 
-len = size(trainingDataX1,1);
 trainingDataX11 = {};
-trainingDatay11 = [];
-idx = 1;
-for i = 1:len
-    Xi = trainingDataX1{i};
-    yi = trainingDatay(i);
-    if yi ~= 0
-        ynum = chordnums{yi};
-    else
-        ynum = '0:0';
-    end
-    
-    % neg transpose
-    nseg = length(Xi) / 252;
-    for j = 0:5
-        TXi = [];
-        for k = 1:nseg % transpose for all nseg sections
-            Xt = Xi((k-1)*252+1:(k)*252);
-            padlen = j*3;
-            pad = zeros(1,padlen);
-            TXt = [Xt(1+padlen:end) pad];
-            TXi = [TXi TXt];
-        end
-        trainingDataX11{idx,1} = TXi;
-        nynum = chTranspose(ynum, -j);
-        [~,nyi] = ismember(nynum,chordnums);
-        trainingDatay11(idx,:) = nyi;
-        idx = idx + 1;
-    end
-    
-    % pos transpose
-    for j = 1:6
-        TXi = [];
-        for k = 1:nseg
-            Xt = Xi((k-1)*252+1:(k)*252);
-            padlen = j*3;
-            pad = zeros(1,padlen);
-            TXt = [pad Xt(1:end-padlen)];
-            TXi = [TXi TXt];
-        end
-        trainingDataX11{idx,1} = TXi;
-        nynum = chTranspose(ynum, j);
-        [~,nyi] = ismember(nynum,chordnums);
-        trainingDatay11(idx) = nyi;
-        idx = idx + 1;
-    end
-end
-
-% generate other training data for all 12 keys for every training data
-% entry in X2 (24 dim feature - basstreble chroma)
-display('collecting training data for all 12 keys in trainingDataX2......');
+trainingDatay11 = {};
 trainingDataX22 = {};
-trainingDatay22 = [];
-t12idx = 1;
-len = size(trainingDataX2,1);
-for j = 1:len
-    ocase = trainingDataX2{j};
-    y = trainingDatay(j);
-    nseg = length(ocase) / 24;
-    for i = 0:11 % generate all other 11 keys (except for N chord)
-        ncase = zeros(24,nseg);
-        for k = 1:nseg % generate for all nseg segments
-            bcase = circshift(ocase(1+(k-1)*24:12+(k-1)*24)',i,1);
-            ucase = circshift(ocase(13+(k-1)*24:24+(k-1)*24)',i,1);
-            % generate a new data and a new label
-            ncase(:,k) = [bcase;ucase];
-        end
-        
-        if y ~= 0
-            ochnum = chordnums{y};
+trainingDatay22 = {};
+nsongs = size(trainingDataX1,1);
+for ii = 1:nsongs
+    trainingDataOneSongX1 = trainingDataX1{ii};
+    trainingDataOneSongX2 = trainingDataX2{ii};
+    trainingDataOneSongy = trainingDatay{ii};
+    
+    len = size(trainingDataOneSongX1,1); % number of songs
+    trainingDataOneSongX11 = [];
+    trainingDataOneSongy11 = [];
+    idx = 1;
+    for i = 1:len
+        Xi = trainingDataOneSongX1(i,:);
+        yi = trainingDataOneSongy(i);
+        if yi ~= 0
+            ynum = chordnums{yi};
         else
-            ochnum = '0:0';
+            ynum = '0:0';
         end
-        nchnum = chTranspose(ochnum, i);
-        [~,nlabel] = ismember(nchnum,chordnums);
-        trainingDataX22{t12idx,1} = ncase(:)';
-        trainingDatay22(t12idx,:) = nlabel;
+
+        % neg transpose
+        nseg = 1;
+        for j = 0:5
+            TXi = [];
+            for k = 1:nseg % transpose for all nseg sections
+                Xt = Xi((k-1)*252+1:(k)*252);
+                padlen = j*3;
+                pad = zeros(1,padlen);
+                TXt = [Xt(1+padlen:end) pad];
+                TXi = [TXi TXt];
+            end
+            trainingDataOneSongX11(12-j,idx,:) = TXi;
+            nynum = chTranspose(ynum, -j);
+            [~,nyi] = ismember(nynum,chordnums);
+            trainingDataOneSongy11(12-j,idx,:) = nyi;
+        end
+
+        % pos transpose
+        for j = 1:6
+            TXi = [];
+            for k = 1:nseg
+                Xt = Xi((k-1)*252+1:(k)*252);
+                padlen = j*3;
+                pad = zeros(1,padlen);
+                TXt = [pad Xt(1:end-padlen)];
+                TXi = [TXi TXt];
+            end
+            trainingDataOneSongX11(j,idx,:) = TXi;
+            nynum = chTranspose(ynum, j);
+            [~,nyi] = ismember(nynum,chordnums);
+            trainingDataOneSongy11(j,idx,:) = nyi;
+        end
+        idx = idx + 1;
+    end
+
+    % generate other training data for all 12 keys for every training data
+    % entry in X2 (24 dim feature - basstreble chroma)
+    t12idx = 1;
+    len = size(trainingDataOneSongX2,1);
+    trainingDataOneSongX22 = [];
+    trainingDataOneSongy22 = [];
+    for j = 1:len
+        ocase = trainingDataOneSongX2(j,:);
+        y = trainingDataOneSongy(j);
+        nseg = 1;
+        for i = 0:11 % generate all other 11 keys (except for N chord)
+            ncase = zeros(24,nseg);
+            for k = 1:nseg % generate for all nseg segments
+                bcase = circshift(ocase(1+(k-1)*24:12+(k-1)*24)',i,1);
+                ucase = circshift(ocase(13+(k-1)*24:24+(k-1)*24)',i,1);
+                % generate a new data and a new label
+                ncase(:,k) = [bcase;ucase];
+            end
+
+            if y ~= 0
+                ochnum = chordnums{y};
+            else
+                ochnum = '0:0';
+            end
+            nchnum = chTranspose(ochnum, i);
+            [~,nlabel] = ismember(nchnum,chordnums);
+            trainingDataOneSongX22(i+1,t12idx,:) = ncase(:)';
+            trainingDataOneSongy22(i+1,t12idx,:) = nlabel; 
+        end
         t12idx = t12idx + 1;
     end
+    
+    trainingDataOneSongy11(trainingDataOneSongy11 == 0) = length(chordnames)+1;
+    trainingDataOneSongy22(trainingDataOneSongy22 == 0) = length(chordnames)+1;
+    trainingDataX11 = [trainingDataX11 trainingDataOneSongX11];
+    trainingDataX22 = [trainingDataX22 trainingDataOneSongX22];
+    trainingDatay11 = [trainingDatay11 trainingDataOneSongy11];
+    trainingDatay22 = [trainingDatay22 trainingDataOneSongy22];
+
 end
-
-
-% set label 0 to label length(chordnames)+1
-trainingDatay(trainingDatay == 0) = length(chordnames)+1;
-trainingDatay11(trainingDatay11 == 0) = length(chordnames)+1;
-trainingDatay22(trainingDatay22 == 0) = length(chordnames)+1;
 
 % save all the training data set collected
 display('saving results......');

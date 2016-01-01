@@ -2,7 +2,7 @@
 % cast non-7th to 7th chords
 % delete brackets
 
-function nch = castGtLabel(och)
+function nch = castGtLabel(och, noinv)
 
 nch = och;
 
@@ -31,4 +31,10 @@ end
 if ~isempty(strfind(nch,'6'))
     pos = strfind(nch,'6');
     nch = [nch(1:pos-1) nch(pos+1:end)];
+end
+
+% if no support of inversions, delete the inversion part
+if noinv && ~isempty(strfind(nch,'/'))
+    pos = strfind(nch,'/');
+    nch = nch(1:pos-1);
 end
