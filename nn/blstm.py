@@ -13,7 +13,7 @@ from theano import config
 import theano.tensor as T
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 
-from acedb import load_data, prepare_data
+from acedbsong import load_data_varlen, prepare_data
 
 dataset = "../test-Jvar.mat"
 format = 'cell'
@@ -672,7 +672,7 @@ def train_lstm(
     #load_data, prepare_data = get_dataset(dataset)
 
     print 'Loading data'
-    train, valid, test = load_data(dataset=dataset, valid_portion=0.05, test_portion=0.05,
+    train, valid, test = load_data_varlen(dataset=dataset, valid_portion=0.05, test_portion=0.05,
                                    maxlen=None, scaling=scaling, robust=robust, format=format, fdim=dim_proj, nseg=nseg)
                                    
     print 'data loaded'

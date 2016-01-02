@@ -13,7 +13,7 @@ from theano import config
 import theano.tensor as T
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 
-from acesongdb import load_data
+from acesongdb import load_data_song
 
 dataset = "../test-Jsong1seg.pkl"
 
@@ -555,7 +555,7 @@ def train_lstm(
     # the dateset is organized as:
     # X - n_songs * n_timesteps * dim_proj (dim_proj = 24 for chromagram based dataset)
     # y - n_songs * n_timesteps * 1
-    train, valid, test = load_data(dataset=dataset, valid_portion=0.05, test_portion=0.05)
+    train, valid, test = load_data_song(dataset=dataset, valid_portion=0.05, test_portion=0.05)
                                    
     print 'data loaded'
     
