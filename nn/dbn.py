@@ -1,44 +1,36 @@
-"""
-"""
 import os
 import sys
 import timeit
-
-try:
-    import PIL.Image as Image
-except ImportError:
-    import Image
-
+import cPickle
 import numpy
-
 import theano
 import theano.tensor as T
 from theano.sandbox.rng_mrg import MRG_RandomStreams
-
 from loadmat import loadmat
-
 from logistic import LogisticRegression
 from mlp import HiddenLayer
 from rbm import RBM
 from grbm import GRBM
-
 from utils import tile_raster_images
+import sys
 
-dataset = '../data-B6-12-key-raw.mat'
-# 1 - shuffle the dataset in a random way; 0 - use the dataset as its original order
+dataset = sys.argv[1] #'../data/ch/B6seg-ch-noinv.mat'
+dumppath = sys.argv[2] #'../data/ch/dbn.pkl'
+hidden_layers_sizes_ = sys.argv[3].split(',') #[1000]
+hidden_layers_sizes = []
+for hls in range(len(hidden_layers_sizes_)):
+    hidden_layers_sizes.append(int(hidden_layers_sizes_[hls]))
+    
+first_layer = sys.argv[4] #'rbm'
+
+
 shuffle = 1
-# scaling = -1: not scaling at all;
-# scaling = 0, perform standardization along axis=0 - scaling input variables
-# scaling = 1, perform standardization along axis=1 - scaling input cases
 scaling = 1
 robust = 0
-# select a portion of data, max value is 1
 datasel = 1
-batch_size = 100
-hidden_layers_sizes = [2000]
-first_layer = 'grbm'
 
-pretraining_epochs=10
+batch_size = 100
+pretraining_epochs=20
 pretrain_lr=0.001
 cdk=10
 usepersistent=True
@@ -49,7 +41,7 @@ L1_reg=0.0000
 L2_reg=0.0000
 earlystop=False
 dropout=True
-pretrain_dropout=True
+pretrain_dropout=False
 
 output_folder = 'dbn_train_plots'
 
@@ -402,7 +394,7 @@ def test_DBN(finetune_lr, pretraining_epochs,
              pretrain_lr, cdk, usepersistent, training_epochs,
              L1_reg, L2_reg,
              hidden_layers_sizes,
-             dataset, batch_size, output_folder, shuffle, scaling):
+             dataset, batch_size, output_folder, shuffle, scaling, dropout, first_layer):
     """
     Demonstrates how to train and test a Deep Belief Network.
 
@@ -421,7 +413,8 @@ def test_DBN(finetune_lr, pretraining_epochs,
     :type batch_size: int
     :param batch_size: the size of a minibatch
     """
-      
+    print locals()
+    
     datasets = loadmat(dataset=dataset, shuffle=shuffle, datasel=datasel, scaling=scaling, robust=robust)
     train_set_x, train_set_y = datasets[0]
     valid_set_x, valid_set_y = datasets[1]
@@ -446,9 +439,9 @@ def test_DBN(finetune_lr, pretraining_epochs,
     
     # getting pre-training and fine-tuning functions
     # save images of the weights(receptive fields) in this output folder
-    if not os.path.isdir(output_folder):
-        os.makedirs(output_folder)
-    os.chdir(output_folder)
+    # if not os.path.isdir(output_folder):
+        # os.makedirs(output_folder)
+    # os.chdir(output_folder)
     
     print '... getting the pretraining functions'
     pretraining_fns = dbn.pretraining_functions(train_set_x=train_set_x,
@@ -623,11 +616,13 @@ def test_DBN(finetune_lr, pretraining_epochs,
                           os.path.split(__file__)[1] +
                           ' ran for %.2fm' % ((end_time - start_time)
                                               / 60.))
-
+    with open(dumppath, "wb") as f:
+        cPickle.dump(dbn.params, f)
+    
 
 if __name__ == '__main__':
     test_DBN(finetune_lr, pretraining_epochs,
              pretrain_lr, cdk, usepersistent, training_epochs,
              L1_reg, L2_reg,
              hidden_layers_sizes,
-             dataset, batch_size, output_folder, shuffle, scaling)
+             dataset, batch_size, output_folder, shuffle, scaling, dropout, first_layer)

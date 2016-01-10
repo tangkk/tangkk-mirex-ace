@@ -113,7 +113,7 @@ def pkl_data_varlen(dataset=None, dumppath=None, fdim=None, nseg=1):
     with open(dumppath, "wb") as f:
         cPickle.dump((X,y), f)
     
-def pkl_data_nseg_h5py(dataset=None, dumppath=None, nseg=6):
+def pkl_data_nseg_h5py(dataset=None, dumppath=None, nseg=6, ymax=None):
     
     #############
     # LOAD DATA #
@@ -155,8 +155,8 @@ def pkl_data_nseg_h5py(dataset=None, dumppath=None, nseg=6):
             # y_kk is one song targets for one key
             ym = y_k[kk]
             # target no need to standardize
-            # assuming max value of target is 277
-            ym[ym==277]=0
+            # assuming max value of target is ymax
+            ym[ym==ymax]=0
             y_.append(ym)
             # y_ stores targets for all songs all keys, the 12 key dim is unrolled
     y = numpy.asarray(y_)
@@ -167,7 +167,7 @@ def pkl_data_nseg_h5py(dataset=None, dumppath=None, nseg=6):
     with open(dumppath, "wb") as f:
         cPickle.dump((X,y), f)
         
-def pkl_data_framewise_h5py(dataset=None, dumppath=None):
+def pkl_data_framewise_h5py(dataset=None, dumppath=None, ymax=None):
 
     #############
     # LOAD DATA #
@@ -206,8 +206,8 @@ def pkl_data_framewise_h5py(dataset=None, dumppath=None):
             # y_kk is one song targets for one key
             ym = y_k[kk]
             # target no need to standardize
-            # assuming max value of target is 277
-            ym[ym==277]=0
+            # assuming max value of target is ymax
+            ym[ym==ymax]=0
             y_.append(ym)
             # y_ stores targets for all songs all keys, the 12 key dim is unrolled
     y = numpy.asarray(y_)
@@ -218,7 +218,7 @@ def pkl_data_framewise_h5py(dataset=None, dumppath=None):
     with open(dumppath, "wb") as f:
         cPickle.dump((X,y), f)
         
-def pkl_data_nseg(dataset=None, dumppath=None, nseg=6):
+def pkl_data_nseg(dataset=None, dumppath=None, nseg=6, ymax=None):
     
     #############
     # LOAD DATA #
@@ -260,8 +260,8 @@ def pkl_data_nseg(dataset=None, dumppath=None, nseg=6):
             # y_kk is one song targets for one key
             ym = y_k[kk]
             # target no need to standardize
-            # assuming max value of target is 277
-            ym[ym==277]=0
+            # assuming max value of target is ymax
+            ym[ym==ymax]=0
             y_.append(ym)
             # y_ stores targets for all songs all keys, the 12 key dim is unrolled
     y = numpy.asarray(y_)
@@ -272,7 +272,7 @@ def pkl_data_nseg(dataset=None, dumppath=None, nseg=6):
     with open(dumppath, "wb") as f:
         cPickle.dump((X,y), f)
 
-def pkl_data_framewise(dataset=None, dumppath=None):
+def pkl_data_framewise(dataset=None, dumppath=None, ymax=None):
 
     #############
     # LOAD DATA #
@@ -312,8 +312,8 @@ def pkl_data_framewise(dataset=None, dumppath=None):
             # y_kk is one song targets for one key
             ym = y_k[kk]
             # target no need to standardize
-            # assuming max value of target is 277
-            ym[ym==277]=0
+            # assuming max value of target is ymax
+            ym[ym==ymax]=0
             y_.append(ym)
             # y_ stores targets for all songs all keys, the 12 key dim is unrolled
     y = numpy.asarray(y_)
@@ -324,7 +324,7 @@ def pkl_data_framewise(dataset=None, dumppath=None):
     with open(dumppath, "wb") as f:
         cPickle.dump((X,y), f)
 
-def prepare_data(seqs, labels, maxlen=None, dim_proj=None, fC='repeat'):
+def prepare_data(seqs, labels, maxlen=None, xdim=None):
     """Create the matrices from the datasets.
 
     This pad each sequence to the same lenght: the lenght of the
@@ -357,29 +357,22 @@ def prepare_data(seqs, labels, maxlen=None, dim_proj=None, fC='repeat'):
     n_samples = len(seqs)
     maxlen = numpy.max(lengths)
     # print 'maxlen is %d'%maxlen
-    
-    # if feature control is 'reshape', dim_proj is used to control x_mask's length
-    # otherwise, dim_proj is not used
-    if fC == 'reshape':
-        dim_proj = dim_proj
-    elif fC == 'repeat':
-        dim_proj = 1
 
     x = numpy.zeros((maxlen, n_samples)).astype(theano.config.floatX)
-    # the length of each submask should be maxlen/dim_proj (assuming x is a 1-dim vector where maxlen already contains
-    # the dim_proj dimension, which means maxlen is dividable by dim_proj)
-    x_mask = numpy.zeros((maxlen/dim_proj, n_samples)).astype(theano.config.floatX)
-    x_oh_mask = numpy.zeros((maxlen/dim_proj, n_samples)).astype(theano.config.floatX)
+    # the length of each submask should be maxlen/xdim (assuming x is a 1-dim vector where maxlen already contains
+    # the xdim dimension, which means maxlen is dividable by xdim)
+    x_mask = numpy.zeros((maxlen/xdim, n_samples)).astype(theano.config.floatX)
+    x_oh_mask = numpy.zeros((maxlen/xdim, n_samples)).astype(theano.config.floatX)
     for idx, s in enumerate(seqs): # this enumerate n_samples
         x[:lengths[idx], idx] = s
-        x_mask[:lengths[idx]/dim_proj, idx] = 1. # full hot mask
-        # x_oh_mask[lengths[idx]/dim_proj-1, idx] = 1. # one hot mask
+        x_mask[:lengths[idx]/xdim, idx] = 1. # full hot mask
+        # x_oh_mask[lengths[idx]/xdim-1, idx] = 1. # one hot mask
         
     x_oh_mask = x_mask
     return x, x_mask, x_oh_mask, labels
 
 def load_data_varlen(dataset="../testnn.mat", valid_portion=0.05, test_portion=0.05, maxlen=None,
-              sort_by_len=False, scaling=1, robust=0, format = 'matrix', nseg=6, fdim=24):
+               scaling=1, robust=0, format = 'matrix'):
     '''Loads the dataset
 
     :type dataset: String
@@ -401,8 +394,15 @@ def load_data_varlen(dataset="../testnn.mat", valid_portion=0.05, test_portion=0
     # LOAD DATA #
     #############
    
-    f = open(dataset, 'rb')
-    X,y = cPickle.load(f)
+    if format == 'cell':
+        f = open(dataset, 'rb')
+        X,y = cPickle.load(f)
+    elif format == 'matrix':
+        mat = sio.loadmat(dataset)
+        X = mat['X']
+        y = mat['y']
+        y = y.T[0]
+        y[y==max(y)]=0
 
     train_set = (X,y)
     
@@ -438,22 +438,6 @@ def load_data_varlen(dataset="../testnn.mat", valid_portion=0.05, test_portion=0
     
     if format == 'matrix':
         train_set_x, valid_set_x, test_set_x = standardize(train_set_x, valid_set_x, test_set_x, scaling, robust)
-
-    def len_argsort(seq):
-        return sorted(range(len(seq)), key=lambda x: len(seq[x]))
-
-    if sort_by_len and format == 'cell':
-        sorted_index = len_argsort(test_set_x)
-        test_set_x = [test_set_x[i] for i in sorted_index]
-        test_set_y = [test_set_y[i] for i in sorted_index]
-
-        sorted_index = len_argsort(valid_set_x)
-        valid_set_x = [valid_set_x[i] for i in sorted_index]
-        valid_set_y = [valid_set_y[i] for i in sorted_index]
-
-        sorted_index = len_argsort(train_set_x)
-        train_set_x = [train_set_x[i] for i in sorted_index]
-        train_set_y = [train_set_y[i] for i in sorted_index]
 
     train = (train_set_x, train_set_y)
     valid = (valid_set_x, valid_set_y)

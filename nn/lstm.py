@@ -1,50 +1,26 @@
 '''
 A chord classifier based on LSTM
 '''
-
 from collections import OrderedDict
 import cPickle as pkl
 import sys
 import time
-
 import numpy
 import theano
 from theano import config
 import theano.tensor as T
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
+from acesongdb import load_data_varlen, prepare_data
+import sys
 
-from acedbsong import load_data_varlen, prepare_data
+dataset = sys.argv[1] #'../data/ch/J6Seg-ch-noinv.pkl'
+dumppath = sys.argv[2] #'lstm_model.npz'
+format = sys.argv[3] #'matrix'
+xdim = int(sys.argv[4])#24
+dim_proj = int(sys.argv[5])#500
 
-dataset = "../test-Jseg.mat"
-format = 'matrix'
-# this is actually a smoothing factor to the raw data
-nseg = 6
-# scaling = -1: not scaling at all
-# scaling = 0, perform standardization along axis=0 - scaling input variables
-# scaling = 1, perform standardization along axis=1 - scaling input cases
-scaling=1
-robust=0
-
-# dim_proj
-# 1. for testnn.mat dataset (simple MNIST), the input feature vector dim is 400
-#   which means it's a 20*20 square digit, we can make it 20*20
-# 2. for ACE 12-key dataset, the input feature vector dim is 144
-#   we can make it 12*12
-# 3. for ACE ns-12-key dataset, the input feature vector dim is 1512
-#   we can make it 12*256
-# param fC
-# feature control, either is repeat or reshape by dim_proj
-#
-fC = 'reshape'
-dim_proj = 24
-maxlen = None
-# fC = 'repeat'
-# dim_proj=24
-
-# dropout
+scaling=1 
 use_dropout=True
-
-# gd
 max_epochs = 500 # give it long enough time to train
 batch_size = 100
 
@@ -127,14 +103,10 @@ def init_params(options):
     Global (not LSTM) parameter. For the embeding and the classifier.
     """
     params = OrderedDict()
-    # embedding
     '''
     https://en.wikipedia.org/wiki/Word_embedding
     Word embedding is the collective name for a set of language modeling and feature learning techniques in natural language processing where words from the vocabulary (and possibly phrases thereof) are mapped to vectors of real numbers in a low dimensional space, relative to the vocabulary size ("continuous space").
     '''
-    # randn = numpy.random.rand(options['n_words'],
-                              # options['dim_proj'])
-    # params['Wemb'] = (0.01 * randn).astype(config.floatX)
     params = get_layer(options['encoder'])[0](options,
                                               params,
                                               prefix=options['encoder'])
@@ -168,10 +140,18 @@ def get_layer(name):
     return fns
 
 
-def ortho_weight(ndim):
-    W = numpy.random.randn(ndim, ndim)
-    u, s, v = numpy.linalg.svd(W)
-    return u.astype(config.floatX)
+def ortho_weight(ndim1, ndim2):
+    W = numpy.random.randn(ndim1, ndim2)
+    if ndim1 == ndim2:
+        u, s, v = numpy.linalg.svd(W)
+        return u.astype(config.floatX)
+    elif ndim1 < ndim2:
+        u, s, v = numpy.linalg.svd(W,full_matrices=0)
+        return v.astype(config.floatX)
+    elif ndim1 > ndim2:
+        u, s, v = numpy.linalg.svd(W,full_matrices=0)
+        return u.astype(config.floatX)
+        
 
 
 def param_init_lstm(options, params, prefix='lstm'):
@@ -180,17 +160,17 @@ def param_init_lstm(options, params, prefix='lstm'):
 
     :see: init_params
     """
-    # W are the input weights
-    W = numpy.concatenate([ortho_weight(options['dim_proj']),
-                           ortho_weight(options['dim_proj']),
-                           ortho_weight(options['dim_proj']),
-                           ortho_weight(options['dim_proj'])], axis=1)
+    # W are the input weights (maps xdim to dim_proj)
+    W = numpy.concatenate([ortho_weight(options['xdim'],options['dim_proj']),
+                           ortho_weight(options['xdim'],options['dim_proj']),
+                           ortho_weight(options['xdim'],options['dim_proj']),
+                           ortho_weight(options['xdim'],options['dim_proj'])], axis=1)
     params[_p(prefix, 'W')] = W # "lstm_W"
     # U are recurrent weights
-    U = numpy.concatenate([ortho_weight(options['dim_proj']),
-                           ortho_weight(options['dim_proj']),
-                           ortho_weight(options['dim_proj']),
-                           ortho_weight(options['dim_proj'])], axis=1)
+    U = numpy.concatenate([ortho_weight(options['dim_proj'],options['dim_proj']),
+                           ortho_weight(options['dim_proj'],options['dim_proj']),
+                           ortho_weight(options['dim_proj'],options['dim_proj']),
+                           ortho_weight(options['dim_proj'],options['dim_proj'])], axis=1)
     params[_p(prefix, 'U')] = U # "lstm_U"
     # b are bias
     b = numpy.zeros((4 * options['dim_proj'],))
@@ -411,7 +391,7 @@ def rmsprop(lr, tparams, grads, x, mask, oh_mask, y, cost):
     return f_grad_shared, f_update
 
 
-def build_model(tparams, options, fC):
+def build_model(tparams, options):
     trng = RandomStreams(SEED)
 
     # Used for dropout.
@@ -423,24 +403,12 @@ def build_model(tparams, options, fC):
     y = T.vector('y', dtype='int64')
     
     # this part is subject to change for different application domain
-    n_timesteps = x.shape[0] / options['dim_proj']
+    n_timesteps = x.shape[0] / options['xdim']
     n_samples = x.shape[1]
     
-    '''
-    from https://en.wikipedia.org/wiki/Word_embedding
-    Word embedding is the collective name for a set of language modeling and feature learning techniques in natural language processing where words from the vocabulary (and possibly phrases thereof) are mapped to vectors of real numbers in a low dimensional space, relative to the vocabulary size ("continuous space")
-    '''
-    # emb = tparams['Wemb'][x.flatten()].reshape([n_timesteps,
-                                                # n_samples,
-                                                # options['dim_proj']])
-    
-    if fC == 'reshape':
-        # reshape the feature vector to use LSTM
-        emb = x.reshape([n_timesteps, options['dim_proj'], n_samples])
-        emb = numpy.swapaxes(emb,1,2)
-    elif fC == 'repeat':
-        # simply repeat the feature vector to dim_proj to use LSTM
-        emb = numpy.repeat(x[:, :, numpy.newaxis], options['dim_proj'], axis=2)
+    # reshape the feature vector to use LSTM
+    emb = x.reshape([n_timesteps, options['xdim'], n_samples])
+    emb = numpy.swapaxes(emb,1,2)
                                                
     proj = get_layer(options['encoder'])[1](tparams, emb, options,
                                             prefix=options['encoder'],
@@ -499,7 +467,7 @@ def pred_probs(f_pred_prob, prepare_data, data, iterator, verbose=False):
     for _, valid_index in iterator:
         x, mask, oh_mask, y = prepare_data([data[0][t] for t in valid_index],
                                   numpy.array(data[1])[valid_index],
-                                  maxlen=None, dim_proj=dim_proj, fC=fC)
+                                  maxlen=None, xdim=xdim)
         pred_probs = f_pred_prob(x, mask, oh_mask)
         probs[valid_index, :] = pred_probs
 
@@ -520,7 +488,7 @@ def pred_error(f_pred, prepare_data, data, iterator, verbose=False):
     for _, valid_index in iterator:
         x, mask, oh_mask, y = prepare_data([data[0][t] for t in valid_index],
                                   numpy.array(data[1])[valid_index],
-                                  maxlen=None, dim_proj=dim_proj, fC=fC)
+                                  maxlen=None, xdim=xdim)
         preds = f_pred(x, mask, oh_mask)
         targets = numpy.array(data[1])[valid_index]
         valid_err += (preds == targets).sum()
@@ -531,7 +499,9 @@ def pred_error(f_pred, prepare_data, data, iterator, verbose=False):
 
 def train_lstm(
     # word embedding in ACE's context can be regarded as the feature vector size of each ns frame
-    dim_proj=100,  # word embeding dimension and LSTM number of hidden units.
+    dim_proj=None,  # word embeding dimension and LSTM number of hidden units.
+    xdim=None,
+    ydim=None,
     patience=10,  # Number of epoch to wait before early stop if no progress
     max_epochs=500,  # The maximum number of epoch to run
     dispFreq=10,  # Display to stdout the training progress every N updates
@@ -540,7 +510,7 @@ def train_lstm(
     # n_words=10000,  # Vocabulary size
     optimizer=adadelta,  # sgd, adadelta and rmsprop available, sgd very hard to use, not recommanded (probably need momentum and decaying learning rate).
     encoder='lstm',  # TODO: can be removed must be lstm.
-    saveto='lstm_model.npz',  # The best model will be saved there
+    dumppath='lstm_model.npz',  # The best model will be saved there
     validFreq=400,  # Compute the validation error after this number of update.
     saveFreq=1000,  # Save the parameters after every saveFreq updates
     maxlen=None,  # Sequence longer then this get ignored
@@ -554,8 +524,7 @@ def train_lstm(
                        # This frequently need a bigger model.
     reload_model=None,  # Path to a saved model we want to start from.
     test_size=-1,  # If >0, we keep only this number of test example.
-    scaling=1,
-    fC='reshape'
+    scaling=1
 ):
 
     # Model options
@@ -564,7 +533,7 @@ def train_lstm(
     
     print 'Loading data'
     train, valid, test = load_data_varlen(dataset=dataset, valid_portion=0.05, test_portion=0.05,
-                                   maxlen=maxlen, scaling=scaling, robust=robust, format=format, fdim=dim_proj, nseg=nseg)
+                                   maxlen=maxlen, scaling=scaling, robust=0, format=format)
                                    
     print 'data loaded'
     
@@ -584,6 +553,8 @@ def train_lstm(
     print 'ydim = %d'%ydim
 
     model_options['ydim'] = ydim
+    model_options['xdim'] = xdim
+    model_options['dim_proj'] = dim_proj
 
     print 'Building model'
     # This create the initial parameters as numpy ndarrays.
@@ -600,7 +571,7 @@ def train_lstm(
 
     # use_noise is for dropout
     (use_noise, x, mask, oh_mask,
-     y, f_pred_prob, f_pred, cost) = build_model(tparams, model_options, fC=fC)
+     y, f_pred_prob, f_pred, cost) = build_model(tparams, model_options)
 
     if decay_c > 0.:
         decay_c = theano.shared(numpy_floatX(decay_c), name='decay_c')
@@ -657,7 +628,7 @@ def train_lstm(
                 # Get the data in numpy.ndarray format
                 # This swap the axis!
                 # Return something of shape (minibatch maxlen, n samples)
-                x, mask, oh_mask, y = prepare_data(x, y, dim_proj=dim_proj, fC=fC)
+                x, mask, oh_mask, y = prepare_data(x, y, xdim=xdim)
                 n_samples += x.shape[1]
 
                 cost = f_grad_shared(x, mask, oh_mask, y)
@@ -670,7 +641,7 @@ def train_lstm(
                 if numpy.mod(uidx, dispFreq) == 0:
                     print 'Epoch ', eidx, 'Update ', uidx, 'Cost ', cost
 
-                if saveto and numpy.mod(uidx, saveFreq) == 0:
+                if dumppath and numpy.mod(uidx, saveFreq) == 0:
                     print 'Saving...',
                     
                     # save the best param set to date (best_p)
@@ -678,8 +649,8 @@ def train_lstm(
                         params = best_p
                     else:
                         params = unzip(tparams)
-                    numpy.savez(saveto, history_errs=history_errs, **params)
-                    pkl.dump(model_options, open('%s.pkl' % saveto, 'wb'), -1)
+                    numpy.savez(dumppath, history_errs=history_errs, **params)
+                    pkl.dump(model_options, open('%s.pkl' % dumppath, 'wb'), -1)
                     print 'Done'
 
                 if numpy.mod(uidx, validFreq) == 0:
@@ -732,8 +703,8 @@ def train_lstm(
     test_err = pred_error(f_pred, prepare_data, test, kf_test)
 
     print 'Train ', train_err, 'Valid ', valid_err, 'Test ', test_err
-    if saveto:
-        numpy.savez(saveto, train_err=train_err,
+    if dumppath:
+        numpy.savez(dumppath, train_err=train_err,
                     valid_err=valid_err, test_err=test_err,
                     history_errs=history_errs, **best_p)
     print 'The code run for %d epochs, with %f sec/epochs' % (
@@ -747,11 +718,11 @@ if __name__ == '__main__':
     # See function train for all possible parameter and there definition.
     train_lstm(
         dim_proj=dim_proj,
+        xdim=xdim,
+        dumppath=dumppath,
         max_epochs=max_epochs,
-        maxlen=maxlen,
         scaling=scaling,
         dataset=dataset,
         use_dropout=use_dropout,
         batch_size=batch_size,
-        fC=fC
     )

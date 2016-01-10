@@ -6,31 +6,27 @@ from collections import OrderedDict
 import cPickle as pkl
 import sys
 import time
-
 import numpy
 import theano
 from theano import config
 import theano.tensor as T
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
-
 from acesongdb import load_data_song
 
-dataset = "../test-Jsong.pkl"
+dataset = sys.argv[1] #'../data/ch/Jsong-ch-noinv.pkl'
+dumppath = sys.argv[2] #'lstm_model.npz'
+xdim = int(sys.argv[3])#24
+ydim = int(sys.argv[4])#61 or 252
+dim_proj = int(sys.argv[5])#500
 
-dim_proj = 24
-ydim = 277
-maxlen = None
-
-# dropout
 use_dropout=True
-
-# gd
-max_epochs = 4000 # give it long enough time to train
-batch_size = 1000 # length of a sample training piece within a song in terms of number of frames
+max_epochs = 12000 # give it long enough time to train
+batch_size = 500 # length of a sample training piece within a song in terms of number of frames
 
 # Set the random number generators' seeds for consistency
 SEED = 123
 numpy.random.seed(SEED)
+rng = numpy.random.RandomState(SEED)
 
 def numpy_floatX(data):
     return numpy.asarray(data, dtype=config.floatX)
@@ -110,6 +106,7 @@ def init_params(options):
     params = get_layer(options['encoder'])[0](options,
                                               params,
                                               prefix=options['encoder'])
+    
     # classifier
     params['U'] = 0.01 * numpy.random.randn(options['dim_proj'],
                                             options['ydim']).astype(config.floatX)
@@ -139,11 +136,31 @@ def get_layer(name):
     fns = layers[name]
     return fns
 
-
-def ortho_weight(ndim):
-    W = numpy.random.randn(ndim, ndim)
-    u, s, v = numpy.linalg.svd(W)
-    return u.astype(config.floatX)
+def random_weight(n_in,n_out=0):
+    if n_out == 0:
+       n_out = n_in 
+    W = numpy.asarray(
+                rng.uniform(
+                    low=-numpy.sqrt(6. / (n_in + n_out)),
+                    high=numpy.sqrt(6. / (n_in + n_out)),
+                    size=(n_in, n_out)
+                ),
+                dtype=theano.config.floatX
+            )
+    return W
+    
+def ortho_weight(ndim1, ndim2):
+    W = numpy.random.randn(ndim1, ndim2)
+    if ndim1 == ndim2:
+        u, s, v = numpy.linalg.svd(W)
+        return u.astype(config.floatX)
+    elif ndim1 < ndim2:
+        u, s, v = numpy.linalg.svd(W,full_matrices=0)
+        return v.astype(config.floatX)
+    elif ndim1 > ndim2:
+        u, s, v = numpy.linalg.svd(W,full_matrices=0)
+        return u.astype(config.floatX)
+        
 
 
 def param_init_lstm(options, params, prefix='lstm'):
@@ -152,17 +169,17 @@ def param_init_lstm(options, params, prefix='lstm'):
 
     :see: init_params
     """
-    # W are the input weights
-    W = numpy.concatenate([ortho_weight(options['dim_proj']),
-                           ortho_weight(options['dim_proj']),
-                           ortho_weight(options['dim_proj']),
-                           ortho_weight(options['dim_proj'])], axis=1)
+    # W are the input weights (maps xdim to dim_proj)
+    W = numpy.concatenate([ortho_weight(options['xdim'],options['dim_proj']),
+                           ortho_weight(options['xdim'],options['dim_proj']),
+                           ortho_weight(options['xdim'],options['dim_proj']),
+                           ortho_weight(options['xdim'],options['dim_proj'])], axis=1)
     params[_p(prefix, 'W')] = W # "lstm_W"
     # U are recurrent weights
-    U = numpy.concatenate([ortho_weight(options['dim_proj']),
-                           ortho_weight(options['dim_proj']),
-                           ortho_weight(options['dim_proj']),
-                           ortho_weight(options['dim_proj'])], axis=1)
+    U = numpy.concatenate([ortho_weight(options['dim_proj'],options['dim_proj']),
+                           ortho_weight(options['dim_proj'],options['dim_proj']),
+                           ortho_weight(options['dim_proj'],options['dim_proj']),
+                           ortho_weight(options['dim_proj'],options['dim_proj'])], axis=1)
     params[_p(prefix, 'U')] = U # "lstm_U"
     # b are bias
     b = numpy.zeros((4 * options['dim_proj'],))
@@ -173,13 +190,17 @@ def param_init_lstm(options, params, prefix='lstm'):
 
 def lstm_layer(tparams, x, y, use_noise, options, prefix='lstm'):
     n_timesteps = x.shape[0]
-
+    
     def _slice(_x, n, dim):
         return _x[n * dim:(n + 1) * dim]
     
     def _step(x_, h_, c_):
+        # input goes through a hidden layer
+        # x_i = T.nnet.sigmoid(T.dot(x_, tparams['Ui']) + tparams['bi'])
+        x_i = x_
+    
         preact = T.dot(h_, tparams[_p(prefix, 'U')])
-        preact += T.dot(x_, tparams[_p(prefix, 'W')])
+        preact += T.dot(x_i, tparams[_p(prefix, 'W')])
         preact += tparams[_p(prefix, 'b')]
 
         i = T.nnet.sigmoid(_slice(preact, 0, options['dim_proj']))
@@ -190,8 +211,12 @@ def lstm_layer(tparams, x, y, use_noise, options, prefix='lstm'):
         c = f * c_ + i * c
         h = o * T.tanh(c)
         
+        # one more pass before feeding to classifier
+        # h_o = T.nnet.sigmoid(T.dot(h, tparams['Uo']) + tparams['bo'])
+        h_o = h
+        
         # a single frame prediction given h - the posterior probablity
-        one_pred = T.nnet.softmax(T.dot(h, tparams['U']) + tparams['b'])
+        one_pred = T.nnet.softmax(T.dot(h_o, tparams['U']) + tparams['b'])
         
         return h, c, one_pred
     
@@ -215,7 +240,7 @@ def lstm_layer(tparams, x, y, use_noise, options, prefix='lstm'):
     pred = rval[2]
     pred = T.flatten(pred,2)
     
-    trng = RandomStreams(123)
+    trng = RandomStreams(SEED)
     if options['use_dropout']:
         pred = dropout_layer(pred, use_noise, trng)
     
@@ -462,24 +487,31 @@ def pred_error(f_pred, data, verbose=False):
     f_pred: Theano fct computing the prediction
     prepare_data: usual prepare_data for that dataset.
     """
-    idx0 = numpy.random.randint(0,len(data[0]))
+    # idx0 = numpy.random.randint(0,len(data[0]))
+    lendata = len(data[0])
     
-    valid_err = 0
-    # on one whole random song
-    x = data[0][idx0]
-    y = data[1][idx0]
+    sum_valid_err = 0
+    # loop over the valid/test set and predict the error for every song
+    for idx0 in range(lendata):
+        # on one whole random song
+        x = data[0][idx0]
+        y = data[1][idx0]
 
-    preds = f_pred(x)
-    targets = y
-    valid_err += (preds == targets).sum()
-    valid_err = 1. - numpy_floatX(valid_err) / len(y)
+        preds = f_pred(x)
+        targets = y
+        valid_err = (preds == targets).sum()
+        valid_err = 1. - numpy_floatX(valid_err) / len(y)
+        sum_valid_err += valid_err
+        
+    sum_valid_err = sum_valid_err / lendata
 
-    return valid_err
+    return sum_valid_err
 
 
 def train_lstm(
-    # word embedding in ACE's context can be regarded as the feature vector size of each ns frame
-    dim_proj=100,  # word embeding dimension and LSTM number of hidden units.
+    dim_proj = None,
+    xdim=None,
+    ydim=None,
     patience=10,  # Number of epoch to wait before early stop if no progress
     max_epochs=500,  # The maximum number of epoch to run
     dispFreq=10,  # Display to stdout the training progress every N updates
@@ -488,7 +520,7 @@ def train_lstm(
     # n_words=10000,  # Vocabulary size
     optimizer=adadelta,  # sgd, adadelta and rmsprop available, sgd very hard to use, not recommanded (probably need momentum and decaying learning rate).
     encoder='lstm',  # TODO: can be removed must be lstm.
-    saveto='lstm_model.npz',  # The best model will be saved there
+    dumppath='ctc_model.npz',  # The best model will be saved there
     validFreq=400,  # Compute the validation error after this number of update.
     saveFreq=1000,  # Save the parameters after every saveFreq updates
     maxlen=None,  # Sequence longer then this get ignored
@@ -517,6 +549,8 @@ def train_lstm(
                                    
     print 'data loaded'
 
+    model_options['xdim'] = xdim
+    model_options['dim_proj'] = dim_proj
     model_options['ydim'] = ydim
 
     print 'Building model'
@@ -598,7 +632,7 @@ def train_lstm(
             if numpy.mod(uidx, dispFreq) == 0:
                 print 'Epoch ', eidx, 'Update ', uidx, 'Cost ', cost
 
-            if saveto and numpy.mod(uidx, saveFreq) == 0:
+            if dumppath and numpy.mod(uidx, saveFreq) == 0:
                 print 'Saving...',
                 
                 # save the best param set to date (best_p)
@@ -606,17 +640,18 @@ def train_lstm(
                     params = best_p
                 else:
                     params = unzip(tparams)
-                numpy.savez(saveto, history_errs=history_errs, **params)
-                pkl.dump(model_options, open('%s.pkl' % saveto, 'wb'), -1)
+                numpy.savez(dumppath, history_errs=history_errs, **params)
+                pkl.dump(model_options, open('%s.pkl' % dumppath, 'wb'), -1)
                 print 'Done'
 
             if numpy.mod(uidx, validFreq) == 0:
                 use_noise.set_value(0.)
-                train_err = pred_error(f_pred, train)
+                # train_err = pred_error(f_pred, train)
                 valid_err = pred_error(f_pred, valid)
-                test_err = pred_error(f_pred, test)
+                # test_err = pred_error(f_pred, test)
 
-                history_errs.append([valid_err, test_err])
+                # history_errs.append([valid_err, test_err])
+                history_errs.append([valid_err, 1])
                 
                 # save param only if the validation error is less than the history minimum
                 if (uidx == 0 or
@@ -626,8 +661,9 @@ def train_lstm(
                     best_p = unzip(tparams)
                     bad_counter = 0
 
-                print ('Train ', train_err, 'Valid ', valid_err,
-                       'Test ', test_err)
+                # print ('Train ', train_err, 'Valid ', valid_err,
+                       # 'Test ', test_err)
+                print ('Valid ', valid_err)
                 
                 # early stopping
                 if (len(history_errs) > patience and
@@ -659,8 +695,8 @@ def train_lstm(
     test_err = pred_error(f_pred, test)
 
     print 'Train ', train_err, 'Valid ', valid_err, 'Test ', test_err
-    if saveto:
-        numpy.savez(saveto, train_err=train_err,
+    if dumppath:
+        numpy.savez(dumppath, train_err=train_err,
                     valid_err=valid_err, test_err=test_err,
                     history_errs=history_errs, **best_p)
     print 'The code run for %d epochs, with %f sec/epochs' % (
@@ -673,8 +709,11 @@ def train_lstm(
 if __name__ == '__main__':
     # See function train for all possible parameter and there definition.
     train_lstm(
-        dim_proj=dim_proj,
         dataset=dataset,
+        dim_proj=dim_proj,
+        xdim=xdim,
+        ydim=ydim,
+        dumppath=dumppath,
         max_epochs=max_epochs,
         use_dropout=use_dropout,
         batch_size=batch_size

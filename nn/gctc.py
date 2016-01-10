@@ -1,5 +1,5 @@
 '''
-A chord classifier based on unidirectional CTC
+A chord classifier based on unidirectional CTC - with dynamic programming
 '''
 
 from collections import OrderedDict
@@ -12,22 +12,18 @@ import theano
 from theano import config
 import theano.tensor as T
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
+from sklearn import preprocessing
 
 from acesongdb import load_data_song
 
-dataset = "../test-Jsong1seg.pkl"
+dataset = sys.argv[1] #'../data/ch/Jsong-ch-noinv.pkl'
+dumppath = sys.argv[2] #'lstm_model.npz'
+xdim = int(sys.argv[3])#24
+ydim = int(sys.argv[4])#61 or 252
+dim_proj = int(sys.argv[5])#500
 
-xdim = 24
-dim_proj = 500 # input x will be projected to dim_proj space
-dim_proj_2 = 500 # output of LSTM will be projected to dim_proj_2 space
-ydim = 277
-maxlen = None
-
-# dropout
 use_dropout=True
-
-# gd
-max_epochs = 4000 # give it long enough time to train
+max_epochs = 16000 # give it long enough time to train
 batch_size = 500 # length of a sample training piece within a song in terms of number of frames
 
 # Set the random number generators' seeds for consistency
@@ -37,7 +33,9 @@ rng = numpy.random.RandomState(SEED)
 
 def numpy_floatX(data):
     return numpy.asarray(data, dtype=config.floatX)
-
+    
+def numpy_intX(data):
+    return numpy.asarray(data, dtype='int32')
 
 def get_minibatches_idx(n, minibatch_size, shuffle=False):
     """
@@ -113,18 +111,6 @@ def init_params(options):
     params = get_layer(options['encoder'])[0](options,
                                               params,
                                               prefix=options['encoder'])
-    
-    
-    # input hidden layer - transform x to a dim_proj space
-    # params['Ui'] = 0.01 * numpy.random.randn(options['xdim'],
-                                            # options['dim_proj']).astype(config.floatX)
-    # params['bi'] = numpy.zeros((options['dim_proj'],)).astype(config.floatX)
-    
-    # output hidden layer - transform output of lstm to dim_proj_2 space
-    # classifier
-    # params['Uo'] = 0.01 * numpy.random.randn(options['dim_proj'],
-                                            # options['dim_proj_2']).astype(config.floatX)
-    # params['bo'] = numpy.zeros((options['dim_proj_2'],)).astype(config.floatX)
     
     # classifier
     params['U'] = 0.01 * numpy.random.randn(options['dim_proj'],
@@ -212,14 +198,13 @@ def lstm_layer(tparams, x, y, use_noise, options, prefix='lstm'):
     
     def _slice(_x, n, dim):
         return _x[n * dim:(n + 1) * dim]
+        
+    # construct a transition matrix
+    ydim = options['ydim']
     
-    def _step(x_, h_, c_):
-        # input goes through a hidden layer
-        # x_i = T.nnet.sigmoid(T.dot(x_, tparams['Ui']) + tparams['bi'])
-        x_i = x_
-    
+    def _step(x_, h_, c_):  
         preact = T.dot(h_, tparams[_p(prefix, 'U')])
-        preact += T.dot(x_i, tparams[_p(prefix, 'W')])
+        preact += T.dot(x_, tparams[_p(prefix, 'W')])
         preact += tparams[_p(prefix, 'b')]
 
         i = T.nnet.sigmoid(_slice(preact, 0, options['dim_proj']))
@@ -230,101 +215,139 @@ def lstm_layer(tparams, x, y, use_noise, options, prefix='lstm'):
         c = f * c_ + i * c
         h = o * T.tanh(c)
         
-        # one more pass before feeding to classifier
-        # h_o = T.nnet.sigmoid(T.dot(h, tparams['Uo']) + tparams['bo'])
-        h_o = h
+        op = T.dot(h, tparams['U']) + tparams['b']
         
-        # a single frame prediction given h - the posterior probablity
-        one_pred = T.nnet.softmax(T.dot(h_o, tparams['U']) + tparams['b'])
-        
-        return h, c, one_pred
+        return h, c, op
     
     dim_proj = options['dim_proj']
-    ydim = options['ydim']
     # the scan function takse one dim_proj vector of x and one target of y at a time
     # the output is:
     # rval[0] -- n_timesteps of h -- n_timesteps * dim_proj
     # rval[1] -- n_timesteps of c -- n_timesteps * dim_proj
-    # rval[2] -- n_timesteps of one_pred -- n_timesteps * ydim
+    # rval[2] -- n_timesteps of opp -- n_timesteps * ydim
+    # rval[3] -- n_timesteps of op -- n_timesteps * ydim (softmax)
     rval, updates = theano.scan(_step,
                                 sequences=[x],
-                                outputs_info=[T.alloc(numpy_floatX(0.),
-                                                           dim_proj),
-                                              T.alloc(numpy_floatX(0.),
-                                                           dim_proj),
+                                outputs_info=[T.alloc(0.,dim_proj),
+                                              T.alloc(0.,dim_proj),
                                               None],
                                 name=_p(prefix, '_layers'),
                                 n_steps=n_timesteps)
     
-    pred = rval[2]
-    pred = T.flatten(pred,2)
+    pred = rval[-1]
+    
+    pred = T.nnet.softmax(pred)
     
     trng = RandomStreams(SEED)
     if options['use_dropout']:
         pred = dropout_layer(pred, use_noise, trng)
     
     '''
-    # CTC forward-backward pass, adapted from:
-    # https://blog.wtf.sg/2014/10/06/connectionist-temporal-classification-ctc-with-theano/
-    def recurrence_relation(size):
-        big_I = T.eye(size+2)
-        return T.eye(size) + big_I[2:,1:-1] + big_I[2:,:-2] * (T.arange(size) % 2)
-        
-    def _epslog(x):
-        return tensor.cast(tensor.log(tensor.clip(x, 1E-12, 1E12)),
-                           theano.config.floatX)
-
-    def log_add(a, b):
-        max_ = tensor.maximum(a, b)
-        return (max_ + tensor.log1p(tensor.exp(a + b - 2 * max_)))
-
-    def log_dot_matrix(x, z):
-        inf = 1E12
-        log_dot = tensor.dot(x, z)
-        zeros_to_minus_inf = (z.max(axis=0) - 1) * inf
-        return log_dot + zeros_to_minus_inf
-
-    def log_dot_tensor(x, z):
-        inf = 1E12
-        log_dot = (x.dimshuffle(1, 'x', 0) * z).sum(axis=0).T
-        zeros_to_minus_inf = (z.max(axis=0) - 1) * inf
-        return log_dot + zeros_to_minus_inf.T
+    ########################################################################################
+    # use dynamic programming to find out the optimal path
+    # viterbi algorithm is adapted from Pattern Recognition, Chapter 9
+    # transition matrix - impose high self-transition
+    st = 1e6 # self-transition factor
+    A = T.eye(ydim) * st + 1
     
-    def path_probs(predict,Y):
-        P = predict[:,Y]
-        rr = recurrence_relation(Y.shape[0])
-        def step(p_curr,p_prev):
-            return (p_curr * T.dot(p_prev,rr)).astype(theano.config.floatX)
-        probs,_ = theano.scan(
-                step,
-                sequences = [P],
-                outputs_info = [T.eye(Y.shape[0])[0]]
-            )
-        return probs
+    def _dp(opred_,odmax_):
+        odmax = T.zeros_like(odmax_)
+        odargmax = T.zeros_like(odmax_)
+        for i in range(ydim):
+            dtemp = odmax_ + T.log(A[:,i]*opred_[i])
+            T.set_subtensor(odmax[i],T.max(dtemp))
+            T.set_subtensor(odargmax[i],T.argmax(dtemp))
+        return odmax, odargmax
+    
+    # this scan loops over the index k to perform iterative dynamic programming
+    rval, updates = theano.scan(_dp,
+                                sequences=[pred],
+                                outputs_info=[T.zeros_like(pred[0]),
+                                              None],
+                                name=_p(prefix, '_dp'),
+                                n_steps=n_timesteps)
+                                
+    dargmax = rval[1].astype(config.floatX)
+    dmax = rval[0]
+    
+    dlast = T.argmax(dmax[-1]).astype(config.floatX)
+    darglast = T.fill(T.zeros_like(dargmax[0]),dlast)
+    darglast = darglast.reshape([1,ydim])
+    dargmax_ = dargmax[::-1]
+    dargmax_ = T.concatenate([darglast,dargmax_[:-1]])
+    
+    def _bt(odargmax, point_):
+        point = odargmax[point_.astype('int32')]
+        return point
+    
+    # this scan backtracks and findout the path
+    rval, updates = theano.scan(_bt,
+                                sequences=[dargmax_],
+                                outputs_info=[T.zeros_like(dargmax_[0][0])],
+                                name=_p(prefix, '_bt'),
+                                n_steps=n_timesteps)
+                                
+    path_ = rval
+    path = path_[::-1]
+    
+    # this is viterbi based algorithm adapted from a course (use additive weights)
+    # for k in range(x.shape[0]):
+        # for i in range(ydim):
+            # dtemp = numpy.zeros(ydim)
+            # dtemp = dmax[k-1,:] + numpy.log(A[:,i]*pred[k,i])
+            # dmax[k,i] = numpy.max(dtemp)
+            # dargmax[k,i] = numpy.argmax(dtemp)
+    
+    # set starting point
+    # dargmax[0,0] = numpy.argmax(dmax[-1])
+    # reverse
+    # dargmax_ = dargmax[::-1]
+    # path_ = numpy.zeros_like(path)
+    
+    # for k in range(x.shape[0]):
+        # path_[k] = dargmax_[k-1,path_[k-1]]
+    # path = path_[::-1]
         
-    def ctc_cost(predict,Y):
-        forward_probs  = path_probs(predict,Y)
-        backward_probs = path_probs(predict[::-1],Y[::-1])[::-1,::-1]
-        probs = forward_probs * backward_probs / predict[:,Y]
-        total_prob = T.sum(probs)
-        return -T.log(total_prob)
-        
-    ctc cost - with DP
-    cost = ctc_cost(pred, y)
+    # the path yield from the above process should be the most probable path of pred
+    # set it as the prediction instead
+    ########################################################################################
+    
+    
+    f_pred_prob = theano.function([x], pred, name='f_pred_prob')
+    f_pred = theano.function([x], path, name='f_pred')
+    
+    
+    def _cost(path_, y_, cost_):
+        if T.neq(path_, y_):
+            cost_ = cost_ + 1
+        return cost_
+    # this scan backtracks and findout the path
+    rval, updates = theano.scan(_cost,
+                                sequences=[path,y],
+                                outputs_info=[T.zeros_like(path[0])],
+                                name=_p(prefix, '_cost'),
+                                n_steps=n_timesteps)
+    
+    
+    cost = -T.log(rval[-1]).mean()
     '''
+    
     
     # pred will be -- n_timesteps * ydim posterior probs
     f_pred_prob = theano.function([x], pred, name='f_pred_prob')
     # pred.argmax(axis=1) will be -- n_timesteps * 1 one hot prediction
-    f_pred = theano.function([x], pred.argmax(axis=1), name='f_pred')
+    # f_pred = theano.function([x], pred.argmax(axis=1), name='f_pred')
+    f_pred = theano.function([x], pred, name='f_pred')
+    
     
     # cost will be a scaler value
-    # compile a function for the cost for one frame given one_pred and one_y (or y_)
+    # compile a function for the cost for one frame given op and one_y (or y_)
     # cost is a scaler, where y is a n_timesteps * 1 target vector
     # Each prediction is conditionally independent give x
     # thus the posterior of p(pi|x) should be the product of each posterior
     off = 1e-8
     cost = -T.log(pred[T.arange(y.shape[0]), y] + off).mean()
+    
     
     return f_pred_prob, f_pred, cost
 
@@ -491,15 +514,14 @@ def build_model(tparams, options):
     use_noise = theano.shared(numpy_floatX(0.))
 
     x = T.matrix('x', dtype=config.floatX)
-    y = T.vector('y', dtype='int64')
+    y = T.vector('y', dtype='int32')
     
     f_pred_prob, f_pred, cost = get_layer(options['encoder'])[1](tparams, x, y, use_noise, options,
                                             prefix=options['encoder'])
                                            
 
     return use_noise, x, y, f_pred_prob, f_pred, cost
-
-
+'''
 def pred_error(f_pred, data, verbose=False):
     """
     Just compute the error
@@ -515,10 +537,75 @@ def pred_error(f_pred, data, verbose=False):
         # on one whole random song
         x = data[0][idx0]
         y = data[1][idx0]
-
+        
+        # emission probs
         preds = f_pred(x)
+        
         targets = y
         valid_err = (preds == targets).sum()
+        valid_err = 1. - numpy_floatX(valid_err) / len(y)
+        sum_valid_err += valid_err
+        
+    sum_valid_err = sum_valid_err / lendata
+
+    return sum_valid_err
+''' 
+
+# this pred_error function use viterbi algorithm to smooth outputs of LSTM
+def pred_error(f_pred, data, verbose=False):
+    """
+    Just compute the error
+    f_pred: Theano fct computing the prediction
+    prepare_data: usual prepare_data for that dataset.
+    """
+    # idx0 = numpy.random.randint(0,len(data[0]))
+    lendata = len(data[0])
+    
+    sum_valid_err = 0
+    # loop over the valid/test set and predict the error for every song
+    for idx0 in range(lendata):
+        # on one whole random song
+        x = data[0][idx0]
+        y = data[1][idx0]
+        
+        # emission probs
+        e_probs = f_pred(x)
+        
+        ########################################################################################
+        # use dynamic programming to find out the optimal path
+        # viterbi algorithm is adapted from Pattern Recognition, Chapter 9
+        # transition matrix - impose high self-transition
+        st = 1e6 # self-transition factor
+        A = numpy.eye(ydim) * st + 1
+        # normalize with l1-norm
+        A = preprocessing.normalize(A, 'l1')
+        path = numpy.zeros_like(e_probs.argmax(axis=1))
+        dmax = numpy.zeros_like(e_probs)
+        dargmax = numpy.zeros_like(e_probs)
+        
+        # this is viterbi based algorithm adapted from a course (use additive weights)
+        for k in range(x.shape[0]):
+            for i in range(ydim):
+                dtemp = numpy.zeros(ydim)
+                dtemp = dmax[k-1,:] + numpy.log(A[:,i]*e_probs[k,i])
+                dmax[k,i] = numpy.max(dtemp)
+                dargmax[k,i] = numpy.argmax(dtemp)
+        
+        # set starting point
+        dargmax[0,0] = numpy.argmax(dmax[-1])
+        # reverse
+        dargmax_ = dargmax[::-1]
+        path_ = numpy.zeros_like(path)
+        
+        for k in range(x.shape[0]):
+            path_[k] = dargmax_[k-1,path_[k-1]]
+        path = path_[::-1]
+            
+        # the path yield from the above process should be the most probable path of pred
+        # set it as the prediction instead
+        ########################################################################################
+        targets = y
+        valid_err = (path == targets).sum()
         valid_err = 1. - numpy_floatX(valid_err) / len(y)
         sum_valid_err += valid_err
         
@@ -536,8 +623,8 @@ def train_lstm(
     # n_words=10000,  # Vocabulary size
     optimizer=adadelta,  # sgd, adadelta and rmsprop available, sgd very hard to use, not recommanded (probably need momentum and decaying learning rate).
     encoder='lstm',  # TODO: can be removed must be lstm.
-    saveto='lstm_model.npz',  # The best model will be saved there
-    validFreq=400,  # Compute the validation error after this number of update.
+    dumppath='ctc_model.npz',  # The best model will be saved there
+    validFreq=200,  # Compute the validation error after this number of update.
     saveFreq=1000,  # Save the parameters after every saveFreq updates
     maxlen=None,  # Sequence longer then this get ignored
     batch_size=100,  # The batch size during training.
@@ -567,7 +654,6 @@ def train_lstm(
 
     model_options['xdim'] = xdim
     model_options['dim_proj'] = dim_proj
-    model_options['dim_proj_2'] = dim_proj_2
     model_options['ydim'] = ydim
 
     print 'Building model'
@@ -649,7 +735,7 @@ def train_lstm(
             if numpy.mod(uidx, dispFreq) == 0:
                 print 'Epoch ', eidx, 'Update ', uidx, 'Cost ', cost
 
-            if saveto and numpy.mod(uidx, saveFreq) == 0:
+            if dumppath and numpy.mod(uidx, saveFreq) == 0:
                 print 'Saving...',
                 
                 # save the best param set to date (best_p)
@@ -657,8 +743,8 @@ def train_lstm(
                     params = best_p
                 else:
                     params = unzip(tparams)
-                numpy.savez(saveto, history_errs=history_errs, **params)
-                pkl.dump(model_options, open('%s.pkl' % saveto, 'wb'), -1)
+                numpy.savez(dumppath, history_errs=history_errs, **params)
+                pkl.dump(model_options, open('%s.pkl' % dumppath, 'wb'), -1)
                 print 'Done'
 
             if numpy.mod(uidx, validFreq) == 0:
@@ -712,8 +798,8 @@ def train_lstm(
     test_err = pred_error(f_pred, test)
 
     print 'Train ', train_err, 'Valid ', valid_err, 'Test ', test_err
-    if saveto:
-        numpy.savez(saveto, train_err=train_err,
+    if dumppath:
+        numpy.savez(dumppath, train_err=train_err,
                     valid_err=valid_err, test_err=test_err,
                     history_errs=history_errs, **best_p)
     print 'The code run for %d epochs, with %f sec/epochs' % (
@@ -727,6 +813,10 @@ if __name__ == '__main__':
     # See function train for all possible parameter and there definition.
     train_lstm(
         dataset=dataset,
+        dim_proj=dim_proj,
+        xdim=xdim,
+        ydim=ydim,
+        dumppath=dumppath
         max_epochs=max_epochs,
         use_dropout=use_dropout,
         batch_size=batch_size

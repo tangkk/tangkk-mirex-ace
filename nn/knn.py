@@ -1,18 +1,23 @@
-# this is an svm to classify ACE dataset
+# this is an supervised knn to classify ACE dataset
 
-from sklearn import svm
-import scipy.io as sio
+from sklearn import neighbors
 from sklearn.metrics import accuracy_score
 from loadmat import loadmat_noshare
 import numpy
 import cPickle
 
 import sys
-dataset = sys.argv[1] #'../data/ch/B6seg-ch-noinv.mat'
-dumppath = sys.argv[2] #'../data/ch/svm.pkl'
+dataset = sys.argv[1] #'../data/ch/J6seg-ch-noinv.mat'
+dumppath = sys.argv[2] #'../data/ch/knn.pkl'
+n_neighbors = int(sys.argv[3]) #10
+weights = sys.argv[4] # 'distance'
+
 
 print 'dataset%s'dataset
 print 'dumppath%s'dumppath
+print 'n_neighbors%d'n_neighbors
+print 'weights%s'weights
+
 
 shuffle = 1
 scaling = 1
@@ -20,27 +25,17 @@ robust = 0
 datasel = 1
 norm = 0
 
-print globals()
-
 # this is run in cpu
 datasets = loadmat_noshare(dataset=dataset,shuffle=shuffle,datasel=datasel,scaling=scaling,robust=robust,norm=norm)
-
+print "dataset %s"%dataset
 train_X, train_y = datasets[0]
 valid_X, valid_y = datasets[1]
 test_X, test_y = datasets[2]
 
-# use svm to fit the training data (train_X,train_y) - use a multiclass SVC
-clf = svm.SVC(decision_function_shape = 'ovo')
-print "dataset %s"%dataset
+clf = neighbors.KNeighborsClassifier(n_neighbors, weights=weights)
+
 print "fitting the training data"
 clf.fit(train_X,train_y)
-# this svm probably is with default configs:
-'''
-SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
-    decision_function_shape='ovo', degree=3, gamma='auto', kernel='rbf',
-    max_iter=-1, probability=False, random_state=None, shrinking=True,
-    tol=0.001, verbose=False)
-'''
 
 y_pred_train = clf.predict(train_X)
 train_score = accuracy_score(train_y, y_pred_train)

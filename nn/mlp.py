@@ -22,35 +22,29 @@ References:
 import os
 import sys
 import timeit
-
+import cPickle
 import numpy
-
 import theano
 import theano.tensor as T
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
-
 from loadmat import loadmat
 from logistic import LogisticRegression
+import sys
 
+dataset = sys.argv[1] #'../data/ch/B6seg-ch-noinv.mat'
+dumppath = sys.argv[2] #'../data/ch/mlp.pkl'
+hidden_layers_sizes_ = sys.argv[3].split(',') #1000
+hidden_layers_sizes = []
+for hls in range(len(hidden_layers_sizes_)):
+    hidden_layers_sizes.append(int(hidden_layers_sizes_[hls]))
 
-# hyperparameters
-dataset = '../data-B6-12-key-raw.mat'
-# norm = 0, no normalization
-# norm = 'l1', l1 norm, ='l2', l2 norm, ='max', max norm
 norm = 0
-# scaling = -1: not scaling at all;
-# scaling = 0, perform standardization along axis=0 - scaling input variables
-# scaling = 1, perform standardization along axis=1 - scaling input cases
 scaling = 1
-# robust = 1, robust scaling, = 0, not robust scaling
 robust = 0
-# 1 - shuffle the dataset in a random way; 0 - use the dataset as its original order
 shuffle = 1
-# select a portion of data, max value is 1
 datasel = 1
-batch_size = 100
-hidden_layers_sizes = [2000,1000]
 
+batch_size = 100
 n_epochs=500
 learning_rate=0.01
 L1_reg=0.0000
@@ -251,7 +245,7 @@ def dropout_layer(state_before, use_noise, trng, p):
     return layer
     
 def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
-             hidden_layers_sizes, dataset, batch_size, datasel, shuffle, scaling):
+             hidden_layers_sizes, dataset, batch_size, datasel, shuffle, scaling, dropout, earlystop):
     """
     Demonstrate stochastic gradient descent optimization for a multilayer
     perceptron
@@ -276,6 +270,8 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
 
 
    """
+    print locals()
+    
     datasets = loadmat(dataset=dataset,shuffle=shuffle,datasel=datasel,scaling=scaling,robust=robust,norm=norm)
 
     train_set_x, train_set_y = datasets[0]
@@ -493,8 +489,11 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
     print >> sys.stderr, ('The code for file ' +
                           os.path.split(__file__)[1] +
                           ' ran for %.2fm' % ((end_time - start_time) / 60.))
+    # save model
+    with open(dumppath, "wb") as f:
+        cPickle.dump(classifier.params, f)
 
 
 if __name__ == '__main__':
     test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
-             hidden_layers_sizes, dataset, batch_size, datasel, shuffle, scaling)
+             hidden_layers_sizes, dataset, batch_size, datasel, shuffle, scaling, dropout, earlystop)
