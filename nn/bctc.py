@@ -15,12 +15,6 @@ from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 
 from acesongdb import load_data_song
 
-dataset = sys.argv[1] #'../data/ch/Jsong-ch-noinv.pkl'
-dumppath = sys.argv[2] #'lstm_model.npz'
-xdim = int(sys.argv[3])#24
-ydim = int(sys.argv[4])#61 or 252
-dim_proj = int(sys.argv[5])#500
-
 use_dropout=True
 max_epochs = 12000 # give it long enough time to train
 batch_size = 500 # length of a sample training piece within a song in terms of number of frames
@@ -515,7 +509,19 @@ def pred_error(f_pred, data, verbose=False):
 
     return sum_valid_err
 
-
+def predprobs(model, X):
+    model_options = OrderedDict()
+    tparams = init_tparams(model)
+    model_options['encoder'] = 'lstm'
+    model_options['xdim'] = model['lstm_W'].shape[0]
+    model_options['dim_proj'] = model['U'].shape[0]
+    model_options['ydim'] = model['U'].shape[1]
+    model_options['use_dropout'] = False
+    (use_noise, _, _, f_pred_prob, f_pred, _) = build_model(tparams, model_options)
+    use_noise.set_value(0.)
+    
+    return f_pred_prob(X.astype(theano.config.floatX)), f_pred(X.astype(theano.config.floatX))
+    
 def train_lstm(
     dim_proj=None,
     xdim=None,
@@ -715,7 +721,12 @@ def train_lstm(
 
 
 if __name__ == '__main__':
-    # See function train for all possible parameter and there definition.
+    dataset = sys.argv[1] #'../data/ch/Jsong-ch-noinv.pkl'
+    dumppath = sys.argv[2] #'lstm_model.npz'
+    xdim = int(sys.argv[3])#24
+    ydim = int(sys.argv[4])#61 or 252
+    dim_proj = int(sys.argv[5])#500
+    
     train_lstm(
         dataset=dataset,
         xdim=xdim,

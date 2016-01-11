@@ -31,13 +31,6 @@ from loadmat import loadmat
 from logistic import LogisticRegression
 import sys
 
-dataset = sys.argv[1] #'../data/ch/B6seg-ch-noinv.mat'
-dumppath = sys.argv[2] #'../data/ch/mlp.pkl'
-hidden_layers_sizes_ = sys.argv[3].split(',') #1000
-hidden_layers_sizes = []
-for hls in range(len(hidden_layers_sizes_)):
-    hidden_layers_sizes.append(int(hidden_layers_sizes_[hls]))
-
 norm = 0
 scaling = 1
 robust = 0
@@ -138,7 +131,7 @@ class MLP(object):
     class).
     """
 
-    def __init__(self, rng, input, n_in, hidden_layers_sizes, n_out):
+    def __init__(self, rng, input, n_in, hidden_layers_sizes, n_out, model=None):
         """Initialize the parameters for the multilayer perceptron
 
         :type rng: numpy.random.RandomState
@@ -182,13 +175,21 @@ class MLP(object):
                 layer_input = input
             else:
                 layer_input = self.hiddenlayers[i - 1].output
+                
+            if model is None:
+                W = None
+                b = None
+            else:
+                W = model[i%2]
+                b = model[i%2 + 1]
             
             hiddenLayer = HiddenLayer(
                 rng=rng,
                 input=layer_input,
                 n_in=input_size,
                 n_out=hidden_layers_sizes[i],
-                # or activation=T.tanh
+                W = W,
+                b = b,
                 activation=T.nnet.sigmoid
             )
             
@@ -199,9 +200,17 @@ class MLP(object):
 
         # The logistic regression layer gets as input the hidden units
         # of the hidden layer
+        if model is None:
+            W = None
+            b = None
+        else:
+            W = model[-2]
+            b = model[-1]
         self.logRegressionLayer = LogisticRegression(
             input=self.hiddenlayers[-1].output,
             n_in=hidden_layers_sizes[-1],
+            W = W,
+            b = b,
             n_out=n_out
         )
         # end-snippet-2 start-snippet-3
@@ -220,6 +229,8 @@ class MLP(object):
         )
         # same holds for the function computing the number of errors
         self.errors = self.logRegressionLayer.errors
+        self.predprobs = self.logRegressionLayer.p_y_given_x
+        self.preds = self.logRegressionLayer.y_pred
 
         # the parameters of the model are the parameters of the two layer it is
         # made out of
@@ -244,8 +255,46 @@ def dropout_layer(state_before, use_noise, trng, p):
                          state_before * p)
     return layer
     
+def predprobs(model, X):
+    W = []
+    b = []
+    hidden_layers_sizes = []
+    # W and b stores the weights and bias of different hidden layers
+    # the last element of them stores those of the logistic regression layers
+    for i in range(len(model)):
+        if i % 2 == 0:
+            Wi = model[i].get_value()
+            W.append(Wi)
+        if i % 2 == 1:
+            bi = model[i].get_value()
+            b.append(bi)
+            if i != len(model)-1:
+                hidden_layers_sizes.append(bi.shape[0])       
+    
+    
+    rng = numpy.random.RandomState(1234)
+    n_in = W[0].shape[0]
+    n_out = W[-1].shape[1]
+    print n_in
+    print n_out
+    print hidden_layers_sizes
+    x = T.matrix('x')
+    mlp = MLP(
+        rng=rng,
+        input=x,
+        n_in=n_in,
+        model=model,
+        hidden_layers_sizes=hidden_layers_sizes,
+        n_out=n_out
+    )
+    
+    predprobs_ = theano.function(inputs=[x], outputs=mlp.predprobs)
+    preds_ = theano.function(inputs=[x], outputs=mlp.preds)
+    return predprobs_(X.astype(theano.config.floatX)), preds_(X.astype(theano.config.floatX))
+    
+    
 def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
-             hidden_layers_sizes, dataset, batch_size, datasel, shuffle, scaling, dropout, earlystop):
+             hidden_layers_sizes, dataset, batch_size, datasel, shuffle, scaling, dropout, earlystop, dumppath):
     """
     Demonstrate stochastic gradient descent optimization for a multilayer
     perceptron
@@ -309,6 +358,9 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
         n_out=nclass
     )
     
+    with open(dumppath, "wb") as f:
+        cPickle.dump(classifier, f)
+    
     # dropout the hidden layers
     trng = RandomStreams(1234)
     use_noise = theano.shared(numpy.asarray(0., dtype=theano.config.floatX))
@@ -354,6 +406,15 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
         givens={
             x: train_set_x[index * batch_size:(index + 1) * batch_size],
             y: train_set_y[index * batch_size:(index + 1) * batch_size]
+        }
+    )
+    
+    pred_probs = theano.function(
+        inputs=[index],
+        outputs=classifier.predprobs,
+        givens={
+            x: train_set_x[index:1000],
+            # y: train_set_y[index * batch_size:(index + 1) * batch_size]
         }
     )
 
@@ -412,6 +473,8 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
 
     epoch = 0
     done_looping = False
+    
+    print 
 
     while (epoch < n_epochs):
         if earlystop and done_looping:
@@ -434,6 +497,8 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
                                     in xrange(n_train_batches)]
                 this_validation_loss = numpy.mean(validation_losses)
                 this_training_loss = numpy.mean(training_losses)
+                probs = [pred_probs(i) for i
+                                    in xrange(n_train_batches)]
                 
                 print(
                     'epoch %i, minibatch %i/%i, training error %f %%' %
@@ -495,5 +560,11 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
 
 
 if __name__ == '__main__':
+    dataset = sys.argv[1] #'../data/ch/B6seg-ch-noinv.mat'
+    dumppath = sys.argv[2] #'../data/ch/mlp.pkl'
+    hidden_layers_sizes_ = sys.argv[3].split(',') #1000
+    hidden_layers_sizes = []
+    for hls in range(len(hidden_layers_sizes_)):
+        hidden_layers_sizes.append(int(hidden_layers_sizes_[hls]))
     test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
-             hidden_layers_sizes, dataset, batch_size, datasel, shuffle, scaling, dropout, earlystop)
+             hidden_layers_sizes, dataset, batch_size, datasel, shuffle, scaling, dropout, earlystop, dumppath)

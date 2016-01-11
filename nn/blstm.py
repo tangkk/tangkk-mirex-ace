@@ -16,13 +16,6 @@ from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 
 from acesongdb import load_data_varlen, prepare_data
 
-dataset = sys.argv[1] #'../data/ch/Jvarlen-ch-noinv.pkl'
-dumppath = sys.argv[2] #'lstm_model.npz'
-format = sys.argv[3] #'matrix'
-xdim = int(sys.argv[4])#24
-dim_proj = int(sys.argv[5])#500
-
-
 scaling=1
 use_dropout=True
 max_epochs = 500
@@ -117,10 +110,6 @@ def init_params(options):
     params = get_layer(options['encoder'])[0](options,
                                               params,
                                               prefix=options['encoder'])
-    # classifier - note that this set of 'U' and 'b' is for log_regression layer
-    # params['U'] = 0.01 * numpy.random.randn(options['dim_proj'],
-                                            # options['ydim']).astype(config.floatX)
-    # params['b'] = numpy.zeros((options['ydim'],)).astype(config.floatX)
     
     # below is for Bidirectional LSTM, the logistic regression needs to accomondate length of 2*dim_proj
     params['U'] = 0.01 * numpy.random.randn(2*options['dim_proj'],
@@ -206,7 +195,7 @@ def param_init_lstm(options, params, prefix='lstm'):
     bb = numpy.zeros((4 * options['dim_proj'],))
     params[_p(prefix, 'bb')] = bb.astype(config.floatX) # "lstm_bb"
     
-    return params #[lstm_W, lstm_U, lstm_b]
+    return params #[lstm_W, lstm_U, lstm_b, lstm_Wb, lstm_Ub, lstm_bb]
 
 
 def lstm_layer(tparams, state_below, options, prefix='lstm', mask=None):
@@ -572,7 +561,7 @@ def build_model(tparams, options):
 
     return use_noise, x, mask, oh_mask, y, f_pred_prob, f_pred, cost
 
-
+'''
 def pred_probs(f_pred_prob, prepare_data, data, iterator, verbose=False, maxlen=None):
     """ If you want to use a trained model, this is useful to compute
     the probabilities of new examples.
@@ -594,7 +583,7 @@ def pred_probs(f_pred_prob, prepare_data, data, iterator, verbose=False, maxlen=
             print '%d/%d samples classified' % (n_done, n_samples)
 
     return probs
-
+'''
 
 def pred_error(f_pred, prepare_data, data, iterator, verbose=False, maxlen=None):
     """
@@ -614,11 +603,29 @@ def pred_error(f_pred, prepare_data, data, iterator, verbose=False, maxlen=None)
 
     return valid_err
 
+def predprobs(model, X):
+    model_options = OrderedDict()
+    tparams = init_tparams(model)
+    model_options['encoder'] = 'lstm'
+    model_options['xdim'] = model['lstm_W'].shape[0]
+    model_options['dim_proj'] = model['U'].shape[0]
+    model_options['ydim'] = model['U'].shape[1]
+    model_options['use_dropout'] = False
+    (use_noise, _, _, _,
+     _, f_pred_prob, f_pred, _) = build_model(tparams, model_options)
+     
+    use_noise.set_value(0.)
+    
+    x, mask, oh_mask, _ = prepare_data(X, None, maxlen=None, xdim=model_options['xdim'])
+    
+    return f_pred_prob(x, mask, oh_mask), f_pred(x, mask, oh_mask)
 
 def train_lstm(
     # word embedding in ACE's context can be regarded as the feature vector size of each ns frame
     dim_proj=None,  # word embeding dimension and LSTM number of hidden units.
     xdim=None,
+    ydim=None,
+    format=None,
     patience=10,  # Number of epoch to wait before early stop if no progress
     max_epochs=500,  # The maximum number of epoch to run
     dispFreq=10,  # Display to stdout the training progress every N updates
@@ -835,10 +842,16 @@ def train_lstm(
 
 
 if __name__ == '__main__':
-    # See function train for all possible parameter and there definition.
+    dataset = sys.argv[1] #'../data/ch/Jvarlen-ch-noinv.pkl'
+    dumppath = sys.argv[2] #'lstm_model.npz'
+    format = sys.argv[3] #'matrix'
+    xdim = int(sys.argv[4])#24
+    dim_proj = int(sys.argv[5])#500
+    
     train_lstm(
         dim_proj=dim_proj,
         xdim=xdim,
+        format=format,
         dumppath=dumppath,
         max_epochs=max_epochs,
         scaling=scaling,

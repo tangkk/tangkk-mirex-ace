@@ -1,0 +1,48 @@
+import numpy
+import cPickle
+import scipy.io as sio
+from sklearn import preprocessing
+import theano
+import sys
+
+input = sys.argv[1]
+modelpath = sys.argv[2]
+nntype = sys.argv[3]
+
+# 1. load input (in .mat format)
+# standardize the input (scaling = 1)
+# FIXME: make sure that on matlab's size the output X is pre-standardized
+mat = sio.loadmat(input)
+X = mat['X']
+X = preprocessing.scale(X, axis=1)
+# X = theano.shared(numpy.asarray(X, dtype=theano.config.floatX), borrow=True)
+
+# 2. load model (in .pkl format or .npz format)
+if nntype == 'mlp' or nntype == 'dbn':
+    with open(modelpath, 'rb') as f:
+        model = cPickle.load(f)
+elif nntype == 'knn' or nntype == 'svm':
+    with open(modelpath, 'rb') as f:
+        model = cPickle.load(f)
+elif nntype == 'lstm' or nntype == 'blstm' or nntype == 'ctc' or nntype == 'bctc':
+    model = numpy.load(modelpath)
+            
+# 3. predict output using the model and the input
+# 4. save the prediction back to .mat
+importCmd = 'from ' + nntype + ' import predprobs'
+exec(importCmd)
+
+if nntype == 'svm' or nntype == 'knn':
+    y_preds = y_preds = predprobs(model,X)
+    print y_preds
+    ymax = numpy.max(y_preds)
+    y_preds[y_preds==0] = ymax+1
+    sio.savemat('../y_preds.mat', {'y_preds':y_preds})
+else:
+    y_probs, y_preds = predprobs(model,X)
+    print y_probs
+    print y_preds
+    ymax = numpy.max(y_preds)
+    y_preds[y_preds==0] = ymax+1
+    sio.savemat('../y_probs.mat', {'y_probs':y_probs})
+    sio.savemat('../y_preds.mat', {'y_preds':y_preds})

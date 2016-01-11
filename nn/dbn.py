@@ -14,15 +14,6 @@ from grbm import GRBM
 from utils import tile_raster_images
 import sys
 
-dataset = sys.argv[1] #'../data/ch/B6seg-ch-noinv.mat'
-dumppath = sys.argv[2] #'../data/ch/dbn.pkl'
-hidden_layers_sizes_ = sys.argv[3].split(',') #[1000]
-hidden_layers_sizes = []
-for hls in range(len(hidden_layers_sizes_)):
-    hidden_layers_sizes.append(int(hidden_layers_sizes_[hls]))
-    
-first_layer = sys.argv[4] #'rbm'
-
 
 shuffle = 1
 scaling = 1
@@ -58,7 +49,7 @@ class DBN(object):
     """
 
     def __init__(self, numpy_rng, theano_rng=None, n_ins=784,
-                 hidden_layers_sizes=[500, 500], n_outs=10, L1_reg=0, L2_reg=0):
+                 hidden_layers_sizes=[500, 500], n_outs=10, L1_reg=0, L2_reg=0, first_layer='grbm',model=None):
         """This class is made to support a variable number of layers.
 
         :type numpy_rng: numpy.random.RandomState
@@ -125,11 +116,20 @@ class DBN(object):
                 layer_input = self.x
             else:
                 layer_input = self.sigmoid_layers[i - 1].output
-
+            
+            if model is None:
+                W = None
+                b = None
+            else:
+                W = model[i%2]
+                b = model[i%2 + 1]
+                
             sigmoid_layer = HiddenLayer(rng=numpy_rng,
                                         input=layer_input,
                                         n_in=input_size,
                                         n_out=hidden_layers_sizes[i],
+                                        W = W,
+                                        b = b,
                                         activation=T.nnet.sigmoid)
 
             # add the layer to our list of layers
@@ -181,9 +181,17 @@ class DBN(object):
             self.rbm_layers.append(rbm_layer)
 
         # We now need to add a logistic layer on top of the MLP
+        if model is None:
+            W = None
+            b = None
+        else:
+            W = model[-2]
+            b = model[-1]
         self.logLayer = LogisticRegression(
             input=self.sigmoid_layers[-1].output,
             n_in=hidden_layers_sizes[-1],
+            W = W,
+            b = b,
             n_out=n_outs)
         self.params.extend(self.logLayer.params)
         
@@ -203,6 +211,8 @@ class DBN(object):
         # symbolic variable that points to the number of errors made on the
         # minibatch given by self.x and self.y
         self.errors = self.logLayer.errors(self.y)
+        self.predprobs = self.logLayer.p_y_given_x
+        self.preds = self.logLayer.y_pred
 
     def pretraining_functions(self, train_set_x, batch_size, cdk, usepersistent):
         '''Generates a list of functions, for performing one step of
@@ -390,11 +400,41 @@ def dropout_layer(state_before, use_noise, trng, p):
                          state_before * p)
     return layer
 
+    
+def predprobs(model, X):
+    W = []
+    b = []
+    hidden_layers_sizes = []
+    # W and b stores the weights and bias of different hidden layers
+    # the last element of them stores those of the logistic regression layers
+    for i in range(len(model)):
+        if i % 2 == 0:
+            Wi = model[i].get_value()
+            W.append(Wi)
+        if i % 2 == 1:
+            bi = model[i].get_value()
+            b.append(bi)
+            if i != len(model)-1:
+                hidden_layers_sizes.append(bi.shape[0])       
+                
+    numpy_rng = numpy.random.RandomState(123)
+    n_in = W[0].shape[0]
+    n_out = W[-1].shape[1]
+    print n_in
+    print n_out
+    print hidden_layers_sizes
+    dbn = DBN(numpy_rng=numpy_rng, n_ins=n_in,
+              hidden_layers_sizes=hidden_layers_sizes,
+              n_outs=n_out,model=model)
+    predprobs_ = theano.function(inputs=[dbn.x], outputs=dbn.predprobs, name='predprobs_')
+    preds_ = theano.function(inputs=[dbn.x], outputs=dbn.preds)
+    return predprobs_(X.astype(theano.config.floatX)), preds_(X.astype(theano.config.floatX))
+    
 def test_DBN(finetune_lr, pretraining_epochs,
              pretrain_lr, cdk, usepersistent, training_epochs,
              L1_reg, L2_reg,
              hidden_layers_sizes,
-             dataset, batch_size, output_folder, shuffle, scaling, dropout, first_layer):
+             dataset, batch_size, output_folder, shuffle, scaling, dropout, first_layer, dumppath):
     """
     Demonstrates how to train and test a Deep Belief Network.
 
@@ -433,7 +473,7 @@ def test_DBN(finetune_lr, pretraining_epochs,
     nclass = max(train_set_y.eval())+1
     dbn = DBN(numpy_rng=numpy_rng, n_ins=train_set_x.get_value(borrow=True).shape[1],
               hidden_layers_sizes=hidden_layers_sizes,
-              n_outs=nclass, L1_reg=L1_reg, L2_reg=L2_reg)
+              n_outs=nclass, L1_reg=L1_reg, L2_reg=L2_reg, first_layer=first_layer)
     print 'n_ins:%d'% train_set_x.get_value(borrow=True).shape[1]
     print 'n_outs:%d'% nclass
     
@@ -621,8 +661,15 @@ def test_DBN(finetune_lr, pretraining_epochs,
     
 
 if __name__ == '__main__':
+    dataset = sys.argv[1] #'../data/ch/B6seg-ch-noinv.mat'
+    dumppath = sys.argv[2] #'../data/ch/dbn.pkl'
+    hidden_layers_sizes_ = sys.argv[3].split(',') #[1000]
+    hidden_layers_sizes = []
+    for hls in range(len(hidden_layers_sizes_)):
+        hidden_layers_sizes.append(int(hidden_layers_sizes_[hls]))
+    first_layer = sys.argv[4] #'rbm'
     test_DBN(finetune_lr, pretraining_epochs,
              pretrain_lr, cdk, usepersistent, training_epochs,
              L1_reg, L2_reg,
              hidden_layers_sizes,
-             dataset, batch_size, output_folder, shuffle, scaling, dropout, first_layer)
+             dataset, batch_size, output_folder, shuffle, scaling, dropout, first_layer, dumppath)
