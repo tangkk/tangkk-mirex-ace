@@ -1,3 +1,4 @@
+% %%%%%%%%%%%%%%%%%%MIREX 2015%%%%%%%%%%%%%%%%%%
 % 20 baseline
 % 10 heuristic
 % 15 revconf-J-10 based
@@ -21,6 +22,7 @@
 % tangkkace('29','JayChou29List.txt');evaluateCP jaychou-29 JayChou29List.txt;
 % tangkkace('29','TheBeatles180List.txt');evaluateCP thebeatles-29 TheBeatles180List.txt;
 
+% %%%%%%%%%%%%%%%%%%data generation processes%%%%%%%%%%%%%%%%%%
 % trainingDataGenNSeg('raw1.mat','JayChou29List.txt',6, 1)% encoded in -v5
 % trainingDataGenVarLen('raw2.mat','JayChou29List.txt', 1)% encoded in -v7.3
 % trainingDataGenSongWise('raw3.mat','JayChou29List.txt', 1)% encoded in -v7.3
@@ -30,4 +32,9 @@
 
 % trainingDataGenVarLen('raw7.mat','JayChou29List.txt', 0)% encoded in -v7.3
 % trainingDataGenVarLen('raw8.mat','TheBeatles180List.txt', 0)% encoded in -v7.3
-trainingDataGenSongWise('raw9.mat','JayChou29List.txt', 0)% encoded in -v7.3
+% trainingDataGenSongWise('raw9.mat','JayChou29List.txt', 0)% encoded in -v7.3
+
+% %%%%%%%%%%%%%%%%%%Work With Theano NN%%%%%%%%%%%%%%%%%%
+% tangkkace('30','tempList.txt');evaluateCP tempList-30 tempList.txt;
+tangkkace('30','JayChou29List.txt');evaluateCP jaychou-30 JayChou29List.txt;
+

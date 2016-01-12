@@ -1,5 +1,5 @@
 function [rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode, beparam, dbnparam, dbn2param,...
-    basegram, uppergram, bdrys, df, enPlot)
+    basegram, uppergram, rawbasegram, rawuppergram, bdrys, df, enPlot)
 
 display('chord decoding...');
 if beparam.useSIM1 % apply simple chord matching, works with a 1-D basegram
@@ -23,12 +23,16 @@ end
 
 
 if beparam.enBassTrebleCorrect
-display('chord correcting...');
+if beparam.enTheanoNN % if using TheanoNN, use raw basegram and uppergram
+display('work with theano NN model...');
+[rootgram, bassgram, treblegram] = feval(['bassTrebleCorrect',num2str(beparam.btcVersion)],rootgram,...
+    bassgram, treblegram, rawbasegram, rawuppergram, bdrys, chordmode);
+else % otherwise use normalized basegram and uppergram
+display('work with simple model...');
 [rootgram, bassgram, treblegram] = feval(['bassTrebleCorrect',num2str(beparam.btcVersion)],rootgram,...
     bassgram, treblegram, basegram, uppergram, bdrys, chordmode);
 end
-
-
+end
 
 bassnotenames = {'N','C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
 nslices = length(rootgram);

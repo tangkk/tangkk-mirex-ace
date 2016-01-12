@@ -1,4 +1,5 @@
-% Automatic Chord Estimation - with evaluation
+% Automatic Chord Estimation
+% main process
 
 function tangkkace(paramN, acelist)
 
@@ -18,12 +19,12 @@ while ischar(tline)
 
     display('frontend...');
 
-    [bdrys, basegram, uppergram, endtime] = frontEndDecode(inputpath, feparam, 0, 0);
+    [bdrys, basegram, uppergram, rawbasegram, rawuppergram, endtime] = frontEndDecode(inputpath, feparam, 0, 0);
 
     display('backend...');
 
     [rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode, beparam, dbnparam, dbn2param,...
-        basegram, uppergram, bdrys, 0, 0);
+        basegram, uppergram, rawbasegram, rawuppergram, bdrys, 0, 0);
 
     display('output...');
     writeOut(outputpath, feparam.hopsize, feparam.fs,...

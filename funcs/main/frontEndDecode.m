@@ -1,4 +1,4 @@
-function [bdrys, basegram, uppergram, endtime] = frontEndDecode(audiopath, feparam, df, enPlot)
+function [bdrys, basegram, uppergram, rawbasegram, rawuppergram, endtime] = frontEndDecode(audiopath, feparam, df, enPlot)
 
 display('input in progress...');
 x = myInput(audiopath, feparam.stereotomono, feparam.fs);
@@ -247,6 +247,9 @@ if feparam.basstreblechromagram
     % note this is to compute chromagram
     basegram = computeChromagram(Sbout);
     uppergram = computeChromagram(Stout);
+    % this is the point where the trainingData takes basegram and uppergram
+    rawbasegram = basegram;
+    rawuppergram = uppergram;
     % normalize grams (whether global or local)
     [uppergram,~] = normalizeGram(uppergram,feparam.normalization);
     [basegram,~] = normalizeGram(basegram,feparam.normalization);

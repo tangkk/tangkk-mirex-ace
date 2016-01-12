@@ -1,6 +1,6 @@
-% Automatic Chord Estimation - examine only
+% Automatic Chord Estimation - examine only (look only once)
 
-function tangkkace(paramN, acelist)
+function tangkkace_exm(paramN, acelist)
 
 if ischar(paramN)
     [feparam, beparam, dbnparam, dbn2param, chordmode] = feval(strcat('paramInit',paramN));

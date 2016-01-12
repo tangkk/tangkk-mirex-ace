@@ -358,9 +358,6 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
         n_out=nclass
     )
     
-    with open(dumppath, "wb") as f:
-        cPickle.dump(classifier, f)
-    
     # dropout the hidden layers
     trng = RandomStreams(1234)
     use_noise = theano.shared(numpy.asarray(0., dtype=theano.config.floatX))

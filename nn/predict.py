@@ -8,10 +8,10 @@ import sys
 input = sys.argv[1]
 modelpath = sys.argv[2]
 nntype = sys.argv[3]
+invtype = sys.argv[4]
 
 # 1. load input (in .mat format)
 # standardize the input (scaling = 1)
-# FIXME: make sure that on matlab's size the output X is pre-standardized
 mat = sio.loadmat(input)
 X = mat['X']
 X = preprocessing.scale(X, axis=1)
@@ -32,17 +32,20 @@ elif nntype == 'lstm' or nntype == 'blstm' or nntype == 'ctc' or nntype == 'bctc
 importCmd = 'from ' + nntype + ' import predprobs'
 exec(importCmd)
 
+if invtype == 'inv':
+    nclass = 277
+elif invtype == 'noinv':
+    nclass = 61
+    
 if nntype == 'svm' or nntype == 'knn':
     y_preds = y_preds = predprobs(model,X)
     print y_preds
-    ymax = numpy.max(y_preds)
-    y_preds[y_preds==0] = ymax+1
-    sio.savemat('../y_preds.mat', {'y_preds':y_preds})
+    y_preds[y_preds==0] = nclass
+    sio.savemat('./data/temp/y_preds.mat', {'y_preds':y_preds})
 else:
     y_probs, y_preds = predprobs(model,X)
     print y_probs
     print y_preds
-    ymax = numpy.max(y_preds)
-    y_preds[y_preds==0] = ymax+1
-    sio.savemat('../y_probs.mat', {'y_probs':y_probs})
-    sio.savemat('../y_preds.mat', {'y_preds':y_preds})
+    y_preds[y_preds==0] = nclass
+    sio.savemat('./data/temp/y_probs.mat', {'y_probs':y_probs})
+    sio.savemat('./data/temp/y_preds.mat', {'y_preds':y_preds})
