@@ -39,13 +39,12 @@ elif invtype == 'noinv':
     
 if nntype == 'svm' or nntype == 'knn':
     y_preds = y_preds = predprobs(model,X)
-    print y_preds
     y_preds[y_preds==0] = nclass
+    print y_preds
     sio.savemat('./data/temp/y_preds.mat', {'y_preds':y_preds})
 else:
     y_probs, y_preds = predprobs(model,X)
-    print y_probs
-    print y_preds
     y_preds[y_preds==0] = nclass
+    print y_preds
     sio.savemat('./data/temp/y_probs.mat', {'y_probs':y_probs})
     sio.savemat('./data/temp/y_preds.mat', {'y_preds':y_preds})

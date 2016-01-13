@@ -31,7 +31,6 @@ from loadmat import loadmat
 from logistic import LogisticRegression
 import sys
 
-norm = 0
 scaling = 1
 robust = 0
 shuffle = 1
@@ -42,7 +41,7 @@ n_epochs=500
 learning_rate=0.01
 L1_reg=0.0000
 L2_reg=0.0000
-earlystop = False
+earlystop = True
 dropout = True
 
 # start-snippet-1
@@ -321,7 +320,7 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
    """
     print locals()
     
-    datasets = loadmat(dataset=dataset,shuffle=shuffle,datasel=datasel,scaling=scaling,robust=robust,norm=norm)
+    datasets = loadmat(dataset=dataset,shuffle=shuffle,datasel=datasel,scaling=scaling,robust=robust)
 
     train_set_x, train_set_y = datasets[0]
     valid_set_x, valid_set_y = datasets[1]
@@ -452,7 +451,7 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
     print '... training'
 
     # early-stopping parameters
-    patience = 10000  # look as this many examples regardless
+    patience = 10 * n_train_batches  # look as this many examples regardless
     patience_increase = 2  # wait this much longer when a new best is
                            # found
     improvement_threshold = 0.995  # a relative improvement of this much is
@@ -525,7 +524,10 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
                         improvement_threshold
                     ):
                         patience = max(patience, iter * patience_increase)
-
+                    # save model
+                    with open(dumppath, "wb") as f:
+                        cPickle.dump(classifier.params, f)
+                        
                     best_validation_loss = this_validation_loss
                     best_iter = iter
 
@@ -551,9 +553,6 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
     print >> sys.stderr, ('The code for file ' +
                           os.path.split(__file__)[1] +
                           ' ran for %.2fm' % ((end_time - start_time) / 60.))
-    # save model
-    with open(dumppath, "wb") as f:
-        cPickle.dump(classifier.params, f)
 
 
 if __name__ == '__main__':

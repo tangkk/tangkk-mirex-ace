@@ -17,8 +17,8 @@ import sys
 
 shuffle = 1
 scaling = 1
-robust = 0
 datasel = 1
+robust = 0
 
 batch_size = 100
 pretraining_epochs=20
@@ -30,7 +30,7 @@ training_epochs=500
 finetune_lr=0.01
 L1_reg=0.0000
 L2_reg=0.0000
-earlystop=False
+earlystop=True
 dropout=True
 pretrain_dropout=False
 
@@ -560,7 +560,7 @@ def test_DBN(finetune_lr, pretraining_epochs,
 
     print '... finetuning the model'
     # early-stopping parameters
-    patience = 4 * n_train_batches  # look as this many examples regardless
+    patience = 10 * n_train_batches  # look as this many examples regardless
     patience_increase = 2.    # wait this much longer when a new best is
                               # found
     improvement_threshold = 0.995  # a relative improvement of this much is
@@ -626,6 +626,9 @@ def test_DBN(finetune_lr, pretraining_epochs,
                         improvement_threshold
                     ):
                         patience = max(patience, iter * patience_increase)
+                        
+                    with open(dumppath, "wb") as f:
+                        cPickle.dump(dbn.params, f)
 
                     # save best validation score and iteration number
                     best_validation_loss = this_validation_loss
@@ -656,8 +659,6 @@ def test_DBN(finetune_lr, pretraining_epochs,
                           os.path.split(__file__)[1] +
                           ' ran for %.2fm' % ((end_time - start_time)
                                               / 60.))
-    with open(dumppath, "wb") as f:
-        cPickle.dump(dbn.params, f)
     
 
 if __name__ == '__main__':
