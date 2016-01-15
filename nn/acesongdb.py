@@ -371,7 +371,7 @@ def prepare_data(seqs, labels, maxlen=None, xdim=None):
     x_oh_mask = x_mask
     return x, x_mask, x_oh_mask, labels
 
-def load_data_varlen(dataset="../testnn.mat", valid_portion=0.05, test_portion=0.05, maxlen=None,
+def load_data_varlen(dataset="../testnn.mat", valid_portion=0.1, test_portion=0.1, maxlen=None,
                scaling=1, robust=0, format = 'matrix'):
     '''Loads the dataset
 
@@ -427,8 +427,10 @@ def load_data_varlen(dataset="../testnn.mat", valid_portion=0.05, test_portion=0
     # note that these are list objects now (train_set_ , valid_set_, test_set_)
     test_set_x = [train_set_x[s] for s in sidx[n_valid:]]
     test_set_y = [train_set_y[s] for s in sidx[n_valid:]]
-    valid_set_x = [train_set_x[s] for s in sidx[n_train:n_valid]]
-    valid_set_y = [train_set_y[s] for s in sidx[n_train:n_valid]]
+    # valid_set_x = [train_set_x[s] for s in sidx[n_train:n_valid]]
+    # valid_set_y = [train_set_y[s] for s in sidx[n_train:n_valid]]
+    valid_set_x = [train_set_x[s] for s in sidx[n_train:]] # 20% validation
+    valid_set_y = [train_set_y[s] for s in sidx[n_train:]] # 20% validation
     train_set_x = [train_set_x[s] for s in sidx[:n_train]]
     train_set_y = [train_set_y[s] for s in sidx[:n_train]]
     
@@ -445,7 +447,7 @@ def load_data_varlen(dataset="../testnn.mat", valid_portion=0.05, test_portion=0
 
     return train, valid, test
     
-def load_data_song(dataset=None, valid_portion=0.05, test_portion=0.05):
+def load_data_song(dataset=None, valid_portion=0.1, test_portion=0.1):
     f = open(dataset, 'rb')
     X,y = cPickle.load(f)
     
@@ -458,8 +460,10 @@ def load_data_song(dataset=None, valid_portion=0.05, test_portion=0.05):
     # note that these are list objects now (train_set_ , valid_set_, test_set_) rather than numpy objects
     test_set_x = numpy.asarray([X[s] for s in sidx[n_valid:]])
     test_set_y = numpy.asarray([y[s] for s in sidx[n_valid:]])
-    valid_set_x = numpy.asarray([X[s] for s in sidx[n_train:n_valid]])
-    valid_set_y = numpy.asarray([y[s] for s in sidx[n_train:n_valid]])
+    # valid_set_x = numpy.asarray([X[s] for s in sidx[n_train:n_valid]])
+    # valid_set_y = numpy.asarray([y[s] for s in sidx[n_train:n_valid]])
+    valid_set_x = numpy.asarray([X[s] for s in sidx[n_train:]]) # 20% validation
+    valid_set_y = numpy.asarray([y[s] for s in sidx[n_train:]]) # 20% validation
     train_set_x = numpy.asarray([X[s] for s in sidx[:n_train]])
     train_set_y = numpy.asarray([y[s] for s in sidx[:n_train]])
 

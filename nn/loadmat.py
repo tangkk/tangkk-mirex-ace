@@ -139,14 +139,16 @@ def loadmat_noshare(dataset, shuffle=1, datasel=1, scaling=1, robust=0, norm=0):
     testidx = len(X)
     
     train_X = numpy.asarray(X[0:trainidx],dtype=numpy.float32)
-    valid_X = numpy.asarray(X[trainidx:valididx],dtype=numpy.float32)
+    # valid_X = numpy.asarray(X[trainidx:valididx],dtype=numpy.float32)
+    valid_X = numpy.asarray(X[trainidx:testidx],dtype=numpy.float32) # 20% validation set
     test_X = numpy.asarray(X[valididx:testidx],dtype=numpy.float32)
     
     train_X, valid_X, test_X = standardize(train_X, valid_X, test_X, scaling, robust)
     
     # collect labels
     train_y = numpy.asarray(y[0:trainidx],dtype=numpy.int64)
-    valid_y = numpy.asarray(y[trainidx:valididx],dtype=numpy.int64)
+    # valid_y = numpy.asarray(y[trainidx:valididx],dtype=numpy.int64)
+    valid_y = numpy.asarray(y[trainidx:testidx],dtype=numpy.int64)# 20% validation set
     test_y = numpy.asarray(y[valididx:testidx],dtype=numpy.int64)
     
     # make data set
@@ -220,14 +222,16 @@ def loadmat(dataset, shuffle=1, datasel=1, scaling=1, robust=0, norm=0):
     testidx = len(X)
     
     train_X = numpy.asarray(X[0:trainidx],dtype=numpy.float32)
-    valid_X = numpy.asarray(X[trainidx:valididx],dtype=numpy.float32)
+    # valid_X = numpy.asarray(X[trainidx:valididx],dtype=numpy.float32)
+    valid_X = numpy.asarray(X[trainidx:testidx],dtype=numpy.float32) # 20% validation set
     test_X = numpy.asarray(X[valididx:testidx],dtype=numpy.float32)
     
     train_X, valid_X, test_X = standardize(train_X, valid_X, test_X, scaling, robust)
     
     # collect labels
     train_y = numpy.asarray(y[0:trainidx],dtype=numpy.int64)
-    valid_y = numpy.asarray(y[trainidx:valididx],dtype=numpy.int64)
+    # valid_y = numpy.asarray(y[trainidx:valididx],dtype=numpy.int64)
+    valid_y = numpy.asarray(y[trainidx:testidx],dtype=numpy.int64)# 20% validation set
     test_y = numpy.asarray(y[valididx:testidx],dtype=numpy.int64)
     
     # make data set

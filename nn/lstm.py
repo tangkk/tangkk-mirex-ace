@@ -542,7 +542,7 @@ def train_lstm(
     print "model options", model_options
     
     print 'Loading data'
-    train, valid, test = load_data_varlen(dataset=dataset, valid_portion=0.05, test_portion=0.05,
+    train, valid, test = load_data_varlen(dataset=dataset, valid_portion=0.1, test_portion=0.1,
                                    maxlen=maxlen, scaling=scaling, robust=0, format=format)
                                    
     print 'data loaded'
@@ -667,7 +667,9 @@ def train_lstm(
                     use_noise.set_value(0.)
                     train_err = pred_error(f_pred, prepare_data, train, kf)
                     valid_err = pred_error(f_pred, prepare_data, valid, kf_valid)
-                    test_err = pred_error(f_pred, prepare_data, test, kf_test)
+                    # not caring about test_err
+                    # test_err = pred_error(f_pred, prepare_data, test, kf_test)
+                    test_err = 1
 
                     history_errs.append([valid_err, test_err])
                     
@@ -710,7 +712,8 @@ def train_lstm(
     kf_train_sorted = get_minibatches_idx(len(train[0]), batch_size)
     train_err = pred_error(f_pred, prepare_data, train, kf_train_sorted)
     valid_err = pred_error(f_pred, prepare_data, valid, kf_valid)
-    test_err = pred_error(f_pred, prepare_data, test, kf_test)
+    # test_err = pred_error(f_pred, prepare_data, test, kf_test)
+    test_err = 1
 
     print 'Train ', train_err, 'Valid ', valid_err, 'Test ', test_err
     if dumppath:

@@ -38,9 +38,9 @@ def test_knn(dataset, dumppath, n_neighbors, weights):
     valid_score = accuracy_score(valid_y, y_pred_valid)
     print "validation score %f"%valid_score
 
-    y_pred_test = clf.predict(test_X)
-    test_score = accuracy_score(test_y, y_pred_test)
-    print "testing score %f"%test_score
+    # y_pred_test = clf.predict(test_X)
+    # test_score = accuracy_score(test_y, y_pred_test)
+    # print "testing score %f"%test_score
 
     # save model
     with open(dumppath, "wb") as f:

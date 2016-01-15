@@ -26,7 +26,7 @@ pretrain_lr=0.001
 cdk=10
 usepersistent=True
 
-training_epochs=500
+training_epochs=400
 finetune_lr=0.01
 L1_reg=0.0000
 L2_reg=0.0000
@@ -563,7 +563,7 @@ def test_DBN(finetune_lr, pretraining_epochs,
     patience = 10 * n_train_batches  # look as this many examples regardless
     patience_increase = 2.    # wait this much longer when a new best is
                               # found
-    improvement_threshold = 0.995  # a relative improvement of this much is
+    improvement_threshold = 0.999  # a relative improvement of this much is
                                    # considered significant
     validation_frequency = min(n_train_batches, patience / 2)
                                   # go through this many
@@ -633,7 +633,8 @@ def test_DBN(finetune_lr, pretraining_epochs,
                     # save best validation score and iteration number
                     best_validation_loss = this_validation_loss
                     best_iter = iter
-
+                    
+                    '''
                     # test it on the test set
                     test_losses = test_model()
                     test_score = numpy.mean(test_losses)
@@ -641,6 +642,7 @@ def test_DBN(finetune_lr, pretraining_epochs,
                            'best model %f %%') %
                           (epoch, minibatch_index + 1, n_train_batches,
                            test_score * 100.))
+                    '''
 
             if patience <= iter:
                 done_looping = True

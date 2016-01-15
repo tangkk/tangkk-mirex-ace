@@ -1,24 +1,3 @@
-"""
-This tutorial introduces the multilayer perceptron using Theano.
-
- A multilayer perceptron is a logistic regressor where
-instead of feeding the input to the logistic regression you insert a
-intermediate layer, called the hidden layer, that has a nonlinear
-activation function (usually tanh or sigmoid) . One can use many such
-hidden layers making the architecture deep. The tutorial will also tackle
-the problem of MNIST digit classification.
-
-.. math::
-
-    f(x) = G( b^{(2)} + W^{(2)}( s( b^{(1)} + W^{(1)} x))),
-
-References:
-
-    - textbooks: "Pattern Recognition and Machine Learning" -
-                 Christopher M. Bishop, section 5
-
-"""
-
 import os
 import sys
 import timeit
@@ -32,12 +11,12 @@ from logistic import LogisticRegression
 import sys
 
 scaling = 1
-robust = 0
 shuffle = 1
 datasel = 1
+robust = 0
 
 batch_size = 100
-n_epochs=500
+n_epochs=400
 learning_rate=0.01
 L1_reg=0.0000
 L2_reg=0.0000
@@ -451,10 +430,10 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
     print '... training'
 
     # early-stopping parameters
-    patience = 10 * n_train_batches  # look as this many examples regardless
+    patience = 100 * n_train_batches  # look as this many examples regardless
     patience_increase = 2  # wait this much longer when a new best is
                            # found
-    improvement_threshold = 0.995  # a relative improvement of this much is
+    improvement_threshold = 0.999  # a relative improvement of this much is
                                    # considered significant
     validation_frequency = min(n_train_batches, patience / 2)
                                   # go through this many
@@ -530,7 +509,8 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
                         
                     best_validation_loss = this_validation_loss
                     best_iter = iter
-
+                    
+                    '''
                     # test it on the test set
                     test_losses = [test_model(i) for i
                                    in xrange(n_test_batches)]
@@ -540,6 +520,7 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
                            'best model %f %%') %
                           (epoch, minibatch_index + 1, n_train_batches,
                            test_score * 100.))
+                    '''
 
             if patience <= iter:
                 done_looping = True

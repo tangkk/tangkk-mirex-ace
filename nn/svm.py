@@ -1,7 +1,6 @@
 # this is an svm to classify ACE dataset
 
 from sklearn import svm
-import scipy.io as sio
 from sklearn.metrics import accuracy_score
 from loadmat import loadmat_noshare
 import numpy
@@ -31,6 +30,7 @@ def test_svm(dataset, dumppath):
     print "dataset %s"%dataset
     print "fitting the training data"
     clf.fit(train_X,train_y)
+    
     # this svm probably is with default configs:
     '''
     SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
@@ -47,9 +47,9 @@ def test_svm(dataset, dumppath):
     valid_score = accuracy_score(valid_y, y_pred_valid)
     print "validation score %f"%valid_score
 
-    y_pred_test = clf.predict(test_X)
-    test_score = accuracy_score(test_y, y_pred_test)
-    print "testing score %f"%test_score
+    # y_pred_test = clf.predict(test_X)
+    # test_score = accuracy_score(test_y, y_pred_test)
+    # print "testing score %f"%test_score
 
     # save model
     with open(dumppath, "wb") as f:
