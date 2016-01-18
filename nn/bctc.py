@@ -559,7 +559,7 @@ def train_lstm(
     # the dateset is organized as:
     # X - n_songs * n_timesteps * dim_proj (dim_proj = 24 for chromagram based dataset)
     # y - n_songs * n_timesteps * 1
-    train, valid, test = load_data_song(dataset=dataset, valid_portion=0.05, test_portion=0.05)
+    train, valid, test = load_data_song(dataset=dataset, valid_portion=0.1, test_portion=0.1)
                                    
     print 'data loaded'
     
@@ -722,9 +722,9 @@ def train_lstm(
 
 if __name__ == '__main__':
     dataset = sys.argv[1] #'../data/ch/Jsong-ch-noinv.pkl'
-    dumppath = sys.argv[2] #'lstm_model.npz'
+    dumppath = sys.argv[2] #'bctc.npz'
     xdim = int(sys.argv[3])#24
-    ydim = int(sys.argv[4])#61 or 252
+    ydim = int(sys.argv[4])#61 or 277
     dim_proj = int(sys.argv[5])#500
     
     train_lstm(
