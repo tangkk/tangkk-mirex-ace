@@ -622,14 +622,19 @@ def train_lstm(
 
             # Get random sample a piece of length batch_size from a song
             idx0 = numpy.random.randint(0,len(train[0]))
-            idx1 = numpy.random.randint(0,len(train[0][idx0])-batch_size) # 500 in our case
+            
+            batch_size_ = batch_size
+            while len(train[0][idx0]) < batch_size_:
+                batch_size_ = batch_size_ / 2
+                
+            idx1 = numpy.random.randint(0,len(train[0][idx0])-batch_size_) # 500 in our case
             
             uidx += 1
             use_noise.set_value(1.)
             
             # Select the random examples for this minibatch
-            x = train[0][idx0][idx1:idx1+batch_size]
-            y = train[1][idx0][idx1:idx1+batch_size]
+            x = train[0][idx0][idx1:idx1+batch_size_]
+            y = train[1][idx0][idx1:idx1+batch_size_]
             
             # Get the data in numpy.ndarray format
             # This swap the axis!
