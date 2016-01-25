@@ -96,7 +96,7 @@ run ctc.py ../data/ch/Bsong-ch-inv.pkl ../data/model/ctc-Bsong-ch-inv-i 24 277 5
 run bctc.py ../data/ch/Bsong-ch-inv.pkl ../data/model/bctc-Bsong-ch-inv-i 24 277 500
 
 -------------------------------------------- noinv ---------------------------------------------------
-
+# 6seg
 run mlp.py ../data/ch/B6seg-ch-noinv.mat ../data/model/mlp-B6seg-ch-noinv-[500,500]-i.pkl 500,500
 
 run dbn.py ../data/ch/B6seg-ch-noinv.mat ../data/model/dbn-B6seg-ch-noinv-[500,500]-i.pkl 500,500 grbm
@@ -153,6 +153,7 @@ run ctc.py ../data/ch/Jsong-ch-inv.pkl ../data/model/ctc-Jsong-ch-inv-i 24 277 5
 run bctc.py ../data/ch/Jsong-ch-inv.pkl ../data/model/bctc-Jsong-ch-inv-i 24 277 500
 
 -------------------------------------------- noinv ---------------------------------------------------
+# 6seg
 run mlp.py ../data/ch/J6seg-ch-noinv.mat ../data/model/mlp-J6seg-ch-noinv-[500,500].pkl 500,500
 
 run dbn.py ../data/ch/J6seg-ch-noinv.mat ../data/model/dbn-J6seg-ch-noinv-[500,500].pkl 500,500 grbm
