@@ -34,7 +34,12 @@
 % trainingDataGenVarLen('raw8.mat','TheBeatles180List.txt', 0)% encoded in -v7.3
 % trainingDataGenSongWise('raw9.mat','JayChou29List.txt', 0)% encoded in -v7.3
 
+% %%%%%%%%%%%%%%%%%%Save intermediate results for faster comparison%%%%%%%%%%%%%%%%%%
+% tangkkace('30','JayChou29List.txt','1');
+% tangkkace('30','TheBeatles180List.txt','1');
+tangkkace('30','CaroleKingQueen26List.txt','1');
+
 % %%%%%%%%%%%%%%%%%%Work With Theano NN%%%%%%%%%%%%%%%%%%
 % tangkkace('30','tempList.txt');evaluateCP tempList-30 tempList.txt;
-tangkkace('30','JayChou29List.txt');evaluateCP jaychou-30 JayChou29List.txt;
+% tangkkace('30','JayChou29List.txt');evaluateCP jaychou-30 JayChou29List.txt;
 
