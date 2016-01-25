@@ -25,8 +25,8 @@ end
 if beparam.enBassTrebleCorrect
 if beparam.enTheanoNN % if using TheanoNN, use raw basegram and uppergram
 display('work with theano NN model...');
-[rootgram, bassgram, treblegram] = feval(['bassTrebleCorrect',num2str(beparam.btcVersion)],rootgram,...
-    bassgram, treblegram, rawbasegram, rawuppergram, bdrys, chordmode);
+[rootgram, bassgram, treblegram] = feval(['bassTrebleCorrect',num2str(beparam.btcVersion)],...
+    rawbasegram, rawuppergram, bdrys, chordmode);
 else % otherwise use normalized basegram and uppergram
 display('work with simple model...');
 [rootgram, bassgram, treblegram] = feval(['bassTrebleCorrect',num2str(beparam.btcVersion)],rootgram,...

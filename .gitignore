@@ -62,6 +62,7 @@ nn/*.pkl
 data.mat
 data-J*.mat
 data-B*.mat
+*BUB.mat
 dbn*.mat
 test*.mat
 raw.mat
