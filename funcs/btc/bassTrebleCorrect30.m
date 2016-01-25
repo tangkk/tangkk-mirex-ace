@@ -1,11 +1,13 @@
 % recompute the whole sequence using another probabilistic model:
 % acoustic model - mlp-J6seg-ch-inv.pkl-1000
  
-function [rootgram, bassgram, treblegram] = bassTrebleCorrect30(rootgram,...
-    bassgram, treblegram, basegram, uppergram, bdrys, chordmode)
+function [rootgram, bassgram, treblegram] = bassTrebleCorrect30(basegram, uppergram, bdrys, chordmode)
 
+rootgram = [];
+bassgram = [];
+treblegram = [];
 
-nslices = size(rootgram,2);
+nslices = size(bdrys,2)-1;
 load('chordnames-inv.mat');
 chordnums = [chnames2chnums(chordnames, chordmode);'0:0'];
 nseg = 6;
