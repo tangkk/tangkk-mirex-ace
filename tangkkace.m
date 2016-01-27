@@ -1,7 +1,7 @@
 % Automatic Chord Estimation
 % main process
 
-function tangkkace(paramN, acelist, savetmp, loadtmp)
+function tangkkace(paramN, acelist, savetmp, loadtmp, model)
 
 if ischar(paramN)
     [feparam, beparam, dbnparam, dbn2param, chordmode] = feval(strcat('paramInit',paramN));
@@ -16,14 +16,15 @@ savetmp = str2num(savetmp);
 if nargin == 2
     savetmp = 0;
 end
-if savetmp == 2 && nargin == 4 % load tmp
+if savetmp == 2 && nargin >= 4 % load tmp
     load(loadtmp);
     loadidx = 1;
 end
-if savetmp == 1 % save tmp
+if savetmp == 1 && nargin >= 4 % save tmp
     rawbasegramSet = {};
     rawuppergramSet = {};
     bdrysSet = {};
+    endtimeSet = {};
     saveidx = 1;
 end
 
@@ -45,16 +46,18 @@ while ischar(tline)
         rawbasegramSet{saveidx} = rawbasegram;
         rawuppergramSet{saveidx} = rawuppergram;
         bdrysSet{saveidx} = bdrys;
+        endtimeSet{saveidx} = endtime;
         saveidx = saveidx + 1;
         tline = fgetl(fe);
         display(strcat('finish saving rawbasegram, rawuppergram, bdrys of ...',songtitle, ' !'));
         continue;
-    elseif savetmp == 2
+    elseif savetmp == 2 % load intermediate results (frontend results) and work on backend directly
         rawbasegram = rawbasegramSet{loadidx};
         rawuppergram = rawuppergramSet{loadidx};
         bdrys = bdrysSet{loadidx};
+        endtime = endtimeSet{loadidx};
         loadidx = loadidx + 1;
-        [rootgram, bassgram, treblegram] = loadingDecode(chordmode, beparam, rawbasegram, rawuppergram, bdrys);
+        [rootgram, bassgram, treblegram] = loadingDecode(chordmode, beparam, rawbasegram, rawuppergram, bdrys, model);
     end
     
     display('output...');
@@ -68,4 +71,4 @@ end % pair with the very first while loop
 
 fclose(fe);
 
-save('CNPop20BUB.mat','rawbasegramSet','rawuppergramSet','bdrysSet','chordmode');
+save(loadtmp,'rawbasegramSet','rawuppergramSet','bdrysSet','endtimeSet','chordmode');

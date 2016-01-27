@@ -1,7 +1,7 @@
 % recompute the whole sequence using another probabilistic model:
 % acoustic model - mlp-J6seg-ch-inv-[500,500]-1
  
-function [rootgram, bassgram, treblegram] = bassTrebleCorrect30(basegram, uppergram, bdrys, chordmode)
+function [rootgram, bassgram, treblegram] = theanoNN6SegPredict(basegram, uppergram, bdrys, chordmode, model)
 
 rootgram = [];
 bassgram = [];
@@ -36,11 +36,34 @@ end
 
 save('./data/temp/X.mat','X');
 
+% extract info from model
+if ~isempty(strfind(model,'-inv-'))
+    invtype = 'inv';
+else
+    invtype = 'noinv';
+end
+
+if ~isempty(strfind(model,'mlp'))
+    nntype = 'mlp';
+elseif ~isempty(strfind(model,'dbn'))
+    nntype = 'dbn';
+elseif ~isempty(strfind(model,'lstm'))
+    nntype = 'lstm';
+elseif ~isempty(strfind(model,'blstm'))
+    nntype = 'blstm';
+elseif ~isempty(strfind(model,'knn'))
+    nntype = 'knn';
+elseif ~isempty(strfind(model,'svm'))
+    nntype = 'svm';
+end
+
+
 % execute python prediction script to predict X
 % first argument is input path
 % second argument is model path
 % third argument is nntype
-python nn/predict.py ./data/temp/X.mat ./data/model/mlp-J6seg-ch-inv-[500,500]-1.pkl mlp inv
+pythoncmd = {'nn/predict.py','./data/temp/X.mat',['./data/model/' model],nntype,invtype};
+python(pythoncmd)
 % the output of the process is saved to ./data/temp/y_prob.mat and
 % ./data/temp/y_pred.mat
 load('./data/temp/y_preds.mat');

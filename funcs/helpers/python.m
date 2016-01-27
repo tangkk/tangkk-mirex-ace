@@ -16,11 +16,14 @@ function [result, status] = python(varargin)
 
     
 cmdString = '';
+args = varargin{1};
+nargs = length(args);
 
 % Add input to arguments to operating system command to be executed.
 % (If an argument refers to a file on the MATLAB path, use full file path.)
-for i = 1:nargin
-    thisArg = varargin{i};
+for i = 1:nargs
+    thisArg = args{i};
+    display(thisArg);
     if ~ischar(thisArg)
         error(message('MATLAB:perl:InputsMustBeStrings'));
     end

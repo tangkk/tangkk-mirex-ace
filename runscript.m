@@ -35,11 +35,11 @@
 % trainingDataGenSongWise('raw9.mat','JayChou29List.txt', 0)% encoded in -v7.3
 
 % %%%%%%%%%%%%%%%%%%Save intermediate results for faster comparison%%%%%%%%%%%%%%%%%%
-% tangkkace('30','JayChou29List.txt','1');
-% tangkkace('30','TheBeatles180List.txt','1');
-% tangkkace('30','CaroleKingQueen26List.txt','1');
-% tangkkace('30','CNPop20List.txt','1');
+% tangkkace('30','JayChou29List.txt','1','JayChou29ListBUB.mat');
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat');
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat');
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat');
 
 % %%%%%%%%%%%%%%%%%%Work With Theano NN%%%%%%%%%%%%%%%%%%
-tangkkace('30','JayChou29List.txt','2','JayChou29BUB.mat');evaluateCP jaychou-30 JayChou29List.txt;
+tangkkace('30','JayChou29List.txt','2','JayChou29ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-1.pkl');evaluateCP jaychou-mlp-1 JayChou29List.txt;
 
