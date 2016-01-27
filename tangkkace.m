@@ -1,7 +1,7 @@
 % Automatic Chord Estimation
 % main process
 
-function tangkkace(paramN, acelist, savetmp)
+function tangkkace(paramN, acelist, savetmp, loadtmp)
 
 if ischar(paramN)
     [feparam, beparam, dbnparam, dbn2param, chordmode] = feval(strcat('paramInit',paramN));
@@ -12,35 +12,51 @@ end
 fe = fopen(acelist,'r');
 tline = fgetl(fe);
 
-rawbasegramSet = {};
-rawuppergramSet = {};
-bdrysSet = {};
-saveidx = 1;
+savetmp = str2num(savetmp);
+if nargin == 2
+    savetmp = 0;
+end
+if savetmp == 2 && nargin == 4 % load tmp
+    load(loadtmp);
+    loadidx = 1;
+end
+if savetmp == 1 % save tmp
+    rawbasegramSet = {};
+    rawuppergramSet = {};
+    bdrysSet = {};
+    saveidx = 1;
+end
+
 while ischar(tline)
 
     [inputpath, outputpath, songtitle] = inputDecode(tline);
     disp(['now start to analyze ' songtitle ' ......']);
-
-    display('frontend...');
-
-    [bdrys, basegram, uppergram, rawbasegram, rawuppergram, endtime] = frontEndDecode(inputpath, feparam, 0, 0);
-
-    display('backend...');
     
-    if savetmp % save intermediate results
-        display(strcat('finish saving rawbasegram, rawuppergram, bdrys of ...',songtitle, ' !'));
+    if savetmp == 0
+        display('frontend...');
+        [bdrys, basegram, uppergram, rawbasegram, rawuppergram, endtime] = frontEndDecode(inputpath, feparam, 0, 0);
+        display('backend...');
+        [rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode, beparam, dbnparam, dbn2param,...
+        basegram, uppergram, rawbasegram, rawuppergram, bdrys, 0, 0);
+    elseif savetmp == 1 % save intermediate results
+        display('frontend...');
+        [bdrys, basegram, uppergram, rawbasegram, rawuppergram, endtime] = frontEndDecode(inputpath, feparam, 0, 0);
         bdrys = savingDecode(chordmode, beparam, dbnparam, dbn2param, basegram, uppergram, bdrys);
         rawbasegramSet{saveidx} = rawbasegram;
         rawuppergramSet{saveidx} = rawuppergram;
         bdrysSet{saveidx} = bdrys;
         saveidx = saveidx + 1;
         tline = fgetl(fe);
+        display(strcat('finish saving rawbasegram, rawuppergram, bdrys of ...',songtitle, ' !'));
         continue;
+    elseif savetmp == 2
+        rawbasegram = rawbasegramSet{loadidx};
+        rawuppergram = rawuppergramSet{loadidx};
+        bdrys = bdrysSet{loadidx};
+        loadidx = loadidx + 1;
+        [rootgram, bassgram, treblegram] = loadingDecode(chordmode, beparam, rawbasegram, rawuppergram, bdrys);
     end
-
-    [rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode, beparam, dbnparam, dbn2param,...
-        basegram, uppergram, rawbasegram, rawuppergram, bdrys, 0, 0);
-
+    
     display('output...');
     writeOut(outputpath, feparam.hopsize, feparam.fs,...
         rootgram, treblegram, bdrys, endtime, chordmode);
@@ -52,4 +68,4 @@ end % pair with the very first while loop
 
 fclose(fe);
 
-save('CaroleKingQueen26BUB.mat','rawbasegramSet','rawuppergramSet','bdrysSet','chordmode');
+save('CNPop20BUB.mat','rawbasegramSet','rawuppergramSet','bdrysSet','chordmode');

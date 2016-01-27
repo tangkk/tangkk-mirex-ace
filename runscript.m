@@ -37,9 +37,9 @@
 % %%%%%%%%%%%%%%%%%%Save intermediate results for faster comparison%%%%%%%%%%%%%%%%%%
 % tangkkace('30','JayChou29List.txt','1');
 % tangkkace('30','TheBeatles180List.txt','1');
-tangkkace('30','CaroleKingQueen26List.txt','1');
+% tangkkace('30','CaroleKingQueen26List.txt','1');
+% tangkkace('30','CNPop20List.txt','1');
 
 % %%%%%%%%%%%%%%%%%%Work With Theano NN%%%%%%%%%%%%%%%%%%
-% tangkkace('30','tempList.txt');evaluateCP tempList-30 tempList.txt;
-% tangkkace('30','JayChou29List.txt');evaluateCP jaychou-30 JayChou29List.txt;
+tangkkace('30','JayChou29List.txt','2','JayChou29BUB.mat');evaluateCP jaychou-30 JayChou29List.txt;
 

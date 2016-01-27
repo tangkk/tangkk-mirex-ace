@@ -68,6 +68,7 @@
 # each for 3 times, train the following models
 # - B6seg-inv-svm-ch
 # - B6seg-inv-knn-ch
+# each for 1 time
 # - Bsong-inv-ctc-ch
 
 # testing phase - on Queen19+CarolKing7
@@ -115,7 +116,7 @@ run ctc.py ../data/ch/Bsong-ch-noinv.pkl ../data/model/ctc-Bsong-ch-noinv-i 24 6
 run bctc.py ../data/ch/Bsong-ch-noinv.pkl ../data/model/bctc-Bsong-ch-noinv-i 24 61 500
 '''
 ---------------------------------------------------------------------------------------------------------------
-# Experiment Group 2: Chinese Pop - Use JayChou29 trained/validated model, tested on ...(TBD)
+# Experiment Group 2: Chinese Pop - Use JayChou29 trained/validated model, tested on cnpop-others
 # training phase - random holdout 20% validation
 # each for 6 times, train the following models
 # - J6seg-inv-mlp-ch
@@ -125,9 +126,10 @@ run bctc.py ../data/ch/Bsong-ch-noinv.pkl ../data/model/bctc-Bsong-ch-noinv-i 24
 # each for 3 times, train the following models
 # - J6seg-inv-svm-ch
 # - J6seg-inv-knn-ch
+# each for 1 time
 # - Jsong-inv-ctc-ch
 
-# testing phase - on (TBD)
+# testing phase - on cnpop-others
 # - run end-to-end experiment and generate results on this combined dataset using the above trained models
 # - try to do boosting: combine weaker models to become stronger models and run the above step again
 # - compare performances with chordino's
@@ -143,9 +145,9 @@ run lstm.py ../data/ch/J6seg-ch-inv.mat ../data/model/lstm-J6seg-ch-inv-[500]-i 
 
 run blstm.py ../data/ch/J6seg-ch-inv.mat ../data/model/blstm-J6seg-ch-inv-[500]-i matrix 24 500
 
-run knn.py ../data/ch/J6seg-ch-inv.mat ../data/model/knn-J6seg-ch-inv.pkl 10 distance
+run knn.py ../data/ch/J6seg-ch-inv.mat ../data/model/knn-J6seg-ch-inv-i.pkl 10 distance
 
-run svm.py ../data/ch/J6seg-ch-inv.mat ../data/model/svm-J6seg-ch-inv.pkl
+run svm.py ../data/ch/J6seg-ch-inv.mat ../data/model/svm-J6seg-ch-inv-i.pkl
 
 # songwise
 run ctc.py ../data/ch/Jsong-ch-inv.pkl ../data/model/ctc-Jsong-ch-inv-i 24 277 500
@@ -154,17 +156,17 @@ run bctc.py ../data/ch/Jsong-ch-inv.pkl ../data/model/bctc-Jsong-ch-inv-i 24 277
 
 -------------------------------------------- noinv ---------------------------------------------------
 # 6seg
-run mlp.py ../data/ch/J6seg-ch-noinv.mat ../data/model/mlp-J6seg-ch-noinv-[500,500].pkl 500,500
+run mlp.py ../data/ch/J6seg-ch-noinv.mat ../data/model/mlp-J6seg-ch-noinv-[500,500]-i.pkl 500,500
 
-run dbn.py ../data/ch/J6seg-ch-noinv.mat ../data/model/dbn-J6seg-ch-noinv-[500,500].pkl 500,500 grbm
+run dbn.py ../data/ch/J6seg-ch-noinv.mat ../data/model/dbn-J6seg-ch-noinv-[500,500]-i.pkl 500,500 grbm
 
 run lstm.py ../data/ch/J6seg-ch-noinv.mat ../data/model/lstm-J6seg-ch-noinv-[500]-i matrix 24 500
 
 run blstm.py ../data/ch/J6seg-ch-noinv.mat ../data/model/blstm-J6seg-ch-noinv-[500]-i matrix 24 500
 
-run knn.py ../data/ch/J6seg-ch-noinv.mat ../data/model/knn-J6seg-ch-noinv.pkl 10 distance
+run knn.py ../data/ch/J6seg-ch-noinv.mat ../data/model/knn-J6seg-ch-noinv-i.pkl 10 distance
 
-run svm.py ../data/ch/J6seg-ch-noinv.mat ../data/model/svm-J6seg-ch-noinv.pkl
+run svm.py ../data/ch/J6seg-ch-noinv.mat ../data/model/svm-J6seg-ch-noinv-i.pkl
 
 # songwise
 run ctc.py ../data/ch/Jsong-ch-noinv.pkl ../data/model/ctc-Jsong-ch-noinv-i 24 61 500
@@ -179,6 +181,9 @@ run bctc.py ../data/ch/Jsong-ch-noinv.pkl ../data/model/bctc-Jsong-ch-noinv-i 24
 # do the same on the -ns dataset
 ---------------------------------------------------------------------------------------------------------------
 # perform end-to-end test on matlab
+# - save intermediate results first to save time
+# - generate results and evaluations using the same old excel form
+# - do some subjective test on the results
 '''
 predict scripts:
 python nn/predict.py ./data/temp/X.mat ./data/model/mlp-J6seg-ch-inv-1000.pkl mlp inv

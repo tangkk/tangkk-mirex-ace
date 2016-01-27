@@ -1,5 +1,5 @@
 % recompute the whole sequence using another probabilistic model:
-% acoustic model - mlp-J6seg-ch-inv.pkl-1000
+% acoustic model - mlp-J6seg-ch-inv-[500,500]-1
  
 function [rootgram, bassgram, treblegram] = bassTrebleCorrect30(basegram, uppergram, bdrys, chordmode)
 
@@ -40,7 +40,7 @@ save('./data/temp/X.mat','X');
 % first argument is input path
 % second argument is model path
 % third argument is nntype
-python nn/predict.py ./data/temp/X.mat ./data/model/mlp-J6seg-ch-inv-1000.pkl mlp inv
+python nn/predict.py ./data/temp/X.mat ./data/model/mlp-J6seg-ch-inv-[500,500]-1.pkl mlp inv
 % the output of the process is saved to ./data/temp/y_prob.mat and
 % ./data/temp/y_pred.mat
 load('./data/temp/y_preds.mat');
