@@ -2,7 +2,7 @@
 % evaluation tools
 
 
-target = './gt/variousartist/jaychou/';
+target = './gt/variousartist/others/';
 
 filelist = dir(target);
 
