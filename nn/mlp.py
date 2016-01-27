@@ -158,8 +158,8 @@ class MLP(object):
                 W = None
                 b = None
             else:
-                W = model[i%2]
-                b = model[i%2 + 1]
+                W = model[i*2]
+                b = model[i*2 + 1]
             
             hiddenLayer = HiddenLayer(
                 rng=rng,
@@ -170,7 +170,6 @@ class MLP(object):
                 b = b,
                 activation=T.nnet.sigmoid
             )
-            
             self.hiddenlayers.append(hiddenLayer)
             self.params.extend(hiddenLayer.params)
             self.L1 += (abs(hiddenLayer.W).sum())
@@ -248,7 +247,6 @@ def predprobs(model, X):
             b.append(bi)
             if i != len(model)-1:
                 hidden_layers_sizes.append(bi.shape[0])       
-    
     
     rng = numpy.random.RandomState(1234)
     n_in = W[0].shape[0]

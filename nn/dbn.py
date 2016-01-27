@@ -121,8 +121,8 @@ class DBN(object):
                 W = None
                 b = None
             else:
-                W = model[i%2]
-                b = model[i%2 + 1]
+                W = model[i*2]
+                b = model[i*2 + 1]
                 
             sigmoid_layer = HiddenLayer(rng=numpy_rng,
                                         input=layer_input,
