@@ -8,8 +8,6 @@ bassgram = [];
 treblegram = [];
 
 nslices = size(bdrys,2)-1;
-load('chordnames-inv.mat');
-chordnums = [chnames2chnums(chordnames, chordmode);'0:0'];
 nseg = 6;
 
 % step 1, generate the 6seg samples from basegram and uppergram - store X
@@ -39,8 +37,12 @@ save('./data/temp/X.mat','X');
 % extract info from model
 if ~isempty(strfind(model,'-inv-'))
     invtype = 'inv';
+    load('chordnames-inv.mat');
+    chordnums = [chnames2chnums(chordnames, chordmode);'0:0'];
 else
     invtype = 'noinv';
+    load('chordnames-noinv.mat');
+    chordnums = [chnames2chnums(chordnames, chordmode);'0:0'];
 end
 
 if ~isempty(strfind(model,'mlp'))

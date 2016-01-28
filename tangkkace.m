@@ -60,7 +60,7 @@ while ischar(tline)
         [rootgram, bassgram, treblegram] = loadingDecode(chordmode, beparam, rawbasegram, rawuppergram, bdrys, model);
     end
     
-    display('output...');
+    display('writing to output...');
     writeOut(outputpath, feparam.hopsize, feparam.fs,...
         rootgram, treblegram, bdrys, endtime, chordmode);
 

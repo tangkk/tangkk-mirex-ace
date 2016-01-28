@@ -23,7 +23,6 @@ nargs = length(args);
 % (If an argument refers to a file on the MATLAB path, use full file path.)
 for i = 1:nargs
     thisArg = args{i};
-    display(thisArg);
     if ~ischar(thisArg)
         error(message('MATLAB:perl:InputsMustBeStrings'));
     end
