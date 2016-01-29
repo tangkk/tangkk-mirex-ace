@@ -49,10 +49,10 @@ if ~isempty(strfind(model,'mlp'))
     nntype = 'mlp';
 elseif ~isempty(strfind(model,'dbn'))
     nntype = 'dbn';
-elseif ~isempty(strfind(model,'lstm'))
-    nntype = 'lstm';
 elseif ~isempty(strfind(model,'blstm'))
     nntype = 'blstm';
+elseif ~isempty(strfind(model,'lstm'))
+    nntype = 'lstm';
 elseif ~isempty(strfind(model,'knn'))
     nntype = 'knn';
 elseif ~isempty(strfind(model,'svm'))

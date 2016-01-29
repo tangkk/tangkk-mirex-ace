@@ -585,7 +585,7 @@ def pred_probs(f_pred_prob, prepare_data, data, iterator, verbose=False, maxlen=
     return probs
 '''
 
-def pred_error(f_pred, prepare_data, data, iterator, verbose=False, maxlen=None):
+def pred_error(f_pred, prepare_data, data, iterator, verbose=False):
     """
     Just compute the error
     f_pred: Theano fct computing the prediction
@@ -595,7 +595,7 @@ def pred_error(f_pred, prepare_data, data, iterator, verbose=False, maxlen=None)
     for _, valid_index in iterator:
         x, mask, oh_mask, y = prepare_data([data[0][t] for t in valid_index],
                                   numpy.array(data[1])[valid_index],
-                                  maxlen=maxlen, xdim=xdim)
+                                  maxlen=None, xdim=xdim)
         preds = f_pred(x, mask, oh_mask)
         targets = numpy.array(data[1])[valid_index]
         valid_err += (preds == targets).sum()
@@ -608,7 +608,7 @@ def predprobs(model, X):
     tparams = init_tparams(model)
     model_options['encoder'] = 'lstm'
     model_options['xdim'] = model['lstm_W'].shape[0]
-    model_options['dim_proj'] = model['U'].shape[0]
+    model_options['dim_proj'] = model['U'].shape[0]/2
     model_options['ydim'] = model['U'].shape[1]
     model_options['use_dropout'] = False
     (use_noise, _, _, _,
@@ -620,6 +620,7 @@ def predprobs(model, X):
     
     return f_pred_prob(x, mask, oh_mask), f_pred(x, mask, oh_mask)
 
+    
 def train_lstm(
     # word embedding in ACE's context can be regarded as the feature vector size of each ns frame
     dim_proj=None,  # word embeding dimension and LSTM number of hidden units.
