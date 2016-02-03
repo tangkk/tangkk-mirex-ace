@@ -38,12 +38,14 @@ elif invtype == 'noinv':
     nclass = 61
     
 if nntype == 'svm' or nntype == 'knn':
-    y_preds = y_preds = predprobs(model,X)
+    y_preds = predprobs(model,X)
     y_preds[y_preds==0] = nclass
     print y_preds
     sio.savemat('./data/temp/y_preds.mat', {'y_preds':y_preds})
 else:
     y_probs, y_preds = predprobs(model,X)
+    # conform to matlab indexing standard
+    y_probs = numpy.roll(y_probs,-1,axis=1)
     y_preds[y_preds==0] = nclass
     print y_preds
     sio.savemat('./data/temp/y_probs.mat', {'y_probs':y_probs})
