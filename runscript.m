@@ -48,6 +48,7 @@
 % tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat');
 % tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat');
 % tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat');
+% tangkkace('30','tempList.txt','1','tempListBUB.mat');
 
 % %%%%%%%%%%%%%%%%%%Work With Theano NN%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -88,6 +89,13 @@
 % tangkkace('30','CNPop20List.txt','2','CNPop20ListBUB.mat','svm-J6seg-ch-inv-1.pkl');evaluateCP cnpop-svm-1 CNPop20List.txt;
 % tangkkace('30','CNPop20List.txt','2','CNPop20ListBUB.mat','svm-J6seg-ch-inv-2.pkl');evaluateCP cnpop-svm-2 CNPop20List.txt;
 % tangkkace('30','CNPop20List.txt','2','CNPop20ListBUB.mat','svm-J6seg-ch-inv-3.pkl');evaluateCP cnpop-svm-3 CNPop20List.txt;
+
+tangkkace('30','CNPop20List.txt','2','CNPop20ListBUB.mat','mlpJ6segInvList.txt');evaluateCP cnpop-mlp-ens CNPop20List.txt;
+tangkkace('30','CNPop20List.txt','2','CNPop20ListBUB.mat','dbnJ6segInvList.txt');evaluateCP cnpop-dbn-ens CNPop20List.txt;
+tangkkace('30','CNPop20List.txt','2','CNPop20ListBUB.mat','lstmJ6segInvList.txt');evaluateCP cnpop-lstm-ens CNPop20List.txt;
+tangkkace('30','CNPop20List.txt','2','CNPop20ListBUB.mat','blstmJ6segInvList.txt');evaluateCP cnpop-blstm-ens CNPop20List.txt;
+tangkkace('30','CNPop20List.txt','2','CNPop20ListBUB.mat','knnJ6segInvList.txt');evaluateCP cnpop-knn-ens CNPop20List.txt;
+tangkkace('30','CNPop20List.txt','2','CNPop20ListBUB.mat','svmJ6segInvList.txt');evaluateCP cnpop-svm-ens CNPop20List.txt;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %%%%%%%%%%%%%%%%%% CaroleKingQueen - INV %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -126,6 +134,12 @@
 % tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','svm-B6seg-ch-inv-1.pkl');evaluateCP kingqueen-svm-1 CaroleKingQueen26List.txt;
 % tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','svm-B6seg-ch-inv-2.pkl');evaluateCP kingqueen-svm-2 CaroleKingQueen26List.txt;
 % tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','svm-B6seg-ch-inv-3.pkl');evaluateCP kingqueen-svm-3 CaroleKingQueen26List.txt;
+tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','mlpB6segInvList.txt');evaluateCP kingqueen-mlp-ens CaroleKingQueen26List.txt;
+tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','dbnB6segInvList.txt');evaluateCP kingqueen-dbn-ens CaroleKingQueen26List.txt;
+tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','lstmB6segInvList.txt');evaluateCP kingqueen-lstm-ens CaroleKingQueen26List.txt;
+tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','blstmB6segInvList.txt');evaluateCP kingqueen-blstm-ens CaroleKingQueen26List.txt;
+tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','knnB6segInvList.txt');evaluateCP kingqueen-knn-ens CaroleKingQueen26List.txt;
+tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','svmB6segInvList.txt');evaluateCP kingqueen-svm-ens CaroleKingQueen26List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %%%%%%%%%%%%%%%%%% CNPop - NN-HMM %%%%%%%%%%%%%%%%%%

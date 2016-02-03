@@ -35,39 +35,41 @@ end
 save('./data/temp/X.mat','X');
 
 % extract info from model
-if ~isempty(strfind(model,'-inv-'))
+if ~isempty(strfind(model,'-inv-')) || ~isempty(strfind(model,'Inv'))
     invtype = 'inv';
     load('chordnames-inv.mat');
     chordnums = [chnames2chnums(chordnames, chordmode);'0:0'];
-else
+elseif ~isempty(strfind(model,'-noinv-')) || ~isempty(strfind(model,'Noinv'))
     invtype = 'noinv';
     load('chordnames-noinv.mat');
     chordnums = [chnames2chnums(chordnames, chordmode);'0:0'];
 end
 
-if ~isempty(strfind(model,'mlp'))
-    nntype = 'mlp';
-elseif ~isempty(strfind(model,'dbn'))
-    nntype = 'dbn';
-elseif ~isempty(strfind(model,'blstm'))
-    nntype = 'blstm';
-elseif ~isempty(strfind(model,'lstm'))
-    nntype = 'lstm';
-elseif ~isempty(strfind(model,'knn'))
-    nntype = 'knn';
-elseif ~isempty(strfind(model,'svm'))
-    nntype = 'svm';
+if isempty(strfind(model,'.txt')) % not ensemble model
+    if ~isempty(strfind(model,'mlp'))
+        nntype = 'mlp';
+    elseif ~isempty(strfind(model,'dbn'))
+        nntype = 'dbn';
+    elseif ~isempty(strfind(model,'blstm'))
+        nntype = 'blstm';
+    elseif ~isempty(strfind(model,'lstm'))
+        nntype = 'lstm';
+    elseif ~isempty(strfind(model,'knn'))
+        nntype = 'knn';
+    elseif ~isempty(strfind(model,'svm'))
+        nntype = 'svm';
+    end
+    % execute python prediction script to predict X
+    pythoncmd = {'nn/predict.py','./data/temp/X.mat',['./data/model/' model],nntype,invtype};
+else % ensemble model
+    pythoncmd = {'nn/enspredict.py','./data/temp/X.mat',['./data/model/' model]};
 end
 
-
-% execute python prediction script to predict X
-% first argument is input path
-% second argument is model path
-% third argument is nntype
-pythoncmd = {'nn/predict.py','./data/temp/X.mat',['./data/model/' model],nntype,invtype};
 python(pythoncmd)
-% the output of the process is saved to ./data/temp/y_prob.mat and
-% ./data/temp/y_pred.mat
+
+
+% the output of the process is saved to ./data/temp/y_probs.mat and
+% ./data/temp/y_preds.mat
 load('./data/temp/y_preds.mat');
 y_preds = y_preds';
 
