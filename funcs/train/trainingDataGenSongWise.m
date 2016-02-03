@@ -1,6 +1,6 @@
 % Generate training data based on the ground truth files
 % this process leverages the frontend and the ground truth data
-function trainingDataGenSongWise(savename, gtList, noinv)
+function trainingDataGenSongWise(savename, gtList, noinv, no7)
 
 [feparam, ~, ~, ~, ~] = paramInit10();
 chordmode =  chordTypesGen;
@@ -15,8 +15,10 @@ trainingDataX1 = {};
 trainingDataX2 = {};
 trainingDatay = {};
 
-if noinv
+if noinv 
     load chordnames-noinv.mat;
+elseif no7
+    load chordnames-no7.mat;
 else
     load chordnames-inv.mat;
 end
@@ -166,7 +168,7 @@ while ischar(tline)
         % cast chord to standard chords
         % FIXME: sus chords will all be cast to maj/1 chords
         % is this a desirable effect? Maybe...
-        nch = castGtLabel(ch,noinv);
+        nch = castGtLabel(ch,noinv,no7);
         chnum = chname2chnum(nch, chordmode);
         [~,tlabel] = ismember(chnum,chordnums);
         

@@ -5,4 +5,4 @@
 % this is -ch
 X = trainingDataX22;
 y = trainingDatay22;
-save('data/Bsong-ch-noinv.mat','X','y');
+save('data/ch/B6song-ch-no7.mat','X','y');

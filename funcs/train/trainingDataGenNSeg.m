@@ -1,7 +1,7 @@
 % Generate training data based on the ground truth files
 % this process leverages the frontend and the ground truth data
 
-function trainingDataGenNSeg(savename, gtList, nseg, noinv)
+function trainingDataGenNSeg(savename, gtList, nseg, noinv, no7)
 
 [feparam, ~, ~, ~, ~] = paramInit10();
 chordmode =  chordTypesGen;
@@ -14,8 +14,10 @@ trainingDataX2 = zeros(1,24*nseg);
 trainingDatay = zeros(1,1);
 tidx = 1;
 
-if noinv
+if noinv 
     load chordnames-noinv.mat;
+elseif no7
+    load chordnames-no7.mat;
 else
     load chordnames-inv.mat;
 end
@@ -160,7 +162,7 @@ while ischar(tline)
         eb = databound(et, tw, 'et');
         % cast chord to standard chords
         % FIXME: sus chords will all be cast to maj/1 chords
-        nch = castGtLabel(ch,noinv);
+        nch = castGtLabel(ch,noinv,no7);
         
         % grab data and make training point -
         % 1. salience matrix slices (take
