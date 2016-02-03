@@ -33,10 +33,15 @@ while ischar(tline)
     [inputpath, outputpath, songtitle] = inputDecode(tline);
     disp(['now start to analyze ' songtitle ' ......']);
     
-    if savetmp == 0
+    if savetmp == -1 % use DBN2 and use NN's posteria probs to decode
         display('frontend...');
         [bdrys, basegram, uppergram, rawbasegram, rawuppergram, endtime] = frontEndDecode(inputpath, feparam, 0, 0);
-        display('backend...');
+        display('NN-HMM backend...');
+        [rootgram, bassgram, treblegram, bdrys] = nnbackEndDecode(chordmode, model, beparam, dbn2param, rawbasegram, rawuppergram, bdrys);
+    elseif savetmp == 0 % normal decode frontend + backend
+        display('frontend...');
+        [bdrys, basegram, uppergram, rawbasegram, rawuppergram, endtime] = frontEndDecode(inputpath, feparam, 0, 0);
+        display('Gaussian-HMM backend...');
         [rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode, beparam, dbnparam, dbn2param,...
         basegram, uppergram, rawbasegram, rawuppergram, bdrys, 0, 0);
     elseif savetmp == 1 % save intermediate results
@@ -57,6 +62,7 @@ while ischar(tline)
         bdrys = bdrysSet{loadidx};
         endtime = endtimeSet{loadidx};
         loadidx = loadidx + 1;
+        display('Seg-NN backend...');
         [rootgram, bassgram, treblegram] = loadingDecode(chordmode, beparam, rawbasegram, rawuppergram, bdrys, model);
     end
     
@@ -71,4 +77,6 @@ end % pair with the very first while loop
 
 fclose(fe);
 
-save(loadtmp,'rawbasegramSet','rawuppergramSet','bdrysSet','endtimeSet','chordmode');
+if savetmp == 1 && nargin >= 4 % save tmp
+    save(loadtmp,'rawbasegramSet','rawuppergramSet','bdrysSet','endtimeSet','chordmode');
+end
