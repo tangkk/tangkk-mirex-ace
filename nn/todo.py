@@ -208,13 +208,14 @@ Title: deep learning approaches towards automatic chord estimation and its novel
     - overall architecture
     - audio feature - from waveform to chromagram
     - chord progression probilistic model
+    - baseline approach - Gaussian model
 - parametric approaches towards ACE
-    - Gaussian model
     - deep neural network (contribution of this thesis)
     - recurrent neural network (contribution of this thesis)
 - non-parametric approaches towards ACE
     - support vector machine (contribution of this thesis)
     - k-NN (k-nearest-neighbour)
+- an ensemble approach (bagging, boosting...)
 - evaluation results of the proposed approaches
     - results
     - comparisons
