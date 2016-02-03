@@ -660,7 +660,7 @@ def train_lstm(
                 else:
                     params = unzip(tparams)
                 numpy.savez(dumppath, history_errs=history_errs, **params)
-                pkl.dump(model_options, open('%s.pkl' % dumppath, 'wb'), -1)
+                # pkl.dump(model_options, open('%s.pkl' % dumppath, 'wb'), -1)
                 print 'Done'
 
             if numpy.mod(uidx, validFreq) == 0:
