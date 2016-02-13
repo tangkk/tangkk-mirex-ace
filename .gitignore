@@ -51,6 +51,7 @@ outcd/
 res/
 data/
 testdata/
+mirexace/
 nn/*.pyc
 nn/*/
 nn/*.perl
