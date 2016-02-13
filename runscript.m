@@ -294,90 +294,90 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% J-TheBeatles - INV %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-1.pkl');evaluateCP J-thebeatles-mlp-1 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-2.pkl');evaluateCP J-thebeatles-mlp-2 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-3.pkl');evaluateCP J-thebeatles-mlp-3 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-4.pkl');evaluateCP J-thebeatles-mlp-4 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-5.pkl');evaluateCP J-thebeatles-mlp-5 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-6.pkl');evaluateCP J-thebeatles-mlp-6 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-1.pkl');evaluateCP J-thebeatles-mlp-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-2.pkl');evaluateCP J-thebeatles-mlp-2 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-3.pkl');evaluateCP J-thebeatles-mlp-3 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-4.pkl');evaluateCP J-thebeatles-mlp-4 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-5.pkl');evaluateCP J-thebeatles-mlp-5 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-6.pkl');evaluateCP J-thebeatles-mlp-6 TheBeatles180List.txt;
 
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-1.pkl');evaluateCP J-thebeatles-dbn-1 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-2.pkl');evaluateCP J-thebeatles-dbn-2 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-3.pkl');evaluateCP J-thebeatles-dbn-3 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-4.pkl');evaluateCP J-thebeatles-dbn-4 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-5.pkl');evaluateCP J-thebeatles-dbn-5 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-6.pkl');evaluateCP J-thebeatles-dbn-6 TheBeatles180List.txt;
-
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','lstm-J6seg-ch-inv-[500]-1.npz');evaluateCP J-thebeatles-lstm-1 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','lstm-J6seg-ch-inv-[500]-2.npz');evaluateCP J-thebeatles-lstm-2 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','lstm-J6seg-ch-inv-[500]-3.npz');evaluateCP J-thebeatles-lstm-3 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','lstm-J6seg-ch-inv-[500]-4.npz');evaluateCP J-thebeatles-lstm-4 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','lstm-J6seg-ch-inv-[500]-5.npz');evaluateCP J-thebeatles-lstm-5 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','lstm-J6seg-ch-inv-[500]-6.npz');evaluateCP J-thebeatles-lstm-6 TheBeatles180List.txt;
-
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','blstm-J6seg-ch-inv-[500]-1.npz');evaluateCP J-thebeatles-blstm-1 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','blstm-J6seg-ch-inv-[500]-2.npz');evaluateCP J-thebeatles-blstm-2 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','blstm-J6seg-ch-inv-[500]-3.npz');evaluateCP J-thebeatles-blstm-3 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','blstm-J6seg-ch-inv-[500]-4.npz');evaluateCP J-thebeatles-blstm-4 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','blstm-J6seg-ch-inv-[500]-5.npz');evaluateCP J-thebeatles-blstm-5 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','blstm-J6seg-ch-inv-[500]-6.npz');evaluateCP J-thebeatles-blstm-6 TheBeatles180List.txt;
-
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','knn-J6seg-ch-inv-1.pkl');evaluateCP J-thebeatles-knn-1 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','knn-J6seg-ch-inv-2.pkl');evaluateCP J-thebeatles-knn-2 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','knn-J6seg-ch-inv-3.pkl');evaluateCP J-thebeatles-knn-3 TheBeatles180List.txt;
-
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','svm-J6seg-ch-inv-1.pkl');evaluateCP J-thebeatles-svm-1 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','svm-J6seg-ch-inv-2.pkl');evaluateCP J-thebeatles-svm-2 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','svm-J6seg-ch-inv-3.pkl');evaluateCP J-thebeatles-svm-3 TheBeatles180List.txt;
-
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','mlpJ6segInvList.txt');evaluateCP J-thebeatles-mlp-ens TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','dbnJ6segInvList.txt');evaluateCP J-thebeatles-dbn-ens TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','lstmJ6segInvList.txt');evaluateCP J-thebeatles-lstm-ens TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','blstmJ6segInvList.txt');evaluateCP J-thebeatles-blstm-ens TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','knnJ6segInvList.txt');evaluateCP J-thebeatles-knn-ens TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','svmJ6segInvList.txt');evaluateCP J-thebeatles-svm-ens TheBeatles180List.txt;
-
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','mixJ6segInvList.txt');evaluateCP J-thebeatles-mix-ens TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','allJ6segInvList.txt');evaluateCP J-thebeatles-all-ens TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-1.pkl');evaluateCP J-thebeatles-dbn-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-2.pkl');evaluateCP J-thebeatles-dbn-2 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-3.pkl');evaluateCP J-thebeatles-dbn-3 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-4.pkl');evaluateCP J-thebeatles-dbn-4 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-5.pkl');evaluateCP J-thebeatles-dbn-5 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-6.pkl');evaluateCP J-thebeatles-dbn-6 TheBeatles180List.txt;
+% 
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','lstm-J6seg-ch-inv-[500]-1.npz');evaluateCP J-thebeatles-lstm-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','lstm-J6seg-ch-inv-[500]-2.npz');evaluateCP J-thebeatles-lstm-2 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','lstm-J6seg-ch-inv-[500]-3.npz');evaluateCP J-thebeatles-lstm-3 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','lstm-J6seg-ch-inv-[500]-4.npz');evaluateCP J-thebeatles-lstm-4 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','lstm-J6seg-ch-inv-[500]-5.npz');evaluateCP J-thebeatles-lstm-5 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','lstm-J6seg-ch-inv-[500]-6.npz');evaluateCP J-thebeatles-lstm-6 TheBeatles180List.txt;
+% 
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','blstm-J6seg-ch-inv-[500]-1.npz');evaluateCP J-thebeatles-blstm-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','blstm-J6seg-ch-inv-[500]-2.npz');evaluateCP J-thebeatles-blstm-2 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','blstm-J6seg-ch-inv-[500]-3.npz');evaluateCP J-thebeatles-blstm-3 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','blstm-J6seg-ch-inv-[500]-4.npz');evaluateCP J-thebeatles-blstm-4 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','blstm-J6seg-ch-inv-[500]-5.npz');evaluateCP J-thebeatles-blstm-5 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','blstm-J6seg-ch-inv-[500]-6.npz');evaluateCP J-thebeatles-blstm-6 TheBeatles180List.txt;
+% 
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','knn-J6seg-ch-inv-1.pkl');evaluateCP J-thebeatles-knn-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','knn-J6seg-ch-inv-2.pkl');evaluateCP J-thebeatles-knn-2 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','knn-J6seg-ch-inv-3.pkl');evaluateCP J-thebeatles-knn-3 TheBeatles180List.txt;
+% 
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','svm-J6seg-ch-inv-1.pkl');evaluateCP J-thebeatles-svm-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','svm-J6seg-ch-inv-2.pkl');evaluateCP J-thebeatles-svm-2 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','svm-J6seg-ch-inv-3.pkl');evaluateCP J-thebeatles-svm-3 TheBeatles180List.txt;
+% 
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','mlpJ6segInvList.txt');evaluateCP J-thebeatles-mlp-ens TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','dbnJ6segInvList.txt');evaluateCP J-thebeatles-dbn-ens TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','lstmJ6segInvList.txt');evaluateCP J-thebeatles-lstm-ens TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','blstmJ6segInvList.txt');evaluateCP J-thebeatles-blstm-ens TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','knnJ6segInvList.txt');evaluateCP J-thebeatles-knn-ens TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','svmJ6segInvList.txt');evaluateCP J-thebeatles-svm-ens TheBeatles180List.txt;
+% 
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','mixJ6segInvList.txt');evaluateCP J-thebeatles-mix-ens TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','2','TheBeatles180ListBUB.mat','allJ6segInvList.txt');evaluateCP J-thebeatles-all-ens TheBeatles180List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% J-TheBeatles - NN-HMM %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','mlp-J6seg-ch-inv-[500,500]-1.pkl');evaluateCP J-thebeatles-mlp-nnhmm-1 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','mlp-J6seg-ch-inv-[500,500]-2.pkl');evaluateCP J-thebeatles-mlp-nnhmm-2 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','mlp-J6seg-ch-inv-[500,500]-3.pkl');evaluateCP J-thebeatles-mlp-nnhmm-3 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','mlp-J6seg-ch-inv-[500,500]-4.pkl');evaluateCP J-thebeatles-mlp-nnhmm-4 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','mlp-J6seg-ch-inv-[500,500]-5.pkl');evaluateCP J-thebeatles-mlp-nnhmm-5 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','mlp-J6seg-ch-inv-[500,500]-6.pkl');evaluateCP J-thebeatles-mlp-nnhmm-6 TheBeatles180List.txt;
-
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','dbn-J6seg-ch-inv-[500,500]-1.pkl');evaluateCP J-thebeatles-dbn-nnhmm-1 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','dbn-J6seg-ch-inv-[500,500]-2.pkl');evaluateCP J-thebeatles-dbn-nnhmm-2 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','dbn-J6seg-ch-inv-[500,500]-3.pkl');evaluateCP J-thebeatles-dbn-nnhmm-3 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','dbn-J6seg-ch-inv-[500,500]-4.pkl');evaluateCP J-thebeatles-dbn-nnhmm-4 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','dbn-J6seg-ch-inv-[500,500]-5.pkl');evaluateCP J-thebeatles-dbn-nnhmm-5 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','dbn-J6seg-ch-inv-[500,500]-6.pkl');evaluateCP J-thebeatles-dbn-nnhmm-6 TheBeatles180List.txt;
-
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','lstm-J6seg-ch-inv-[500]-1.npz');evaluateCP J-thebeatles-lstm-nnhmm-1 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','lstm-J6seg-ch-inv-[500]-2.npz');evaluateCP J-thebeatles-lstm-nnhmm-2 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','lstm-J6seg-ch-inv-[500]-3.npz');evaluateCP J-thebeatles-lstm-nnhmm-3 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','lstm-J6seg-ch-inv-[500]-4.npz');evaluateCP J-thebeatles-lstm-nnhmm-4 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','lstm-J6seg-ch-inv-[500]-5.npz');evaluateCP J-thebeatles-lstm-nnhmm-5 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','lstm-J6seg-ch-inv-[500]-6.npz');evaluateCP J-thebeatles-lstm-nnhmm-6 TheBeatles180List.txt;
-
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','blstm-J6seg-ch-inv-[500]-1.npz');evaluateCP J-thebeatles-blstm-nnhmm-1 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','blstm-J6seg-ch-inv-[500]-2.npz');evaluateCP J-thebeatles-blstm-nnhmm-2 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','blstm-J6seg-ch-inv-[500]-3.npz');evaluateCP J-thebeatles-blstm-nnhmm-3 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','blstm-J6seg-ch-inv-[500]-4.npz');evaluateCP J-thebeatles-blstm-nnhmm-4 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','blstm-J6seg-ch-inv-[500]-5.npz');evaluateCP J-thebeatles-blstm-nnhmm-5 TheBeatles180List.txt;
-tangkkace('30','TheBeatles180List.txt','-1','x.mat','blstm-J6seg-ch-inv-[500]-6.npz');evaluateCP J-thebeatles-blstm-nnhmm-6 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','mlp-J6seg-ch-inv-[500,500]-1.pkl');evaluateCP J-thebeatles-mlp-nnhmm-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','mlp-J6seg-ch-inv-[500,500]-2.pkl');evaluateCP J-thebeatles-mlp-nnhmm-2 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','mlp-J6seg-ch-inv-[500,500]-3.pkl');evaluateCP J-thebeatles-mlp-nnhmm-3 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','mlp-J6seg-ch-inv-[500,500]-4.pkl');evaluateCP J-thebeatles-mlp-nnhmm-4 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','mlp-J6seg-ch-inv-[500,500]-5.pkl');evaluateCP J-thebeatles-mlp-nnhmm-5 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','mlp-J6seg-ch-inv-[500,500]-6.pkl');evaluateCP J-thebeatles-mlp-nnhmm-6 TheBeatles180List.txt;
+% 
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','dbn-J6seg-ch-inv-[500,500]-1.pkl');evaluateCP J-thebeatles-dbn-nnhmm-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','dbn-J6seg-ch-inv-[500,500]-2.pkl');evaluateCP J-thebeatles-dbn-nnhmm-2 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','dbn-J6seg-ch-inv-[500,500]-3.pkl');evaluateCP J-thebeatles-dbn-nnhmm-3 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','dbn-J6seg-ch-inv-[500,500]-4.pkl');evaluateCP J-thebeatles-dbn-nnhmm-4 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','dbn-J6seg-ch-inv-[500,500]-5.pkl');evaluateCP J-thebeatles-dbn-nnhmm-5 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','dbn-J6seg-ch-inv-[500,500]-6.pkl');evaluateCP J-thebeatles-dbn-nnhmm-6 TheBeatles180List.txt;
+% 
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','lstm-J6seg-ch-inv-[500]-1.npz');evaluateCP J-thebeatles-lstm-nnhmm-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','lstm-J6seg-ch-inv-[500]-2.npz');evaluateCP J-thebeatles-lstm-nnhmm-2 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','lstm-J6seg-ch-inv-[500]-3.npz');evaluateCP J-thebeatles-lstm-nnhmm-3 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','lstm-J6seg-ch-inv-[500]-4.npz');evaluateCP J-thebeatles-lstm-nnhmm-4 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','lstm-J6seg-ch-inv-[500]-5.npz');evaluateCP J-thebeatles-lstm-nnhmm-5 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','lstm-J6seg-ch-inv-[500]-6.npz');evaluateCP J-thebeatles-lstm-nnhmm-6 TheBeatles180List.txt;
+% 
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','blstm-J6seg-ch-inv-[500]-1.npz');evaluateCP J-thebeatles-blstm-nnhmm-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','blstm-J6seg-ch-inv-[500]-2.npz');evaluateCP J-thebeatles-blstm-nnhmm-2 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','blstm-J6seg-ch-inv-[500]-3.npz');evaluateCP J-thebeatles-blstm-nnhmm-3 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','blstm-J6seg-ch-inv-[500]-4.npz');evaluateCP J-thebeatles-blstm-nnhmm-4 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','blstm-J6seg-ch-inv-[500]-5.npz');evaluateCP J-thebeatles-blstm-nnhmm-5 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','-1','x.mat','blstm-J6seg-ch-inv-[500]-6.npz');evaluateCP J-thebeatles-blstm-nnhmm-6 TheBeatles180List.txt;
 
 %%% fixme kingqueen
-tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','mlpJ6segInvList.txt');evaluateCP J-kingqueen-mlp-ens CaroleKingQueen26List.txt;
-tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','dbnJ6segInvList.txt');evaluateCP J-kingqueen-dbn-ens CaroleKingQueen26List.txt;
-tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','lstmJ6segInvList.txt');evaluateCP J-kingqueen-lstm-ens CaroleKingQueen26List.txt;
-tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','blstmJ6segInvList.txt');evaluateCP J-kingqueen-blstm-ens CaroleKingQueen26List.txt;
-tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','knnJ6segInvList.txt');evaluateCP J-kingqueen-knn-ens CaroleKingQueen26List.txt;
-tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','svmJ6segInvList.txt');evaluateCP J-kingqueen-svm-ens CaroleKingQueen26List.txt;
-
-tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','mixJ6segInvList.txt');evaluateCP J-kingqueen-mix-ens CaroleKingQueen26List.txt;
-tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','allJ6segInvList.txt');evaluateCP J-kingqueen-all-ens CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','mlpJ6segInvList.txt');evaluateCP J-kingqueen-mlp-ens CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','dbnJ6segInvList.txt');evaluateCP J-kingqueen-dbn-ens CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','lstmJ6segInvList.txt');evaluateCP J-kingqueen-lstm-ens CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','blstmJ6segInvList.txt');evaluateCP J-kingqueen-blstm-ens CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','knnJ6segInvList.txt');evaluateCP J-kingqueen-knn-ens CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','svmJ6segInvList.txt');evaluateCP J-kingqueen-svm-ens CaroleKingQueen26List.txt;
+% 
+% tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','mixJ6segInvList.txt');evaluateCP J-kingqueen-mix-ens CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','2','CaroleKingQueen26ListBUB.mat','allJ6segInvList.txt');evaluateCP J-kingqueen-all-ens CaroleKingQueen26List.txt;
