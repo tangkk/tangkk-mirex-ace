@@ -373,6 +373,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% J-CNPop - SongNN %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% tangkkace('31','tempList.txt','3','tempListBUB.mat','ctc-Jsong-ch-inv-i.npz');evaluateCP J-temp-song tempList.txt;
-tangkkace('31','CNPop20List.txt','3','CNPop20ListBUB.mat','ctc-Jsong-ch-inv-i.npz');evaluateCP cnpop-song CNPop20List.txt;
-
+tangkkace('31','CNPop20List.txt','3','CNPop20ListBUB.mat','bctc-Jsong-ch-inv-i.npz');evaluateCP cnpop-bctc CNPop20List.txt;
+tangkkace('31','CNPop20List.txt','3','CNPop20ListBUB.mat','ctc-Jsong-ch-inv-i.npz');evaluateCP cnpop-ctc CNPop20List.txt;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%% J-TheBeatles - SongNN %%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+tangkkace('31','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','bctc-Jsong-ch-inv-i.npz');evaluateCP thebeatles-bctc TheBeatles180List.txt;
+tangkkace('31','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','ctc-Jsong-ch-inv-i.npz');evaluateCP thebeatles-ctc TheBeatles180List.txt;
