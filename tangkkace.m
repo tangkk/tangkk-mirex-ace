@@ -16,7 +16,7 @@ savetmp = str2num(savetmp);
 if nargin == 2
     savetmp = 0;
 end
-if savetmp == 2 && nargin >= 4 % load tmp
+if (savetmp == 2 || savetmp == 3)&& nargin >= 4 % load tmp
     load(loadtmp);
     loadidx = 1;
 end
@@ -64,6 +64,14 @@ while ischar(tline)
         loadidx = loadidx + 1;
         display('Seg-NN backend...');
         [rootgram, bassgram, treblegram] = loadingDecode(chordmode, beparam, rawbasegram, rawuppergram, bdrys, model);
+    elseif savetmp == 3
+        rawbasegram = rawbasegramSet{loadidx};
+        rawuppergram = rawuppergramSet{loadidx};
+        bdrys = 1:size(rawbasegram,2);
+        endtime = endtimeSet{loadidx};
+        loadidx = loadidx + 1;
+        display('Song-NN backend...');
+        [rootgram, bassgram, treblegram, bdrys] = nnbackEndDecode(chordmode, model, beparam, dbn2param, rawbasegram, rawuppergram, bdrys);
     end
     
     display('writing to output...');

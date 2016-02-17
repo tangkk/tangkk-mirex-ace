@@ -514,7 +514,7 @@ def predprobs(model, X):
     tparams = init_tparams(model)
     model_options['encoder'] = 'lstm'
     model_options['xdim'] = model['lstm_W'].shape[0]
-    model_options['dim_proj'] = model['U'].shape[0]
+    model_options['dim_proj'] = model['U'].shape[0]/2
     model_options['ydim'] = model['U'].shape[1]
     model_options['use_dropout'] = False
     (use_noise, _, _, f_pred_prob, f_pred, _) = build_model(tparams, model_options)

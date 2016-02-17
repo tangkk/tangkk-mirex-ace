@@ -4,7 +4,7 @@ function [rootgram, bassgram, treblegram] = loadingDecode(chordmode, beparam, ra
 if beparam.enBassTrebleCorrect
 if beparam.enTheanoNN % if using TheanoNN, use raw basegram and uppergram
 display('work with theano NN model...');
-[rootgram, bassgram, treblegram] = theanoNN6SegPredict(rawbasegram, rawuppergram, bdrys, chordmode, model);
+[rootgram, bassgram, treblegram] = theanoNNTypeTwoPredict(rawbasegram, rawuppergram, bdrys, chordmode, model);
 end
 end
 

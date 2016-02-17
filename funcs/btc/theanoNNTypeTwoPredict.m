@@ -1,7 +1,7 @@
-% recompute the whole sequence using another probabilistic model:
-% acoustic model - mlp-J6seg-ch-inv-[500,500]-1
+% estimate the sequence using theano based parametric and non-parametric
+% 6seg models
  
-function [rootgram, bassgram, treblegram] = theanoNN6SegPredict(basegram, uppergram, bdrys, chordmode, model)
+function [rootgram, bassgram, treblegram] = theanoNNTypeTwoPredict(basegram, uppergram, bdrys, chordmode, model)
 
 rootgram = [];
 bassgram = [];

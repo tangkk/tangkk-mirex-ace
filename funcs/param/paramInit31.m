@@ -1,7 +1,7 @@
 % ***********************************************************************
 % enNNLS, specWhitening, enProfileHamming, DBN1
-% enTheanoNN = 1
-% This param supports both type-I and type-II systems
+% enTheanoNN = 3
+% this param supports type-III system (enTheanoNN = 2 is ignored
 % FIXME: use Rayleigh when the statistic toolbox is available
 %
 % enTheanoNN
@@ -9,7 +9,7 @@
 %
 % enMajMin, enSeventh, enMajBass, enMinBass, enSeventhBass
 
-function [feparam, beparam, dbnparam, dbn2param, chordmode] = paramInit30()
+function [feparam, beparam, dbnparam, dbn2param, chordmode] = paramInit31()
 
 % ****** front-end control ****** %
 feparam = struct(...
@@ -79,8 +79,8 @@ beparam = struct(...
     ...
     ...
     'enBassTrebleCorrect', 1,... % work together with 'noSegmentation'
-    'enTheanoNN', 1,... % 1: type-I or type-II, switched by savetmp setting
-    'btcVersion', 30);
+    'enTheanoNN', 3,... % 3: song models - type-III
+    'btcVersion', 31);
 dbnparam = struct(...
     'muCBass',1,...
     'muNCBass',1,...
