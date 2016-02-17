@@ -118,8 +118,25 @@ def pkl_data_nseg_h5py(dataset=None, dumppath=None, nseg=6, ymax=None):
     #############
     # LOAD DATA #
     #############
-    X = load_data_cell_h5py(dataset,'X') # X is a list instead of a numpy array
-    y = load_data_cell_h5py(dataset,'y')
+    X = load_cell_data_h5py(dataset,'X') # X is a list instead of a numpy array
+    y = load_cell_data_h5py(dataset,'y')
+    
+    y_ = []
+    for k in range(len(y)): # for every song entry
+        # y_k is the target for one song "12 * n_timesteps" for all 12 keys transposition
+        y_k = y[k]
+        for kk in range(12): # iterate over 12 keys
+            # y_kk is one song targets for one key
+            ym = y_k[kk]
+            # target no need to standardize
+            # assuming max value of target is ymax
+            ym[ym==ymax]=0
+            y_.append(ym)
+            # y_ stores targets for all songs all keys, the 12 key dim is unrolled
+    y = numpy.asarray(y_)
+    
+    print y.shape
+    print y[0].shape
     
     # X dimension is 1 * number of songs
     X_ = []
@@ -146,24 +163,6 @@ def pkl_data_nseg_h5py(dataset=None, dumppath=None, nseg=6, ymax=None):
     print X[0].shape
     print X[0][0].shape
     
-    y = mat['y']
-    y_ = []
-    for k in range(y.shape[1]): # for every song entry
-        # y_k is the target for one song "12 * n_timesteps" for all 12 keys transposition
-        y_k = y[0][k]
-        for kk in range(12): # iterate over 12 keys
-            # y_kk is one song targets for one key
-            ym = y_k[kk]
-            # target no need to standardize
-            # assuming max value of target is ymax
-            ym[ym==ymax]=0
-            y_.append(ym)
-            # y_ stores targets for all songs all keys, the 12 key dim is unrolled
-    y = numpy.asarray(y_)
-    
-    print y.shape
-    print y[0].shape
-    
     with open(dumppath, "wb") as f:
         cPickle.dump((X,y), f)
         
@@ -172,8 +171,24 @@ def pkl_data_framewise_h5py(dataset=None, dumppath=None, ymax=None):
     #############
     # LOAD DATA #
     #############
-    X = load_data_cell_h5py(dataset,'X') # X is a list instead of a numpy array
-    y = load_data_cell_h5py(dataset,'y')
+    X = load_cell_data_h5py(dataset,'X') # X is a list instead of a numpy array
+    y = load_cell_data_h5py(dataset,'y')
+
+    y_ = []
+    for k in range(len(y)): # for every song entry
+        # y_k is the target for one song "12 * n_timesteps" for all 12 keys transposition
+        y_k = y[k]
+        for kk in range(12): # iterate over 12 keys
+            # y_kk is one song targets for one key
+            ym = y_k[kk]
+            # target no need to standardize
+            ym[ym==ymax]=0
+            y_.append(ym)
+            # y_ stores targets for all songs all keys, the 12 key dim is unrolled
+    y = numpy.asarray(y_)
+    
+    print y.shape
+    print y[0].shape
     
     # X dimension is 1 * number of songs
     X_ = []
@@ -197,23 +212,6 @@ def pkl_data_framewise_h5py(dataset=None, dumppath=None, ymax=None):
     print X.shape
     print X[0].shape
     print X[0][0].shape
-    
-    y_ = []
-    for k in range(y.shape[1]): # for every song entry
-        # y_k is the target for one song "12 * n_timesteps" for all 12 keys transposition
-        y_k = y[0][k]
-        for kk in range(12): # iterate over 12 keys
-            # y_kk is one song targets for one key
-            ym = y_k[kk]
-            # target no need to standardize
-            # assuming max value of target is ymax
-            ym[ym==ymax]=0
-            y_.append(ym)
-            # y_ stores targets for all songs all keys, the 12 key dim is unrolled
-    y = numpy.asarray(y_)
-    
-    print y.shape
-    print y[0].shape
     
     with open(dumppath, "wb") as f:
         cPickle.dump((X,y), f)

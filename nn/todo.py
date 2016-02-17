@@ -19,44 +19,48 @@
 # %autoreload 2
 
 # *****************************************************
-# For -ch datasets:
+# models
 # *****************************************************
 # (* = optional)
 ###parametric and non-parametric###
 # Models1:
-    # - J6seg-inv-mlp-ch
-    # - J6seg-inv-dbn-ch
-	# - B6seg-inv-mlp-ch
-	# - B6seg-inv-dbn-ch   
+    # - J6seg-inv-mlp
+    # - J6seg-inv-dbn
+	# - B6seg-inv-mlp
+	# - B6seg-inv-dbn
 # Models2:
-	# - J6seg-inv-lstm-ch
-    # - Jvarlen-inv-lstm-ch(*)
-	# - Jsong-inv-ctc-ch
-	# - B6seg-inv-lstm-ch
-    # - Bvarlen-inv-lstm-ch(*)
-	# - Bsong-inv-ctc-ch
+	# - J6seg-inv-lstm
+    # - Jvarlen-inv-lstm(*)
+	# - Jsong-inv-ctc
+	# - B6seg-inv-lstm
+    # - Bvarlen-inv-lstm(*)
+	# - Bsong-inv-ctc
 # Models3:
-    # - J6seg-inv-svm-ch
-    # - J6seg-inv-knn-ch
-    # - B6seg-inv-svm-ch
-    # - B6seg-inv-knn-ch
+    # - J6seg-inv-svm
+    # - J6seg-inv-knn
+    # - B6seg-inv-svm
+    # - B6seg-inv-knn
 # Models4:
-    # - J6seg-noinv-mlp-ch
-    # - J6seg-noinv-dbn-ch
-    # - B6seg-noinv-mlp-ch
-    # - B6seg-noinv-dbn-ch
+    # - J6seg-noinv-mlp
+    # - J6seg-noinv-dbn
+    # - B6seg-noinv-mlp
+    # - B6seg-noinv-dbn
 # Models5:
-	# - J6seg-noinv-lstm-ch
-    # - Jvarlen-noinv-lstm-ch(*)
-	# - Jsong-noinv-ctc-ch
-	# - B6seg-noinv-lstm-ch
-    # - Bvarlen-noinv-lstm-ch(*)
-	# - Bsong-noinv-ctc-ch
+	# - J6seg-noinv-lstm
+    # - Jvarlen-noinv-lstm(*)
+	# - Jsong-noinv-ctc
+	# - B6seg-noinv-lstm
+    # - Bvarlen-noinv-lstm(*)
+	# - Bsong-noinv-ctc
 # Models6:
-    # - J6seg-noinv-svm-ch
-    # - J6seg-noinv-knn-ch
-    # - B6seg-noinv-svm-ch
-    # - B6seg-noinv-knn-ch
+    # - J6seg-noinv-svm
+    # - J6seg-noinv-knn
+    # - B6seg-noinv-svm
+    # - B6seg-noinv-knn
+
+# *****************************************************
+# For -ch datasets:
+# *****************************************************
 ---------------------------------------------------------------------------------------------------------------
 # Experiment Group 1: English Pop/Rock - Use TheBeatles180 trained/validated model, tested on Queen19+CarolKing7
 # training phase - random holdout 20% validation
@@ -177,8 +181,42 @@ run bctc.py ../data/ch/Jsong-ch-noinv.pkl ../data/model/bctc-Jsong-ch-noinv-i 24
 # *****************************************************
 # For -ns datasets:
 # *****************************************************
+---------------------------------------------------------------------------------------------------------------
+# Experiment Group 3: Chinese Pop - Use JayChou29 trained/validated model
+# training phase - random holdout 20% validation
+# each for 6 times, train the following models
+# - J6seg-inv-mlp-ns
+# - J6seg-inv-dbn-ns
+# - J6seg-inv-lstm-ns
+# - J6seg-inv-blstm-ns
+# each for 3 times, train the following models
+# - J6seg-inv-svm-ns
+# - J6seg-inv-knn-ns
+# each for 1 time
+# - Jsong-inv-ctc-ns
+'''
+running scripts:
+-------------------------------------------- inv ---------------------------------------------------
+# 6seg
+run mlp.py ../data/ns/J6seg-ns-inv.mat ../data/model/mlp-J6seg-ns-inv-[800,800]-i.pkl 800,800
 
-# do the same on the -ns dataset
+run dbn.py ../data/ns/J6seg-ns-inv.mat ../data/model/dbn-J6seg-ns-inv-[800,800]-i.pkl 800,800 grbm
+
+run lstm.py ../data/ns/J6seg-ns-inv.mat ../data/model/lstm-J6seg-ns-inv-[800]-i matrix 252 800
+
+run blstm.py ../data/ns/J6seg-ns-inv.mat ../data/model/blstm-J6seg-ns-inv-[800]-i matrix 252 800
+
+run knn.py ../data/ns/J6seg-ns-inv.mat ../data/model/knn-J6seg-ns-inv-i.pkl 10 distance
+
+run svm.py ../data/ns/J6seg-ns-inv.mat ../data/model/svm-J6seg-ns-inv-i.pkl
+
+# songwise
+run ctc.py ../data/ns/Jsong-ns-inv.pkl ../data/model/ctc-Jsong-ns-inv-i 252 277 800
+
+run bctc.py ../data/ns/Jsong-ns-inv.pkl ../data/model/bctc-Jsong-ns-inv-i 252 277 800
+'''
+
+
 ---------------------------------------------------------------------------------------------------------------
 # perform end-to-end test on matlab
 # - save intermediate results first to save time
