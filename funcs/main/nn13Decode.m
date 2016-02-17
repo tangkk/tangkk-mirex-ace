@@ -1,4 +1,4 @@
-function [rootgram, bassgram, treblegram, bdrys] = nnbackEndDecode(chordmode, model, beparam, dbn2param, rawbasegram, rawuppergram, bdrys)
+function [rootgram, bassgram, treblegram, bdrys] = nn13Decode(chordmode, model, beparam, dbn2param, rawbasegram, rawuppergram, bdrys)
 
 display('chord decoding...');
 
