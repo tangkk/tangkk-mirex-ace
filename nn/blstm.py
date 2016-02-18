@@ -783,9 +783,9 @@ def train_lstm(
 
                 if numpy.mod(uidx, validFreq) == 0:
                     use_noise.set_value(0.)
-                    train_err = pred_error(f_pred, prepare_data, train, kf, maxlen=None)
-                    valid_err = pred_error(f_pred, prepare_data, valid, kf_valid, maxlen=None)
-                    # test_err = pred_error(f_pred, prepare_data, test, kf_test, maxlen=None)
+                    train_err = pred_error(f_pred, prepare_data, train, kf)
+                    valid_err = pred_error(f_pred, prepare_data, valid, kf_valid)
+                    # test_err = pred_error(f_pred, prepare_data, test, kf_test)
                     test_err = 1
 
                     history_errs.append([valid_err, test_err])
