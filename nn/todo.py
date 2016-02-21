@@ -57,9 +57,10 @@
     # - J6seg-noinv-knn
     # - B6seg-noinv-svm
     # - B6seg-noinv-knn
-
+    
+---------------------------------------------------------------------------------------------------------------
 # *****************************************************
-# For -ch datasets:
+# For -ch (chromagram level) datasets:
 # *****************************************************
 ---------------------------------------------------------------------------------------------------------------
 # Experiment Group 1: English Pop/Rock - Use TheBeatles180 trained/validated model, tested on Queen19+CarolKing7
@@ -179,7 +180,7 @@ run bctc.py ../data/ch/Jsong-ch-noinv.pkl ../data/model/bctc-Jsong-ch-noinv-i 24
 '''
 ---------------------------------------------------------------------------------------------------------------
 # *****************************************************
-# For -ns datasets:
+# For -ns datasets (note salience level):
 # *****************************************************
 ---------------------------------------------------------------------------------------------------------------
 # Experiment Group 3: Chinese Pop - Use JayChou29 trained/validated model
@@ -214,8 +215,37 @@ run svm.py ../data/ns/J6seg-ns-inv.mat ../data/model/svm-J6seg-ns-inv-i.pkl
 run ctc.py ../data/ns/Jsong-ns-inv.pkl ../data/model/ctc-Jsong-ns-inv-i 252 277 800
 
 run bctc.py ../data/ns/Jsong-ns-inv.pkl ../data/model/bctc-Jsong-ns-inv-i 252 277 800
-'''
 
+-------------------------------------------- no7 ---------------------------------------------------
+# 6seg
+run mlp.py ../data/ns/J6seg-ns-no7.mat ../data/model/mlp-J6seg-ns-no7-[800,800]-i.pkl 800,800
+
+run dbn.py ../data/ns/J6seg-ns-no7.mat ../data/model/dbn-J6seg-ns-no7-[800,800]-i.pkl 800,800 grbm
+
+run lstm.py ../data/ns/J6seg-ns-no7.mat ../data/model/lstm-J6seg-ns-no7-[800]-i matrix 252 800
+
+run blstm.py ../data/ns/J6seg-ns-no7.mat ../data/model/blstm-J6seg-ns-no7-[800]-i matrix 252 800
+
+run knn.py ../data/ns/J6seg-ns-no7.mat ../data/model/knn-J6seg-ns-no7-i.pkl 10 distance
+
+run svm.py ../data/ns/J6seg-ns-no7.mat ../data/model/svm-J6seg-ns-no7-i.pkl
+
+# songwise
+run ctc.py ../data/ns/Jsong-ns-no7.pkl ../data/model/ctc-Jsong-ns-no7-i 252 73 800
+
+run bctc.py ../data/ns/Jsong-ns-no7.pkl ../data/model/bctc-Jsong-ns-no7-i 252 73 800
+'''
+---------------------------------------------------------------------------------------------------------------
+# *****************************************************
+# For -sg datasets (spectrogram level):
+# *****************************************************
+---------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------
+# *****************************************************
+# For -wf datasets (waveform level):
+# *****************************************************
+---------------------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------------------
 # perform end-to-end test on matlab

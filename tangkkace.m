@@ -13,9 +13,7 @@ fe = fopen(acelist,'r');
 tline = fgetl(fe);
 
 savetmp = str2num(savetmp);
-if nargin == 2
-    savetmp = 0;
-end
+
 if (savetmp == 2 || savetmp == 3)&& nargin >= 4 % load tmp
     load(loadtmp);
     loadidx = 1;
