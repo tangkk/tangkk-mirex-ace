@@ -25,7 +25,6 @@ end
 
 chordnums = chnames2chnums(chordnames, chordmode);
 
-tidx = 1;
 while ischar(tline)
     trainingDataOneSongX1 = [];
     trainingDataOneSongX2 = [];
@@ -84,6 +83,7 @@ while ischar(tline)
     end
     
     % probing point for training data set 1
+    % FIXME: put Strain1 one step ahead (before tuning)
     Strain1 = Ss;
 
     % spectral rollon

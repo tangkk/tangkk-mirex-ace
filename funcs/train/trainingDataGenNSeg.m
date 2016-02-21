@@ -79,6 +79,7 @@ while ischar(tline)
     end
     
     % probing point for training data set 1
+    % FIXME: put Strain1 one step ahead (before tuning)
     Strain1 = Ss;
 
     % spectral rollon
