@@ -22,7 +22,7 @@ else
 E = nnlsNoteProfile(feparam.overtoneS, nnotes, ntones);
 % note that the size of one col of the spectrogram will be nfft/2 + 1,
 % where nfft = feparam.wl (the hamming window size)
-LE = logFreqNoteProfile(ntones, fmin, fratio, USR, feparam.fs, feparam.wl/2);
+LE = logFreqNoteProfile(ntones, fmin, fratio, USR, feparam.fs, feparam.wl/2+1);
 save('dict.mat','Ms','Mc','E','LE');
 end
 
@@ -33,12 +33,21 @@ myImagePlot(LE, 1:feparam.wl/2, 1:ntones, 'dft bin', '1/3 semitone', 'log freq n
 myImagePlot(E, 1:nnotes, 1:ntones, 'semitone', '1/3 semitone', 'nnls note profile');
 end
 
+% CQT transform
+% Xcq = cqt(x, 36, feparam.fs, fmin, fmax);
+% x = icqt(Xcq);
+
+% standard spectrogram transform
+% Xsp = spectrogram(x, feparam.wl, feparam.wl-feparam.hopsize);
+% x = istft(Xsp,feparam.hopsize,feparam.wl,feparam.fs);
+
 % calculate note salience matrix of the stft spectrogram (cosine
 % similarity) (note that this is an additive approach, as contrast to
 % the nnls approach which is an deductive approach)
 % transform time domain into frequency domain
 display('computing spectrogram...');
 X = mySpectrogram(x, feparam.wl, feparam.hopsize);
+% X = abs(spectrogram(x, feparam.wl, feparam.wl-feparam.hopsize));
 nslices = size(X,2);
 endtime = (1/feparam.fs)*length(x);
 if df && enPlot

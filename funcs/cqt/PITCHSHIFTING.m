@@ -6,11 +6,10 @@ B = 48;
 gamma = 10; 
 fmax = fs/2;
 
-shiftBins = 48;
+shiftBins = -3;
 
 %% INPUT SIGNAL
-% x = wavread('brent2.wav');
-x = wavread('kempff1.wav');
+x = wavread('brent2.wav');
 x = x(:); xlen = length(x);
 
 %% COMPUTE COEFFIENTS

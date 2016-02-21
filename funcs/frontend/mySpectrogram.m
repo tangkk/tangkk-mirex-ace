@@ -5,7 +5,7 @@ function X = mySpectrogram(x, wl, hopsize)
 len = length(x);
 w = hamming(wl);
 nslices = ceil((length(x)-wl)/hopsize);
-X = zeros(wl/2, nslices);
+X = zeros(wl/2+1, nslices);
 idx = 1;
 for i = wl/2+1:hopsize:len - wl/2
     raws = i-wl/2;
@@ -15,6 +15,6 @@ for i = wl/2+1:hopsize:len - wl/2
     if max(fftraw) < 2 % low cut
         fftraw(:) = 0;
     end
-    X(:,idx) = 2*fftraw(1:wl/2);
+    X(:,idx) = 2*fftraw(1:wl/2+1);
     idx = idx + 1;
 end
