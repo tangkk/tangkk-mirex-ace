@@ -32,14 +32,14 @@ from acesongdb import pkl_data_nseg_h5py, pkl_data_framewise_h5py, pkl_data_nseg
 # pkl_data_varlen('../data/ch/Bvarlen-ch-noinv.mat','../data/ch/B6varlen-ch-noinv.pkl',24,1)
 
 ####################################### ns ############################################
-ymax = 61 #noinv
-# pkl_data_framewise_h5py('../data/ns/Jsong-ns-noinv.mat','../data/ns/Jsong-ns-noinv.pkl',ymax)
-pkl_data_nseg_h5py('../data/ns/Jsong-ns-noinv.mat','../data/ns/Jsong-6seg-ns-noinv.pkl',6,ymax)
-
 ymax = 277 #inv
 pkl_data_framewise_h5py('../data/ns/Jsong-ns-inv.mat','../data/ns/Jsong-ns-inv.pkl', ymax)
-pkl_data_nseg_h5py('../data/ns/Jsong-ns-inv.mat','../data/ns/Jsong-6seg-ns-inv.pkl',6, ymax)
+# pkl_data_nseg_h5py('../data/ns/Jsong-ns-inv.mat','../data/ns/Jsong-6seg-ns-inv.pkl',6, ymax)
 
-ymax = 73 #no7
-pkl_data_framewise_h5py('../data/ns/Jsong-ns-no7.mat','../data/ns/Jsong-ns-no7.pkl', ymax)
-pkl_data_nseg_h5py('../data/ns/Jsong-ns-no7.mat','../data/ns/Jsong-6seg-ns-no7.pkl',6, ymax)
+# ymax = 61 #noinv
+# pkl_data_framewise_h5py('../data/ns/Jsong-ns-noinv.mat','../data/ns/Jsong-ns-noinv.pkl',ymax)
+# pkl_data_nseg_h5py('../data/ns/Jsong-ns-noinv.mat','../data/ns/Jsong-6seg-ns-noinv.pkl',6,ymax)
+
+# ymax = 73 #no7
+# pkl_data_framewise_h5py('../data/ns/Jsong-ns-no7.mat','../data/ns/Jsong-ns-no7.pkl', ymax)
+# pkl_data_nseg_h5py('../data/ns/Jsong-ns-no7.mat','../data/ns/Jsong-6seg-ns-no7.pkl',6, ymax)

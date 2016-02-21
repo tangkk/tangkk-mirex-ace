@@ -53,7 +53,8 @@ def pkl_data_matrix(dataset=None, dumppath=None):
         
     print X.shape
     print y.shape 
-    
+
+# FIXME: y should be in 'uint16' type    
 def pkl_data_varlen_h5py(dataset=None, dumppath=None, fdim=None, nseg=1):
     X = load_cell_data_h5py_0(dataset,'X')
     X = X.T
@@ -73,6 +74,7 @@ def pkl_data_varlen_h5py(dataset=None, dumppath=None, fdim=None, nseg=1):
         xm = preprocessing.scale(xm)
         cX.append(xm)
     X = numpy.asarray(cX)
+    
     y = load_matrix_data_h5py(dataset,'y')
     y = y.T[0]
     y[y==max(y)]=0
@@ -131,6 +133,7 @@ def pkl_data_nseg_h5py(dataset=None, dumppath=None, nseg=6, ymax=None):
             # target no need to standardize
             # assuming max value of target is ymax
             ym[ym==ymax]=0
+            ym = ym.astype('uint16')
             y_.append(ym)
             # y_ stores targets for all songs all keys, the 12 key dim is unrolled
     y = numpy.asarray(y_)
@@ -183,6 +186,7 @@ def pkl_data_framewise_h5py(dataset=None, dumppath=None, ymax=None):
             ym = y_k[kk]
             # target no need to standardize
             ym[ym==ymax]=0
+            ym = ym.astype('uint16')
             y_.append(ym)
             # y_ stores targets for all songs all keys, the 12 key dim is unrolled
     y = numpy.asarray(y_)
