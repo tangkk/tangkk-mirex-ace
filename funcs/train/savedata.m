@@ -6,4 +6,4 @@ y = trainingDatay11;
 % X = trainingDataX22;
 % y = trainingDatay22;
 
-save('data/ns/Jsong-ns-noinv.mat','X','y','-v7.3');
+save('data/wf/Jsong-wf-inv.mat','X','y','-v7.3');

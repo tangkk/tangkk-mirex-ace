@@ -388,7 +388,7 @@
 % trainingDataGenSgSongWise('raw2.mat','CNPopJayChou49List.txt',0,0)
 % trainingDataGenSgNSegPinv('raw1.mat','CNPopJayChou49List.txt',6,0,0)
 % trainingDataGenSgSongWisePinv('raw2.mat','CNPopJayChou49List.txt',0,0)
-trainingDataGenWfSongWise('raw5.mat','CNPopJayChou49List.txt',0,0)
+% trainingDataGenWfSongWise('raw5.mat','CNPopJayChou49List.txt',0,0)
 
 % trainingDataGenSgSongWise('raw1.mat','JayChou29List.txt',0,0)
 % trainingDataGenSgSongWisePinv('raw2.mat','JayChou29List.txt',0,0)

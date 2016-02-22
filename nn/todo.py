@@ -100,25 +100,6 @@ run svm.py ../data/ch/B6seg-ch-inv.mat ../data/model/svm-B6seg-ch-inv-i.pkl
 run ctc.py ../data/ch/Bsong-ch-inv.pkl ../data/model/ctc-Bsong-ch-inv-i 24 277 500
 
 run bctc.py ../data/ch/Bsong-ch-inv.pkl ../data/model/bctc-Bsong-ch-inv-i 24 277 500
-
--------------------------------------------- noinv ---------------------------------------------------
-# 6seg
-run mlp.py ../data/ch/B6seg-ch-noinv.mat ../data/model/mlp-B6seg-ch-noinv-[500,500]-i.pkl 500,500
-
-run dbn.py ../data/ch/B6seg-ch-noinv.mat ../data/model/dbn-B6seg-ch-noinv-[500,500]-i.pkl 500,500 grbm
-
-run lstm.py ../data/ch/B6seg-ch-noinv.mat ../data/model/lstm-B6seg-ch-noinv-[500]-i matrix 24 500
-
-run blstm.py ../data/ch/B6seg-ch-noinv.mat ../data/model/blstm-B6seg-ch-noinv-[500]-i matrix 24 500
-
-run knn.py ../data/ch/B6seg-ch-noinv.mat ../data/model/knn-B6seg-ch-noinv-i.pkl 10 distance
-
-run svm.py ../data/ch/B6seg-ch-noinv.mat ../data/model/svm-B6seg-ch-noinv-i.pkl
-
-# songwise
-run ctc.py ../data/ch/Bsong-ch-noinv.pkl ../data/model/ctc-Bsong-ch-noinv-i 24 61 500
-
-run bctc.py ../data/ch/Bsong-ch-noinv.pkl ../data/model/bctc-Bsong-ch-noinv-i 24 61 500
 '''
 ---------------------------------------------------------------------------------------------------------------
 # Experiment Group 2: Chinese Pop - Use JayChou29 trained/validated model, tested on cnpop-others
@@ -158,25 +139,6 @@ run svm.py ../data/ch/J6seg-ch-inv.mat ../data/model/svm-J6seg-ch-inv-i.pkl
 run ctc.py ../data/ch/Jsong-ch-inv.pkl ../data/model/ctc-Jsong-ch-inv-i 24 277 500
 
 run bctc.py ../data/ch/Jsong-ch-inv.pkl ../data/model/bctc-Jsong-ch-inv-i 24 277 500
-
--------------------------------------------- noinv ---------------------------------------------------
-# 6seg
-run mlp.py ../data/ch/J6seg-ch-noinv.mat ../data/model/mlp-J6seg-ch-noinv-[500,500]-i.pkl 500,500
-
-run dbn.py ../data/ch/J6seg-ch-noinv.mat ../data/model/dbn-J6seg-ch-noinv-[500,500]-i.pkl 500,500 grbm
-
-run lstm.py ../data/ch/J6seg-ch-noinv.mat ../data/model/lstm-J6seg-ch-noinv-[500]-i matrix 24 500
-
-run blstm.py ../data/ch/J6seg-ch-noinv.mat ../data/model/blstm-J6seg-ch-noinv-[500]-i matrix 24 500
-
-run knn.py ../data/ch/J6seg-ch-noinv.mat ../data/model/knn-J6seg-ch-noinv-i.pkl 10 distance
-
-run svm.py ../data/ch/J6seg-ch-noinv.mat ../data/model/svm-J6seg-ch-noinv-i.pkl
-
-# songwise
-run ctc.py ../data/ch/Jsong-ch-noinv.pkl ../data/model/ctc-Jsong-ch-noinv-i 24 61 500
-
-run bctc.py ../data/ch/Jsong-ch-noinv.pkl ../data/model/bctc-Jsong-ch-noinv-i 24 61 500
 '''
 ---------------------------------------------------------------------------------------------------------------
 # *****************************************************
@@ -198,14 +160,20 @@ run bctc.py ../data/ch/Jsong-ch-noinv.pkl ../data/model/bctc-Jsong-ch-noinv-i 24
 '''
 running scripts:
 -------------------------------------------- inv ---------------------------------------------------
+input dimension 252*6 = 1512
 # 6seg
 run mlp.py ../data/ns/J6seg-ns-inv.mat ../data/model/mlp-J6seg-ns-inv-[800,800]-i.pkl 800,800
 
 run dbn.py ../data/ns/J6seg-ns-inv.mat ../data/model/dbn-J6seg-ns-inv-[800,800]-i.pkl 800,800 grbm
 
+run mlp.py ../data/ns/J6seg-ns-inv.mat ../data/model/mlp-J6seg-ns-inv-[2000,2000]-i.pkl 2000,2000
+
+run dbn.py ../data/ns/J6seg-ns-inv.mat ../data/model/dbn-J6seg-ns-inv-[2000,2000]-i.pkl 2000,2000 grbm
+
 run lstm.py ../data/ns/J6seg-ns-inv.mat ../data/model/lstm-J6seg-ns-inv-[800]-i matrix 252 800
 
 run blstm.py ../data/ns/J6seg-ns-inv.mat ../data/model/blstm-J6seg-ns-inv-[800]-i matrix 252 800
+
 
 run knn.py ../data/ns/J6seg-ns-inv.mat ../data/model/knn-J6seg-ns-inv-i.pkl 10 distance
 
@@ -215,37 +183,30 @@ run svm.py ../data/ns/J6seg-ns-inv.mat ../data/model/svm-J6seg-ns-inv-i.pkl
 run ctc.py ../data/ns/Jsong-ns-inv.pkl ../data/model/ctc-Jsong-ns-inv-i 252 277 800
 
 run bctc.py ../data/ns/Jsong-ns-inv.pkl ../data/model/bctc-Jsong-ns-inv-i 252 277 800
-
--------------------------------------------- no7 ---------------------------------------------------
-# 6seg
-run mlp.py ../data/ns/J6seg-ns-no7.mat ../data/model/mlp-J6seg-ns-no7-[800,800]-i.pkl 800,800
-
-run dbn.py ../data/ns/J6seg-ns-no7.mat ../data/model/dbn-J6seg-ns-no7-[800,800]-i.pkl 800,800 grbm
-
-run lstm.py ../data/ns/J6seg-ns-no7.mat ../data/model/lstm-J6seg-ns-no7-[800]-i matrix 252 800
-
-run blstm.py ../data/ns/J6seg-ns-no7.mat ../data/model/blstm-J6seg-ns-no7-[800]-i matrix 252 800
-
-run knn.py ../data/ns/J6seg-ns-no7.mat ../data/model/knn-J6seg-ns-no7-i.pkl 10 distance
-
-run svm.py ../data/ns/J6seg-ns-no7.mat ../data/model/svm-J6seg-ns-no7-i.pkl
-
-# songwise
-run ctc.py ../data/ns/Jsong-ns-no7.pkl ../data/model/ctc-Jsong-ns-no7-i 252 73 800
-
-run bctc.py ../data/ns/Jsong-ns-no7.pkl ../data/model/bctc-Jsong-ns-no7-i 252 73 800
 '''
 ---------------------------------------------------------------------------------------------------------------
 # *****************************************************
 # For -sg datasets (spectrogram level):
 # *****************************************************
 ---------------------------------------------------------------------------------------------------------------
+'''
+# songwise
+run ctc.py ../data/sg/Jsong-sg-inv.pkl ../data/model/ctc-Jsong-sg-inv-i 2048 277 800
+
+run bctc.py ../data/sg/Jsong-sg-inv.pkl ../data/model/bctc-Jsong-sg-inv-i 2048 277 800
+'''
 
 ---------------------------------------------------------------------------------------------------------------
 # *****************************************************
 # For -wf datasets (waveform level):
 # *****************************************************
 ---------------------------------------------------------------------------------------------------------------
+'''
+# songwise
+run ctc.py ../data/wf/Jsong-wf-inv.pkl ../data/model/ctc-Jsong-wf-inv-i 1 277 800
+
+run bctc.py ../data/wf/Jsong-wf-inv.pkl ../data/model/bctc-Jsong-wf-inv-i 1 277 800
+'''
 
 ---------------------------------------------------------------------------------------------------------------
 # perform end-to-end test on matlab

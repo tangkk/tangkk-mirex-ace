@@ -169,6 +169,51 @@ def pkl_data_nseg_h5py(dataset=None, dumppath=None, nseg=6, ymax=None):
     with open(dumppath, "wb") as f:
         cPickle.dump((X,y), f)
         
+def pkl_data_waveform_h5py(dataset=None, dumppath=None, ymax=None):
+
+    #############
+    # LOAD DATA #
+    #############
+    X = load_cell_data_h5py(dataset,'X') # X is a list instead of a numpy array
+    y = load_cell_data_h5py(dataset,'y')
+
+    y_ = []
+    for k in range(len(y)): # for every song entry
+        # y_k is the target for one song "12 * n_timesteps" for all 12 keys transposition
+        y_k = y[k]
+        for kk in range(12): # iterate over 12 keys
+            # y_kk is one song targets for one key
+            ym = y_k[kk]
+            # target no need to standardize
+            ym[ym==ymax]=0
+            ym = ym.astype('uint16')
+            y_.append(ym)
+            # y_ stores targets for all songs all keys, the 12 key dim is unrolled
+    y = numpy.asarray(y_)
+    
+    print y.shape
+    print y[0].shape
+    
+    # similar to y
+    X_ = []
+    for k in range(len(X)): # for every song entry
+        # y_k is the target for one song "12 * n_timesteps" for all 12 keys transposition
+        X_k = X[k]
+        for kk in range(12): # iterate over 12 keys
+            # y_kk is one song targets for one key
+            Xm = X_k[kk]
+            # target no need to standardize
+            Xm = Xm.astype(theano.config.floatX)
+            X_.append(Xm)
+            # y_ stores targets for all songs all keys, the 12 key dim is unrolled
+    X = numpy.asarray(X_)
+    
+    print X.shape
+    print X[0].shape
+    
+    with open(dumppath, "wb") as f:
+        cPickle.dump((X,y), f)
+        
 def pkl_data_framewise_h5py(dataset=None, dumppath=None, ymax=None):
 
     #############
