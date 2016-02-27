@@ -24,7 +24,7 @@ if nntype == 'mlp' or nntype == 'dbn':
 elif nntype == 'knn' or nntype == 'svm':
     with open(modelpath, 'rb') as f:
         model = cPickle.load(f)
-elif nntype == 'lstm' or nntype == 'blstm' or nntype == 'ctc' or nntype == 'bctc':
+elif nntype == 'lstm' or nntype == 'blstm' or nntype == 'ctc' or nntype == 'bctc' or nntype == 'ctcsg' or nntype == 'bctcsg':
     model = numpy.load(modelpath)
             
 # 3. predict output using the model and the input

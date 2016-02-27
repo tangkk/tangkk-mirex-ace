@@ -49,5 +49,5 @@ from acesongdb import pkl_data_nseg_h5py, pkl_data_framewise_h5py, pkl_data_nseg
 # pkl_data_framewise_h5py('../data/sg/Jsong-sg-inv.mat','../data/sg/Jsong-sg-inv.pkl', ymax)
 
 ####################################### wf ############################################
-ymax = 277 #inv
-pkl_data_waveform_h5py('../data/wf/Jsong-wf-inv.mat','../data/wf/Jsong-wf-inv.pkl', ymax)
+# ymax = 277 #inv
+# pkl_data_waveform_h5py('../data/wf/Jsong-wf-inv.mat','../data/wf/Jsong-wf-inv.pkl', ymax)
