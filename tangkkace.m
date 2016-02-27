@@ -12,18 +12,28 @@ end
 fe = fopen(acelist,'r');
 tline = fgetl(fe);
 
-savetmp = str2num(savetmp);
+savetmp = str2double(savetmp);
 
-if (savetmp == 2 || savetmp == 3)&& nargin >= 4 % load tmp
-    load(loadtmp);
-    loadidx = 1;
-end
-if savetmp == -1 && nargin >= 4 % save tmp
+if savetmp == -1 % save tmp
     rawbasegramSet = {};
     rawuppergramSet = {};
     bdrysSet = {};
     endtimeSet = {};
     saveidx = 1;
+end
+if savetmp == -2
+    nsSet = {};
+    endtimeSet = {};
+    saveidx = 1;
+end
+if savetmp == -3
+    sgSet = {};
+    endtimeSet = {};
+    saveidx = 1;
+end
+if (savetmp == 2 || savetmp == 3 || savetmp == 4)
+    load(loadtmp);
+    loadidx = 1;
 end
 
 while ischar(tline)
@@ -31,8 +41,25 @@ while ischar(tline)
     [inputpath, outputpath, songtitle] = inputDecode(tline);
     disp(['now start to analyze ' songtitle ' ......']);
     
-    
-    if savetmp == -1 % save intermediate results
+    if savetmp == -3 % save intermediate results for sg models
+        display('frontend...');
+        [sg, endtime] = sgfrontEndDecode(inputpath, feparam, 0, 0);
+        sgSet{saveidx} = sg;
+        endtimeSet{saveidx} = endtime;
+        saveidx = saveidx + 1;
+        tline = fgetl(fe);
+        display(strcat('finish saving sg of ...',songtitle, ' !'));
+        continue;
+    elseif savetmp == -2 % save intermediate results for ns models
+        display('frontend...');
+        [ns, endtime] = nsfrontEndDecode(inputpath, feparam, 0, 0);
+        nsSet{saveidx} = ns;
+        endtimeSet{saveidx} = endtime;
+        saveidx = saveidx + 1;
+        tline = fgetl(fe);
+        display(strcat('finish saving ns of ...',songtitle, ' !'));
+        continue;
+    elseif savetmp == -1 % save intermediate results for ch models
         display('frontend...');
         [bdrys, basegram, uppergram, rawbasegram, rawuppergram, endtime] = frontEndDecode(inputpath, feparam, 0, 0);
         bdrys = savingDecode(chordmode, beparam, dbnparam, dbn2param, basegram, uppergram, bdrys);
@@ -50,27 +77,34 @@ while ischar(tline)
         display('Gaussian-HMM backend...');
         [rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode, beparam, dbnparam, dbn2param,...
         basegram, uppergram, rawbasegram, rawuppergram, bdrys, 0, 0);
-    elseif savetmp == 1 % use DBN2 and use NN's posteria probs to decode
+    elseif savetmp == 1 % type-I decode (ch fix model with HMM backend)
         display('frontend...');
         [bdrys, basegram, uppergram, rawbasegram, rawuppergram, endtime] = frontEndDecode(inputpath, feparam, 0, 0);
-        display('NN-HMM backend...');
-        [rootgram, bassgram, treblegram, bdrys] = nn13Decode(chordmode, model, beparam, dbn2param, rawbasegram, rawuppergram, bdrys);
-    elseif savetmp == 2 % load intermediate results (frontend results) and work on backend directly
+        display('ch-NN-HMM backend...');
+        [rootgram, bassgram, treblegram, bdrys] = nn1Decode(chordmode, model, beparam, dbn2param, rawbasegram, rawuppergram, bdrys);
+    elseif savetmp == 2 % type-II decode (ch fix model with segmentation information provided by baseline method)
         rawbasegram = rawbasegramSet{loadidx};
         rawuppergram = rawuppergramSet{loadidx};
         bdrys = bdrysSet{loadidx};
         endtime = endtimeSet{loadidx};
         loadidx = loadidx + 1;
-        display('Seg-NN backend...');
-        [rootgram, bassgram, treblegram] = nn2Decode(chordmode, beparam, rawbasegram, rawuppergram, bdrys, model);
-    elseif savetmp == 3
+        display('ch-seg-NN backend...');
+        [rootgram, bassgram, treblegram] = nn2Decode(chordmode, rawbasegram, rawuppergram, bdrys, model);
+    elseif savetmp == 3 % type-III decode (ch recurrent model songwise model decode)
         rawbasegram = rawbasegramSet{loadidx};
         rawuppergram = rawuppergramSet{loadidx};
         bdrys = 1:size(rawbasegram,2);
         endtime = endtimeSet{loadidx};
         loadidx = loadidx + 1;
-        display('Song-NN backend...');
-        [rootgram, bassgram, treblegram, bdrys] = nn13Decode(chordmode, model, beparam, dbn2param, rawbasegram, rawuppergram, bdrys);
+        display('ch-song-RNN backend...');
+        [rootgram, bassgram, treblegram, bdrys] = nn3Decode(chordmode, model, beparam, rawbasegram, rawuppergram, bdrys);
+    elseif savetmp == 4 % type-IV decode (ns recurrent model songwise decode)
+        ns = nsSet{loadidx};
+        bdrys = 1:size(ns,2);
+        endtime = endtimeSet{loadidx};
+        loadidx = loadidx + 1;
+        display('ns-song-RNN backend...');
+        [rootgram, bassgram, treblegram, bdrys] = nn4Decode(chordmode, model, beparam, ns, bdrys);
     end
     
     display('writing to output...');
@@ -84,6 +118,12 @@ end % pair with the very first while loop
 
 fclose(fe);
 
-if savetmp == -1 && nargin >= 4 % save tmp
+if savetmp == -1 % save tmp
     save(loadtmp,'rawbasegramSet','rawuppergramSet','bdrysSet','endtimeSet','chordmode');
+end
+if savetmp == -2
+    save(loadtmp,'nsSet','endtimeSet','-v7.3');
+end
+if savetmp == -3
+    save(loadtmp,'sgSet','endtimeSet','-v7.3');
 end

@@ -1,7 +1,5 @@
-% estimate the sequence using theano based parametric and non-parametric
-% 6seg models
- 
-function [rootgram, bassgram, treblegram] = theanoNNTypeTwoPredict(basegram, uppergram, bdrys, chordmode, model)
+% work with TheanoNN
+function [rootgram, bassgram, treblegram] = nn2Decode(chordmode, rawbasegram, rawuppergram, bdrys, model)
 
 rootgram = [];
 bassgram = [];
@@ -10,13 +8,13 @@ treblegram = [];
 nslices = size(bdrys,2)-1;
 nseg = 6;
 
-% step 1, generate the 6seg samples from basegram and uppergram - store X
+% step 1, generate the 6seg samples from rawbasegram and rawuppergram - store X
 X = zeros(1,24*nseg);
 for j = 1:nslices
     sb = bdrys(j);
     eb = bdrys(j+1);
-    smb = basegram(:,sb:eb);
-    smu = uppergram(:,sb:eb);
+    smb = rawbasegram(:,sb:eb);
+    smu = rawuppergram(:,sb:eb);
     sm = [smb;smu];
     smnseg = zeros(24,nseg);
 
@@ -89,3 +87,5 @@ for j = 1:nslices
         bassgram(j) = 0;
     end
 end
+
+display('chord progression done...');

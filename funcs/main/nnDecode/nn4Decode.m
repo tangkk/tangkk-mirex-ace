@@ -1,7 +1,6 @@
-% estimate the sequence using the Theano (B)LSTM based parametric song
-% model
- 
-function [rootgram, bassgram, treblegram] = theanoNNTypeThreePredict(basegram, uppergram, bdrys, chordmode, model)
+function [rootgram, bassgram, treblegram, bdrys] = nn4Decode(chordmode, model, beparam, ns, bdrys)
+
+display('chord decoding...');
 
 rootgram = [];
 bassgram = [];
@@ -9,8 +8,8 @@ treblegram = [];
 
 nslices = size(bdrys,2)-1;
 
-% step 1, combine basegram and uppergram
-X = [basegram;uppergram]';
+% step 1, assign ns to input
+X = ns';
 
 save('./data/temp/X.mat','X');
 
@@ -32,6 +31,11 @@ if ~isempty(strfind(model,'bctc'))
 elseif ~isempty(strfind(model,'ctc'))
     nntype = 'ctc';
 end
+
+if ~isempty(strfind(model,'ii'))
+    nntype = [nntype 'sg'];
+end
+
 pythoncmd = {'nn/predict.py','./data/temp/X.mat',['./data/model/' model],nntype,invtype};
 python(pythoncmd)
 
@@ -55,13 +59,9 @@ for j = 1:nslices
     end
 end
 
-% load('./data/temp/y_probs.mat');
-% chordogram = y_probs';
-% dbn2param = struct(...
-%     'mu', 1,...
-%     'sigma', 0.1,...
-%     'selfTrans', 1e12);
-% bnet4 = dbnSetup4(dbn2param, nchords);
-% [chordogram, ~] = normalizeGram(chordogram, inf);
-% [rootgram, bassgram, treblegram] = dbnInference4(bnet4, chordmode, chordogram, nchords);
+if beparam.enChordGestalt
+[rootgram, bassgram, treblegram, bdrys] = ...
+    chordLevelGestalt(rootgram, bassgram, treblegram, bdrys, beparam, chordmode);
+end
 
+display('chord progression done...');
