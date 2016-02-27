@@ -21,43 +21,6 @@
 # *****************************************************
 # models
 # *****************************************************
-# (* = optional)
-###parametric and non-parametric###
-# Models1:
-    # - J6seg-inv-mlp
-    # - J6seg-inv-dbn
-	# - B6seg-inv-mlp
-	# - B6seg-inv-dbn
-# Models2:
-	# - J6seg-inv-lstm
-    # - Jvarlen-inv-lstm(*)
-	# - Jsong-inv-ctc
-	# - B6seg-inv-lstm
-    # - Bvarlen-inv-lstm(*)
-	# - Bsong-inv-ctc
-# Models3:
-    # - J6seg-inv-svm
-    # - J6seg-inv-knn
-    # - B6seg-inv-svm
-    # - B6seg-inv-knn
-# Models4:
-    # - J6seg-noinv-mlp
-    # - J6seg-noinv-dbn
-    # - B6seg-noinv-mlp
-    # - B6seg-noinv-dbn
-# Models5:
-	# - J6seg-noinv-lstm
-    # - Jvarlen-noinv-lstm(*)
-	# - Jsong-noinv-ctc
-	# - B6seg-noinv-lstm
-    # - Bvarlen-noinv-lstm(*)
-	# - Bsong-noinv-ctc
-# Models6:
-    # - J6seg-noinv-svm
-    # - J6seg-noinv-knn
-    # - B6seg-noinv-svm
-    # - B6seg-noinv-knn
-    
 ---------------------------------------------------------------------------------------------------------------
 # *****************************************************
 # For -ch (chromagram level) datasets:
@@ -134,7 +97,8 @@ run blstm.py ../data/ch/J6seg-ch-inv.mat ../data/model/blstm-J6seg-ch-inv-[500]-
 run knn.py ../data/ch/J6seg-ch-inv.mat ../data/model/knn-J6seg-ch-inv-i.pkl 10 distance
 
 run svm.py ../data/ch/J6seg-ch-inv.mat ../data/model/svm-J6seg-ch-inv-i.pkl
-
+'''
+'''
 # songwise
 run ctc.py ../data/ch/Jsong-ch-inv.pkl ../data/model/ctc-Jsong-ch-inv-i 24 277 500
 
@@ -178,11 +142,14 @@ run blstm.py ../data/ns/J6seg-ns-inv.mat ../data/model/blstm-J6seg-ns-inv-[800]-
 run knn.py ../data/ns/J6seg-ns-inv.mat ../data/model/knn-J6seg-ns-inv-i.pkl 10 distance
 
 run svm.py ../data/ns/J6seg-ns-inv.mat ../data/model/svm-J6seg-ns-inv-i.pkl
-
+'''
+'''
 # songwise
 run ctc.py ../data/ns/Jsong-ns-inv.pkl ../data/model/ctc-Jsong-ns-inv-i 252 277 800
+run ctcsg.py ../data/ns/Jsong-ns-inv.pkl ../data/model/ctc-Jsong-ns-inv-ii 252 277 800 500
 
 run bctc.py ../data/ns/Jsong-ns-inv.pkl ../data/model/bctc-Jsong-ns-inv-i 252 277 800
+run bctcsg.py ../data/ns/Jsong-ns-inv.pkl ../data/model/bctc-Jsong-ns-inv-ii 252 277 800 500
 '''
 ---------------------------------------------------------------------------------------------------------------
 # *****************************************************
@@ -191,11 +158,10 @@ run bctc.py ../data/ns/Jsong-ns-inv.pkl ../data/model/bctc-Jsong-ns-inv-i 252 27
 ---------------------------------------------------------------------------------------------------------------
 '''
 # songwise
-run ctc.py ../data/sg/Jsong-sg-inv.pkl ../data/model/ctc-Jsong-sg-inv-i 2048 277 800
+run ctcsg.py ../data/sg/Jsong-sg-inv.pkl ../data/model/ctc-Jsong-sg-inv-i 2049 277 5000 800
 
-run bctc.py ../data/sg/Jsong-sg-inv.pkl ../data/model/bctc-Jsong-sg-inv-i 2048 277 800
+run bctcsg.py ../data/sg/Jsong-sg-inv.pkl ../data/model/bctc-Jsong-sg-inv-i 2049 277 5000 800
 '''
-
 ---------------------------------------------------------------------------------------------------------------
 # *****************************************************
 # For -wf datasets (waveform level):
@@ -203,24 +169,34 @@ run bctc.py ../data/sg/Jsong-sg-inv.pkl ../data/model/bctc-Jsong-sg-inv-i 2048 2
 ---------------------------------------------------------------------------------------------------------------
 '''
 # songwise
-run ctc.py ../data/wf/Jsong-wf-inv.pkl ../data/model/ctc-Jsong-wf-inv-i 1 277 800
+run ctcwf.py ../data/wf/Jsong-wf-inv.pkl ../data/model/ctc-Jsong-wf-inv-i 1 277 500
 
-run bctc.py ../data/wf/Jsong-wf-inv.pkl ../data/model/bctc-Jsong-wf-inv-i 1 277 800
+run bctcwf.py ../data/wf/Jsong-wf-inv.pkl ../data/model/bctc-Jsong-wf-inv-i 1 277 500
 '''
-
 ---------------------------------------------------------------------------------------------------------------
 # perform end-to-end test on matlab
 # - save intermediate results first to save time
 # - generate results and evaluations using the same old excel form
 # - do some subjective test on the results
+---------------------------------------------------------------------------------------------------------------
+# predict scripts:
+# python nn/predict.py ./data/temp/X.mat ./data/model/mlp-J6seg-ch-inv-1000.pkl mlp inv
+---------------------------------------------------------------------------------------------------------------
 '''
-predict scripts:
-python nn/predict.py ./data/temp/X.mat ./data/model/mlp-J6seg-ch-inv-1000.pkl mlp inv
-'''
+tentative framework:
+(Refrain to use ''we'')
 
-'''
 - PhD thesis outline (index)
-Title: deep learning approaches towards automatic chord estimation and its novel application to algorithmic improvisation and music genre classification
+Title: deep learning approaches towards automatic chord estimation, music mood classification and algorithmic composition
+
+Abstract:
+This thesis presents the usage of deep learning approaches towards three problems in both music information retrieval and computer music: automatic chord estimation, music mood classification and algorithmic composition. The main focus is on deep learning based automatic chord estimation, where similar learning structures are extended to form a music mood classification system, where a mood oriented algorithmic composition system is then obtained by reversing the discriminative model to be a generative model.
+
+Concretely, this thesis first considers a unified spectrum of parametric (MLP, DBN, LSTM, BLSTM) and non-parametric (k-NN, SVM) approaches towards automatic chord estimation that support a very large chord vocabulary. At first the baseline approach is similar to chordino, including multiple feature engineering frontend steps and an HMM backend. Then approaches are put forward to try to learn these handcrafted features and transformations from data as much as possible, all the way to an end-to-end recurrent neural network system taking the waveform as input and generating its chord sequence as output. Evaluation on new MIREX standard metrics show that some of these approaches have significant advantage over MIREX state-of-the-art ones in terms of very large chord vocabulary metrics, and comparable to them in other metrics. Besides MIREX dataset, a jazz chord progression dataset with much larger vocabulary is also used to evaluate some of the very strong approaches.
+
+Secondly, a music mood classification system is built using similar but deeper hybrid DBN-(B)LSTM recurrent neural network structure as applied in automatic chord estimation, which supports both generative pretraining and discriminative training. After the model is trained and verified using a combined MIDI dataset of chord and melody, it is turned into a generative model for music composition in terms of chord and melody... (this part is not finished yet, to be decided)
+
+
 (* = optional)
 - introduction
     - automatic chord estimation(ACE) problem definition
@@ -250,12 +226,12 @@ Title: deep learning approaches towards automatic chord estimation and its novel
     - comparisons
     - discussions
 - ACE applications
-    - ACE application to algorithmic improvisation (*) (contribution of this thesis)
-        - algorithmic improvisation platform (refer to WIJAM and ArmKeyBoard work)
-        - ACE application to algorithmic improvisation
+    - ACE application to algorithmic composition/improvisation (*) (contribution of this thesis)
+        - algorithmic composition platform (refer to WIJAM and ArmKeyBoard work)
+        - ACE application to algorithmic composition
         - subjective evaluations
-    - ACE application to music genre classification (*) (contribution of this thesis)
-        - music genre classification overview (refer to SAfeDJ work)
+    - ACE application to music mood classification (*) (contribution of this thesis)
+        - music mood classification overview (refer to SAfeDJ work)
         - experiment setup
         - experiment result
 - conclusion
