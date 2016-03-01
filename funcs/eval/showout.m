@@ -7,9 +7,9 @@ evalmodule = fgetl(frpl);
 loopidx = 1;
 
 mmtable = cell(1,2);
-mmbtable = cell(1,8);
+mmbtable = cell(1,6);
 stable = cell(1,5);
-sbtable = cell(1,23);
+sbtable = cell(1,18);
 nctable = cell(1,1);
 os = cell(1,7);
 evaltable = cell(1,1);
@@ -120,6 +120,7 @@ while ischar(evalmodule)
     fr = fopen(evaloutmajminbass,'r');
     tline = fgetl(fr);
     li = 1;
+    ti = 1;
     
     while ischar(tline)
         if li == 7
@@ -130,19 +131,25 @@ while ischar(evalmodule)
         if li >= 19 && li <= 26
             strtoks1 = strsplit(tline,':');
             ch = strtoks1{1};
+            if ~isempty(strfind(ch,'/1'))
+                tline = fgetl(fr);
+                li = li+1;
+                continue;
+            end
             strtoks2 = strsplit(strtoks1{2},{'(',')'});
             per = strtoks2{2};
             dper = str2double(per(1:end-1)); % delete the '%' symbol
             tol = strtoks2{4};
             if loopidx == 1
-                mmbtable{loopidx, li - 18} = ch;
-                mmbtable{loopidx+1, li - 18} = tol;
+                mmbtable{loopidx, ti - 18} = ch;
+                mmbtable{loopidx+1, ti - 18} = tol;
             end
-            mmbtable{loopidx+2, li - 18} = dper;
+            mmbtable{loopidx+2, ti - 18} = dper;
             
         end
         tline = fgetl(fr);
         li = li+1;
+        ti = ti+1;
     end
     fclose(fr);
 
@@ -180,6 +187,7 @@ while ischar(evalmodule)
     fr = fopen(evaloutseventhsbass,'r');
     tline = fgetl(fr);
     li = 1;
+    ti = 1;
     
     while ischar(tline)
         if li == 7
@@ -190,19 +198,25 @@ while ischar(evalmodule)
         if li >= 19 && li <= 41
             strtoks1 = strsplit(tline,':');
             ch = strtoks1{1};
+            if ~isempty(strfind(ch,'/1'))
+                tline = fgetl(fr);
+                li = li+1;
+                continue;
+            end
             strtoks2 = strsplit(strtoks1{2},{'(',')'});
             per = strtoks2{2};
             dper = str2double(per(1:end-1)); % delete the '%' symbol
             tol = strtoks2{4};
             if loopidx == 1
-                sbtable{loopidx, li - 18} = ch;
-                sbtable{loopidx+1, li - 18} = tol;
+                sbtable{loopidx, ti - 18} = ch;
+                sbtable{loopidx+1, ti - 18} = tol;
             end
-            sbtable{loopidx+2, li - 18} = dper;
+            sbtable{loopidx+2, ti - 18} = dper;
             
         end
         tline = fgetl(fr);
         li = li+1;
+        ti = ti+1;
     end
     fclose(fr);
 
