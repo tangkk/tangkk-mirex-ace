@@ -103,6 +103,10 @@ run svm.py ../data/ch/J6seg-ch-inv.mat ../data/model/svm-J6seg-ch-inv-i.pkl
 run ctc.py ../data/ch/Jsong-ch-inv.pkl ../data/model/ctc-Jsong-ch-inv-i 24 277 500
 
 run bctc.py ../data/ch/Jsong-ch-inv.pkl ../data/model/bctc-Jsong-ch-inv-i 24 277 500
+-------------------------------------------- no7 ---------------------------------------------------
+run bctc.py ../data/ch/Jsong-ch-no7.pkl ../data/model/bctc-Jsong-ch-no7-i 24 73 500
+-------------------------------------------- noinv ---------------------------------------------------
+run bctc.py ../data/ch/Jsong-ch-noinv.pkl ../data/model/bctc-Jsong-ch-noinv-i 24 61 500
 '''
 ---------------------------------------------------------------------------------------------------------------
 # *****************************************************
@@ -150,6 +154,10 @@ run ctcsg.py ../data/ns/Jsong-ns-inv.pkl ../data/model/ctc-Jsong-ns-inv-ii 252 2
 
 run bctc.py ../data/ns/Jsong-ns-inv.pkl ../data/model/bctc-Jsong-ns-inv-i 252 277 800
 run bctcsg.py ../data/ns/Jsong-ns-inv.pkl ../data/model/bctc-Jsong-ns-inv-ii 252 277 800 500
+-------------------------------------------- no7 ---------------------------------------------------
+run bctc.py ../data/ns/Jsong-ns-no7.pkl ../data/model/bctc-Jsong-ns-no7-i 252 73 800
+-------------------------------------------- noinv ---------------------------------------------------
+run bctc.py ../data/ns/Jsong-ns-noinv.pkl ../data/model/bctc-Jsong-ns-noinv-i 252 61 800
 '''
 ---------------------------------------------------------------------------------------------------------------
 # *****************************************************

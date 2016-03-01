@@ -34,6 +34,8 @@ exec(importCmd)
 
 if invtype == 'inv':
     nclass = 277
+elif invtype == 'no7':
+    nclass = 73
 elif invtype == 'noinv':
     nclass = 61
     

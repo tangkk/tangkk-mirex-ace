@@ -24,6 +24,11 @@ elseif ~isempty(strfind(model,'-noinv-')) || ~isempty(strfind(model,'Noinv'))
     nchords = 61;
     load('chordnames-noinv.mat');
     chordnums = [chnames2chnums(chordnames, chordmode);'0:0'];
+elseif ~isempty(strfind(model,'-no7-')) || ~isempty(strfind(model,'No7'))
+    invtype = 'no7';
+    nchords = 73;
+    load('chordnames-no7.mat');
+    chordnums = [chnames2chnums(chordnames, chordmode);'0:0'];
 end
 
 if ~isempty(strfind(model,'bctc'))
