@@ -1,22 +1,22 @@
 from acesongdb import pkl_data_nseg_h5py, pkl_data_framewise_h5py, pkl_data_nseg, pkl_data_framewise, pkl_data_varlen, pkl_data_varlen_h5py, pkl_data_matrix, pkl_data_waveform_h5py
 
 ####################################### ch ############################################
+# ymax = 277 #inv
+# pkl_data_framewise('../data/ch/Jsong-ch-inv.mat','../data/ch/Jsong-ch-inv.pkl', ymax)
+# pkl_data_framewise('../data/ch/Bsong-ch-inv.mat','../data/ch/Bsong-ch-inv.pkl', ymax)
+# pkl_data_nseg('../data/ch/Jsong-ch-inv.mat','../data/ch/Jsong-6seg-ch-inv.pkl',6, ymax)
+# pkl_data_nseg('../data/ch/Bsong-ch-inv.mat','../data/ch/Bsong-6seg-ch-inv.pkl',6, ymax)
+
 # ymax = 61 #noinv
 # pkl_data_framewise('../data/ch/Jsong-ch-noinv.mat','../data/ch/Jsong-ch-noinv.pkl',ymax)
 # pkl_data_framewise('../data/ch/Bsong-ch-noinv.mat','../data/ch/Bsong-ch-noinv.pkl',ymax)
 # pkl_data_nseg('../data/ch/Jsong-ch-noinv.mat','../data/ch/Jsong-6seg-ch-noinv.pkl',6,ymax)
 # pkl_data_nseg('../data/ch/Bsong-ch-noinv.mat','../data/ch/Bsong-6seg-ch-noinv.pkl',6,ymax)
 
-# ymax = 277 #inv
-# pkl_data_framewise('../data/ch/Jsong-ch-inv.mat','../data/ch/Jsong-ch-inv.pkl', ymax)
-# pkl_data_nseg('../data/ch/Jsong-ch-inv.mat','../data/ch/Jsong-6seg-ch-inv.pkl',6, ymax)
-# pkl_data_framewise('../data/ch/Bsong-ch-inv.mat','../data/ch/Bsong-ch-inv.pkl', ymax)
-# pkl_data_nseg('../data/ch/Bsong-ch-inv.mat','../data/ch/Bsong-6seg-ch-inv.pkl',6, ymax)
-
 # ymax = 73 #no7
 # pkl_data_framewise('../data/ch/Jsong-ch-no7.mat','../data/ch/Jsong-ch-no7.pkl', ymax)
-# pkl_data_nseg('../data/ch/Jsong-ch-no7.mat','../data/ch/Jsong-6seg-ch-no7.pkl',6, ymax)
 # pkl_data_framewise('../data/ch/Bsong-ch-no7.mat','../data/ch/Bsong-ch-no7.pkl', ymax)
+# pkl_data_nseg('../data/ch/Jsong-ch-no7.mat','../data/ch/Jsong-6seg-ch-no7.pkl',6, ymax)
 # pkl_data_nseg('../data/ch/Bsong-ch-no7.mat','../data/ch/Bsong-6seg-ch-no7.pkl',6, ymax)
 
 # no need to pkl pure matrix .mat file for the moment, since it can be handled quite nicely in scipy.io

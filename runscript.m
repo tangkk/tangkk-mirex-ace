@@ -396,6 +396,13 @@
 % tangkkace('30','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','ctc-Jsong-ns-inv-ii.npz');evaluateCP thebeatles-ns-ctcsg TheBeatles180List.txt;
 % tangkkace('30','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','bctc-Jsong-ns-inv-ii.npz');evaluateCP thebeatles-ns-bctcsg TheBeatles180List.txt;
 
+% tangkkace('30','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','bctc-Jsong-ch-no7-i.npz');evaluateCP thebeatles-ch-bctc-no7 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','bctc-Jsong-ns-no7-i.npz');evaluateCP thebeatles-ns-bctc-no7 TheBeatles180List.txt;
+
+% tangkkace('30','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','bctc-Jsong-ch-noinv-i.npz');evaluateCP thebeatles-ch-bctc-noinv TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','bctc-Jsong-ns-noinv-i.npz');evaluateCP thebeatles-ns-bctc-noinv TheBeatles180List.txt;
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Spectrogram Data Gen - SongNN %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -414,6 +421,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Saving ns sets %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% tangkkace('30','tempList.txt','-1','tempListBUB.mat');
 % tangkkace('30','tempList.txt','-2','tempListBUBns.mat');
 % tangkkace('30','tempList.txt','-3','tempListBUBsg.mat');
 % tangkkace('30','CNPop20List.txt','-2','CNPop20ListBUBns.mat');
@@ -425,4 +433,9 @@
 %%%%%%%%%%%%%%%%%% Simple Test %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % tangkkace('20','tempList.txt','0','0','0');evaluateCP tempList tempList.txt;
-% tangkkace('30','tempList.txt','4','tempListBUBns.mat','ctc-Jsong-ns-inv-ii.npz');evaluateCP temp-ns-ctcsg tempList.txt;
+
+% tangkkace('30','tempList.txt','-1','tempListBUB.mat');
+% tangkkace('30','tempList.txt','3','tempListBUB.mat','bctc-Jsong-ch-no7-i.npz');evaluateCP temp-ch-bctc-no7 tempList.txt;
+
+% tangkkace('30','tempList.txt','-2','tempListBUBns.mat');
+% tangkkace('30','tempList.txt','4','tempListBUBns.mat','bctc-Jsong-ns-no7-i.npz');evaluateCP temp-ns-bctc-no7 tempList.txt;
