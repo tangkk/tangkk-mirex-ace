@@ -102,33 +102,33 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %%%%%%%%%%%%%%%%%% J-CNPop - NN-HMM %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% tangkkace('30','CNPop20List.txt','1','x.mat','mlp-J6seg-ch-inv-[500,500]-1.pkl');evaluateCP cnpop-mlp-nnhmm-1 CNPop20List.txt;
-% tangkkace('30','CNPop20List.txt','1','x.mat','mlp-J6seg-ch-inv-[500,500]-2.pkl');evaluateCP cnpop-mlp-nnhmm-2 CNPop20List.txt;
-% tangkkace('30','CNPop20List.txt','1','x.mat','mlp-J6seg-ch-inv-[500,500]-3.pkl');evaluateCP cnpop-mlp-nnhmm-3 CNPop20List.txt;
-% tangkkace('30','CNPop20List.txt','1','x.mat','mlp-J6seg-ch-inv-[500,500]-4.pkl');evaluateCP cnpop-mlp-nnhmm-4 CNPop20List.txt;
-% tangkkace('30','CNPop20List.txt','1','x.mat','mlp-J6seg-ch-inv-[500,500]-5.pkl');evaluateCP cnpop-mlp-nnhmm-5 CNPop20List.txt;
-% tangkkace('30','CNPop20List.txt','1','x.mat','mlp-J6seg-ch-inv-[500,500]-6.pkl');evaluateCP cnpop-mlp-nnhmm-6 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-1.pkl');evaluateCP cnpop-mlp-nnhmm-1 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-2.pkl');evaluateCP cnpop-mlp-nnhmm-2 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-3.pkl');evaluateCP cnpop-mlp-nnhmm-3 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-4.pkl');evaluateCP cnpop-mlp-nnhmm-4 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-5.pkl');evaluateCP cnpop-mlp-nnhmm-5 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-6.pkl');evaluateCP cnpop-mlp-nnhmm-6 CNPop20List.txt;
 % 
-% tangkkace('30','CNPop20List.txt','1','x.mat','dbn-J6seg-ch-inv-[500,500]-1.pkl');evaluateCP cnpop-dbn-nnhmm-1 CNPop20List.txt;
-% tangkkace('30','CNPop20List.txt','1','x.mat','dbn-J6seg-ch-inv-[500,500]-2.pkl');evaluateCP cnpop-dbn-nnhmm-2 CNPop20List.txt;
-% tangkkace('30','CNPop20List.txt','1','x.mat','dbn-J6seg-ch-inv-[500,500]-3.pkl');evaluateCP cnpop-dbn-nnhmm-3 CNPop20List.txt;
-% tangkkace('30','CNPop20List.txt','1','x.mat','dbn-J6seg-ch-inv-[500,500]-4.pkl');evaluateCP cnpop-dbn-nnhmm-4 CNPop20List.txt;
-% tangkkace('30','CNPop20List.txt','1','x.mat','dbn-J6seg-ch-inv-[500,500]-5.pkl');evaluateCP cnpop-dbn-nnhmm-5 CNPop20List.txt;
-% tangkkace('30','CNPop20List.txt','1','x.mat','dbn-J6seg-ch-inv-[500,500]-6.pkl');evaluateCP cnpop-dbn-nnhmm-6 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-1.pkl');evaluateCP cnpop-dbn-nnhmm-1 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-2.pkl');evaluateCP cnpop-dbn-nnhmm-2 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-3.pkl');evaluateCP cnpop-dbn-nnhmm-3 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-4.pkl');evaluateCP cnpop-dbn-nnhmm-4 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-5.pkl');evaluateCP cnpop-dbn-nnhmm-5 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-6.pkl');evaluateCP cnpop-dbn-nnhmm-6 CNPop20List.txt;
 % 
-% tangkkace('30','CNPop20List.txt','1','x.mat','lstm-J6seg-ch-inv-[500]-1.npz');evaluateCP cnpop-lstm-nnhmm-1 CNPop20List.txt;
-% tangkkace('30','CNPop20List.txt','1','x.mat','lstm-J6seg-ch-inv-[500]-2.npz');evaluateCP cnpop-lstm-nnhmm-2 CNPop20List.txt;
-% tangkkace('30','CNPop20List.txt','1','x.mat','lstm-J6seg-ch-inv-[500]-3.npz');evaluateCP cnpop-lstm-nnhmm-3 CNPop20List.txt;
-% tangkkace('30','CNPop20List.txt','1','x.mat','lstm-J6seg-ch-inv-[500]-4.npz');evaluateCP cnpop-lstm-nnhmm-4 CNPop20List.txt;
-% tangkkace('30','CNPop20List.txt','1','x.mat','lstm-J6seg-ch-inv-[500]-5.npz');evaluateCP cnpop-lstm-nnhmm-5 CNPop20List.txt;
-% tangkkace('30','CNPop20List.txt','1','x.mat','lstm-J6seg-ch-inv-[500]-6.npz');evaluateCP cnpop-lstm-nnhmm-6 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','lstm-J6seg-ch-inv-[500]-1.npz');evaluateCP cnpop-lstm-nnhmm-1 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','lstm-J6seg-ch-inv-[500]-2.npz');evaluateCP cnpop-lstm-nnhmm-2 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','lstm-J6seg-ch-inv-[500]-3.npz');evaluateCP cnpop-lstm-nnhmm-3 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','lstm-J6seg-ch-inv-[500]-4.npz');evaluateCP cnpop-lstm-nnhmm-4 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','lstm-J6seg-ch-inv-[500]-5.npz');evaluateCP cnpop-lstm-nnhmm-5 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','lstm-J6seg-ch-inv-[500]-6.npz');evaluateCP cnpop-lstm-nnhmm-6 CNPop20List.txt;
 % 
-% tangkkace('30','CNPop20List.txt','1','x.mat','blstm-J6seg-ch-inv-[500]-1.npz');evaluateCP cnpop-blstm-nnhmm-1 CNPop20List.txt;
-% tangkkace('30','CNPop20List.txt','1','x.mat','blstm-J6seg-ch-inv-[500]-2.npz');evaluateCP cnpop-blstm-nnhmm-2 CNPop20List.txt;
-% tangkkace('30','CNPop20List.txt','1','x.mat','blstm-J6seg-ch-inv-[500]-3.npz');evaluateCP cnpop-blstm-nnhmm-3 CNPop20List.txt;
-% tangkkace('30','CNPop20List.txt','1','x.mat','blstm-J6seg-ch-inv-[500]-4.npz');evaluateCP cnpop-blstm-nnhmm-4 CNPop20List.txt;
-% tangkkace('30','CNPop20List.txt','1','x.mat','blstm-J6seg-ch-inv-[500]-5.npz');evaluateCP cnpop-blstm-nnhmm-5 CNPop20List.txt;
-% tangkkace('30','CNPop20List.txt','1','x.mat','blstm-J6seg-ch-inv-[500]-6.npz');evaluateCP cnpop-blstm-nnhmm-6 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','blstm-J6seg-ch-inv-[500]-1.npz');evaluateCP cnpop-blstm-nnhmm-1 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','blstm-J6seg-ch-inv-[500]-2.npz');evaluateCP cnpop-blstm-nnhmm-2 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','blstm-J6seg-ch-inv-[500]-3.npz');evaluateCP cnpop-blstm-nnhmm-3 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','blstm-J6seg-ch-inv-[500]-4.npz');evaluateCP cnpop-blstm-nnhmm-4 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','blstm-J6seg-ch-inv-[500]-5.npz');evaluateCP cnpop-blstm-nnhmm-5 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','1','CNPop20ListBUB.mat','blstm-J6seg-ch-inv-[500]-6.npz');evaluateCP cnpop-blstm-nnhmm-6 CNPop20List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %%%%%%%%%%%%%%%%%% B-CaroleKingQueen - INV %%%%%%%%%%%%%%%%%%
@@ -182,33 +182,33 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %%%%%%%%%%%%%%%%%% B-CaroleKingQueen - NN-HMM %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','mlp-B6seg-ch-inv-[500,500]-1.pkl');evaluateCP kingqueen-mlp-nnhmm-1 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','mlp-B6seg-ch-inv-[500,500]-2.pkl');evaluateCP kingqueen-mlp-nnhmm-2 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','mlp-B6seg-ch-inv-[500,500]-3.pkl');evaluateCP kingqueen-mlp-nnhmm-3 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','mlp-B6seg-ch-inv-[500,500]-4.pkl');evaluateCP kingqueen-mlp-nnhmm-4 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','mlp-B6seg-ch-inv-[500,500]-5.pkl');evaluateCP kingqueen-mlp-nnhmm-5 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','mlp-B6seg-ch-inv-[500,500]-6.pkl');evaluateCP kingqueen-mlp-nnhmm-6 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','mlp-B6seg-ch-inv-[500,500]-1.pkl');evaluateCP kingqueen-mlp-nnhmm-1 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','mlp-B6seg-ch-inv-[500,500]-2.pkl');evaluateCP kingqueen-mlp-nnhmm-2 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','mlp-B6seg-ch-inv-[500,500]-3.pkl');evaluateCP kingqueen-mlp-nnhmm-3 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','mlp-B6seg-ch-inv-[500,500]-4.pkl');evaluateCP kingqueen-mlp-nnhmm-4 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','mlp-B6seg-ch-inv-[500,500]-5.pkl');evaluateCP kingqueen-mlp-nnhmm-5 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','mlp-B6seg-ch-inv-[500,500]-6.pkl');evaluateCP kingqueen-mlp-nnhmm-6 CaroleKingQueen26List.txt;
 % 
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','dbn-B6seg-ch-inv-[500,500]-1.pkl');evaluateCP kingqueen-dbn-nnhmm-1 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','dbn-B6seg-ch-inv-[500,500]-2.pkl');evaluateCP kingqueen-dbn-nnhmm-2 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','dbn-B6seg-ch-inv-[500,500]-3.pkl');evaluateCP kingqueen-dbn-nnhmm-3 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','dbn-B6seg-ch-inv-[500,500]-4.pkl');evaluateCP kingqueen-dbn-nnhmm-4 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','dbn-B6seg-ch-inv-[500,500]-5.pkl');evaluateCP kingqueen-dbn-nnhmm-5 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','dbn-B6seg-ch-inv-[500,500]-6.pkl');evaluateCP kingqueen-dbn-nnhmm-6 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','dbn-B6seg-ch-inv-[500,500]-1.pkl');evaluateCP kingqueen-dbn-nnhmm-1 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','dbn-B6seg-ch-inv-[500,500]-2.pkl');evaluateCP kingqueen-dbn-nnhmm-2 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','dbn-B6seg-ch-inv-[500,500]-3.pkl');evaluateCP kingqueen-dbn-nnhmm-3 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','dbn-B6seg-ch-inv-[500,500]-4.pkl');evaluateCP kingqueen-dbn-nnhmm-4 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','dbn-B6seg-ch-inv-[500,500]-5.pkl');evaluateCP kingqueen-dbn-nnhmm-5 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','dbn-B6seg-ch-inv-[500,500]-6.pkl');evaluateCP kingqueen-dbn-nnhmm-6 CaroleKingQueen26List.txt;
 % 
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','lstm-B6seg-ch-inv-[500]-1.npz');evaluateCP kingqueen-lstm-nnhmm-1 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','lstm-B6seg-ch-inv-[500]-2.npz');evaluateCP kingqueen-lstm-nnhmm-2 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','lstm-B6seg-ch-inv-[500]-3.npz');evaluateCP kingqueen-lstm-nnhmm-3 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','lstm-B6seg-ch-inv-[500]-4.npz');evaluateCP kingqueen-lstm-nnhmm-4 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','lstm-B6seg-ch-inv-[500]-5.npz');evaluateCP kingqueen-lstm-nnhmm-5 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','lstm-B6seg-ch-inv-[500]-6.npz');evaluateCP kingqueen-lstm-nnhmm-6 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','lstm-B6seg-ch-inv-[500]-1.npz');evaluateCP kingqueen-lstm-nnhmm-1 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','lstm-B6seg-ch-inv-[500]-2.npz');evaluateCP kingqueen-lstm-nnhmm-2 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','lstm-B6seg-ch-inv-[500]-3.npz');evaluateCP kingqueen-lstm-nnhmm-3 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','lstm-B6seg-ch-inv-[500]-4.npz');evaluateCP kingqueen-lstm-nnhmm-4 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','lstm-B6seg-ch-inv-[500]-5.npz');evaluateCP kingqueen-lstm-nnhmm-5 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','lstm-B6seg-ch-inv-[500]-6.npz');evaluateCP kingqueen-lstm-nnhmm-6 CaroleKingQueen26List.txt;
 % 
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','blstm-B6seg-ch-inv-[500]-1.npz');evaluateCP kingqueen-blstm-nnhmm-1 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','blstm-B6seg-ch-inv-[500]-2.npz');evaluateCP kingqueen-blstm-nnhmm-2 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','blstm-B6seg-ch-inv-[500]-3.npz');evaluateCP kingqueen-blstm-nnhmm-3 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','blstm-B6seg-ch-inv-[500]-4.npz');evaluateCP kingqueen-blstm-nnhmm-4 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','blstm-B6seg-ch-inv-[500]-5.npz');evaluateCP kingqueen-blstm-nnhmm-5 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','blstm-B6seg-ch-inv-[500]-6.npz');evaluateCP kingqueen-blstm-nnhmm-6 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','blstm-B6seg-ch-inv-[500]-1.npz');evaluateCP kingqueen-blstm-nnhmm-1 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','blstm-B6seg-ch-inv-[500]-2.npz');evaluateCP kingqueen-blstm-nnhmm-2 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','blstm-B6seg-ch-inv-[500]-3.npz');evaluateCP kingqueen-blstm-nnhmm-3 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','blstm-B6seg-ch-inv-[500]-4.npz');evaluateCP kingqueen-blstm-nnhmm-4 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','blstm-B6seg-ch-inv-[500]-5.npz');evaluateCP kingqueen-blstm-nnhmm-5 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','blstm-B6seg-ch-inv-[500]-6.npz');evaluateCP kingqueen-blstm-nnhmm-6 CaroleKingQueen26List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% J-CaroleKingQueen - INV %%%%%%%%%%%%%%%%%%
@@ -262,33 +262,33 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% J-CaroleKingQueen - NN-HMM %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','mlp-J6seg-ch-inv-[500,500]-1.pkl');evaluateCP J-kingqueen-mlp-nnhmm-1 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','mlp-J6seg-ch-inv-[500,500]-2.pkl');evaluateCP J-kingqueen-mlp-nnhmm-2 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','mlp-J6seg-ch-inv-[500,500]-3.pkl');evaluateCP J-kingqueen-mlp-nnhmm-3 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','mlp-J6seg-ch-inv-[500,500]-4.pkl');evaluateCP J-kingqueen-mlp-nnhmm-4 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','mlp-J6seg-ch-inv-[500,500]-5.pkl');evaluateCP J-kingqueen-mlp-nnhmm-5 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','mlp-J6seg-ch-inv-[500,500]-6.pkl');evaluateCP J-kingqueen-mlp-nnhmm-6 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-1.pkl');evaluateCP J-kingqueen-mlp-nnhmm-1 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-2.pkl');evaluateCP J-kingqueen-mlp-nnhmm-2 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-3.pkl');evaluateCP J-kingqueen-mlp-nnhmm-3 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-4.pkl');evaluateCP J-kingqueen-mlp-nnhmm-4 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-5.pkl');evaluateCP J-kingqueen-mlp-nnhmm-5 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-6.pkl');evaluateCP J-kingqueen-mlp-nnhmm-6 CaroleKingQueen26List.txt;
 % 
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','dbn-J6seg-ch-inv-[500,500]-1.pkl');evaluateCP J-kingqueen-dbn-nnhmm-1 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','dbn-J6seg-ch-inv-[500,500]-2.pkl');evaluateCP J-kingqueen-dbn-nnhmm-2 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','dbn-J6seg-ch-inv-[500,500]-3.pkl');evaluateCP J-kingqueen-dbn-nnhmm-3 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','dbn-J6seg-ch-inv-[500,500]-4.pkl');evaluateCP J-kingqueen-dbn-nnhmm-4 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','dbn-J6seg-ch-inv-[500,500]-5.pkl');evaluateCP J-kingqueen-dbn-nnhmm-5 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','dbn-J6seg-ch-inv-[500,500]-6.pkl');evaluateCP J-kingqueen-dbn-nnhmm-6 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-1.pkl');evaluateCP J-kingqueen-dbn-nnhmm-1 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-2.pkl');evaluateCP J-kingqueen-dbn-nnhmm-2 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-3.pkl');evaluateCP J-kingqueen-dbn-nnhmm-3 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-4.pkl');evaluateCP J-kingqueen-dbn-nnhmm-4 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-5.pkl');evaluateCP J-kingqueen-dbn-nnhmm-5 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-6.pkl');evaluateCP J-kingqueen-dbn-nnhmm-6 CaroleKingQueen26List.txt;
 % 
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','lstm-J6seg-ch-inv-[500]-1.npz');evaluateCP J-kingqueen-lstm-nnhmm-1 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','lstm-J6seg-ch-inv-[500]-2.npz');evaluateCP J-kingqueen-lstm-nnhmm-2 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','lstm-J6seg-ch-inv-[500]-3.npz');evaluateCP J-kingqueen-lstm-nnhmm-3 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','lstm-J6seg-ch-inv-[500]-4.npz');evaluateCP J-kingqueen-lstm-nnhmm-4 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','lstm-J6seg-ch-inv-[500]-5.npz');evaluateCP J-kingqueen-lstm-nnhmm-5 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','lstm-J6seg-ch-inv-[500]-6.npz');evaluateCP J-kingqueen-lstm-nnhmm-6 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','lstm-J6seg-ch-inv-[500]-1.npz');evaluateCP J-kingqueen-lstm-nnhmm-1 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','lstm-J6seg-ch-inv-[500]-2.npz');evaluateCP J-kingqueen-lstm-nnhmm-2 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','lstm-J6seg-ch-inv-[500]-3.npz');evaluateCP J-kingqueen-lstm-nnhmm-3 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','lstm-J6seg-ch-inv-[500]-4.npz');evaluateCP J-kingqueen-lstm-nnhmm-4 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','lstm-J6seg-ch-inv-[500]-5.npz');evaluateCP J-kingqueen-lstm-nnhmm-5 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','lstm-J6seg-ch-inv-[500]-6.npz');evaluateCP J-kingqueen-lstm-nnhmm-6 CaroleKingQueen26List.txt;
 % 
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','blstm-J6seg-ch-inv-[500]-1.npz');evaluateCP J-kingqueen-blstm-nnhmm-1 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','blstm-J6seg-ch-inv-[500]-2.npz');evaluateCP J-kingqueen-blstm-nnhmm-2 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','blstm-J6seg-ch-inv-[500]-3.npz');evaluateCP J-kingqueen-blstm-nnhmm-3 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','blstm-J6seg-ch-inv-[500]-4.npz');evaluateCP J-kingqueen-blstm-nnhmm-4 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','blstm-J6seg-ch-inv-[500]-5.npz');evaluateCP J-kingqueen-blstm-nnhmm-5 CaroleKingQueen26List.txt;
-% tangkkace('30','CaroleKingQueen26List.txt','1','x.mat','blstm-J6seg-ch-inv-[500]-6.npz');evaluateCP J-kingqueen-blstm-nnhmm-6 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','blstm-J6seg-ch-inv-[500]-1.npz');evaluateCP J-kingqueen-blstm-nnhmm-1 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','blstm-J6seg-ch-inv-[500]-2.npz');evaluateCP J-kingqueen-blstm-nnhmm-2 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','blstm-J6seg-ch-inv-[500]-3.npz');evaluateCP J-kingqueen-blstm-nnhmm-3 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','blstm-J6seg-ch-inv-[500]-4.npz');evaluateCP J-kingqueen-blstm-nnhmm-4 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','blstm-J6seg-ch-inv-[500]-5.npz');evaluateCP J-kingqueen-blstm-nnhmm-5 CaroleKingQueen26List.txt;
+% tangkkace('30','CaroleKingQueen26List.txt','1','CaroleKingQueen26ListBUB.mat','blstm-J6seg-ch-inv-[500]-6.npz');evaluateCP J-kingqueen-blstm-nnhmm-6 CaroleKingQueen26List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% J-TheBeatles - INV %%%%%%%%%%%%%%%%%%
@@ -342,33 +342,33 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% J-TheBeatles - NN-HMM %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','mlp-J6seg-ch-inv-[500,500]-1.pkl');evaluateCP J-thebeatles-mlp-nnhmm-1 TheBeatles180List.txt;
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','mlp-J6seg-ch-inv-[500,500]-2.pkl');evaluateCP J-thebeatles-mlp-nnhmm-2 TheBeatles180List.txt;
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','mlp-J6seg-ch-inv-[500,500]-3.pkl');evaluateCP J-thebeatles-mlp-nnhmm-3 TheBeatles180List.txt;
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','mlp-J6seg-ch-inv-[500,500]-4.pkl');evaluateCP J-thebeatles-mlp-nnhmm-4 TheBeatles180List.txt;
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','mlp-J6seg-ch-inv-[500,500]-5.pkl');evaluateCP J-thebeatles-mlp-nnhmm-5 TheBeatles180List.txt;
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','mlp-J6seg-ch-inv-[500,500]-6.pkl');evaluateCP J-thebeatles-mlp-nnhmm-6 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-1.pkl');evaluateCP J-thebeatles-mlp-nnhmm-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-2.pkl');evaluateCP J-thebeatles-mlp-nnhmm-2 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-3.pkl');evaluateCP J-thebeatles-mlp-nnhmm-3 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-4.pkl');evaluateCP J-thebeatles-mlp-nnhmm-4 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-5.pkl');evaluateCP J-thebeatles-mlp-nnhmm-5 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','mlp-J6seg-ch-inv-[500,500]-6.pkl');evaluateCP J-thebeatles-mlp-nnhmm-6 TheBeatles180List.txt;
 % 
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','dbn-J6seg-ch-inv-[500,500]-1.pkl');evaluateCP J-thebeatles-dbn-nnhmm-1 TheBeatles180List.txt;
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','dbn-J6seg-ch-inv-[500,500]-2.pkl');evaluateCP J-thebeatles-dbn-nnhmm-2 TheBeatles180List.txt;
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','dbn-J6seg-ch-inv-[500,500]-3.pkl');evaluateCP J-thebeatles-dbn-nnhmm-3 TheBeatles180List.txt;
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','dbn-J6seg-ch-inv-[500,500]-4.pkl');evaluateCP J-thebeatles-dbn-nnhmm-4 TheBeatles180List.txt;
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','dbn-J6seg-ch-inv-[500,500]-5.pkl');evaluateCP J-thebeatles-dbn-nnhmm-5 TheBeatles180List.txt;
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','dbn-J6seg-ch-inv-[500,500]-6.pkl');evaluateCP J-thebeatles-dbn-nnhmm-6 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-1.pkl');evaluateCP J-thebeatles-dbn-nnhmm-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-2.pkl');evaluateCP J-thebeatles-dbn-nnhmm-2 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-3.pkl');evaluateCP J-thebeatles-dbn-nnhmm-3 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-4.pkl');evaluateCP J-thebeatles-dbn-nnhmm-4 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-5.pkl');evaluateCP J-thebeatles-dbn-nnhmm-5 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','dbn-J6seg-ch-inv-[500,500]-6.pkl');evaluateCP J-thebeatles-dbn-nnhmm-6 TheBeatles180List.txt;
 % 
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','lstm-J6seg-ch-inv-[500]-1.npz');evaluateCP J-thebeatles-lstm-nnhmm-1 TheBeatles180List.txt;
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','lstm-J6seg-ch-inv-[500]-2.npz');evaluateCP J-thebeatles-lstm-nnhmm-2 TheBeatles180List.txt;
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','lstm-J6seg-ch-inv-[500]-3.npz');evaluateCP J-thebeatles-lstm-nnhmm-3 TheBeatles180List.txt;
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','lstm-J6seg-ch-inv-[500]-4.npz');evaluateCP J-thebeatles-lstm-nnhmm-4 TheBeatles180List.txt;
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','lstm-J6seg-ch-inv-[500]-5.npz');evaluateCP J-thebeatles-lstm-nnhmm-5 TheBeatles180List.txt;
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','lstm-J6seg-ch-inv-[500]-6.npz');evaluateCP J-thebeatles-lstm-nnhmm-6 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','lstm-J6seg-ch-inv-[500]-1.npz');evaluateCP J-thebeatles-lstm-nnhmm-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','lstm-J6seg-ch-inv-[500]-2.npz');evaluateCP J-thebeatles-lstm-nnhmm-2 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','lstm-J6seg-ch-inv-[500]-3.npz');evaluateCP J-thebeatles-lstm-nnhmm-3 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','lstm-J6seg-ch-inv-[500]-4.npz');evaluateCP J-thebeatles-lstm-nnhmm-4 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','lstm-J6seg-ch-inv-[500]-5.npz');evaluateCP J-thebeatles-lstm-nnhmm-5 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','lstm-J6seg-ch-inv-[500]-6.npz');evaluateCP J-thebeatles-lstm-nnhmm-6 TheBeatles180List.txt;
 % 
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','blstm-J6seg-ch-inv-[500]-1.npz');evaluateCP J-thebeatles-blstm-nnhmm-1 TheBeatles180List.txt;
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','blstm-J6seg-ch-inv-[500]-2.npz');evaluateCP J-thebeatles-blstm-nnhmm-2 TheBeatles180List.txt;
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','blstm-J6seg-ch-inv-[500]-3.npz');evaluateCP J-thebeatles-blstm-nnhmm-3 TheBeatles180List.txt;
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','blstm-J6seg-ch-inv-[500]-4.npz');evaluateCP J-thebeatles-blstm-nnhmm-4 TheBeatles180List.txt;
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','blstm-J6seg-ch-inv-[500]-5.npz');evaluateCP J-thebeatles-blstm-nnhmm-5 TheBeatles180List.txt;
-% tangkkace('30','TheBeatles180List.txt','1','x.mat','blstm-J6seg-ch-inv-[500]-6.npz');evaluateCP J-thebeatles-blstm-nnhmm-6 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','blstm-J6seg-ch-inv-[500]-1.npz');evaluateCP J-thebeatles-blstm-nnhmm-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','blstm-J6seg-ch-inv-[500]-2.npz');evaluateCP J-thebeatles-blstm-nnhmm-2 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','blstm-J6seg-ch-inv-[500]-3.npz');evaluateCP J-thebeatles-blstm-nnhmm-3 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','blstm-J6seg-ch-inv-[500]-4.npz');evaluateCP J-thebeatles-blstm-nnhmm-4 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','blstm-J6seg-ch-inv-[500]-5.npz');evaluateCP J-thebeatles-blstm-nnhmm-5 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','1','TheBeatles180ListBUB.mat','blstm-J6seg-ch-inv-[500]-6.npz');evaluateCP J-thebeatles-blstm-nnhmm-6 TheBeatles180List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% J-CNPop - ch-SongNN %%%%%%%%%%%%%%%%%%
@@ -402,6 +402,108 @@
 % tangkkace('30','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','bctc-Jsong-ch-noinv-i.npz');evaluateCP thebeatles-ch-bctc-noinv TheBeatles180List.txt;
 % tangkkace('30','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','bctc-Jsong-ns-noinv-i.npz');evaluateCP thebeatles-ns-bctc-noinv TheBeatles180List.txt;
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%% J-CNPop - ns-NN-HMM %%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% tangkkace('30','CNPop20List.txt','5','CNPop20ListBUB','mlp-J6seg-ns-inv-[800,800]-1.pkl');evaluateCP cnpop-ns-mlp-nnhmm-1 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','5','CNPop20ListBUB','mlp-J6seg-ns-inv-[800,800]-2.pkl');evaluateCP cnpop-ns-mlp-nnhmm-2 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','5','CNPop20ListBUB','mlp-J6seg-ns-inv-[800,800]-3.pkl');evaluateCP cnpop-ns-mlp-nnhmm-3 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','5','CNPop20ListBUB','mlp-J6seg-ns-inv-[800,800]-4.pkl');evaluateCP cnpop-ns-mlp-nnhmm-4 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','5','CNPop20ListBUB','mlp-J6seg-ns-inv-[800,800]-5.pkl');evaluateCP cnpop-ns-mlp-nnhmm-5 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','5','CNPop20ListBUB','mlp-J6seg-ns-inv-[800,800]-6.pkl');evaluateCP cnpop-ns-mlp-nnhmm-6 CNPop20List.txt;
+% 
+% tangkkace('30','CNPop20List.txt','5','CNPop20ListBUB','dbn-J6seg-ns-inv-[800,800]-1.pkl');evaluateCP cnpop-ns-dbn-nnhmm-1 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','5','CNPop20ListBUB','dbn-J6seg-ns-inv-[800,800]-2.pkl');evaluateCP cnpop-ns-dbn-nnhmm-2 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','5','CNPop20ListBUB','dbn-J6seg-ns-inv-[800,800]-3.pkl');evaluateCP cnpop-ns-dbn-nnhmm-3 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','5','CNPop20ListBUB','dbn-J6seg-ns-inv-[800,800]-4.pkl');evaluateCP cnpop-ns-dbn-nnhmm-4 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','5','CNPop20ListBUB','dbn-J6seg-ns-inv-[800,800]-5.pkl');evaluateCP cnpop-ns-dbn-nnhmm-5 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','5','CNPop20ListBUB','dbn-J6seg-ns-inv-[800,800]-6.pkl');evaluateCP cnpop-ns-dbn-nnhmm-6 CNPop20List.txt;
+% 
+% tangkkace('30','CNPop20List.txt','5','CNPop20ListBUB','lstm-J6seg-ns-inv-[800]-1.npz');evaluateCP cnpop-ns-lstm-nnhmm-1 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','5','CNPop20ListBUB','lstm-J6seg-ns-inv-[800]-2.npz');evaluateCP cnpop-ns-lstm-nnhmm-2 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','5','CNPop20ListBUB','blstm-J6seg-ns-inv-[800]-1.npz');evaluateCP cnpop-ns-blstm-nnhmm-1 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','5','CNPop20ListBUB','blstm-J6seg-ns-inv-[800]-2.npz');evaluateCP cnpop-ns-blstm-nnhmm-2 CNPop20List.txt;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%% J-CNPop - ns-seg-HMM %%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% tangkkace('30','CNPop20List.txt','6','CNPop20ListBUB','mlp-J6seg-ns-inv-[800,800]-1.pkl');evaluateCP cnpop-ns-mlp-1 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','6','CNPop20ListBUB','mlp-J6seg-ns-inv-[800,800]-2.pkl');evaluateCP cnpop-ns-mlp-2 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','6','CNPop20ListBUB','mlp-J6seg-ns-inv-[800,800]-3.pkl');evaluateCP cnpop-ns-mlp-3 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','6','CNPop20ListBUB','mlp-J6seg-ns-inv-[800,800]-4.pkl');evaluateCP cnpop-ns-mlp-4 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','6','CNPop20ListBUB','mlp-J6seg-ns-inv-[800,800]-5.pkl');evaluateCP cnpop-ns-mlp-5 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','6','CNPop20ListBUB','mlp-J6seg-ns-inv-[800,800]-6.pkl');evaluateCP cnpop-ns-mlp-6 CNPop20List.txt;
+% 
+% tangkkace('30','CNPop20List.txt','6','CNPop20ListBUB','dbn-J6seg-ns-inv-[800,800]-1.pkl');evaluateCP cnpop-ns-dbn-1 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','6','CNPop20ListBUB','dbn-J6seg-ns-inv-[800,800]-2.pkl');evaluateCP cnpop-ns-dbn-2 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','6','CNPop20ListBUB','dbn-J6seg-ns-inv-[800,800]-3.pkl');evaluateCP cnpop-ns-dbn-3 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','6','CNPop20ListBUB','dbn-J6seg-ns-inv-[800,800]-4.pkl');evaluateCP cnpop-ns-dbn-4 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','6','CNPop20ListBUB','dbn-J6seg-ns-inv-[800,800]-5.pkl');evaluateCP cnpop-ns-dbn-5 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','6','CNPop20ListBUB','dbn-J6seg-ns-inv-[800,800]-6.pkl');evaluateCP cnpop-ns-dbn-6 CNPop20List.txt;
+
+% tangkkace('30','CNPop20List.txt','6','CNPop20ListBUB','knn-J6seg-ns-inv-1.pkl');evaluateCP cnpop-ns-knn-1 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','6','CNPop20ListBUB','knn-J6seg-ns-inv-2.pkl');evaluateCP cnpop-ns-knn-2 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','6','CNPop20ListBUB','knn-J6seg-ns-inv-3.pkl');evaluateCP cnpop-ns-knn-3 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','6','CNPop20ListBUB','svm-J6seg-ns-inv-1.pkl');evaluateCP cnpop-ns-svm-1 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','6','CNPop20ListBUB','svm-J6seg-ns-inv-2.pkl');evaluateCP cnpop-ns-svm-2 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','6','CNPop20ListBUB','svm-J6seg-ns-inv-3.pkl');evaluateCP cnpop-ns-svm-3 CNPop20List.txt;
+
+% 
+% tangkkace('30','CNPop20List.txt','6','CNPop20ListBUB','lstm-J6seg-ns-inv-[800]-1.npz');evaluateCP cnpop-ns-lstm-1 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','6','CNPop20ListBUB','lstm-J6seg-ns-inv-[800]-2.npz');evaluateCP cnpop-ns-lstm-2 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','6','CNPop20ListBUB','blstm-J6seg-ns-inv-[800]-1.npz');evaluateCP cnpop-ns-blstm-1 CNPop20List.txt;
+% tangkkace('30','CNPop20List.txt','6','CNPop20ListBUB','blstm-J6seg-ns-inv-[800]-2.npz');evaluateCP cnpop-ns-blstm-2 CNPop20List.txt;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%% J-TheBealtes - ns-NN-HMM %%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% tangkkace('30','TheBeatles180List.txt','5','TheBeatles180ListBUB','mlp-J6seg-ns-inv-[800,800]-1.pkl');evaluateCP thebeatles-ns-mlp-nnhmm-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','5','TheBeatles180ListBUB','mlp-J6seg-ns-inv-[800,800]-2.pkl');evaluateCP thebeatles-ns-mlp-nnhmm-2 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','5','TheBeatles180ListBUB','mlp-J6seg-ns-inv-[800,800]-3.pkl');evaluateCP thebeatles-ns-mlp-nnhmm-3 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','5','TheBeatles180ListBUB','mlp-J6seg-ns-inv-[800,800]-4.pkl');evaluateCP thebeatles-ns-mlp-nnhmm-4 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','5','TheBeatles180ListBUB','mlp-J6seg-ns-inv-[800,800]-5.pkl');evaluateCP thebeatles-ns-mlp-nnhmm-5 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','5','TheBeatles180ListBUB','mlp-J6seg-ns-inv-[800,800]-6.pkl');evaluateCP thebeatles-ns-mlp-nnhmm-6 TheBeatles180List.txt;
+
+% tangkkace('30','TheBeatles180List.txt','5','TheBeatles180ListBUB','dbn-J6seg-ns-inv-[800,800]-1.pkl');evaluateCP thebeatles-ns-dbn-nnhmm-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','5','TheBeatles180ListBUB','dbn-J6seg-ns-inv-[800,800]-2.pkl');evaluateCP thebeatles-ns-dbn-nnhmm-2 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','5','TheBeatles180ListBUB','dbn-J6seg-ns-inv-[800,800]-3.pkl');evaluateCP thebeatles-ns-dbn-nnhmm-3 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','5','TheBeatles180ListBUB','dbn-J6seg-ns-inv-[800,800]-4.pkl');evaluateCP thebeatles-ns-dbn-nnhmm-4 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','5','TheBeatles180ListBUB','dbn-J6seg-ns-inv-[800,800]-5.pkl');evaluateCP thebeatles-ns-dbn-nnhmm-5 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','5','TheBeatles180ListBUB','dbn-J6seg-ns-inv-[800,800]-6.pkl');evaluateCP thebeatles-ns-dbn-nnhmm-6 TheBeatles180List.txt;
+% 
+% tangkkace('30','TheBeatles180List.txt','5','TheBeatles180ListBUB','lstm-J6seg-ns-inv-[800]-1.npz');evaluateCP thebeatles-ns-lstm-nnhmm-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','5','TheBeatles180ListBUB','lstm-J6seg-ns-inv-[800]-2.npz');evaluateCP thebeatles-ns-lstm-nnhmm-2 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','5','TheBeatles180ListBUB','blstm-J6seg-ns-inv-[800]-1.npz');evaluateCP thebeatles-ns-blstm-nnhmm-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','5','TheBeatles180ListBUB','blstm-J6seg-ns-inv-[800]-2.npz');evaluateCP thebeatles-ns-blstm-nnhmm-2 TheBeatles180List.txt;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%% J-TheBealtes - ns-seg-HMM %%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% tangkkace('30','TheBeatles180List.txt','6','TheBeatles180ListBUB','mlp-J6seg-ns-inv-[800,800]-1.pkl');evaluateCP thebeatles-ns-mlp-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','6','TheBeatles180ListBUB','mlp-J6seg-ns-inv-[800,800]-2.pkl');evaluateCP thebeatles-ns-mlp-2 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','6','TheBeatles180ListBUB','mlp-J6seg-ns-inv-[800,800]-3.pkl');evaluateCP thebeatles-ns-mlp-3 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','6','TheBeatles180ListBUB','mlp-J6seg-ns-inv-[800,800]-4.pkl');evaluateCP thebeatles-ns-mlp-4 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','6','TheBeatles180ListBUB','mlp-J6seg-ns-inv-[800,800]-5.pkl');evaluateCP thebeatles-ns-mlp-5 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','6','TheBeatles180ListBUB','mlp-J6seg-ns-inv-[800,800]-6.pkl');evaluateCP thebeatles-ns-mlp-6 TheBeatles180List.txt;
+% 
+% tangkkace('30','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-J6seg-ns-inv-[800,800]-1.pkl');evaluateCP thebeatles-ns-dbn-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-J6seg-ns-inv-[800,800]-2.pkl');evaluateCP thebeatles-ns-dbn-2 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-J6seg-ns-inv-[800,800]-3.pkl');evaluateCP thebeatles-ns-dbn-3 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-J6seg-ns-inv-[800,800]-4.pkl');evaluateCP thebeatles-ns-dbn-4 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-J6seg-ns-inv-[800,800]-5.pkl');evaluateCP thebeatles-ns-dbn-5 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-J6seg-ns-inv-[800,800]-6.pkl');evaluateCP thebeatles-ns-dbn-6 TheBeatles180List.txt;
+% 
+% tangkkace('30','TheBeatles180List.txt','6','TheBeatles180ListBUB','knn-J6seg-ns-inv-1.pkl');evaluateCP thebeatles-ns-knn-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','6','TheBeatles180ListBUB','knn-J6seg-ns-inv-2.pkl');evaluateCP thebeatles-ns-knn-2 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','6','TheBeatles180ListBUB','knn-J6seg-ns-inv-3.pkl');evaluateCP thebeatles-ns-knn-3 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','6','TheBeatles180ListBUB','svm-J6seg-ns-inv-1.pkl');evaluateCP thebeatles-ns-svm-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','6','TheBeatles180ListBUB','svm-J6seg-ns-inv-2.pkl');evaluateCP thebeatles-ns-svm-2 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','6','TheBeatles180ListBUB','svm-J6seg-ns-inv-3.pkl');evaluateCP thebeatles-ns-svm-3 TheBeatles180List.txt;
+% 
+% tangkkace('30','TheBeatles180List.txt','6','TheBeatles180ListBUB','lstm-J6seg-ns-inv-[800]-1.npz');evaluateCP thebeatles-ns-lstm-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','6','TheBeatles180ListBUB','lstm-J6seg-ns-inv-[800]-2.npz');evaluateCP thebeatles-ns-lstm-2 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','6','TheBeatles180ListBUB','blstm-J6seg-ns-inv-[800]-1.npz');evaluateCP thebeatles-ns-blstm-1 TheBeatles180List.txt;
+% tangkkace('30','TheBeatles180List.txt','6','TheBeatles180ListBUB','blstm-J6seg-ns-inv-[800]-2.npz');evaluateCP thebeatles-ns-blstm-2 TheBeatles180List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Spectrogram Data Gen - SongNN %%%%%%%%%%%%%%%%%%
@@ -439,3 +541,5 @@
 
 % tangkkace('30','tempList.txt','-2','tempListBUBns.mat');
 % tangkkace('30','tempList.txt','4','tempListBUBns.mat','bctc-Jsong-ns-no7-i.npz');evaluateCP temp-ns-bctc-no7 tempList.txt;
+% tangkkace('30','tempList.txt','5','tempListBUB','mlp-J6seg-ns-inv-[800,800]-5.pkl');evaluateCP temp-test tempList.txt;
+% tangkkace('30','tempList.txt','6','tempListBUB','mlp-J6seg-ns-inv-[800,800]-5.pkl');evaluateCP temp-test tempList.txt;

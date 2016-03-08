@@ -1,4 +1,4 @@
-function [rootgram, bassgram, treblegram, bdrys] = nn1Decode(chordmode, model, beparam, dbn2param, rawbasegram, rawuppergram, bdrys)
+function [rootgram, bassgram, treblegram, bdrys] = nn5Decode(chordmode, model, beparam, dbn2param, ns, bdrys)
 
 display('chord decoding...');
 
@@ -12,7 +12,7 @@ elseif ~isempty(strfind(model,'-no7'))
 end
 
 bnet4 = dbnSetup4(dbn2param, nchords);
-chordogram = computeNNChordogram(rawbasegram, rawuppergram, chordmode, model, win);
+chordogram = computeNSChordogram(ns, chordmode, model, win);
 [chordogram, ~] = normalizeGram(chordogram, inf);
 [rootgram, bassgram, treblegram] = dbnInference4(bnet4, chordmode, chordogram, nchords);
 

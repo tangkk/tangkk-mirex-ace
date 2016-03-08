@@ -14,6 +14,7 @@ tline = fgetl(fe);
 
 savetmp = str2double(savetmp);
 
+% load presaved matrice
 if savetmp == -1 % save tmp
     rawbasegramSet = {};
     rawuppergramSet = {};
@@ -31,8 +32,16 @@ if savetmp == -3
     endtimeSet = {};
     saveidx = 1;
 end
-if (savetmp == 2 || savetmp == 3 || savetmp == 4)
+if (savetmp == 1 || savetmp == 2 || savetmp == 3 || savetmp == 4)
     load(loadtmp);
+    loadidx = 1;
+end
+if (savetmp == 5 || savetmp == 6)
+    % load both BUB and BUBns
+    loadtmpch = [loadtmp '.mat'];
+    loadtmpns = [loadtmp 'ns.mat'];
+    load(loadtmpch);
+    load(loadtmpns);
     loadidx = 1;
 end
 
@@ -70,7 +79,7 @@ while ischar(tline)
         saveidx = saveidx + 1;
         tline = fgetl(fe);
         display(strcat('finish saving rawbasegram, rawuppergram, bdrys of ...',songtitle, ' !'));
-        continue;
+        continue; 
     elseif savetmp == 0 % normal decode frontend + backend
         display('frontend...');
         [bdrys, basegram, uppergram, rawbasegram, rawuppergram, endtime] = frontEndDecode(inputpath, feparam, 0, 0);
@@ -78,8 +87,10 @@ while ischar(tline)
         [rootgram, bassgram, treblegram, bdrys] = backEndDecode(chordmode, beparam, dbnparam, dbn2param,...
         basegram, uppergram, rawbasegram, rawuppergram, bdrys, 0, 0);
     elseif savetmp == 1 % type-I decode (ch fix model with HMM backend)
-        display('frontend...');
-        [bdrys, basegram, uppergram, rawbasegram, rawuppergram, endtime] = frontEndDecode(inputpath, feparam, 0, 0);
+        rawbasegram = rawbasegramSet{loadidx};
+        rawuppergram = rawuppergramSet{loadidx};
+        bdrys = 1:size(rawbasegram,2);
+        loadidx = loadidx + 1;
         display('ch-NN-HMM backend...');
         [rootgram, bassgram, treblegram, bdrys] = nn1Decode(chordmode, model, beparam, dbn2param, rawbasegram, rawuppergram, bdrys);
     elseif savetmp == 2 % type-II decode (ch fix model with segmentation information provided by baseline method)
@@ -105,6 +116,20 @@ while ischar(tline)
         loadidx = loadidx + 1;
         display('ns-song-RNN backend...');
         [rootgram, bassgram, treblegram, bdrys] = nn4Decode(chordmode, model, beparam, ns, bdrys);
+    elseif savetmp == 5 % type-V decode (ns fix model with HMM backend)
+        ns = nsSet{loadidx};
+        bdrys = 1:size(ns,2);
+        endtime = endtimeSet{loadidx};
+        loadidx = loadidx + 1;
+        display('ns-NN-HMM backend...');
+        [rootgram, bassgram, treblegram, bdrys] = nn5Decode(chordmode, model, beparam, dbn2param, ns, bdrys);
+    elseif savetmp == 6 % type-VI decode (ns fix model with segmentation information provided by baseline method)
+        ns = nsSet{loadidx};
+        bdrys = bdrysSet{loadidx};
+        endtime = endtimeSet{loadidx};
+        loadidx = loadidx + 1;
+        display('ns-seg-NN backend...');
+        [rootgram, bassgram, treblegram] = nn6Decode(chordmode, ns, bdrys, model);
     end
     
     display('writing to output...');
