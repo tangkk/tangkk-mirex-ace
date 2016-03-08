@@ -419,7 +419,7 @@ def prepare_data(seqs, labels, maxlen=None, xdim=None):
     return x, x_mask, x_oh_mask, labels
 
 def load_data_varlen(dataset="../testnn.mat", valid_portion=0.1, test_portion=0.1, maxlen=None,
-               scaling=1, robust=0, format = 'matrix'):
+               scaling=1, robust=0, format = 'matrix', h5py=0):
     '''Loads the dataset
 
     :type dataset: String
@@ -445,9 +445,13 @@ def load_data_varlen(dataset="../testnn.mat", valid_portion=0.1, test_portion=0.
         f = open(dataset, 'rb')
         X,y = cPickle.load(f)
     elif format == 'matrix':
-        mat = sio.loadmat(dataset)
-        X = mat['X']
-        y = mat['y']
+        if h5py == 0:
+            mat = sio.loadmat(dataset)
+            X = mat['X']
+            y = mat['y']
+        else:
+            X = load_matrix_data_h5py(dataset,'X')
+            y = load_matrix_data_h5py(dataset,'y')
         y = y.T[0]
         y[y==max(y)]=0
 

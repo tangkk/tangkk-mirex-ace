@@ -159,6 +159,12 @@ run bctc.py ../data/ns/Jsong-ns-no7.pkl ../data/model/bctc-Jsong-ns-no7-i 252 73
 -------------------------------------------- noinv ---------------------------------------------------
 run bctc.py ../data/ns/Jsong-ns-noinv.pkl ../data/model/bctc-Jsong-ns-noinv-i 252 61 800
 '''
+
+# Experiment Group 4: Spectrogram and Waveform Level Deep Learning
+# training phase - random holdout 20% validation
+# each for 6 times, train the following models
+# - Jsong-inv-ctc-sg
+# - Jsong-inv-bctc-sg
 ---------------------------------------------------------------------------------------------------------------
 # *****************************************************
 # For -sg datasets (spectrogram level):

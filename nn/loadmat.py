@@ -6,6 +6,13 @@ import theano
 import theano.tensor as T
 import numpy
 from sklearn import preprocessing
+import h5py
+
+def load_matrix_data_h5py(dataset=None,name=None):
+    f = h5py.File(dataset)
+    mX = numpy.asarray(f[name]).T
+    # this returns X and y equivalent to that of sio's
+    return mX
 
 def standardize(train_X, valid_X, test_X, scaling=1, robust=0):
     # FIXME: standardization process can be performed:
@@ -84,7 +91,7 @@ def standardize(train_X, valid_X, test_X, scaling=1, robust=0):
     '''
     return train_X, valid_X, test_X
     
-def loadmat_noshare(dataset, shuffle=1, datasel=1, scaling=1, robust=0, norm=0):
+def loadmat_noshare(dataset, shuffle=1, datasel=1, scaling=1, robust=0, norm=0, h5py=0):
     ''' Loads the dataset
 
     :type dataset: string
@@ -98,15 +105,19 @@ def loadmat_noshare(dataset, shuffle=1, datasel=1, scaling=1, robust=0, norm=0):
     print '... loading data'
 
     # Load the dataset
-    mat = sio.loadmat(dataset)
-    
     # the data is in 'X' 'y' format, where 'X' contains the input features, and 'y' contains the output labels
-    X = mat['X']
+    if h5py == 0:
+        mat = sio.loadmat(dataset)
+        X = mat['X']
+        y = mat['y']
+    else:
+        X = load_matrix_data_h5py(dataset,'X')
+        y = load_matrix_data_h5py(dataset,'y')
+        
     # perform normalization if necessary
     if norm != 0:
         X = preprocessing.normalize(X,norm)
     
-    y = mat['y']
     # transpose the y so that it is a row array instead of a column array, which avoids the error:
     # "cannot convert type tensortype(int32, matrix) into type tensortype(int32,vector)"
     y = y.T[0]
@@ -167,7 +178,7 @@ def loadmat_noshare(dataset, shuffle=1, datasel=1, scaling=1, robust=0, norm=0):
     rval = [train_set, valid_set, test_set]
     return rval
 
-def loadmat(dataset, shuffle=1, datasel=1, scaling=1, robust=0, norm=0):
+def loadmat(dataset, shuffle=1, datasel=1, scaling=1, robust=0, norm=0, h5py=0):
     ''' Loads the dataset
 
     :type dataset: string
@@ -181,15 +192,19 @@ def loadmat(dataset, shuffle=1, datasel=1, scaling=1, robust=0, norm=0):
     print '... loading data'
 
     # Load the dataset
-    mat = sio.loadmat(dataset)
-    
     # the data is in 'X' 'y' format, where 'X' contains the input features, and 'y' contains the output labels
-    X = mat['X']
+    if h5py == 0:
+        mat = sio.loadmat(dataset)
+        X = mat['X']
+        y = mat['y']
+    else:
+        X = load_matrix_data_h5py(dataset,'X')
+        y = load_matrix_data_h5py(dataset,'y')
+    
     # perform normalization if necessary
     if norm != 0:
         X = preprocessing.normalize(X,norm)
-    
-    y = mat['y']
+
     # transpose the y so that it is a row array instead of a column array, which avoids the error:
     # "cannot convert type tensortype(int32, matrix) into type tensortype(int32,vector)"
     y = y.T[0]
