@@ -1,0 +1,41 @@
+0. The executables mentioned here can be found at:
+C:\Users\tangkk\Documents\GitHub\sonic-annotator\release
+
+1. First go to the directory containing the audio files to be processed, then:
+
+2. to perform transformation using sonic-annotator, use the following commands:
+sonic-annotator -s vamp:nnls-chroma:chordino > test.n3
+sonic-annotator -t test.n3 xxx.mp3 -w lab --lab-fill-ends
+(note that this equals to the default running:
+sonic-annotator -d vamp:nnls-chroma:chordino xxx.mp3 -w lab --lab-fill-ends)
+
+3. if want to process every files in the current directory:
+sonic-annotator -s vamp:nnls-chroma:chordino > test.n3
+sonic-annotator -t test.n3 ./ -r -w lab --lab-fill-ends
+
+4. then in order to conform with the naming convention, change the name of every output to be the same as the input audio files. run the '.bat' script (can be found in the following) to simply delete the last chars from each file names:
+(for ground-truth chord labels - 38 chars) rensafiles-gtchords.bat
+for /f "delims=" %%a in ('dir /b /a-d *.lab') do (
+    set "name=%%~na"
+    set "ext=%%~xa"
+    setlocal enabledelayedexpansion
+    set "nname=!name:~0,-38!"
+    ren "!name!!ext!" "!nname!!ext!"
+    endlocal
+)
+(for ground-truth tunings - 31 chars) rensafiles-gttunings.bat
+for /f "delims=" %%a in ('dir /b /a-d *.lab') do (
+    set "name=%%~na"
+    set "ext=%%~xa"
+    setlocal enabledelayedexpansion
+    set "nname=!name:~0,-31!"
+    ren "!name!!ext!" "!nname!!ext!"
+    endlocal
+)
+
+5. then delete the quotation marks around every chord labels, use the fart utility (need java environment)
+fart --remove *.lab \"
+
+6. move the *.lab files to the destination folder (./cd/folder/to/testcases/)
+
+7. run the transformCD.m matlab script to transform the chord labels to the formats that the evaluation tools can recognize

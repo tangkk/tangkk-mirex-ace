@@ -1,0 +1,59 @@
+*********************** use johan's tool to generate standard MIERX ACE evaluation results for single system*********************
+1. clone the MusOOEvaluator from git hub and recursively clone all the sub sources
+2. compile and build it
+3. put the .exe file into the matlab source tree and name it 'eval.exe'
+4. all done
+
+
+************************************use jaburgoyne's tool to compare different systems*******************************************
+1. clone the source code
+2. refer to the below email messages:
+
+I did, however, manage to get an R package together for Johan that will allow you to compute MIREX statistics for this and any preceding years. Clone it from here:
+
+   https://bitbucket.org/jaburgoyne/mirexace
+
+Then open a terminal as admin, navigate to the directory containing the source, and type `R CMD INSTALL .`
+(The dependencies are 'aod', 'Hmisc', 'geepack' and 'multcomp')
+
+Then you can use the following commands to get everything you need for the Wiki:
+
+library(mirexace) # To load the package.
+mirexace <- EvaluateACE([DATASET-DIRECTORY], “[VOCABULARY/SEGMENTATION]”) # To run the evaluations for a particular dataset and evaluation vocabulary/segmentation measure.
+summary(mirexace) # To print the comparisons in text (probably not necessary).
+plot(mirexace) # To plot boxplots and compact letter displays (definitely something for the Wiki).
+ACECor(mirexace) # To print a correlation matrix for the algorithms (probably not necessary).
+PlotACEClust(mirexace) # To plot the clustering tree of algorithms (maybe something for the Wiki?).
+ACEOutliers(mirexace) # To print a list of outliers (mostly for your curiosity).
+
+I think what you want is simply this:
+
+  mirexace <- EvaluateACE(".", "MajMin")
+
+When I speak of Johan's output directory, I don’t mean the “resultsMirexMajMin” directories but actually one level higher than that (usually name for the testing database).
+
+Then you run the command separately to check the different vocabularies:
+
+mirexace1 <- EvaluateACE(".", "Root")
+mirexace2 <- EvaluateACE(".", "MajMin")
+mirexace3 <- EvaluateACE(".", "MajMinBass")
+mirexace4 <- EvaluateACE(".", "Sevenths")
+mirexace5 <- EvaluateACE(".", "SeventhsBass")
+mirexace6 <- EvaluateACE(".", "Segmentation")
+
+plot(mirexace1,main="MirexRoot");
+plot(mirexace2,main="MajMin");
+plot(mirexace3,main="MajMinBass");
+plot(mirexace4,main="Sevenths");
+plot(mirexace5,main="SeventhsBass");
+plot(mirexace6,main="Segmentation");
+
+************************ Additional Information for jaburgoyne's tool ***************************
+The correct way to call this tool in practice is:
+1. prepare the data: create an evaluation folder, copy the results of different systems to be compared with to this folder, different results under the same category (such as resultsBass) should be merged in the same folder. For example, if there are two systems, then the two resultsBass folder of these two systems should be merged into one. This results in a folder containing only one level of sub-folders.
+
+2. remove all the .con.csv files
+
+3. open the R gui (probably R i386 under windows desktop). Select File-''change dir'' to change the current directory to evaluation folder directory.
+
+4. then run the commands as given in the above section to yield results
