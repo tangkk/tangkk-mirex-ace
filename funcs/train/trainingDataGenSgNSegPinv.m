@@ -8,7 +8,7 @@ function trainingDataGenSgNSegPinv(savename, gtList, nseg, noinv, no7)
 chordmode =  chordTypesGen;
 fe = fopen(gtList,'r');
 tline = fgetl(fe);
-nbin = 2048;
+nbin = 2049;
 
 % the size of the training data is unknown yet. Will grow.
 trainingDataX1 = zeros(1,nbin*nseg);
@@ -115,7 +115,7 @@ ntones = nnotes*3; % nsemitones = 3
 USR = 80; % upsampling rate
 % cirshift the matrix by first transform it to log-scale and then back to
 % linear scale
-LE = logFreqNoteProfile(ntones, fmin, fratio, USR, feparam.fs, feparam.wl/2);
+LE = logFreqNoteProfile(ntones, fmin, fratio, USR, feparam.fs, feparam.wl/2+1);
 PLE = pinv(LE);
 nsbin = 252;
 
