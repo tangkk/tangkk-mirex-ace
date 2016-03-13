@@ -21,12 +21,12 @@ datasel = 1
 robust = 0
 
 batch_size = 100
-pretraining_epochs=20
+pretraining_epochs=100
 pretrain_lr=0.001
 cdk=10
 usepersistent=True
 
-training_epochs=400
+training_epochs=1000
 finetune_lr=0.01
 L1_reg=0.0000
 L2_reg=0.0000

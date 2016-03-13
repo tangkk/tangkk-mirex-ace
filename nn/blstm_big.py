@@ -18,11 +18,11 @@ from acesongdb import load_data_varlen, prepare_data
 
 scaling=1
 use_dropout=True
-max_epochs = 500
+max_epochs = 1000
 batch_size = 100
 
-SEED = 123
-numpy.random.seed(SEED)
+# SEED = 123
+# numpy.random.seed(SEED)
 
 def numpy_floatX(data):
     return numpy.asarray(data, dtype=config.floatX)
@@ -463,7 +463,8 @@ def rmsprop(lr, tparams, grads, x, mask, oh_mask, y, cost):
 
 
 def build_model(tparams, options):
-    trng = RandomStreams(SEED)
+    # trng = RandomStreams(SEED)
+    trng = RandomStreams()
 
     # Used for dropout.
     use_noise = theano.shared(numpy_floatX(0.))

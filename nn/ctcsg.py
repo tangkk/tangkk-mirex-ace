@@ -14,7 +14,7 @@ from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 from acesongdb import load_data_song
 
 use_dropout=True
-max_epochs = 12000 # give it long enough time to train
+max_epochs = 120000 # give it long enough time to train
 batch_size = 500 # length of a sample training piece within a song in terms of number of frames
 
 # Set the random number generators' seeds for consistency

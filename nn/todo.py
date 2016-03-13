@@ -173,8 +173,14 @@ run bctc.py ../data/ns/Jsong-ns-noinv.pkl ../data/model/bctc-Jsong-ns-noinv-i 25
 '''
 # songwise
 run ctcsg.py ../data/sg/Jsong-sg-inv.pkl ../data/model/ctc-Jsong-sg-inv-i 2049 277 5000 800
-
 run bctcsg.py ../data/sg/Jsong-sg-inv.pkl ../data/model/bctc-Jsong-sg-inv-i 2049 277 5000 800
+'''
+'''
+Experiment Group 5
+# 6seg
+run dbn_big.py ../data/sg/CJ6seg-sg-inv.mat ../data/model/dbn-CJ6seg-sg-inv-[800,500]-i.pkl 800,500 grbm
+run blstm_big.py ../data/sg/CJ6seg-sg-inv.mat ../data/model/blstm-CJ6seg-sg-inv-[800,500]-i matrix 2048 800
+run mlp_big.py ../data/sg/CJ6seg-sg-inv.mat ../data/model/mlp-CJ6seg-sg-inv-[800,500]-i.pkl 800,500
 '''
 ---------------------------------------------------------------------------------------------------------------
 # *****************************************************

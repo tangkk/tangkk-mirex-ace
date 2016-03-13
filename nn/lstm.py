@@ -19,8 +19,6 @@ max_epochs = 500 # give it long enough time to train
 batch_size = 100
 
 # Set the random number generators' seeds for consistency
-SEED = 123
-numpy.random.seed(SEED)
 
 def numpy_floatX(data):
     return numpy.asarray(data, dtype=config.floatX)
@@ -384,7 +382,7 @@ def rmsprop(lr, tparams, grads, x, mask, oh_mask, y, cost):
 
 
 def build_model(tparams, options):
-    trng = RandomStreams(SEED)
+    trng = RandomStreams()
 
     # Used for dropout.
     use_noise = theano.shared(numpy_floatX(0.))
