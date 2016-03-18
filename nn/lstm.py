@@ -15,7 +15,7 @@ import sys
 
 scaling=1 
 use_dropout=True
-max_epochs = 500 # give it long enough time to train
+max_epochs = 50 # give it long enough time to train
 batch_size = 100
 
 # Set the random number generators' seeds for consistency

@@ -14,7 +14,7 @@ from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 from acesongdb import load_data_song
 
 use_dropout=True
-max_epochs = 10000 # give it long enough time to train
+max_epochs = 100000 # give it long enough time to train
 batch_size = 500 # length of a sample training piece within a song in terms of number of frames
 
 # Set the random number generators' seeds for consistency
@@ -616,8 +616,9 @@ def train_lstm(
             idx0 = numpy.random.randint(0,len(train[0]))
             
             batch_size_ = batch_size
-            while len(train[0][idx0]) < batch_size_:
+            while len(train[0][idx0]) <= batch_size_:
                 batch_size_ = batch_size_ / 2
+                
             idx1 = numpy.random.randint(0,len(train[0][idx0])-batch_size_) # 500 in our case
             
             uidx += 1

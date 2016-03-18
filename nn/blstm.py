@@ -18,7 +18,7 @@ from acesongdb import load_data_varlen, prepare_data
 
 scaling=1
 use_dropout=True
-max_epochs = 500
+max_epochs = 50
 batch_size = 100
 
 def numpy_floatX(data):

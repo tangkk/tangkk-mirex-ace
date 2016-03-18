@@ -16,7 +16,7 @@ datasel = 1
 robust = 0
 
 batch_size = 100
-n_epochs=400
+n_epochs=500
 learning_rate=0.01
 L1_reg=0.0000
 L2_reg=0.0000

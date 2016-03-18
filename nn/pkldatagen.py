@@ -1,6 +1,9 @@
-from acesongdb import pkl_data_nseg_h5py, pkl_data_framewise_h5py, pkl_data_nseg, pkl_data_framewise, pkl_data_varlen, pkl_data_varlen_h5py, pkl_data_matrix, pkl_data_matrix_h5py, pkl_data_waveform_h5py
+from acesongdb import pkl_data_nseg_h5py, pkl_data_framewise_h5py, pkl_data_nseg, pkl_data_framewise, pkl_data_varlen, pkl_data_varlen_h5py, pkl_data_matrix, pkl_data_waveform_h5py
 
 ####################################### ch ############################################
+# ymax = 421 # jazz
+# pkl_data_framewise('../data/ch/Jazzsong-ch-inv.mat','../data/ch/Jazzsong-ch-inv.pkl', ymax)
+
 # ymax = 277 #inv
 # pkl_data_framewise('../data/ch/Jsong-ch-inv.mat','../data/ch/Jsong-ch-inv.pkl', ymax)
 # pkl_data_framewise('../data/ch/Bsong-ch-inv.mat','../data/ch/Bsong-ch-inv.pkl', ymax)
@@ -32,6 +35,9 @@ from acesongdb import pkl_data_nseg_h5py, pkl_data_framewise_h5py, pkl_data_nseg
 # pkl_data_varlen('../data/ch/Bvarlen-ch-noinv.mat','../data/ch/B6varlen-ch-noinv.pkl',24,1)
 
 ####################################### ns ############################################
+# ymax = 421 #inv
+# pkl_data_framewise('../data/ns/Jazzsong-ns-inv.mat','../data/ns/Jazzsong-ns-inv.pkl', ymax)
+
 # ymax = 277 #inv
 # pkl_data_framewise_h5py('../data/ns/Jsong-ns-inv.mat','../data/ns/Jsong-ns-inv.pkl', ymax)
 # pkl_data_nseg_h5py('../data/ns/Jsong-ns-inv.mat','../data/ns/Jsong-6seg-ns-inv.pkl',6, ymax)
