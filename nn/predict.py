@@ -38,6 +38,8 @@ elif invtype == 'no7':
     nclass = 73
 elif invtype == 'noinv':
     nclass = 61
+elif invtype == 'jazz':
+    nclass = 421
     
 if nntype == 'svm' or nntype == 'knn':
     y_preds = predprobs(model,X)

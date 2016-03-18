@@ -43,6 +43,10 @@ elseif ~isempty(strfind(model,'-no7-')) || ~isempty(strfind(model,'No7'))
     invtype = 'no7';
     load('chordnames-no7.mat');
     chordnums = [chnames2chnums(chordnames, chordmode);'0:0'];
+elseif ~isempty(strfind(model,'-jazz-'))
+    invtype = 'jazz';
+    load('chordnames-jazz.mat');
+    chordnums = [chnames2chnums(chordnames, chordmode);'0:0'];
 end
 
 if isempty(strfind(model,'.txt')) % not ensemble model

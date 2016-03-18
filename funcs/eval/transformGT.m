@@ -2,7 +2,9 @@
 % evaluation tools
 
 
-target = './gt/JazzBook/';
+target = './temp/JazzGuitar/';
+load chordmode-jazz.mat;
+typecount = zeros(1,size(chordmode,2)+1);
 
 filelist = dir(target);
 
@@ -33,13 +35,24 @@ while ischar(tline)
         ninv = ninv + 1;
     end
     
+    % count the number of chord types
+    if strcmp(ch1,'N')
+        typecount(end) = typecount(end)+1;
+    else
+        strtoks = strsplit(ch1,':');
+        cch = strtoks{2};
+        chnum = tname2tnum(cch,chordmode);
+        if chnum > 0
+            typecount(chnum) = typecount(chnum)+1;
+        end
+    end
+    
     % get next line and append the endtime to the previous line
     tline = fgetl(fr);
     if ischar(tline)
         tokens = strsplit(tline,'\t');
         st2 = tokens{1};
         ch2 = tokens{2};
-
         newst1 = strcat(st1,st2,ch1);
         fprintf(fw,'%s\n',[st1 ' ' st2 ' ' ch1]);
     else
