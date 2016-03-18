@@ -49,7 +49,9 @@ ref/
 out/
 outcd/
 res/
+conf/
 data/
+temp/
 testdata/
 mirexace/
 nn/*.pyc
