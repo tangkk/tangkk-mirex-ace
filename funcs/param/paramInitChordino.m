@@ -6,7 +6,7 @@
 % enMajMin, enSixthMaj, enSixthMin, enSeventh, enMajBass, enMinBass,
 % enSeventhBass
 
-function [feparam, beparam, dbnparam, dbn2param, chordmode] = paramInit20()
+function [feparam, beparam, dbnparam, dbn2param, chordmode] = paramInitChordino()
 
 % ****** front-end control ****** %
 feparam = struct(...

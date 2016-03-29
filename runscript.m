@@ -566,49 +566,49 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Gaussian-HMM Baseline %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-tangkkace('JazzBaseline','GaryBurton7List.txt','0','0','0');evaluateJazz garyburton-baseline GaryBurton7List.txt;
+% tangkkace('JazzBaseline','GaryBurton7List.txt','0','0','0');evaluateJazz garyburton-baseline GaryBurton7List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Jazz - ch-seg-HMM %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-tangkkace('Jazz','GaryBurton7List.txt','2','GaryBurton7ListBUB.mat','mlp-Jazz6seg-ch-jazz-[500,500]-1.pkl');evaluateJazz garyburton-mlp-1 GaryBurton7List.txt;
-tangkkace('Jazz','GaryBurton7List.txt','2','GaryBurton7ListBUB.mat','mlp-Jazz6seg-ch-jazz-[500,500]-2.pkl');evaluateJazz garyburton-mlp-2 GaryBurton7List.txt;
-
-tangkkace('Jazz','GaryBurton7List.txt','2','GaryBurton7ListBUB.mat','dbn-Jazz6seg-ch-jazz-[500,500]-1.pkl');evaluateJazz garyburton-dbn-1 GaryBurton7List.txt;
-tangkkace('Jazz','GaryBurton7List.txt','2','GaryBurton7ListBUB.mat','dbn-Jazz6seg-ch-jazz-[500,500]-2.pkl');evaluateJazz garyburton-dbn-2 GaryBurton7List.txt;
-
-tangkkace('Jazz','GaryBurton7List.txt','2','GaryBurton7ListBUB.mat','blstm-Jazz6seg-ch-jazz-[500]-1.npz');evaluateJazz garyburton-blstm-1 GaryBurton7List.txt;
-tangkkace('Jazz','GaryBurton7List.txt','2','GaryBurton7ListBUB.mat','blstm-Jazz6seg-ch-jazz-[500]-2.npz');evaluateJazz garyburton-blstm-2 GaryBurton7List.txt;
-
-tangkkace('Jazz','GaryBurton7List.txt','2','GaryBurton7ListBUB.mat','svm-Jazz6seg-ch-jazz-1.pkl');evaluateJazz garyburton-svm-1 GaryBurton7List.txt;
-tangkkace('Jazz','GaryBurton7List.txt','2','GaryBurton7ListBUB.mat','svm-Jazz6seg-ch-jazz-2.pkl');evaluateJazz garyburton-svm-2 GaryBurton7List.txt;
+% tangkkace('Jazz','GaryBurton7List.txt','2','GaryBurton7ListBUB.mat','mlp-Jazz6seg-ch-jazz-[500,500]-1.pkl');evaluateJazz garyburton-mlp-1 GaryBurton7List.txt;
+% tangkkace('Jazz','GaryBurton7List.txt','2','GaryBurton7ListBUB.mat','mlp-Jazz6seg-ch-jazz-[500,500]-2.pkl');evaluateJazz garyburton-mlp-2 GaryBurton7List.txt;
+% 
+% tangkkace('Jazz','GaryBurton7List.txt','2','GaryBurton7ListBUB.mat','dbn-Jazz6seg-ch-jazz-[500,500]-1.pkl');evaluateJazz garyburton-dbn-1 GaryBurton7List.txt;
+% tangkkace('Jazz','GaryBurton7List.txt','2','GaryBurton7ListBUB.mat','dbn-Jazz6seg-ch-jazz-[500,500]-2.pkl');evaluateJazz garyburton-dbn-2 GaryBurton7List.txt;
+% 
+% tangkkace('Jazz','GaryBurton7List.txt','2','GaryBurton7ListBUB.mat','blstm-Jazz6seg-ch-jazz-[500]-1.npz');evaluateJazz garyburton-blstm-1 GaryBurton7List.txt;
+% tangkkace('Jazz','GaryBurton7List.txt','2','GaryBurton7ListBUB.mat','blstm-Jazz6seg-ch-jazz-[500]-2.npz');evaluateJazz garyburton-blstm-2 GaryBurton7List.txt;
+% 
+% tangkkace('Jazz','GaryBurton7List.txt','2','GaryBurton7ListBUB.mat','svm-Jazz6seg-ch-jazz-1.pkl');evaluateJazz garyburton-svm-1 GaryBurton7List.txt;
+% tangkkace('Jazz','GaryBurton7List.txt','2','GaryBurton7ListBUB.mat','svm-Jazz6seg-ch-jazz-2.pkl');evaluateJazz garyburton-svm-2 GaryBurton7List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Jazz - ch-ns-HMM %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-tangkkace('Jazz','GaryBurton7List.txt','6','GaryBurton7ListBUB','mlp-Jazz6seg-ns-jazz-[800,800]-1.pkl');evaluateJazz garyburton-ns-mlp-1 GaryBurton7List.txt;
-tangkkace('Jazz','GaryBurton7List.txt','6','GaryBurton7ListBUB','mlp-Jazz6seg-ns-jazz-[800,800]-2.pkl');evaluateJazz garyburton-ns-mlp-2 GaryBurton7List.txt;
-
-tangkkace('Jazz','GaryBurton7List.txt','6','GaryBurton7ListBUB','dbn-Jazz6seg-ns-jazz-[800,800]-1.pkl');evaluateJazz garyburton-ns-dbn-1 GaryBurton7List.txt;
-tangkkace('Jazz','GaryBurton7List.txt','6','GaryBurton7ListBUB','dbn-Jazz6seg-ns-jazz-[800,800]-2.pkl');evaluateJazz garyburton-ns-dbn-2 GaryBurton7List.txt;
-
-tangkkace('Jazz','GaryBurton7List.txt','6','GaryBurton7ListBUB','blstm-Jazz6seg-ns-jazz-[800]-1.npz');evaluateJazz garyburton-ns-blstm-1 GaryBurton7List.txt;
-tangkkace('Jazz','GaryBurton7List.txt','6','GaryBurton7ListBUB','blstm-Jazz6seg-ns-jazz-[800]-2.npz');evaluateJazz garyburton-ns-blstm-2 GaryBurton7List.txt;
-
-tangkkace('Jazz','GaryBurton7List.txt','6','GaryBurton7ListBUB','svm-Jazz6seg-ns-jazz-1.pkl');evaluateJazz garyburton-ns-svm-1 GaryBurton7List.txt;
-tangkkace('Jazz','GaryBurton7List.txt','6','GaryBurton7ListBUB','svm-Jazz6seg-ns-jazz-2.pkl');evaluateJazz garyburton-ns-svm-2 GaryBurton7List.txt;
+% tangkkace('Jazz','GaryBurton7List.txt','6','GaryBurton7ListBUB','mlp-Jazz6seg-ns-jazz-[800,800]-1.pkl');evaluateJazz garyburton-ns-mlp-1 GaryBurton7List.txt;
+% tangkkace('Jazz','GaryBurton7List.txt','6','GaryBurton7ListBUB','mlp-Jazz6seg-ns-jazz-[800,800]-2.pkl');evaluateJazz garyburton-ns-mlp-2 GaryBurton7List.txt;
+% 
+% tangkkace('Jazz','GaryBurton7List.txt','6','GaryBurton7ListBUB','dbn-Jazz6seg-ns-jazz-[800,800]-1.pkl');evaluateJazz garyburton-ns-dbn-1 GaryBurton7List.txt;
+% tangkkace('Jazz','GaryBurton7List.txt','6','GaryBurton7ListBUB','dbn-Jazz6seg-ns-jazz-[800,800]-2.pkl');evaluateJazz garyburton-ns-dbn-2 GaryBurton7List.txt;
+% 
+% tangkkace('Jazz','GaryBurton7List.txt','6','GaryBurton7ListBUB','blstm-Jazz6seg-ns-jazz-[800]-1.npz');evaluateJazz garyburton-ns-blstm-1 GaryBurton7List.txt;
+% tangkkace('Jazz','GaryBurton7List.txt','6','GaryBurton7ListBUB','blstm-Jazz6seg-ns-jazz-[800]-2.npz');evaluateJazz garyburton-ns-blstm-2 GaryBurton7List.txt;
+% 
+% tangkkace('Jazz','GaryBurton7List.txt','6','GaryBurton7ListBUB','svm-Jazz6seg-ns-jazz-1.pkl');evaluateJazz garyburton-ns-svm-1 GaryBurton7List.txt;
+% tangkkace('Jazz','GaryBurton7List.txt','6','GaryBurton7ListBUB','svm-Jazz6seg-ns-jazz-2.pkl');evaluateJazz garyburton-ns-svm-2 GaryBurton7List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Jazz - ch-songwise %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-tangkkace('Jazz','GaryBurton7List.txt','3','GaryBurton7ListBUB.mat','ctc-Jazzsong-ch-jazz-i.npz');evaluateJazz garyburton-ctc GaryBurton7List.txt;
-tangkkace('Jazz','GaryBurton7List.txt','3','GaryBurton7ListBUB.mat','bctc-Jazzsong-ch-jazz-i.npz');evaluateJazz garyburton-bctc GaryBurton7List.txt;
+% tangkkace('Jazz','GaryBurton7List.txt','3','GaryBurton7ListBUB.mat','ctc-Jazzsong-ch-jazz-i.npz');evaluateJazz garyburton-ctc GaryBurton7List.txt;
+% tangkkace('Jazz','GaryBurton7List.txt','3','GaryBurton7ListBUB.mat','bctc-Jazzsong-ch-jazz-i.npz');evaluateJazz garyburton-bctc GaryBurton7List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Jazz - ns-songwise %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-tangkkace('Jazz','GaryBurton7List.txt','4','GaryBurton7ListBUBns.mat','ctc-Jazzsong-ns-jazz-i.npz');evaluateJazz garyburton-ns-ctc GaryBurton7List.txt;
-tangkkace('Jazz','GaryBurton7List.txt','4','GaryBurton7ListBUBns.mat','bctc-Jazzsong-ns-jazz-i.npz');evaluateJazz garyburton-ns-bctc GaryBurton7List.txt;
+% tangkkace('Jazz','GaryBurton7List.txt','4','GaryBurton7ListBUBns.mat','ctc-Jazzsong-ns-jazz-i.npz');evaluateJazz garyburton-ns-ctc GaryBurton7List.txt;
+% tangkkace('Jazz','GaryBurton7List.txt','4','GaryBurton7ListBUBns.mat','bctc-Jazzsong-ns-jazz-i.npz');evaluateJazz garyburton-ns-bctc GaryBurton7List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Spectrogram Data Gen - SongNN %%%%%%%%%%%%%%%%%%
