@@ -6,6 +6,8 @@
 
 - first run arrangeout.m to arrange raw output files to this res/ folder. Different metrics are separated in different folders. (probably run ``arrangeout out/'')
 
+- creat a list of targets that you need to show (name it such as eval...List), the names in the list should be names of the result modules.
+
 - Then run showout.m to summerize results from low level to high level of different evaluation modules
 
 - copy the results in the comparison.xls file

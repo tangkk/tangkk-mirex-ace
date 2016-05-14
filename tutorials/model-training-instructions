@@ -1,4 +1,6 @@
- - go to the raw data folder in D:\, containing the raw datas such as trainingData-JayChou29-6seg-inv.mat (or oninv, or no7)
+- run matlab script in funcs\train to get raw training data from audios (example runs are shown in runscript.m)
+
+- go to the raw/ folder in D:\MIR\, containing the raw datas such as trainingData-JayChou29-6seg-inv.mat (or oninv, or no7)
 
 - load the raw data into matlab, use the ``savedata.m'' script to save the data you want, modify the script for different use. (whether is 1.6seg or song; 2. ch or ns; 3. inv, noinv or no7; 4. whether use -v7.3 (for ns song and varlen)) (the saved data will be at data/ch/ or data/ns/)
 

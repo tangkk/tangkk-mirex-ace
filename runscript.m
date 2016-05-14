@@ -23,6 +23,19 @@
 % tangkkace('29','TheBeatles180List.txt');evaluateCP thebeatles-29 TheBeatles180List.txt;
 
 % %%%%%%%%%%%%%%%%%%data generation processes%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%inv%%%%%%%%%%%%%%%
+% trainingDataGenVarLen('raw7.mat','JayChou29List.txt', 0)% encoded in -v7.3
+% trainingDataGenVarLen('raw8.mat','TheBeatles180List.txt', 0)% encoded in -v7.3
+% trainingDataGenSongWise('raw9.mat','JayChou29List.txt', 0)% e ncoded in -v7.3
+% trainingDataGenSongWise('raw1.mat','CNPopJayChou49List.txt', 0, 0)% encoded in -v7.3
+% trainingDataGenSongWise('raw2.mat','CJK75List.txt', 0, 0)% encoded in -v7.3
+% trainingDataGenNSeg('raw10.mat','CNPopJayChou49List.txt',6, 0, 0)% encoded in -v5
+% trainingDataGenNSeg('raw11.mat','CJK75List.txt',6, 0, 0)% encoded in -v5
+% trainingDataGenNSeg('raw12.mat','TheBeatles180List.txt',6, 0, 0)% encoded in -v7.3
+% trainingDataGenSongWise('raw6.mat','USPop195List.txt', 0, 0)% encoded in -v7.3
+% trainingDataGenNSeg('raw11.mat','USPop195List.txt',6, 0, 0)% encoded in -v7.3
+
+
 %%%%%%%%%%noinv%%%%%%%%%%%%%%%
 % trainingDataGenNSeg('raw1.mat','JayChou29List.txt',6, 1)% encoded in -v5
 % trainingDataGenVarLen('raw2.mat','JayChou29List.txt', 1)% encoded in -v7.3
@@ -32,13 +45,6 @@
 % trainingDataGenSongWise('raw6.mat','TheBeatles180List.txt', 1)% encoded in -v7.3
 % trainingDataGenJazzNSeg('rawjazz.mat','JazzGuitar99List.txt',6);
 % trainingDataGenJazzSongWise('rawjazzsong.mat','JazzGuitar99List.txt')% encoded in -v7.3
-
-%%%%%%%%%%inv%%%%%%%%%%%%%%%
-% trainingDataGenVarLen('raw7.mat','JayChou29List.txt', 0)% encoded in -v7.3
-% trainingDataGenVarLen('raw8.mat','TheBeatles180List.txt', 0)% encoded in -v7.3
-% trainingDataGenSongWise('raw9.mat','JayChou29List.txt', 0)% encoded in -v7.3
-% trainingDataGenNSeg('raw10.mat','CNPopJayChou49List.txt',6, 0, 0)% encoded in -v5
-% trainingDataGenNSeg('raw11.mat','CJK75List.txt',6, 0, 0)% encoded in -v5
 
 %%%%%%%%%%no7%%%%%%%%%%%%%%%
 % trainingDataGenNSeg('rawB.mat','TheBeatles180List.txt',6, 0, 1)% encoded in -v5
@@ -369,34 +375,34 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% J-CNPop - ch-SongNN %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% tangkkace('SB','CNPop20List.txt','3','CNPop20ListBUB.mat','bctc-Jsong-ch-inv-i.npz');evaluateCP cnpop-bctc CNPop20List.txt;
-% tangkkace('SB','CNPop20List.txt','3','CNPop20ListBUB.mat','ctc-Jsong-ch-inv-i.npz');evaluateCP cnpop-ctc CNPop20List.txt;
+% tangkkace('SB','CNPop20List.txt','3','CNPop20ListBUB.mat','blstmrnn-Jsong-ch-inv-i.npz');evaluateCP cnpop-blstmrnn CNPop20List.txt;
+% tangkkace('SB','CNPop20List.txt','3','CNPop20ListBUB.mat','lstmrnn-Jsong-ch-inv-i.npz');evaluateCP cnpop-lstmrnn CNPop20List.txt;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% J-TheBeatles - ch-SongNN %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','bctc-Jsong-ch-inv-i.npz');evaluateCP thebeatles-bctc TheBeatles180List.txt;
-% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','ctc-Jsong-ch-inv-i.npz');evaluateCP thebeatles-ctc TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn-Jsong-ch-inv-i.npz');evaluateCP thebeatles-blstmrnn TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','lstmrnn-Jsong-ch-inv-i.npz');evaluateCP thebeatles-lstmrnn TheBeatles180List.txt;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% J-CNPop - ns-SongNN %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% tangkkace('SB','CNPop20List.txt','4','CNPop20ListBUBns.mat','ctc-Jsong-ns-inv-i.npz');evaluateCP cnpop-ns-ctc CNPop20List.txt;
-% tangkkace('SB','CNPop20List.txt','4','CNPop20ListBUBns.mat','bctc-Jsong-ns-inv-i.npz');evaluateCP cnpop-ns-bctc CNPop20List.txt;
-% tangkkace('SB','CNPop20List.txt','4','CNPop20ListBUBns.mat','ctc-Jsong-ns-inv-ii.npz');evaluateCP cnpop-ns-ctcsg CNPop20List.txt;
-% tangkkace('SB','CNPop20List.txt','4','CNPop20ListBUBns.mat','bctc-Jsong-ns-inv-ii.npz');evaluateCP cnpop-ns-bctcsg CNPop20List.txt;
+% tangkkace('SB','CNPop20List.txt','4','CNPop20ListBUBns.mat','lstmrnn-Jsong-ns-inv-i.npz');evaluateCP cnpop-ns-lstmrnn CNPop20List.txt;
+% tangkkace('SB','CNPop20List.txt','4','CNPop20ListBUBns.mat','blstmrnn-Jsong-ns-inv-i.npz');evaluateCP cnpop-ns-blstmrnn CNPop20List.txt;
+% tangkkace('SB','CNPop20List.txt','4','CNPop20ListBUBns.mat','lstmrnn-Jsong-ns-inv-ii.npz');evaluateCP cnpop-ns-lstmrnnsg CNPop20List.txt;
+% tangkkace('SB','CNPop20List.txt','4','CNPop20ListBUBns.mat','blstmrnn-Jsong-ns-inv-ii.npz');evaluateCP cnpop-ns-blstmrnnsg CNPop20List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% J-TheBealtes - ns-SongNN %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% tangkkace('SB','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','ctc-Jsong-ns-inv-i.npz');evaluateCP thebeatles-ns-ctc TheBeatles180List.txt;
-% tangkkace('SB','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','bctc-Jsong-ns-inv-i.npz');evaluateCP thebeatles-ns-bctc TheBeatles180List.txt;
-% tangkkace('SB','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','ctc-Jsong-ns-inv-ii.npz');evaluateCP thebeatles-ns-ctcsg TheBeatles180List.txt;
-% tangkkace('SB','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','bctc-Jsong-ns-inv-ii.npz');evaluateCP thebeatles-ns-bctcsg TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','lstmrnn-Jsong-ns-inv-i.npz');evaluateCP thebeatles-ns-lstmrnn TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','blstmrnn-Jsong-ns-inv-i.npz');evaluateCP thebeatles-ns-blstmrnn TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','lstmrnn-Jsong-ns-inv-ii.npz');evaluateCP thebeatles-ns-lstmrnnsg TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','blstmrnn-Jsong-ns-inv-ii.npz');evaluateCP thebeatles-ns-blstmrnnsg TheBeatles180List.txt;
 
-% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','bctc-Jsong-ch-no7-i.npz');evaluateCP thebeatles-ch-bctc-no7 TheBeatles180List.txt;
-% tangkkace('SB','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','bctc-Jsong-ns-no7-i.npz');evaluateCP thebeatles-ns-bctc-no7 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn-Jsong-ch-no7-i.npz');evaluateCP thebeatles-ch-blstmrnn-no7 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','blstmrnn-Jsong-ns-no7-i.npz');evaluateCP thebeatles-ns-blstmrnn-no7 TheBeatles180List.txt;
 
-% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','bctc-Jsong-ch-noinv-i.npz');evaluateCP thebeatles-ch-bctc-noinv TheBeatles180List.txt;
-% tangkkace('SB','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','bctc-Jsong-ns-noinv-i.npz');evaluateCP thebeatles-ns-bctc-noinv TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn-Jsong-ch-noinv-i.npz');evaluateCP thebeatles-ch-blstmrnn-noinv TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','blstmrnn-Jsong-ns-noinv-i.npz');evaluateCP thebeatles-ns-blstmrnn-noinv TheBeatles180List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% J-CNPop - ns-NN-HMM %%%%%%%%%%%%%%%%%%
@@ -601,14 +607,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Jazz - ch-songwise %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% tangkkace('Jazz','GaryBurton7List.txt','3','GaryBurton7ListBUB.mat','ctc-Jazzsong-ch-jazz-i.npz');evaluateJazz garyburton-ctc GaryBurton7List.txt;
-% tangkkace('Jazz','GaryBurton7List.txt','3','GaryBurton7ListBUB.mat','bctc-Jazzsong-ch-jazz-i.npz');evaluateJazz garyburton-bctc GaryBurton7List.txt;
+% tangkkace('Jazz','GaryBurton7List.txt','3','GaryBurton7ListBUB.mat','lstmrnn-Jazzsong-ch-jazz-i.npz');evaluateJazz garyburton-lstmrnn GaryBurton7List.txt;
+% tangkkace('Jazz','GaryBurton7List.txt','3','GaryBurton7ListBUB.mat','blstmrnn-Jazzsong-ch-jazz-i.npz');evaluateJazz garyburton-blstmrnn GaryBurton7List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Jazz - ns-songwise %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% tangkkace('Jazz','GaryBurton7List.txt','4','GaryBurton7ListBUBns.mat','ctc-Jazzsong-ns-jazz-i.npz');evaluateJazz garyburton-ns-ctc GaryBurton7List.txt;
-% tangkkace('Jazz','GaryBurton7List.txt','4','GaryBurton7ListBUBns.mat','bctc-Jazzsong-ns-jazz-i.npz');evaluateJazz garyburton-ns-bctc GaryBurton7List.txt;
+% tangkkace('Jazz','GaryBurton7List.txt','4','GaryBurton7ListBUBns.mat','lstmrnn-Jazzsong-ns-jazz-i.npz');evaluateJazz garyburton-ns-lstmrnn GaryBurton7List.txt;
+% tangkkace('Jazz','GaryBurton7List.txt','4','GaryBurton7ListBUBns.mat','blstmrnn-Jazzsong-ns-jazz-i.npz');evaluateJazz garyburton-ns-blstmrnn GaryBurton7List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Spectrogram Data Gen - SongNN %%%%%%%%%%%%%%%%%%
@@ -644,6 +650,8 @@
 % tangkkace('Jazz','JazzGuitar99List.txt','-2','JazzGuitar99ListBUBns.mat');
 % tangkkace('Jazz','GaryBurton7List.txt','-1','GaryBurton7ListBUB.mat');
 % tangkkace('Jazz','GaryBurton7List.txt','-2','GaryBurton7ListBUBns.mat');
+% tangkkace('SB','USPop195List.txt','-1','USPop195ListBUB.mat');
+% tangkkace('SB','USPop195List.txt','-2','USPop195ListBUBns.mat');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Simple Test (Examples running)%%%%%%%%%%%%%%%%%%
@@ -653,9 +661,37 @@
 
 % non-baseline:
 % tangkkace('SB','tempList.txt','-1','tempListBUB.mat');
-% tangkkace('SB','tempList.txt','3','tempListBUB.mat','bctc-Jsong-ch-no7-i.npz');evaluateCP temp-ch-bctc-no7 tempList.txt;
-
+% tangkkace('SB','tempList.txt','3','tempListBUB.mat','blstmrnn-Jsong-ch-no7-i.npz');evaluateCP temp-ch-blstmrnn-no7 tempList.txt;
 % tangkkace('SB','tempList.txt','-2','tempListBUBns.mat');
-% tangkkace('SB','tempList.txt','4','tempListBUBns.mat','bctc-Jsong-ns-no7-i.npz');evaluateCP temp-ns-bctc-no7 tempList.txt;
+% tangkkace('SB','tempList.txt','4','tempListBUBns.mat','blstmrnn-Jsong-ns-no7-i.npz');evaluateCP temp-ns-blstmrnn-no7 tempList.txt;
 % tangkkace('SB','tempList.txt','5','tempListBUB','mlp-J6seg-ns-inv-[800,800]-5.pkl');evaluateCP temp-test tempList.txt;
 % tangkkace('SB','tempList.txt','6','tempListBUB','mlp-J6seg-ns-inv-[800,800]-5.pkl');evaluateCP temp-test tempList.txt;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%% Further Runs %%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ch runs
+% tangkkace('SB','CNPop20List.txt','3','CNPop20ListBUB.mat','ctc-Jsong-ch-inv-i.npz');evaluateCP cnpop-ctc-temp-i CNPop20List.txt;
+% tangkkace('SB','CNPop20List.txt','3','CNPop20ListBUB.mat','ctc-Jsong-ch-inv-ii.npz');evaluateCP cnpop-ctc-temp-ii CNPop20List.txt;
+% tangkkace('SB','CNPop20List.txt','3','CNPop20ListBUB.mat','ctc-Jsong-ch-inv-iii.npz');evaluateCP cnpop-ctc-temp-iii CNPop20List.txt;
+
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','ctc-Jsong-ch-inv-i.npz');evaluateCP thebeatles-ctc-temp-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','ctc-Jsong-ch-inv-ii.npz');evaluateCP thebeatles-ctc-temp-ii TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','ctc-CJKsong-ch-inv-i.npz');evaluateCP thebeatles-ctc-ch-CJK-temp-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','ctc-CJKUsong-ch-inv-i.npz');evaluateCP thebeatles-ctc-ch-CJKU-temp-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','bctc-CJKsong-ch-inv-i.npz');evaluateCP thebeatles-bctc-ch-CJK-temp-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','bctc-CJKUsong-ch-inv-i.npz');evaluateCP thebeatles-bctc-ch-CJKU-temp-i TheBeatles180List.txt;
+
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn-Jsong-ch-inv-i.npz');evaluateCP thebeatles-blstm-ch-J-temp-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn-CJsong-ch-inv-i.npz');evaluateCP thebeatles-blstm-ch-CJ-temp-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn-CJKsong-ch-inv-i.npz');evaluateCP thebeatles-blstm-ch-CJK-temp-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn-CJKUsong-ch-inv-i.npz');evaluateCP thebeatles-blstm-ch-CJKU-temp-i TheBeatles180List.txt;
+
+% ns runs
+% tangkkace('SB','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','blstmrnn-CJsong-ns-inv-i.npz');evaluateCP thebeatles-blstm-ns-CJ-temp-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','blstmrnn-CJKsong-ns-inv-ii.npz');evaluateCP thebeatles-blstm-ns-CJK-temp-ii TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','blstmrnn-CJsong-ns-inv-ii.npz');evaluateCP thebeatles-blstm-ns-CJ-temp-ii TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','blstmrnn-CJKsong-ns-inv-i.npz');evaluateCP thebeatles-blstm-ns-CJK-temp-i TheBeatles180List.txt;
+
+% tangkkace('SB','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','bctc-CJKsong-ns-inv-i.npz');evaluateCP thebeatles-bctc-ns-CJK-temp-i TheBeatles180List.txt;
+
