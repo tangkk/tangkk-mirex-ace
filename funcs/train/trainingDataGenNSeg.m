@@ -155,6 +155,9 @@ while ischar(tline)
     while ischar(gline)
         % decipher start time, end time and chord
         strtoks = strsplit(gline,' ');
+        if length(strtoks) == 1
+            strtoks = strsplit(gline,'\t');
+        end
         st = str2double(strtoks{1});
         et = str2double(strtoks{2});
         ch = strtoks{3};
@@ -213,8 +216,8 @@ end
 display('collecting training data for all 12 keys in trainingDataX1......');
 
 len = size(trainingDataX1,1);
-trainingDataX11 = [];
-trainingDatay11 = [];
+trainingDataX11 = zeros(len*12,252*nseg);
+trainingDatay11 = zeros(len*12,1);
 idx = 1;
 for i = 1:len
     Xi = trainingDataX1(i,:);
@@ -268,8 +271,8 @@ end
 % generate other training data for all 12 keys for every training data
 % entry in X2 (24 dim feature - basstreble chroma)
 display('collecting training data for all 12 keys in trainingDataX2......');
-trainingDataX22 = zeros(1,24*nseg);
-trainingDatay22 = zeros(1,1);
+trainingDataX22 = zeros(len*12,24*nseg);
+trainingDatay22 = zeros(len*12,1);
 t12idx = 1;
 len = size(trainingDataX2,1);
 for j = 1:len
@@ -329,6 +332,6 @@ trainingDatay22(trainingDatay22 == 0) = length(chordnames)+1;
 display('saving results......');
 save(savename,'trainingDataX1','trainingDataX2','trainingDatay',...
     'trainingDataX11', 'trainingDatay11',...
-    'trainingDataX22', 'trainingDatay22');
+    'trainingDataX22', 'trainingDatay22','-v7.3');
 
 display('done......');

@@ -65,6 +65,9 @@ while ischar(tline)
     while ischar(gline)
         % decipher start time, end time and chord
         strtoks = strsplit(gline,' ');
+        if length(strtoks) == 1
+            strtoks = strsplit(gline,'\t');
+        end
         st = str2double(strtoks{1});
         et = str2double(strtoks{2});
         ch = strtoks{3};

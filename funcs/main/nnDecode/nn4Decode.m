@@ -40,9 +40,13 @@ if ~isempty(strfind(model,'bctc'))
     nntype = 'bctc';
 elseif ~isempty(strfind(model,'ctc'))
     nntype = 'ctc';
+elseif ~isempty(strfind(model,'blstmrnn'))
+    nntype = 'blstmrnn';
+elseif ~isempty(strfind(model,'lstmrnn'))
+    nntype = 'lstmrnn';
 end
 
-if ~isempty(strfind(model,'ii'))
+if ~isempty(strfind(model,'ii')) % FIXME: shouldn't use 'ii' to indicate that
     nntype = [nntype 'sg'];
 end
 
@@ -69,9 +73,9 @@ for j = 1:nslices
     end
 end
 
-if beparam.enChordGestalt
-[rootgram, bassgram, treblegram, bdrys] = ...
-    chordLevelGestalt(rootgram, bassgram, treblegram, bdrys, beparam, chordmode);
-end
+[rootgram, bassgram, treblegram, bdrys] = combineSameChords_nocomp(rootgram,...
+    bassgram, treblegram, bdrys);
+[rootgram, bassgram, treblegram, bdrys] = eliminateShortChords(rootgram,...
+    bassgram, treblegram, bdrys, beparam.grainsize);
 
 display('chord progression done...');

@@ -54,6 +54,7 @@ data/
 temp/
 testdata/
 mirexace/
+slides/
 nn/*.pyc
 nn/*/
 nn/*.perl
