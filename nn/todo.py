@@ -37,7 +37,7 @@
 # - B6seg-inv-svm-ch
 # - B6seg-inv-knn-ch
 # each for 1 time
-# - Bsong-inv-ctc-ch
+# - Bsong-inv-lstmrnn-ch
 
 # testing phase - on Queen19+CarolKing7
 # run end-to-end experiment and generate results on this combined dataset using the above trained models
@@ -60,9 +60,9 @@ run knn.py ../data/ch/B6seg-ch-inv.mat ../data/model/knn-B6seg-ch-inv-i.pkl 10 d
 run svm.py ../data/ch/B6seg-ch-inv.mat ../data/model/svm-B6seg-ch-inv-i.pkl
 
 # songwise
-run ctc.py ../data/ch/Bsong-ch-inv.pkl ../data/model/ctc-Bsong-ch-inv-i 24 277 500
+run lstmrnn.py ../data/ch/Bsong-ch-inv.pkl ../data/model/lstmrnn-Bsong-ch-inv-i 24 277 500
 
-run bctc.py ../data/ch/Bsong-ch-inv.pkl ../data/model/bctc-Bsong-ch-inv-i 24 277 500
+run blstmrnn.py ../data/ch/Bsong-ch-inv.pkl ../data/model/blstmrnn-Bsong-ch-inv-i 24 277 500
 '''
 ---------------------------------------------------------------------------------------------------------------
 # Experiment Group 2: Chinese Pop - Use JayChou29 trained/validated model, tested on cnpop-others
@@ -76,7 +76,7 @@ run bctc.py ../data/ch/Bsong-ch-inv.pkl ../data/model/bctc-Bsong-ch-inv-i 24 277
 # - J6seg-inv-svm-ch
 # - J6seg-inv-knn-ch
 # each for 1 time
-# - Jsong-inv-ctc-ch
+# - Jsong-inv-lstmrnn-ch
 
 # testing phase - on cnpop-others
 # - run end-to-end experiment and generate results on this combined dataset using the above trained models
@@ -100,13 +100,15 @@ run svm.py ../data/ch/J6seg-ch-inv.mat ../data/model/svm-J6seg-ch-inv-i.pkl
 '''
 '''
 # songwise
-run ctc.py ../data/ch/Jsong-ch-inv.pkl ../data/model/ctc-Jsong-ch-inv-i 24 277 500
+run lstmrnn.py ../data/ch/Jsong-ch-inv.pkl ../data/model/lstmrnn-Jsong-ch-inv-i 24 277 500
+run blstmrnn.py ../data/ch/Jsong-ch-inv.pkl ../data/model/blstmrnn-Jsong-ch-inv-i 24 277 500
 
-run bctc.py ../data/ch/Jsong-ch-inv.pkl ../data/model/bctc-Jsong-ch-inv-i 24 277 500
+run ctc.py ../data/ch/CJKUsong-ch-inv.pkl ../data/model/ctc-CJKUsong-ch-inv-i 24 277 800
+run bctc.py ../data/ch/CJKUsong-ch-inv.pkl ../data/model/bctc-CJKUsong-ch-inv-i 24 277 800
 -------------------------------------------- no7 ---------------------------------------------------
-run bctc.py ../data/ch/Jsong-ch-no7.pkl ../data/model/bctc-Jsong-ch-no7-i 24 73 500
+run blstmrnn.py ../data/ch/Jsong-ch-no7.pkl ../data/model/blstmrnn-Jsong-ch-no7-i 24 73 500
 -------------------------------------------- noinv ---------------------------------------------------
-run bctc.py ../data/ch/Jsong-ch-noinv.pkl ../data/model/bctc-Jsong-ch-noinv-i 24 61 500
+run blstmrnn.py ../data/ch/Jsong-ch-noinv.pkl ../data/model/blstmrnn-Jsong-ch-noinv-i 24 61 500
 '''
 ---------------------------------------------------------------------------------------------------------------
 # *****************************************************
@@ -124,7 +126,7 @@ run bctc.py ../data/ch/Jsong-ch-noinv.pkl ../data/model/bctc-Jsong-ch-noinv-i 24
 # - J6seg-inv-svm-ns
 # - J6seg-inv-knn-ns
 # each for 1 time
-# - Jsong-inv-ctc-ns
+# - Jsong-inv-lstmrnn-ns
 '''
 running scripts:
 -------------------------------------------- inv ---------------------------------------------------
@@ -149,22 +151,34 @@ run svm.py ../data/ns/J6seg-ns-inv.mat ../data/model/svm-J6seg-ns-inv-i.pkl
 '''
 '''
 # songwise
-run ctc.py ../data/ns/Jsong-ns-inv.pkl ../data/model/ctc-Jsong-ns-inv-i 252 277 800
-run ctcsg.py ../data/ns/Jsong-ns-inv.pkl ../data/model/ctc-Jsong-ns-inv-ii 252 277 800 500
+run lstmrnn.py ../data/ns/Jsong-ns-inv.pkl ../data/model/lstmrnn-Jsong-ns-inv-i 252 277 800
+run lstmrnnsg.py ../data/ns/Jsong-ns-inv.pkl ../data/model/lstmrnn-Jsong-ns-inv-ii 252 277 800 500
 
-run bctc.py ../data/ns/Jsong-ns-inv.pkl ../data/model/bctc-Jsong-ns-inv-i 252 277 800
-run bctcsg.py ../data/ns/Jsong-ns-inv.pkl ../data/model/bctc-Jsong-ns-inv-ii 252 277 800 500
+run blstmrnn.py ../data/ns/Jsong-ns-inv.pkl ../data/model/blstmrnn-Jsong-ns-inv-i 252 277 800
+run blstmrnnsg.py ../data/ns/Jsong-ns-inv.pkl ../data/model/blstmrnn-Jsong-ns-inv-ii 252 277 800 500
+
+run ctc.py ../data/ns/CJKUsong-ns-inv.pkl ../data/model/ctc-CJKUsong-ns-inv-i 24 277 800
+run bctc.py ../data/ns/CJKUsong-ns-inv.pkl ../data/model/bctc-CJKUsong-ns-inv-i 24 277 800
 -------------------------------------------- no7 ---------------------------------------------------
-run bctc.py ../data/ns/Jsong-ns-no7.pkl ../data/model/bctc-Jsong-ns-no7-i 252 73 800
+run blstmrnn.py ../data/ns/Jsong-ns-no7.pkl ../data/model/blstmrnn-Jsong-ns-no7-i 252 73 800
 -------------------------------------------- noinv ---------------------------------------------------
-run bctc.py ../data/ns/Jsong-ns-noinv.pkl ../data/model/bctc-Jsong-ns-noinv-i 252 61 800
+run blstmrnn.py ../data/ns/Jsong-ns-noinv.pkl ../data/model/blstmrnn-Jsong-ns-noinv-i 252 61 800
+'''
+
+''' make it deeper
+input dimension 252*6 = 1512 at 1/3 notegram level
+first layer 1512 at tuned 1/3 notegram level
+second layer 84*6 = 504 at notegram level
+third layer 24*6 = 144 at chromagram level
+fourth layer(*) ... 504 some unknown transformation
+output layer nchords = 277 at chord progression level
 '''
 
 # Experiment Group 4: Spectrogram and Waveform Level Deep Learning
 # training phase - random holdout 20% validation
 # each for 6 times, train the following models
-# - Jsong-inv-ctc-sg
-# - Jsong-inv-bctc-sg
+# - Jsong-inv-lstmrnn-sg
+# - Jsong-inv-blstmrnn-sg
 ---------------------------------------------------------------------------------------------------------------
 # *****************************************************
 # For -sg datasets (spectrogram level):
@@ -172,8 +186,8 @@ run bctc.py ../data/ns/Jsong-ns-noinv.pkl ../data/model/bctc-Jsong-ns-noinv-i 25
 ---------------------------------------------------------------------------------------------------------------
 '''
 # songwise
-run ctcsg.py ../data/sg/Jsong-sg-inv.pkl ../data/model/ctc-Jsong-sg-inv-i 2049 277 5000 800
-run bctcsg.py ../data/sg/Jsong-sg-inv.pkl ../data/model/bctc-Jsong-sg-inv-i 2049 277 5000 800
+run lstmrnnsg.py ../data/sg/Jsong-sg-inv.pkl ../data/model/lstmrnn-Jsong-sg-inv-i 2049 277 5000 800
+run blstmrnnsg.py ../data/sg/Jsong-sg-inv.pkl ../data/model/blstmrnn-Jsong-sg-inv-i 2049 277 5000 800
 '''
 '''
 Experiment Group 5
@@ -189,9 +203,9 @@ run mlp_big.py ../data/sg/CJ6seg-sg-inv.mat ../data/model/mlp-CJ6seg-sg-inv-[800
 ---------------------------------------------------------------------------------------------------------------
 '''
 # songwise
-run ctcwf.py ../data/wf/Jsong-wf-inv.pkl ../data/model/ctc-Jsong-wf-inv-i 1 277 500
+run lstmrnnwf.py ../data/wf/Jsong-wf-inv.pkl ../data/model/lstmrnn-Jsong-wf-inv-i 1 277 500
 
-run bctcwf.py ../data/wf/Jsong-wf-inv.pkl ../data/model/bctc-Jsong-wf-inv-i 1 277 500
+run blstmrnnwf.py ../data/wf/Jsong-wf-inv.pkl ../data/model/blstmrnn-Jsong-wf-inv-i 1 277 500
 '''
 ---------------------------------------------------------------------------------------------------------------
 # perform end-to-end test on matlab

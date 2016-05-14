@@ -1,16 +1,18 @@
 '''
-A chord classifier based on unidirectional CTC
+A chord classifier based on bidirectional CTC
 '''
 
 from collections import OrderedDict
 import cPickle as pkl
 import sys
 import time
+
 import numpy
 import theano
 from theano import config
 import theano.tensor as T
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
+
 from acesongdb import load_data_song
 
 use_dropout=True
@@ -20,7 +22,6 @@ batch_size = 500 # length of a sample training piece within a song in terms of n
 # Set the random number generators' seeds for consistency
 SEED = 123
 # numpy.random.seed(SEED)
-rng = numpy.random.RandomState(SEED)
 
 def numpy_floatX(data):
     return numpy.asarray(data, dtype=config.floatX)
@@ -100,9 +101,8 @@ def init_params(options):
     params = get_layer(options['encoder'])[0](options,
                                               params,
                                               prefix=options['encoder'])
-    
     # classifier
-    params['U'] = 0.01 * numpy.random.randn(options['dim_proj'],
+    params['U'] = 0.01 * numpy.random.randn(2*options['dim_proj'],
                                             options['ydim']).astype(config.floatX)
     params['b'] = numpy.zeros((options['ydim'],)).astype(config.floatX)
 
@@ -130,6 +130,7 @@ def get_layer(name):
     fns = layers[name]
     return fns
 
+
 def random_weight(n_in,n_out=0):
     if n_out == 0:
        n_out = n_in 
@@ -154,7 +155,6 @@ def ortho_weight(ndim1, ndim2):
     elif ndim1 > ndim2:
         u, s, v = numpy.linalg.svd(W,full_matrices=0)
         return u.astype(config.floatX)
-        
 
 
 def param_init_lstm(options, params, prefix='lstm'):
@@ -163,7 +163,10 @@ def param_init_lstm(options, params, prefix='lstm'):
 
     :see: init_params
     """
-    # W are the input weights (maps xdim to dim_proj)
+    # note that this set of 'W','U' and 'b' are for LSTM layer, thus they have prefix in their names
+    # W are the input weights
+    
+    # these are for the forward pass
     W = numpy.concatenate([ortho_weight(options['xdim'],options['dim_proj']),
                            ortho_weight(options['xdim'],options['dim_proj']),
                            ortho_weight(options['xdim'],options['dim_proj']),
@@ -178,23 +181,36 @@ def param_init_lstm(options, params, prefix='lstm'):
     # b are bias
     b = numpy.zeros((4 * options['dim_proj'],))
     params[_p(prefix, 'b')] = b.astype(config.floatX) # "lstm_b"
-
+    
+    # these are for the backward pass
+    Wb = numpy.concatenate([ortho_weight(options['xdim'],options['dim_proj']),
+                           ortho_weight(options['xdim'],options['dim_proj']),
+                           ortho_weight(options['xdim'],options['dim_proj']),
+                           ortho_weight(options['xdim'],options['dim_proj'])], axis=1)
+    params[_p(prefix, 'Wb')] = Wb # "lstm_Wb"
+    # U are recurrent weights
+    Ub = numpy.concatenate([ortho_weight(options['dim_proj'],options['dim_proj']),
+                           ortho_weight(options['dim_proj'],options['dim_proj']),
+                           ortho_weight(options['dim_proj'],options['dim_proj']),
+                           ortho_weight(options['dim_proj'],options['dim_proj'])], axis=1)
+    params[_p(prefix, 'Ub')] = Ub # "lstm_Ub"
+    # b are bias
+    bb = numpy.zeros((4 * options['dim_proj'],))
+    params[_p(prefix, 'bb')] = bb.astype(config.floatX) # "lstm_bb"
+    
     return params #[lstm_W, lstm_U, lstm_b]
 
 
 def lstm_layer(tparams, x, y, use_noise, options, prefix='lstm'):
     n_timesteps = x.shape[0]
-    
+    xb = x[::-1]
+
     def _slice(_x, n, dim):
         return _x[n * dim:(n + 1) * dim]
     
-    def _step(x_, h_, c_):
-        # input goes through a hidden layer
-        # x_i = T.nnet.sigmoid(T.dot(x_, tparams['Ui']) + tparams['bi'])
-        x_i = x_
-    
+    def _step(x_, xb_, h_, c_, hb_, cb_):
         preact = T.dot(h_, tparams[_p(prefix, 'U')])
-        preact += T.dot(x_i, tparams[_p(prefix, 'W')])
+        preact += T.dot(x_, tparams[_p(prefix, 'W')])
         preact += tparams[_p(prefix, 'b')]
 
         i = T.nnet.sigmoid(_slice(preact, 0, options['dim_proj']))
@@ -205,14 +221,24 @@ def lstm_layer(tparams, x, y, use_noise, options, prefix='lstm'):
         c = f * c_ + i * c
         h = o * T.tanh(c)
         
-        # one more pass before feeding to classifier
-        # h_o = T.nnet.sigmoid(T.dot(h, tparams['Uo']) + tparams['bo'])
-        h_o = h
+        preactb = T.dot(hb_, tparams[_p(prefix, 'Ub')])
+        preactb += T.dot(xb_, tparams[_p(prefix, 'Wb')])
+        preactb += tparams[_p(prefix, 'bb')]
+
+        ib = T.nnet.sigmoid(_slice(preactb, 0, options['dim_proj']))
+        fb = T.nnet.sigmoid(_slice(preactb, 1, options['dim_proj']))
+        ob = T.nnet.sigmoid(_slice(preactb, 2, options['dim_proj']))
+        cb = T.tanh(_slice(preactb, 3, options['dim_proj']))
+
+        cb = fb * cb_ + ib * cb
+        hb = ob * T.tanh(cb)
         
+        # take the reverse of hb and concatenate with h before feeding into logistic regression
+        hhb = T.concatenate([h,hb[::-1]])
         # a single frame prediction given h - the posterior probablity
-        one_pred = T.nnet.softmax(T.dot(h_o, tparams['U']) + tparams['b'])
+        one_pred = T.nnet.softmax(T.dot(hhb, tparams['U']) + tparams['b'])
         
-        return h, c, one_pred
+        return h, c, hb, cb, one_pred
     
     dim_proj = options['dim_proj']
     ydim = options['ydim']
@@ -222,8 +248,12 @@ def lstm_layer(tparams, x, y, use_noise, options, prefix='lstm'):
     # rval[1] -- n_timesteps of c -- n_timesteps * dim_proj
     # rval[2] -- n_timesteps of one_pred -- n_timesteps * ydim
     rval, updates = theano.scan(_step,
-                                sequences=[x],
+                                sequences=[x,xb],
                                 outputs_info=[T.alloc(numpy_floatX(0.),
+                                                           dim_proj),
+                                              T.alloc(numpy_floatX(0.),
+                                                           dim_proj),
+                                              T.alloc(numpy_floatX(0.),
                                                            dim_proj),
                                               T.alloc(numpy_floatX(0.),
                                                            dim_proj),
@@ -231,110 +261,42 @@ def lstm_layer(tparams, x, y, use_noise, options, prefix='lstm'):
                                 name=_p(prefix, '_layers'),
                                 n_steps=n_timesteps)
     
-    pred = rval[2]
+    pred = rval[4]
     pred = T.flatten(pred,2)
     
-    trng = RandomStreams(SEED)
+    trng = RandomStreams(123)
     if options['use_dropout']:
         pred = dropout_layer(pred, use_noise, trng)
     
-    
+    '''
     # CTC forward-backward pass, adapted from:
     # https://blog.wtf.sg/2014/10/06/connectionist-temporal-classification-ctc-with-theano/
     def recurrence_relation(size):
         big_I = T.eye(size+2)
         return T.eye(size) + big_I[2:,1:-1] + big_I[2:,:-2] * (T.arange(size) % 2)
-        
-    def recurrence_relation_(y_, blank_symbol):
-        y = y_.dimshuffle(0,'x')
-        n_y = y.shape[0]
-        blanks = T.zeros((2, y.shape[1])) + blank_symbol
-        ybb = T.concatenate((y, blanks), axis=0).T
-        sec_diag = (T.neq(ybb[:, :-2], ybb[:, 2:]) *
-                    T.eq(ybb[:, 1:-1], blank_symbol))
-
-        # r1: LxL
-        # r2: LxL
-        # r3: LxL
-        r2 = T.eye(n_y, k=1)
-        r3 = (T.eye(n_y, k=2) * sec_diag)
-
-        return r2, r3
-        
-    def _epslog(x):
-        return T.cast(T.log(T.clip(x, 1E-12, 1E12)),
-                           theano.config.floatX)
-
-    def log_add(a, b):
-        max_ = T.maximum(a, b)
-        return (max_ + T.log1p(T.exp(a + b - 2 * max_)))
-
-    def log_dot_matrix(x, z):
-        inf = 1E12
-        log_dot = T.dot(x, z)
-        zeros_to_minus_inf = (z.max(axis=0) - 1) * inf
-        return log_dot + zeros_to_minus_inf
-
-    def log_dot_tensor(x, z):
-        inf = 1E12
-        log_dot = (x * z).sum(axis=0).T
-        zeros_to_minus_inf = (z.max(axis=0) - 1) * inf
-        return log_dot + zeros_to_minus_inf.T
     
-    def path_probs(predict,y):
-        # P = predict[:,y]
-        P = predict[T.arange(y.shape[0]), y]
-        rr = recurrence_relation(y.shape[0])
+    def path_probs(predict,Y):
+        P = predict[:,Y]
+        rr = recurrence_relation(Y.shape[0])
         def step(p_curr,p_prev):
             return (p_curr * T.dot(p_prev,rr)).astype(theano.config.floatX)
         probs,_ = theano.scan(
                 step,
                 sequences = [P],
-                outputs_info = [T.eye(y.shape[0])[0]]
+                outputs_info = [T.eye(Y.shape[0])[0]]
             )
         return probs
         
-    def log_path_probs(predict,y):
-        pred_y = predict[T.arange(y.shape[0]), y]
-        blank_symbol = options['ydim']
-        r2, r3 = recurrence_relation_(y, blank_symbol)
-        # rr = recurrence_relation(y.shape[0])
-        # r2 = rr
-        # r3 = rr
-        def step(log_p_curr, log_p_prev):
-            p1 = log_p_prev
-            p2 = log_dot_matrix(p1, r2)
-            p3 = log_dot_tensor(p1, r3)
-            p123 = log_add(p3, log_add(p1, p2))
-
-            return (log_p_curr.T +
-                    p123).astype(theano.config.floatX)
-
-        log_probabilities, _ = theano.scan(
-            step,
-            sequences=[_epslog(pred_y)],
-            outputs_info=[_epslog(T.eye(y.shape[0])[0] *
-                                      T.ones(y.T.shape))])
-        return log_probabilities
-        
-    def ctc_cost(predict,y):
-        forward_probs  = path_probs(predict,y)
-        backward_probs = path_probs(predict[::-1],y[::-1])[::-1,::-1]
-        probs = forward_probs * backward_probs / predict[:,y]
+    def ctc_cost(predict,Y):
+        forward_probs  = path_probs(predict,Y)
+        backward_probs = path_probs(predict[::-1],Y[::-1])[::-1,::-1]
+        probs = forward_probs * backward_probs / predict[:,Y]
         total_prob = T.sum(probs)
         return -T.log(total_prob)
         
-    def log_ctc_cost(predict,y):
-        off = 1e-8
-        forward_probs  = log_path_probs(predict,y)
-        backward_probs = log_path_probs(predict[::-1],y[::-1])[::-1,::-1]
-        probs = log_add(forward_probs,backward_probs)
-        total_prob = T.mean(probs)
-        return -total_prob
-        
-    # ctc cost - with DP
-    cost = log_ctc_cost(pred, y)
-    
+    ctc cost - with DP
+    cost = ctc_cost(pred, y)
+    '''
     
     # pred will be -- n_timesteps * ydim posterior probs
     f_pred_prob = theano.function([x], pred, name='f_pred_prob')
@@ -344,10 +306,8 @@ def lstm_layer(tparams, x, y, use_noise, options, prefix='lstm'):
     # cost will be a scaler value
     # compile a function for the cost for one frame given one_pred and one_y (or y_)
     # cost is a scaler, where y is a n_timesteps * 1 target vector
-    # Each prediction is conditionally independent give x
-    # thus the posterior of p(pi|x) should be the product of each posterior
-    # off = 1e-8
-    # cost = -T.log(pred[T.arange(y.shape[0]), y] + off).mean()
+    off = 1e-8
+    cost = -T.log(pred[T.arange(y.shape[0]), y] + off).mean()
     
     return f_pred_prob, f_pred, cost
 
@@ -548,22 +508,22 @@ def pred_error(f_pred, data, verbose=False):
     sum_valid_err = sum_valid_err / lendata
 
     return sum_valid_err
-    
+
 def predprobs(model, X):
     model_options = OrderedDict()
     tparams = init_tparams(model)
     model_options['encoder'] = 'lstm'
     model_options['xdim'] = model['lstm_W'].shape[0]
-    model_options['dim_proj'] = model['U'].shape[0]
+    model_options['dim_proj'] = model['U'].shape[0]/2
     model_options['ydim'] = model['U'].shape[1]
     model_options['use_dropout'] = False
     (use_noise, _, _, f_pred_prob, f_pred, _) = build_model(tparams, model_options)
     use_noise.set_value(0.)
     
     return f_pred_prob(X.astype(theano.config.floatX)), f_pred(X.astype(theano.config.floatX))
-
+    
 def train_lstm(
-    dim_proj = None,
+    dim_proj=None,
     xdim=None,
     ydim=None,
     patience=10,  # Number of epoch to wait before early stop if no progress
@@ -574,9 +534,9 @@ def train_lstm(
     # n_words=10000,  # Vocabulary size
     optimizer=adadelta,  # sgd, adadelta and rmsprop available, sgd very hard to use, not recommanded (probably need momentum and decaying learning rate).
     encoder='lstm',  # TODO: can be removed must be lstm.
-    dumppath='ctc_model.npz',  # The best model will be saved there
-    validFreq=400,  # Compute the validation error after this number of update.
-    saveFreq=1000,  # Save the parameters after every saveFreq updates
+    dumppath='bctc_model.npz',  # The best model will be saved there
+    validFreq=5000,  # Compute the validation error after this number of update.
+    saveFreq=10000,  # Save the parameters after every saveFreq updates
     maxlen=None,  # Sequence longer then this get ignored
     batch_size=100,  # The batch size during training.
     valid_batch_size=100,  # The batch size used for validation/test set.
@@ -602,11 +562,11 @@ def train_lstm(
     train, valid, test = load_data_song(dataset=dataset, valid_portion=0.1, test_portion=0.1)
                                    
     print 'data loaded'
-
+    
     model_options['xdim'] = xdim
     model_options['dim_proj'] = dim_proj
     model_options['ydim'] = ydim
-
+    
     print 'Building model'
     # This create the initial parameters as numpy ndarrays.
     # Dict name (string) -> numpy ndarray
@@ -616,7 +576,7 @@ def train_lstm(
         load_params('lstm_model.npz', params)
 
     # This create Theano Shared Variable from the parameters.
-    # Dict name (string) -> Theano T Shared Variable
+    # Dict name (string) -> Theano Tensor Shared Variable
     # params and tparams have different copy of the weights.
     tparams = init_tparams(params)
 
@@ -684,9 +644,9 @@ def train_lstm(
             cost = f_grad_shared(x, y)
             f_update(lrate)
 
-            if numpy.isnan(cost) or numpy.isinf(cost):
-                print 'NaN detected'
-                return 1., 1., 1.
+            # if numpy.isnan(cost) or numpy.isinf(cost):
+                # print 'NaN detected'
+                # return 1., 1., 1.
 
             if numpy.mod(uidx, dispFreq) == 0:
                 print 'Epoch ', eidx, 'Update ', uidx, 'Cost ', cost
@@ -722,7 +682,7 @@ def train_lstm(
 
                 # print ('Train ', train_err, 'Valid ', valid_err,
                        # 'Test ', test_err)
-                print ('Valid ', valid_err)
+                print ('Valid', valid_err)
                 
                 # early stopping
                 if (len(history_errs) > patience and
@@ -767,16 +727,16 @@ def train_lstm(
 
 if __name__ == '__main__':
     dataset = sys.argv[1] #'../data/ch/Jsong-ch-noinv.pkl'
-    dumppath = sys.argv[2] #'ctc.npz'
+    dumppath = sys.argv[2] #'bctc.npz'
     xdim = int(sys.argv[3])#24
     ydim = int(sys.argv[4])#61 or 277
     dim_proj = int(sys.argv[5])#500
     
     train_lstm(
         dataset=dataset,
-        dim_proj=dim_proj,
         xdim=xdim,
         ydim=ydim,
+        dim_proj=dim_proj,
         dumppath=dumppath,
         max_epochs=max_epochs,
         use_dropout=use_dropout,

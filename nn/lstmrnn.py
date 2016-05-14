@@ -238,103 +238,55 @@ def lstm_layer(tparams, x, y, use_noise, options, prefix='lstm'):
     if options['use_dropout']:
         pred = dropout_layer(pred, use_noise, trng)
     
-    
+    '''
     # CTC forward-backward pass, adapted from:
     # https://blog.wtf.sg/2014/10/06/connectionist-temporal-classification-ctc-with-theano/
     def recurrence_relation(size):
         big_I = T.eye(size+2)
         return T.eye(size) + big_I[2:,1:-1] + big_I[2:,:-2] * (T.arange(size) % 2)
         
-    def recurrence_relation_(y_, blank_symbol):
-        y = y_.dimshuffle(0,'x')
-        n_y = y.shape[0]
-        blanks = T.zeros((2, y.shape[1])) + blank_symbol
-        ybb = T.concatenate((y, blanks), axis=0).T
-        sec_diag = (T.neq(ybb[:, :-2], ybb[:, 2:]) *
-                    T.eq(ybb[:, 1:-1], blank_symbol))
-
-        # r1: LxL
-        # r2: LxL
-        # r3: LxL
-        r2 = T.eye(n_y, k=1)
-        r3 = (T.eye(n_y, k=2) * sec_diag)
-
-        return r2, r3
-        
     def _epslog(x):
-        return T.cast(T.log(T.clip(x, 1E-12, 1E12)),
+        return tensor.cast(tensor.log(tensor.clip(x, 1E-12, 1E12)),
                            theano.config.floatX)
 
     def log_add(a, b):
-        max_ = T.maximum(a, b)
-        return (max_ + T.log1p(T.exp(a + b - 2 * max_)))
+        max_ = tensor.maximum(a, b)
+        return (max_ + tensor.log1p(tensor.exp(a + b - 2 * max_)))
 
     def log_dot_matrix(x, z):
         inf = 1E12
-        log_dot = T.dot(x, z)
+        log_dot = tensor.dot(x, z)
         zeros_to_minus_inf = (z.max(axis=0) - 1) * inf
         return log_dot + zeros_to_minus_inf
 
     def log_dot_tensor(x, z):
         inf = 1E12
-        log_dot = (x * z).sum(axis=0).T
+        log_dot = (x.dimshuffle(1, 'x', 0) * z).sum(axis=0).T
         zeros_to_minus_inf = (z.max(axis=0) - 1) * inf
         return log_dot + zeros_to_minus_inf.T
     
-    def path_probs(predict,y):
-        # P = predict[:,y]
-        P = predict[T.arange(y.shape[0]), y]
-        rr = recurrence_relation(y.shape[0])
+    def path_probs(predict,Y):
+        P = predict[:,Y]
+        rr = recurrence_relation(Y.shape[0])
         def step(p_curr,p_prev):
             return (p_curr * T.dot(p_prev,rr)).astype(theano.config.floatX)
         probs,_ = theano.scan(
                 step,
                 sequences = [P],
-                outputs_info = [T.eye(y.shape[0])[0]]
+                outputs_info = [T.eye(Y.shape[0])[0]]
             )
         return probs
         
-    def log_path_probs(predict,y):
-        pred_y = predict[T.arange(y.shape[0]), y]
-        blank_symbol = options['ydim']
-        r2, r3 = recurrence_relation_(y, blank_symbol)
-        # rr = recurrence_relation(y.shape[0])
-        # r2 = rr
-        # r3 = rr
-        def step(log_p_curr, log_p_prev):
-            p1 = log_p_prev
-            p2 = log_dot_matrix(p1, r2)
-            p3 = log_dot_tensor(p1, r3)
-            p123 = log_add(p3, log_add(p1, p2))
-
-            return (log_p_curr.T +
-                    p123).astype(theano.config.floatX)
-
-        log_probabilities, _ = theano.scan(
-            step,
-            sequences=[_epslog(pred_y)],
-            outputs_info=[_epslog(T.eye(y.shape[0])[0] *
-                                      T.ones(y.T.shape))])
-        return log_probabilities
-        
-    def ctc_cost(predict,y):
-        forward_probs  = path_probs(predict,y)
-        backward_probs = path_probs(predict[::-1],y[::-1])[::-1,::-1]
-        probs = forward_probs * backward_probs / predict[:,y]
+    def ctc_cost(predict,Y):
+        forward_probs  = path_probs(predict,Y)
+        backward_probs = path_probs(predict[::-1],Y[::-1])[::-1,::-1]
+        probs = forward_probs * backward_probs / predict[:,Y]
         total_prob = T.sum(probs)
         return -T.log(total_prob)
         
-    def log_ctc_cost(predict,y):
-        off = 1e-8
-        forward_probs  = log_path_probs(predict,y)
-        backward_probs = log_path_probs(predict[::-1],y[::-1])[::-1,::-1]
-        probs = log_add(forward_probs,backward_probs)
-        total_prob = T.mean(probs)
-        return -total_prob
-        
-    # ctc cost - with DP
-    cost = log_ctc_cost(pred, y)
-    
+    ctc cost - with DP
+    cost = ctc_cost(pred, y)
+    '''
     
     # pred will be -- n_timesteps * ydim posterior probs
     f_pred_prob = theano.function([x], pred, name='f_pred_prob')
@@ -346,8 +298,8 @@ def lstm_layer(tparams, x, y, use_noise, options, prefix='lstm'):
     # cost is a scaler, where y is a n_timesteps * 1 target vector
     # Each prediction is conditionally independent give x
     # thus the posterior of p(pi|x) should be the product of each posterior
-    # off = 1e-8
-    # cost = -T.log(pred[T.arange(y.shape[0]), y] + off).mean()
+    off = 1e-8
+    cost = -T.log(pred[T.arange(y.shape[0]), y] + off).mean()
     
     return f_pred_prob, f_pred, cost
 
@@ -616,7 +568,7 @@ def train_lstm(
         load_params('lstm_model.npz', params)
 
     # This create Theano Shared Variable from the parameters.
-    # Dict name (string) -> Theano T Shared Variable
+    # Dict name (string) -> Theano Tensor Shared Variable
     # params and tparams have different copy of the weights.
     tparams = init_tparams(params)
 
@@ -684,9 +636,9 @@ def train_lstm(
             cost = f_grad_shared(x, y)
             f_update(lrate)
 
-            if numpy.isnan(cost) or numpy.isinf(cost):
-                print 'NaN detected'
-                return 1., 1., 1.
+            # if numpy.isnan(cost) or numpy.isinf(cost):
+                # print 'NaN detected'
+                # return 1., 1., 1.
 
             if numpy.mod(uidx, dispFreq) == 0:
                 print 'Epoch ', eidx, 'Update ', uidx, 'Cost ', cost

@@ -23,8 +23,8 @@ robust = 0
 batch_size = 100
 pretraining_epochs=100
 pretrain_lr=0.001
-cdk=10
-usepersistent=True
+cdk=20
+usepersistent=False
 
 training_epochs=500
 finetune_lr=0.01

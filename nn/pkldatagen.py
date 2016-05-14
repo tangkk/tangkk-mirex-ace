@@ -4,9 +4,13 @@ from acesongdb import pkl_data_nseg_h5py, pkl_data_framewise_h5py, pkl_data_nseg
 # ymax = 421 # jazz
 # pkl_data_framewise('../data/ch/Jazzsong-ch-inv.mat','../data/ch/Jazzsong-ch-inv.pkl', ymax)
 
-# ymax = 277 #inv
+ymax = 277 #inv
 # pkl_data_framewise('../data/ch/Jsong-ch-inv.mat','../data/ch/Jsong-ch-inv.pkl', ymax)
+# pkl_data_framewise('../data/ch/CJsong-ch-inv.mat','../data/ch/CJsong-ch-inv.pkl', ymax)
+# pkl_data_framewise('../data/ch/CJKsong-ch-inv.mat','../data/ch/CJKsong-ch-inv.pkl', ymax)
 # pkl_data_framewise('../data/ch/Bsong-ch-inv.mat','../data/ch/Bsong-ch-inv.pkl', ymax)
+# pkl_data_framewise_h5py('../data/ch/Usong-ch-inv.mat','../data/ch/Usong-ch-inv.pkl', ymax)
+pkl_data_framewise_h5py('../data/ch/CJKUsong-ch-inv.mat','../data/ch/CJKUsong-ch-inv.pkl', ymax)
 # pkl_data_nseg('../data/ch/Jsong-ch-inv.mat','../data/ch/Jsong-6seg-ch-inv.pkl',6, ymax)
 # pkl_data_nseg('../data/ch/Bsong-ch-inv.mat','../data/ch/Bsong-6seg-ch-inv.pkl',6, ymax)
 
@@ -38,9 +42,13 @@ from acesongdb import pkl_data_nseg_h5py, pkl_data_framewise_h5py, pkl_data_nseg
 # ymax = 421 #inv
 # pkl_data_framewise('../data/ns/Jazzsong-ns-inv.mat','../data/ns/Jazzsong-ns-inv.pkl', ymax)
 
-# ymax = 277 #inv
+ymax = 277 #inv
 # pkl_data_framewise_h5py('../data/ns/Jsong-ns-inv.mat','../data/ns/Jsong-ns-inv.pkl', ymax)
 # pkl_data_nseg_h5py('../data/ns/Jsong-ns-inv.mat','../data/ns/Jsong-6seg-ns-inv.pkl',6, ymax)
+# pkl_data_framewise_h5py('../data/ns/CJsong-ns-inv.mat','../data/ns/CJsong-ns-inv.pkl', ymax)
+# pkl_data_framewise_h5py('../data/ns/CJKsong-ns-inv.mat','../data/ns/CJKsong-ns-inv.pkl', ymax)
+# pkl_data_framewise_h5py('../data/ns/Usong-ns-inv.mat','../data/ns/Usong-ns-inv.pkl', ymax)
+pkl_data_framewise_h5py('../data/ns/CJKUsong-ns-inv.mat','../data/ns/CJKUsong-ns-inv.pkl', ymax)
 
 # ymax = 61 #noinv
 # pkl_data_framewise_h5py('../data/ns/Jsong-ns-noinv.mat','../data/ns/Jsong-ns-noinv.pkl',ymax)
