@@ -1,12 +1,12 @@
 % work with TheanoNN
-function [rootgram, bassgram, treblegram] = nn2Decode(chordmode, rawbasegram, rawuppergram, bdrys, model)
+function [rootgram, bassgram, treblegram] = nn2Decode(chordmode, rawbasegram, rawuppergram, bdrys, model, nseg)
 
 rootgram = [];
 bassgram = [];
 treblegram = [];
 
 nslices = size(bdrys,2)-1;
-nseg = 6;
+% nseg = 6;
 
 % step 1, generate the 6seg samples from rawbasegram and rawuppergram - store X
 X = zeros(1,24*nseg);
