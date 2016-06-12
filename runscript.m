@@ -37,6 +37,18 @@
 % trainingDataGenSongWise('raw1.mat','USPop191List.txt', 0, 0)% encoded in -v7.3
 % trainingDataGenNSeg('raw2.mat','USPop191List.txt',6, 0, 0)% encoded in -v7.3
 
+% trainingDataGenNSeg('raw1_.mat','CJK75List.txt',1, 0, 0)% encoded in -v7.3
+% trainingDataGenNSeg('raw5_.mat','CJK75List.txt',2, 0, 0)% encoded in -v7.3
+% trainingDataGenNSeg('raw2_.mat','CJK75List.txt',3, 0, 0)% encoded in -v7.3
+% trainingDataGenNSeg('raw3_.mat','CJK75List.txt',9, 0, 0)% encoded in -v7.3
+% trainingDataGenNSeg('raw4_.mat','CJK75List.txt',12, 0, 0)% encoded in -v7.3
+% 
+% trainingDataGenNSeg('raw1.mat','CJKU266List.txt',1, 0, 0)% encoded in -v7.3
+% trainingDataGenNSeg('raw5.mat','CJKU266List.txt',2, 0, 0)% encoded in -v7.3
+% trainingDataGenNSeg('raw2.mat','CJKU266List.txt',3, 0, 0)% encoded in -v7.3
+% trainingDataGenNSeg('raw3.mat','CJKU266List.txt',9, 0, 0)% encoded in -v7.3
+% trainingDataGenNSeg('raw4.mat','CJKU266List.txt',12, 0, 0)% encoded in -v7.3
+
 
 
 %%%%%%%%%%noinv%%%%%%%%%%%%%%%
@@ -713,4 +725,82 @@
 % tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-CJKU6seg-ns-inv-[800,800]-1.pkl');evaluateCP CJKU-thebeatles-ns-dbn-1 TheBeatles180List.txt;
 % tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','blstm-CJKU6seg-ns-inv-[800]-1.npz');evaluateCP CJKU-thebeatles-ns-blstm-1 TheBeatles180List.txt;
 
-% tangkkace('SB','USPop191List.txt','6','USPop191ListBUB','mlp-CJKU6seg-ns-inv-[800,800]-1.pkl');evaluateCP CJKU-uspop191-ns-mlp-1 USPop191List.txt;
+% tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-CJ6seg-ns-inv-[500,500,500,500,500]-i.pkl');evaluateCP dbn-CJ6seg-ns-inv-[500,500,500,500,500]-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-CJ6seg-ns-inv-[500,500,500,500,500]-iiii.pkl');evaluateCP dbn-CJ6seg-ns-inv-[500,500,500,500,500]-iiii TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-CJ6seg-ns-inv-[504,144,504]-i.pkl');evaluateCP dbn-CJ6seg-ns-inv-[504,144,504]-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-CJ6seg-ns-inv-[800,504,144,504,800]-i.pkl');evaluateCP dbn-CJ6seg-ns-inv-[800,504,144,504,800]-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-CJ6seg-ns-inv-[800,800,800,800,800]-i.pkl');evaluateCP dbn-CJ6seg-ns-inv-[800,800,800,800,800]-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-CJ6seg-ns-inv-[800,800,800,800,800]-ii.pkl');evaluateCP dbn-CJ6seg-ns-inv-[800,800,800,800,800]-ii TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-CJ6seg-ns-inv-[800,800,800,800,800]-iii.pkl');evaluateCP dbn-CJ6seg-ns-inv-[800,800,800,800,800]-iii TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-CJ6seg-ns-inv-[800,800,800,800,800]-iiii.pkl');evaluateCP dbn-CJ6seg-ns-inv-[800,800,800,800,800]-iiii TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-CJ6seg-ns-inv-[1512,504,144,504,504,504]-ii.pkl');evaluateCP dbn-CJ6seg-ns-inv-[1512,504,144,504,504,504]-ii TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-CJ6seg-ns-inv-[1512,504,144,504,504]-ii.pkl');evaluateCP dbn-CJ6seg-ns-inv-[1512,504,144,504,504]-ii TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-CJ6seg-ns-inv-[1512,504,144,504]-i.pkl');evaluateCP dbn-CJ6seg-ns-inv-[1512,504,144,504]-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-CJ6seg-ns-inv-[1512,504,144,504]-ii.pkl');evaluateCP dbn-CJ6seg-ns-inv-[1512,504,144,504]-ii TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-CJ6seg-ns-inv-[1512,504,144,504]-iii.pkl');evaluateCP dbn-CJ6seg-ns-inv-[1512,504,144,504]-iii TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-CJ6seg-ns-inv-[1512,504,144]-i.pkl');evaluateCP dbn-CJ6seg-ns-inv-[1512,504,144]-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-CJ6seg-ns-inv-[1512,800,504,144,504,504,504]-i.pkl');evaluateCP dbn-CJ6seg-ns-inv-[1512,800,504,144,504,504,504]-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','mlp-CJ6seg-ns-inv-[504,144,504]-i.pkl');evaluateCP mlp-CJ6seg-ns-inv-[504,144,504]-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','mlp-CJ6seg-ns-inv-[800,504,144,504,800]-i.pkl');evaluateCP mlp-CJ6seg-ns-inv-[800,504,144,504,800]-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','mlp-CJ6seg-ns-inv-[1512,504,144,504]-i.pkl');evaluateCP mlp-CJ6seg-ns-inv-[1512,504,144,504]-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','mlp-CJ6seg-ns-inv-[1512,504,144]-i.pkl');evaluateCP mlp-CJ6seg-ns-inv-[1512,504,144]-i TheBeatles180List.txt;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%% Further Runs 6seg Deeper Model%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJK6seg-ch-inv-[500,500]-i.pkl');evaluateCP dbn-CJK6seg-ch-inv-[500,500]-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJK6seg-ch-inv-[800,800,800]-i.pkl');evaluateCP dbn-CJK6seg-ch-inv-[800,800,800]-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJK6seg-ch-inv-[1000,1000,1000]-i.pkl');evaluateCP dbn-CJK6seg-ch-inv-[1000,1000,1000]-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJK6seg-ch-inv-[1000,1000]-i.pkl');evaluateCP dbn-CJK6seg-ch-inv-[1000,1000]-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJK6seg-ch-inv-[2000,2000]-i.pkl');evaluateCP dbn-CJK6seg-ch-inv-[2000,2000]-i TheBeatles180List.txt;
+% 
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJKU(191)6seg-ch-inv-[500,500]-i.pkl');evaluateCP dbn-CJKU(191)6seg-ch-inv-[500,500]-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJKU(191)6seg-ch-inv-[1000,1000]-i.pkl');evaluateCP dbn-CJKU(191)6seg-ch-inv-[1000,1000]-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJKU(191)6seg-ch-inv-[2000,2000]-i.pkl');evaluateCP dbn-CJKU(191)6seg-ch-inv-[2000,2000]-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJKU(191)6seg-ch-inv-[3000,3000]-i.pkl');evaluateCP dbn-CJKU(191)6seg-ch-inv-[3000,3000]-i TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJKU(191)6seg-ch-inv-[1000,1000,1000]-i.pkl');evaluateCP dbn-CJKU(191)6seg-ch-inv-[1000,1000,1000]-i TheBeatles180List.txt;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%% Further Runs Xseg Model%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','mlp-CJK1seg-ch-inv-[800,800]-1.pkl');evaluateCP CJK-1seg-thebeatles-ch-mlp-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','mlp-CJK2seg-ch-inv-[800,800]-1.pkl');evaluateCP CJK-2seg-thebeatles-ch-mlp-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','mlp-CJK3seg-ch-inv-[800,800]-1.pkl');evaluateCP CJK-3seg-thebeatles-ch-mlp-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','mlp-CJK6seg-ch-inv-[800,800]-1.pkl');evaluateCP CJK-6seg-thebeatles-ch-mlp-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','mlp-CJK9seg-ch-inv-[800,800]-1.pkl');evaluateCP CJK-9seg-thebeatles-ch-mlp-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','mlp-CJK12seg-ch-inv-[800,800]-1.pkl');evaluateCP CJK-12seg-thebeatles-ch-mlp-1 TheBeatles180List.txt;
+% 
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJK1seg-ch-inv-[800,800]-1.pkl');evaluateCP CJK-1seg-thebeatles-ch-dbn-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJK2seg-ch-inv-[800,800]-1.pkl');evaluateCP CJK-2seg-thebeatles-ch-dbn-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJK3seg-ch-inv-[800,800]-1.pkl');evaluateCP CJK-3seg-thebeatles-ch-dbn-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJK6seg-ch-inv-[800,800]-1.pkl');evaluateCP CJK-6seg-thebeatles-ch-dbn-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJK9seg-ch-inv-[800,800]-1.pkl');evaluateCP CJK-9seg-thebeatles-ch-dbn-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJK12seg-ch-inv-[800,800]-1.pkl');evaluateCP CJK-12seg-thebeatles-ch-dbn-1 TheBeatles180List.txt;
+% 
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm-CJK1seg-ch-inv-[800]-1.npz');evaluateCP CJK-1seg-thebeatles-ch-blstm-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm-CJK2seg-ch-inv-[800]-1.npz');evaluateCP CJK-2seg-thebeatles-ch-blstm-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm-CJK3seg-ch-inv-[800]-1.npz');evaluateCP CJK-3seg-thebeatles-ch-blstm-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm-CJK6seg-ch-inv-[800]-1.npz');evaluateCP CJK-6seg-thebeatles-ch-blstm-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm-CJK9seg-ch-inv-[800]-1.npz');evaluateCP CJK-9seg-thebeatles-ch-blstm-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm-CJK12seg-ch-inv-[800]-1.npz');evaluateCP CJK-12seg-thebeatles-ch-blstm-1 TheBeatles180List.txt;
+
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','mlp-CJKU(191)1seg-ch-inv-[800,800]-1.pkl');evaluateCP CJKU(191)-1seg-thebeatles-ch-mlp-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','mlp-CJKU(191)2seg-ch-inv-[800,800]-1.pkl');evaluateCP CJKU(191)-2seg-thebeatles-ch-mlp-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','mlp-CJKU(191)3seg-ch-inv-[800,800]-1.pkl');evaluateCP CJKU(191)-3seg-thebeatles-ch-mlp-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','mlp-CJKU(191)6seg-ch-inv-[800,800]-1.pkl');evaluateCP CJKU(191)-6seg-thebeatles-ch-mlp-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','mlp-CJKU(191)9seg-ch-inv-[800,800]-1.pkl');evaluateCP CJKU(191)-9seg-thebeatles-ch-mlp-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','mlp-CJKU(191)12seg-ch-inv-[800,800]-1.pkl');evaluateCP CJKU(191)-12seg-thebeatles-ch-mlp-1 TheBeatles180List.txt;
+% 
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJKU(191)1seg-ch-inv-[800,800]-1.pkl');evaluateCP CJKU(191)-1seg-thebeatles-ch-dbn-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJKU(191)2seg-ch-inv-[800,800]-1.pkl');evaluateCP CJKU(191)-2seg-thebeatles-ch-dbn-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJKU(191)3seg-ch-inv-[800,800]-1.pkl');evaluateCP CJKU(191)-3seg-thebeatles-ch-dbn-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJKU(191)6seg-ch-inv-[800,800]-1.pkl');evaluateCP CJKU(191)-6seg-thebeatles-ch-dbn-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJKU(191)9seg-ch-inv-[800,800]-1.pkl');evaluateCP CJKU(191)-9seg-thebeatles-ch-dbn-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJKU(191)12seg-ch-inv-[800,800]-1.pkl');evaluateCP CJKU(191)-12seg-thebeatles-ch-dbn-1 TheBeatles180List.txt;
+% 
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm-CJKU(191)1seg-ch-inv-[800]-1.npz');evaluateCP CJKU(191)-1seg-thebeatles-ch-blstm-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm-CJKU(191)2seg-ch-inv-[800]-1.npz');evaluateCP CJKU(191)-2seg-thebeatles-ch-blstm-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm-CJKU(191)3seg-ch-inv-[800]-1.npz');evaluateCP CJKU(191)-3seg-thebeatles-ch-blstm-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm-CJKU(191)6seg-ch-inv-[800]-1.npz');evaluateCP CJKU(191)-6seg-thebeatles-ch-blstm-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm-CJKU(191)9seg-ch-inv-[800]-1.npz');evaluateCP CJKU(191)-9seg-thebeatles-ch-blstm-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm-CJKU(191)12seg-ch-inv-[800]-1.npz');evaluateCP CJKU(191)-12seg-thebeatles-ch-blstm-1 TheBeatles180List.txt;

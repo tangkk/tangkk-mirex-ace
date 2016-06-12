@@ -45,6 +45,21 @@ if (savetmp == 5 || savetmp == 6)
     loadidx = 1;
 end
 
+% extract nseg info
+nseg = 0;
+pos = strfind(model,'seg');
+if ~isempty(pos)
+   s0 = model(pos-1);
+   s1 = model(pos-2);
+   % nseg = 1,2,3,6,9,12...
+   n1 = str2double(s1);
+   if isnan(n1)
+       nseg = str2double(s0);
+   else
+       nseg = str2double([s1,s0]);
+   end
+end
+
 while ischar(tline)
 
     [inputpath, outputpath, songtitle] = inputDecode(tline);
@@ -100,7 +115,7 @@ while ischar(tline)
         endtime = endtimeSet{loadidx};
         loadidx = loadidx + 1;
         display('ch-seg-NN backend...');
-        [rootgram, bassgram, treblegram] = nn2Decode(chordmode, rawbasegram, rawuppergram, bdrys, model);
+        [rootgram, bassgram, treblegram] = nn2Decode(chordmode, rawbasegram, rawuppergram, bdrys, model, nseg);
     elseif savetmp == 3 % type-III decode (ch recurrent model songwise model decode)
         rawbasegram = rawbasegramSet{loadidx};
         rawuppergram = rawuppergramSet{loadidx};
@@ -129,7 +144,7 @@ while ischar(tline)
         endtime = endtimeSet{loadidx};
         loadidx = loadidx + 1;
         display('ns-seg-NN backend...');
-        [rootgram, bassgram, treblegram] = nn6Decode(chordmode, ns, bdrys, model);
+        [rootgram, bassgram, treblegram] = nn6Decode(chordmode, ns, bdrys, model, nseg);
     end
     
     display('writing to output...');
