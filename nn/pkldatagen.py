@@ -10,7 +10,7 @@ ymax = 277 #inv
 # pkl_data_framewise('../data/ch/CJKsong-ch-inv.mat','../data/ch/CJKsong-ch-inv.pkl', ymax)
 # pkl_data_framewise('../data/ch/Bsong-ch-inv.mat','../data/ch/Bsong-ch-inv.pkl', ymax)
 # pkl_data_framewise_h5py('../data/ch/Usong-ch-inv.mat','../data/ch/Usong-ch-inv.pkl', ymax)
-pkl_data_framewise_h5py('../data/ch/CJKUsong-ch-inv.mat','../data/ch/CJKUsong-ch-inv.pkl', ymax)
+# pkl_data_framewise_h5py('../data/ch/CJKUsong-ch-inv.mat','../data/ch/CJKUsong-ch-inv.pkl', ymax)
 # pkl_data_nseg('../data/ch/Jsong-ch-inv.mat','../data/ch/Jsong-6seg-ch-inv.pkl',6, ymax)
 # pkl_data_nseg('../data/ch/Bsong-ch-inv.mat','../data/ch/Bsong-6seg-ch-inv.pkl',6, ymax)
 
@@ -37,6 +37,7 @@ pkl_data_framewise_h5py('../data/ch/CJKUsong-ch-inv.mat','../data/ch/CJKUsong-ch
 # pkl_data_varlen('../data/ch/Jvarlen-ch-noinv.mat','../data/ch/J6varlen-ch-noinv.pkl',24,1)
 # pkl_data_varlen('../data/ch/Bvarlen-ch-inv.mat','../data/ch/B6varlen-ch-inv.pkl',24,1)
 # pkl_data_varlen('../data/ch/Bvarlen-ch-noinv.mat','../data/ch/B6varlen-ch-noinv.pkl',24,1)
+pkl_data_varlen('../data/ch/CJKvarlen-ch-inv.mat','../data/ch/CJKvarlen-ch-inv.pkl',24,1)
 
 ####################################### ns ############################################
 # ymax = 421 #inv
@@ -48,7 +49,9 @@ ymax = 277 #inv
 # pkl_data_framewise_h5py('../data/ns/CJsong-ns-inv.mat','../data/ns/CJsong-ns-inv.pkl', ymax)
 # pkl_data_framewise_h5py('../data/ns/CJKsong-ns-inv.mat','../data/ns/CJKsong-ns-inv.pkl', ymax)
 # pkl_data_framewise_h5py('../data/ns/Usong-ns-inv.mat','../data/ns/Usong-ns-inv.pkl', ymax)
-pkl_data_framewise_h5py('../data/ns/CJKUsong-ns-inv.mat','../data/ns/CJKUsong-ns-inv.pkl', ymax)
+# pkl_data_framewise_h5py('../data/ns/CJKUsong-ns-inv.mat','../data/ns/CJKUsong-ns-inv.pkl', ymax)
+
+# pkl_data_varlen_h5py('../data/ns/CJKvarlen-ns-inv.mat','../data/ch/CJKvarlen-ns-inv.pkl',252,1)
 
 # ymax = 61 #noinv
 # pkl_data_framewise_h5py('../data/ns/Jsong-ns-noinv.mat','../data/ns/Jsong-ns-noinv.pkl',ymax)
