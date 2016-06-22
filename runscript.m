@@ -717,7 +717,7 @@
 % tangkkace('SB','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','bctc-CJKsong-ns-inv-i.npz');evaluateCP thebeatles-bctc-ns-CJK-temp-i TheBeatles180List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%% Further Runs 6seg Model%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%% Further Runs 6seg ns Model%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','mlp-CJKU(191)6seg-ns-inv-[800,800]-1.pkl');evaluateCP CJKU(191)-thebeatles-ns-mlp-1 TheBeatles180List.txt;
 % tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-CJKU(191)6seg-ns-inv-[800,800]-1.pkl');evaluateCP CJKU(191)-thebeatles-ns-dbn-1 TheBeatles180List.txt;
@@ -729,6 +729,16 @@
 % tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-CJKU6seg-ns-inv-[800,800]-1.pkl');evaluateCP CJKU-thebeatles-ns-dbn-1 TheBeatles180List.txt;
 % tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','blstm-CJKU6seg-ns-inv-[800]-1.npz');evaluateCP CJKU-thebeatles-ns-blstm-1 TheBeatles180List.txt;
 
+% tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','mlp-CJKUR6seg-ns-inv-[800,800]-1.pkl');evaluateCP CJKUR-thebeatles-ns-mlp-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','dbn-CJKUR6seg-ns-inv-[800,800]-1.pkl');evaluateCP CJKUR-thebeatles-ns-dbn-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','6','TheBeatles180ListBUB','blstm-CJKUR6seg-ns-inv-[800]-1.npz');evaluateCP CJKUR-thebeatles-ns-blstm-1 TheBeatles180List.txt;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%% Further Runs 6seg ch Model%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','mlp-CJKUR6seg-ch-inv-[800,800]-1.pkl');evaluateCP CJKUR-thebeatles-ch-mlp-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJKUR6seg-ch-inv-[800,800]-1.pkl');evaluateCP CJKUR-thebeatles-ch-dbn-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm-CJKUR6seg-ch-inv-[800]-1.npz');evaluateCP CJKUR-thebeatles-ch-blstm-1 TheBeatles180List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Further Runs 6seg ns Deeper Model%%%%%%%%%%%%%%%%%%
