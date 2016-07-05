@@ -5,6 +5,9 @@ for i = 1:1:length(gtrootgram)
     st = gtsegments(i);
     et = gtsegments(i+1);
     boundst = locatebound(st,cpsegments, 'st');
+    if boundst(1) == 0
+        continue;
+    end
     bst = cprootgram(boundst(1));
     tst = cptreblegram(boundst(1));
     boundet = locatebound(et,cpsegments, 'et');

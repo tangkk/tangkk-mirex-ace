@@ -11,6 +11,7 @@ ymax = 277 #inv
 # pkl_data_framewise('../data/ch/Bsong-ch-inv.mat','../data/ch/Bsong-ch-inv.pkl', ymax)
 # pkl_data_framewise_h5py('../data/ch/Usong-ch-inv.mat','../data/ch/Usong-ch-inv.pkl', ymax)
 # pkl_data_framewise_h5py('../data/ch/CJKUsong-ch-inv.mat','../data/ch/CJKUsong-ch-inv.pkl', ymax)
+pkl_data_framewise_h5py('../data/ch/CJKURsong-ch-inv.mat','../data/ch/CJKURsong-ch-inv.pkl', ymax) #U is U191
 # pkl_data_nseg('../data/ch/Jsong-ch-inv.mat','../data/ch/Jsong-6seg-ch-inv.pkl',6, ymax)
 # pkl_data_nseg('../data/ch/Bsong-ch-inv.mat','../data/ch/Bsong-6seg-ch-inv.pkl',6, ymax)
 
@@ -37,7 +38,7 @@ ymax = 277 #inv
 # pkl_data_varlen('../data/ch/Jvarlen-ch-noinv.mat','../data/ch/J6varlen-ch-noinv.pkl',24,1)
 # pkl_data_varlen('../data/ch/Bvarlen-ch-inv.mat','../data/ch/B6varlen-ch-inv.pkl',24,1)
 # pkl_data_varlen('../data/ch/Bvarlen-ch-noinv.mat','../data/ch/B6varlen-ch-noinv.pkl',24,1)
-pkl_data_varlen('../data/ch/CJKvarlen-ch-inv.mat','../data/ch/CJKvarlen-ch-inv.pkl',24,1)
+# pkl_data_varlen('../data/ch/CJKvarlen-ch-inv.mat','../data/ch/CJKvarlen-ch-inv.pkl',24,1)
 
 ####################################### ns ############################################
 # ymax = 421 #inv

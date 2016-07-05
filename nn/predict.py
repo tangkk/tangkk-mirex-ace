@@ -40,6 +40,10 @@ elif invtype == 'noinv':
     nclass = 61
 elif invtype == 'jazz':
     nclass = 421
+elif invtype == 'Mm':
+    nclass = 25
+elif invtype == 'full':
+    nclass = 121
     
 if nntype == 'svm' or nntype == 'knn':
     y_preds = predprobs(model,X)

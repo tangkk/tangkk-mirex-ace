@@ -16,12 +16,12 @@ from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 from acesongdb import load_data_song
 
 use_dropout=True
-max_epochs = 12000 # give it long enough time to train
+max_epochs = 100000 # give it long enough time to train
 batch_size = 500 # length of a sample training piece within a song in terms of number of frames
 
 # Set the random number generators' seeds for consistency
 SEED = 123
-numpy.random.seed(SEED)
+#numpy.random.seed(SEED)
 
 def numpy_floatX(data):
     return numpy.asarray(data, dtype=config.floatX)
@@ -583,8 +583,8 @@ def train_lstm(
     optimizer=adadelta,  # sgd, adadelta and rmsprop available, sgd very hard to use, not recommanded (probably need momentum and decaying learning rate).
     encoder='lstm',  # TODO: can be removed must be lstm.
     dumppath='bctc_model.npz',  # The best model will be saved there
-    validFreq=400,  # Compute the validation error after this number of update.
-    saveFreq=1000,  # Save the parameters after every saveFreq updates
+    validFreq=5000,  # Compute the validation error after this number of update.
+    saveFreq=10000,  # Save the parameters after every saveFreq updates
     maxlen=None,  # Sequence longer then this get ignored
     batch_size=100,  # The batch size during training.
     valid_batch_size=100,  # The batch size used for validation/test set.

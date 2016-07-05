@@ -1,4 +1,4 @@
-function wcsr = evaluateJazz(suffix, evallistin)
+function wcsr = evaluateFull(suffix, evallistin)
 
 fr = fopen(evallistin,'r');
 fw = fopen(['e' evallistin],'w+');
@@ -25,8 +25,8 @@ gtfolder = strcat(gtroot);
 cpfolder = strcat(cproot);
 testfolder = cpfolder;
 
-load chordnames-jazz.mat;
-load chordmode-jazz.mat;
+load chordnames-full.mat;
+load chordmode-full.mat;
 
 
 % evaluate segmentation
@@ -118,9 +118,9 @@ disp('wcsr = ');
 disp(wcsr);
 
 respath = ['out/' suffix '.txt'];
-fejazz = fopen(respath,'w');
-fprintf(fejazz,'%s',wcsr);
-fclose(fejazz);
+fefull = fopen(respath,'w');
+fprintf(fefull,'%s',wcsr);
+fclose(fefull);
 
 
 

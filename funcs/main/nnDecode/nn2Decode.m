@@ -43,13 +43,19 @@ elseif ~isempty(strfind(model,'-noinv-')) || ~isempty(strfind(model,'Noinv'))
     chordnums = [chnames2chnums(chordnames, chordmode);'0:0'];
 elseif ~isempty(strfind(model,'-no7-')) || ~isempty(strfind(model,'No7'))
     invtype = 'no7';
-    nchords = 73;
     load('chordnames-no7.mat');
     chordnums = [chnames2chnums(chordnames, chordmode);'0:0'];
 elseif ~isempty(strfind(model,'-jazz-'))
     invtype = 'jazz';
-    nchords = 421;
     load('chordnames-jazz.mat');
+    chordnums = [chnames2chnums(chordnames, chordmode);'0:0'];
+elseif ~isempty(strfind(model,'-full-'))
+    invtype = 'full';
+    load('chordnames-full.mat');
+    chordnums = [chnames2chnums(chordnames, chordmode);'0:0'];
+elseif ~isempty(strfind(model,'-Mm-'))
+    invtype = 'Mm';
+    load('chordnames-Mm.mat');
     chordnums = [chnames2chnums(chordnames, chordmode);'0:0'];
 end
 

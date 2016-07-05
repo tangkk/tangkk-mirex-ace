@@ -3,7 +3,7 @@ This explains how to build up ground truths annotations using sonic-visualizer (
 1. open sonic visualizer
 2. import the audio to be annotated to sonic visualizer
 3. layer -> add new time instant layer (use instant layer instead of region layer to ease the editing job)
-4. click enter(at the number pad) or ';' to add new instant at playback position (the right most enter), remember to add one instant at the endtime, and put a label 'N' to the last region; and add one instant at start time, label it as correspond to the chord (possibly 'N' at start time)
+4. click enter(at the number pad) or ';'(on mac) to add new instant at playback position (the right most enter), remember to add one instant at the endtime, and put a label 'N' to the last region; and add one instant at start time, label it as correspond to the chord (possibly 'N' at start time); use "pageup" "pagedown"(on windows or fn+left fn+right) to navigate instances.
 5. layer -> edit layer data (to edit the chords at every region)
 6. file -> export annotation layer
 7. fill ends of the file content using transformGT.m (and it will change the file from .txt to .lab)
