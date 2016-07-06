@@ -1,37 +1,26 @@
-Command line calling format for all executables and an example formatted set of commands:
-- ./doChordID-win.sh testFileList.txt testout/ (on Windows)
-- make sure there is a new line at the end of the "testFileList.txt"
-- The inputs are specified in testFileList.txt
-- The analyzed results can be found in the testout/ folder
+Description:
+This is an Automatic Chord Estimation System
+(http://www.music-ir.org/mirex/wiki/2015:Audio_Chord_Estimation)
 
-Number of threads/cores used or whether this should be specified on the command line:
-- N/A
+Author:
+Junqi Deng, The University of Hong Kong
 
-Expected memory footprint:
-- Here's a reference of the memory usage of MATLAB
->> memory
-Maximum possible array:       32334 MB (3.390e+10 bytes) *
-Memory available for all arrays:       32334 MB (3.390e+10 bytes) *
-Memory used by MATLAB:        1225 MB (1.285e+09 bytes)
-Physical Memory (RAM):       32692 MB (3.428e+10 bytes)
-
-And the task manager shows a memory usage of about average 700 MB and maximum 1 GB during execution.
-
-Expected runtime:
-- For a 3 minutes song, executed with the MATLAB shell, the running time of the program is about 25 seconds on a 64bit Windows machine with 32G RAM and E5-2650 @ 2.3GHz processor and GPU Geforce GTX 980 Ti
-
-Any required environments (and versions), e.g. Python, Java, bash, MATLAB.
+System Environment:
 - MATLAB R2015a or later
 - Cygwin if run on Windows
 - Python 2.7 with Numpy and Theano installed
-- The system has only been tested under Windows with MATLAB R2015a and Cygwin. (That is, only ''doChordID-win.sh'' script has been tested)
 - Run the system on Windows if possible
 
-DK1: CJKUR-ch-6seg-[800,800]-dbn-inv (ModelName = dbn-CJKUR6seg-ch-inv-[800,800]-1.pkl)
-DK2: CJKUR-ch-6seg-[800]-blstm-inv (ModelName = blstm-CJKUR6seg-ch-inv-[800]-1.npz)
-DK3: CJKUR-ch-[800,800]-dbn-Mm (ModelName = dbn-CJKUR6seg-ch-Mm-[800,800]-1.pkl)
-DK4: CJKU-ch-[800]-blstmrnn-inv (ModelName = blstmrnn-CJKUsong-ch-inv-i.npz)
+How to Run:
+Open the runscript.m file to see all possible ways to run the system in Matlab shell.
 
-Should there be any problems running under the shell, please run it directly within Matlab as
+Publications:
 
-mirexace_win('testFileList.txt','testout/','SB',ModelName)
+@inproceedings{deng2016automatic,
+  title={Automatic Chord estimation on seventhsbass Chord vocabulary using deep neural network},
+  author={Deng, Junqi and Kwok, Yu-Kwong},
+  booktitle={2016 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  pages={261--265},
+  year={2016},
+  organization={IEEE}
+}
