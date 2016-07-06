@@ -7,7 +7,6 @@ Junqi Deng, The University of Hong Kong
 
 System Environment:
 - MATLAB R2015a or later
-- Cygwin if run on Windows
 - Python 2.7 with Numpy and Theano installed
 - Run the system on Windows if possible
 
@@ -15,7 +14,6 @@ How to Run:
 Open the runscript.m file to see all possible ways to run the system in Matlab shell.
 
 Publications:
-
 @inproceedings{deng2016automatic,
   title={Automatic Chord estimation on seventhsbass Chord vocabulary using deep neural network},
   author={Deng, Junqi and Kwok, Yu-Kwong},
