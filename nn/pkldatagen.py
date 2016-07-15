@@ -44,7 +44,7 @@ pkl_data_framewise_h5py('../data/ch/CJKURsong-ch-inv.mat','../data/ch/CJKURsong-
 # ymax = 421 #inv
 # pkl_data_framewise('../data/ns/Jazzsong-ns-inv.mat','../data/ns/Jazzsong-ns-inv.pkl', ymax)
 
-ymax = 277 #inv
+# ymax = 277 #inv
 # pkl_data_framewise_h5py('../data/ns/Jsong-ns-inv.mat','../data/ns/Jsong-ns-inv.pkl', ymax)
 # pkl_data_nseg_h5py('../data/ns/Jsong-ns-inv.mat','../data/ns/Jsong-6seg-ns-inv.pkl',6, ymax)
 # pkl_data_framewise_h5py('../data/ns/CJsong-ns-inv.mat','../data/ns/CJsong-ns-inv.pkl', ymax)

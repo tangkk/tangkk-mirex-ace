@@ -874,3 +874,4 @@
 % tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm-CJKU(191)6seg-ch-inv-[800]-1.npz');evaluateCP CJKU(191)-6seg-thebeatles-ch-blstm-1 TheBeatles180List.txt;
 % tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm-CJKU(191)9seg-ch-inv-[800]-1.npz');evaluateCP CJKU(191)-9seg-thebeatles-ch-blstm-1 TheBeatles180List.txt;
 % tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm-CJKU(191)12seg-ch-inv-[800]-1.npz');evaluateCP CJKU(191)-12seg-thebeatles-ch-blstm-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm-CJKU(191)6seg-ch-inv-[800]-1_.npz');evaluateCP CJKU(191)-6seg-thebeatles-ch-blstm-1_ TheBeatles180List.txt;
