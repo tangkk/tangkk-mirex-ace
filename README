@@ -22,3 +22,10 @@ Publications:
   year={2016},
   organization={IEEE}
 }
+
+@inproceedings{deng2016hybrid,
+  title={A Hybrid Gaussian-HMM-Deep-Learning Approach For Automatic Chord Estimation With Very Large Vocabulary},
+  author={Deng, Junqi and Kwok, Yu-Kwong},
+  booktitle={ISMIR},
+  year={2016}
+}
