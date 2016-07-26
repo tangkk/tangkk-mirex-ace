@@ -10,6 +10,8 @@ from loadmat import loadmat
 from logistic import LogisticRegression
 import sys
 
+import balanced_seg
+
 scaling = 1
 shuffle = 1
 datasel = 1
@@ -315,6 +317,7 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
 
     # allocate symbolic variables for the data
     index = T.lscalar()  # index to a [mini]batch
+    bcidx = T.ivector('bcidx')
     x = T.matrix('x')  # the data is presented as rasterized images
     y = T.ivector('y')  # the labels are presented as 1D vector of
                         # [int] labels
@@ -411,13 +414,22 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
     # compiling a Theano function `train_model` that returns the cost, but
     # in the same time updates the parameter of the model based on the rules
     # defined in `updates`
+    # train_model = theano.function(
+        # inputs=[index],
+        # outputs=cost,
+        # updates=updates,
+        # givens={
+            # x: train_set_x[index * batch_size: (index + 1) * batch_size],
+            # y: train_set_y[index * batch_size: (index + 1) * batch_size]
+        # }
+    # )
     train_model = theano.function(
-        inputs=[index],
+        inputs=[bcidx],
         outputs=cost,
         updates=updates,
         givens={
-            x: train_set_x[index * batch_size: (index + 1) * batch_size],
-            y: train_set_y[index * batch_size: (index + 1) * batch_size]
+            x: train_set_x[bcidx],
+            y: train_set_y[bcidx]
         }
     )
     # end-snippet-5
@@ -446,7 +458,10 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
 
     epoch = 0
     done_looping = False
-
+    
+    # SP contains an ordered list of (pos), ordered by chord class number [0,ydim-1]
+    SP = balanced_seg.balanced(nclass,train_set_y)
+    
     while (epoch < n_epochs):
         if earlystop and done_looping:
             print 'early-stopping'
@@ -455,7 +470,12 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
         epoch = epoch + 1
         for minibatch_index in xrange(n_train_batches):
             use_noise.set_value(1.) # use dropout
-            minibatch_avg_cost = train_model(minibatch_index)
+            # FIXME: n_train_batches is a fake item
+            # get balanced batch indices
+            bc_idx = balanced_seg.get_bc_idx(SP,nclass)
+            minibatch_avg_cost = train_model(bc_idx)
+            # minibatch_avg_cost = train_model(minibatch_index)
+            
             # iteration number
             iter = (epoch - 1) * n_train_batches + minibatch_index
 
@@ -534,7 +554,7 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
 
 if __name__ == '__main__':
     dataset = sys.argv[1] #'../data/ch/B6seg-ch-noinv.mat'
-    dumppath = sys.argv[2] #'../data/ch/mlp.pkl'
+    dumppath = sys.argv[2] #'../data/model/mlp.pkl'
     hidden_layers_sizes_ = sys.argv[3].split(',') #1000
     hidden_layers_sizes = []
     for hls in range(len(hidden_layers_sizes_)):
