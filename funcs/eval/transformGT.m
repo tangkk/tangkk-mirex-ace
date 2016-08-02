@@ -2,7 +2,7 @@
 % evaluation tools
 
 
-target = './temp/JazzGuitar/';
+target = './gt/JazzBook/PracJazz/';
 load chordmode-jazz.mat;
 typecount = zeros(1,size(chordmode,2)+1);
 
@@ -53,6 +53,7 @@ while ischar(tline)
         tokens = strsplit(tline,'\t');
         st2 = tokens{1};
         ch2 = tokens{2};
+        ch1 = castJazzLabel(ch1);
         newst1 = strcat(st1,st2,ch1);
         fprintf(fw,'%s\n',[st1 ' ' st2 ' ' ch1]);
     else

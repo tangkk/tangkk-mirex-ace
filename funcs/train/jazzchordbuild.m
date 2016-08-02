@@ -1,7 +1,7 @@
 % Generate training data based on the ground truth files
 % this process leverages the frontend and the ground truth data
 
-gtList = 'JazzBook99List.txt';
+gtList = 'JazzTutorial271List.txt';
 
 fe = fopen(gtList,'r');
 tline = fgetl(fe);
@@ -65,7 +65,7 @@ end
 chordnames = JJ';
 chordmode = JN';
 
-save('chordnames-jazz.mat','chordnames');
-save('chordmode-jazz.mat','chordmode');
+save('chordnames-jazz-all.mat','chordnames');
+save('chordmode-jazz-all.mat','chordmode');
 save('keynames.mat','keynames');
 

@@ -49,6 +49,10 @@ elseif ~isempty(strfind(model,'-jazz-'))
     invtype = 'jazz';
     load('chordnames-jazz.mat');
     chordnums = [chnames2chnums(chordnames, chordmode);'0:0'];
+elseif ~isempty(strfind(model,'-jazzall-'))
+    invtype = 'jazzall';
+    load('chordnames-jazz-all.mat');
+    chordnums = [chnames2chnums(chordnames, chordmode);'0:0'];
 elseif ~isempty(strfind(model,'-full-'))
     invtype = 'full';
     load('chordnames-full.mat');

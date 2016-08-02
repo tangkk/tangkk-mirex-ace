@@ -1,6 +1,6 @@
 % Generate training data based on the ground truth files
 % this process leverages the frontend and the ground truth data
-function trainingDataGenSongWise(savename, gtList)
+function trainingDataGenJazzSongWise(savename, gtList)
 
 [feparam, ~, ~, ~, ~] = paramInit10();
 chordmode =  chordTypesGen;
