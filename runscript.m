@@ -61,6 +61,11 @@
 % trainingDataGenSongWise('raw6.mat','TheBeatles180List.txt', 1)% encoded in -v7.3
 % trainingDataGenJazzNSeg('rawjazz.mat','JazzGuitar99List.txt',6);
 % trainingDataGenJazzSongWise('rawjazzsong.mat','JazzGuitar99List.txt')% encoded in -v7.3
+% trainingDataGenJazzNSeg('rawjazz1.mat','JazzImpro96List.txt',6);
+% trainingDataGenJazzSongWise('rawjazzsong1.mat','JazzImpro96List.txt')% encoded in -v7.3
+% trainingDataGenJazzNSeg('rawjazz2.mat','PracJazz76List.txt',6);
+% trainingDataGenJazzSongWise('rawjazzsong2.mat','PracJazz76List.txt')% encoded in -v7.3
+
 
 %%%%%%%%%%no7%%%%%%%%%%%%%%%
 % trainingDataGenNSeg('rawB.mat','TheBeatles180List.txt',6, 0, 1)% encoded in -v5
@@ -96,6 +101,8 @@
 % tangkkace('Jazz','JazzGuitar99List.txt','-2','JazzGuitar99ListBUBns.mat',0);
 % tangkkace('Jazz','GaryBurton7List.txt','-1','GaryBurton7ListBUB.mat',0);
 % tangkkace('Jazz','GaryBurton7List.txt','-2','GaryBurton7ListBUBns.mat',0);
+% tangkkace('Jazz','JG106List.txt','-1','JG106ListBUB.mat',0);
+% tangkkace('Jazz','JG106List.txt','-2','JG106ListBUBns.mat',0);
 % tangkkace('SB','USPop195List.txt','-1','USPop195ListBUB.mat',0);
 % tangkkace('SB','USPop195List.txt','-2','USPop195ListBUBns.mat',0);
 % tangkkace('SB','USPop191List.txt','-1','USPop191ListBUB.mat',0);
@@ -624,6 +631,7 @@
 %%%%%%%%%%%%%%%%%% Gaussian-HMM Baseline %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % tangkkace('JazzBaseline','GaryBurton7List.txt','0','0','0');evaluateJazz garyburton-baseline GaryBurton7List.txt;
+% tangkkace('JazzBaseline','JG106List.txt','0','0','0');evaluateJazz jg106-baseline JG106List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Jazz - ch-seg-HMM %%%%%%%%%%%%%%%%%%
@@ -640,6 +648,13 @@
 % tangkkace('Jazz','GaryBurton7List.txt','2','GaryBurton7ListBUB.mat','svm-Jazz6seg-ch-jazz-1.pkl');evaluateJazz garyburton-svm-1 GaryBurton7List.txt;
 % tangkkace('Jazz','GaryBurton7List.txt','2','GaryBurton7ListBUB.mat','svm-Jazz6seg-ch-jazz-2.pkl');evaluateJazz garyburton-svm-2 GaryBurton7List.txt;
 
+% tangkkace('JazzAll','JG106List.txt','2','JG106ListBUB.mat','mlp-JazzTutorial6seg-ch-jazzall-[800,800]-1.pkl');evaluateJazzAll jg106-ch-mlp-1 JG106List.txt;
+% tangkkace('JazzAll','JG106List.txt','2','JG106ListBUB.mat','dbn-JazzTutorial6seg-ch-jazzall-[800,800]-1.pkl');evaluateJazzAll jg106-ch-dbn-1 JG106List.txt;
+% tangkkace('JazzAll','JG106List.txt','2','JG106ListBUB.mat','blstm-JazzTutorial6seg-ch-jazzall-[800]-1.npz');evaluateJazzAll jg106-ch-blstm-1 JG106List.txt;
+
+% tangkkace('Jazz','JG106List.txt','2','JG106ListBUB.mat','mlp-JazzTutorial6seg-ch-jazz-[800,800]-1.pkl');evaluateJazz jg106-ch-mlp-1 JG106List.txt;
+% tangkkace('Jazz','JG106List.txt','2','JG106ListBUB.mat','dbn-JazzTutorial6seg-ch-jazz-[800,800]-1.pkl');evaluateJazz jg106-ch-dbn-1 JG106List.txt;
+% tangkkace('Jazz','JG106List.txt','2','JG106ListBUB.mat','blstm-JazzTutorial6seg-ch-jazz-[800]-1.npz');evaluateJazz jg106-ch-blstm-1 JG106List.txt;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Jazz - ns-seg-HMM %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -655,17 +670,26 @@
 % tangkkace('Jazz','GaryBurton7List.txt','6','GaryBurton7ListBUB','svm-Jazz6seg-ns-jazz-1.pkl');evaluateJazz garyburton-ns-svm-1 GaryBurton7List.txt;
 % tangkkace('Jazz','GaryBurton7List.txt','6','GaryBurton7ListBUB','svm-Jazz6seg-ns-jazz-2.pkl');evaluateJazz garyburton-ns-svm-2 GaryBurton7List.txt;
 
+% tangkkace('JazzAll','JG106List.txt','6','JG106ListBUB','mlp-JazzTutorial6seg-ns-jazzall-[800,800]-1.pkl');evaluateJazzAll jg106-ns-mlp-1 JG106List.txt;
+% tangkkace('JazzAll','JG106List.txt','6','JG106ListBUB','dbn-JazzTutorial6seg-ns-jazzall-[800,800]-1.pkl');evaluateJazzAll jg106-ns-dbn-1 JG106List.txt;
+% tangkkace('JazzAll','JG106List.txt','6','JG106ListBUB','blstm-JazzTutorial6seg-ns-jazzall-[800]-1.npz');evaluateJazzAll jg106-ns-blstm-1 JG106List.txt;
+
+% tangkkace('Jazz','JG106List.txt','6','JG106ListBUB','mlp-JazzTutorial6seg-ns-jazz-[800,800]-1.pkl');evaluateJazz jg106-ns-mlp-1 JG106List.txt;
+% tangkkace('Jazz','JG106List.txt','6','JG106ListBUB','dbn-JazzTutorial6seg-ns-jazz-[800,800]-1.pkl');evaluateJazz jg106-ns-dbn-1 JG106List.txt;
+% tangkkace('Jazz','JG106List.txt','6','JG106ListBUB','blstm-JazzTutorial6seg-ns-jazz-[800]-1.npz');evaluateJazz jg106-ns-blstm-1 JG106List.txt;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Jazz - ch-songwise %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % tangkkace('Jazz','GaryBurton7List.txt','3','GaryBurton7ListBUB.mat','lstmrnn-Jazzsong-ch-jazz-i.npz');evaluateJazz garyburton-lstmrnn GaryBurton7List.txt;
 % tangkkace('Jazz','GaryBurton7List.txt','3','GaryBurton7ListBUB.mat','blstmrnn-Jazzsong-ch-jazz-i.npz');evaluateJazz garyburton-blstmrnn GaryBurton7List.txt;
+tangkkace('Jazz','JG106List.txt','3','JG106ListBUB.mat','blstmrnn-JazzTutorialsong-ch-jazz-[800]-1.npz');evaluateJazz jg106-ch-blstmrnn JG106List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Jazz - ns-songwise %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % tangkkace('Jazz','GaryBurton7List.txt','4','GaryBurton7ListBUBns.mat','lstmrnn-Jazzsong-ns-jazz-i.npz');evaluateJazz garyburton-ns-lstmrnn GaryBurton7List.txt;
 % tangkkace('Jazz','GaryBurton7List.txt','4','GaryBurton7ListBUBns.mat','blstmrnn-Jazzsong-ns-jazz-i.npz');evaluateJazz garyburton-ns-blstmrnn GaryBurton7List.txt;
+tangkkace('Jazz','JG106List.txt','4','JG106ListBUB.mat','blstmrnn-JazzTutorialsong-ns-jazz-[800]-1.npz');evaluateJazz jg106-ns-blstmrnn JG106List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Full (121) Region %%%%%%%%%%%%%%%%%%
@@ -731,6 +755,36 @@
 % tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn-CJKURsong-ch-inv-[800,800]-1__-sg.npz');evaluateCP thebeatles-blstmrnn-CJKURsong-ch-inv-[800,800]-1__-sg TheBeatles180List.txt;
 % tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn-CJKURsong-ch-inv-[800,800]-1___-sg.npz');evaluateCP thebeatles-blstmrnn-CJKURsong-ch-inv-[800,800]-1___-sg TheBeatles180List.txt;
 
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn_ec-Jsong-ch-inv-[800]-1.npz');evaluateCP thebeatles-blstmrnn_ec-Jsong-ch-inv-[800]-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn_ec-Jsong-ch-inv-[800]-1_.npz');evaluateCP thebeatles-blstmrnn_ec-Jsong-ch-inv-[800]-1_ TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn_ec-Jsong-ch-inv-[800]-1__.npz');evaluateCP thebeatles-blstmrnn_ec-Jsong-ch-inv-[800]-1__ TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn_ec-Jsong-ch-inv-[800]-1___.npz');evaluateCP thebeatles-blstmrnn_ec-Jsong-ch-inv-[800]-1___ TheBeatles180List.txt;
+
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn_ec-CJsong-ch-inv-[800]-1.npz');evaluateCP thebeatles-blstmrnn_ec-CJsong-ch-inv-[800]-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn_ec-CJsong-ch-inv-[800]-1_.npz');evaluateCP thebeatles-blstmrnn_ec-CJsong-ch-inv-[800]-1_ TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn_ec-CJsong-ch-inv-[800]-1__.npz');evaluateCP thebeatles-blstmrnn_ec-CJsong-ch-inv-[800]-1__ TheBeatles180List.txt;
+% 
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn_ec-CJKsong-ch-inv-[800]-1.npz');evaluateCP thebeatles-blstmrnn_ec-CJKsong-ch-inv-[800]-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn_ec-CJKsong-ch-inv-[800]-1_.npz');evaluateCP thebeatles-blstmrnn_ec-CJKsong-ch-inv-[800]-1_ TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn_ec-CJKsong-ch-inv-[800]-1__.npz');evaluateCP thebeatles-blstmrnn_ec-CJKsong-ch-inv-[800]-1__ TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn_ec-CJKsong-ch-inv-[800]-1___.npz');evaluateCP thebeatles-blstmrnn_ec-CJKsong-ch-inv-[800]-1___ TheBeatles180List.txt;
+% 
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn_ec-CJKUsong-ch-inv-[800]-1.npz');evaluateCP thebeatles-blstmrnn_ec-CJKUsong-ch-inv-[800]-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn_ec-CJKUsong-ch-inv-[800]-1_.npz');evaluateCP thebeatles-blstmrnn_ec-CJKUsong-ch-inv-[800]-1_ TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn_ec-CJKUsong-ch-inv-[800]-1__.npz');evaluateCP thebeatles-blstmrnn_ec-CJKUsong-ch-inv-[800]-1__ TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn_ec-CJKUsong-ch-inv-[800]-1___.npz');evaluateCP thebeatles-blstmrnn_ec-CJKUsong-ch-inv-[800]-1___ TheBeatles180List.txt;
+% 
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn_ec-CJKURsong-ch-inv-[800]-1.npz');evaluateCP thebeatles-blstmrnn_ec-CJKURsong-ch-inv-[800]-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn_ec-CJKURsong-ch-inv-[800]-1_.npz');evaluateCP thebeatles-blstmrnn_ec-CJKURsong-ch-inv-[800]-1_ TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn_ec-CJKURsong-ch-inv-[800]-1__.npz');evaluateCP thebeatles-blstmrnn_ec-CJKURsong-ch-inv-[800]-1__ TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn_ec-CJKURsong-ch-inv-[800]-1___.npz');evaluateCP thebeatles-blstmrnn_ec-CJKURsong-ch-inv-[800]-1___ TheBeatles180List.txt;
+
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn-CJKURsong-ch-inv-[800]-1.npz');evaluateCP thebeatles-blstmrnn-CJKURsong-ch-inv-[800]-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn-CJKURsong-ch-inv-[800]-1_.npz');evaluateCP thebeatles-blstmrnn-CJKURsong-ch-inv-[800]-1_ TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn-CJKURsong-ch-inv-[800]-1__.npz');evaluateCP thebeatles-blstmrnn-CJKURsong-ch-inv-[800]-1__ TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn-CJKURsong-ch-inv-[800]-1___.npz');evaluateCP thebeatles-blstmrnn-CJKURsong-ch-inv-[800]-1___ TheBeatles180List.txt;
+
+
 % ns runs
 % tangkkace('SB','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','blstmrnn-CJsong-ns-inv-i.npz');evaluateCP thebeatles-blstm-ns-CJ-temp-i TheBeatles180List.txt;
 % tangkkace('SB','TheBeatles180List.txt','4','TheBeatles180ListBUBns.mat','blstmrnn-CJKsong-ns-inv-ii.npz');evaluateCP thebeatles-blstm-ns-CJK-temp-ii TheBeatles180List.txt;
@@ -765,6 +819,22 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Further Runs 6seg ch Model%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','mlp_bc-CJ6seg-ch-inv-[800,800]-1.pkl');evaluateCP thebeatles-mlp_bc-CJ6seg-ch-inv-[800,800]-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn_bc-CJ6seg-ch-inv-[800,800]-1.pkl');evaluateCP thebeatles-dbn_bc-CJ6seg-ch-inv-[800,800]-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm_bc-CJ6seg-ch-inv-[800]-1.npz');evaluateCP blstm_bc-CJ6seg-ch-inv-[800]-1 TheBeatles180List.txt;
+% 
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','mlp_bc-CJK6seg-ch-inv-[800,800]-1.pkl');evaluateCP thebeatles-mlp_bc-CJK6seg-ch-inv-[800,800]-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn_bc-CJK6seg-ch-inv-[800,800]-1.pkl');evaluateCP thebeatles-dbn_bc-CJK6seg-ch-inv-[800,800]-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm_bc-CJK6seg-ch-inv-[800]-1.npz');evaluateCP blstm_bc-CJK6seg-ch-inv-[800]-1 TheBeatles180List.txt;
+% 
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','mlp_bc-CJKU6seg-ch-inv-[800,800]-1.pkl');evaluateCP thebeatles-mlp_bc-CJKU6seg-ch-inv-[800,800]-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn_bc-CJKU6seg-ch-inv-[800,800]-1.pkl');evaluateCP thebeatles-dbn_bc-CJKU6seg-ch-inv-[800,800]-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm_bc-CJKU6seg-ch-inv-[800]-1.npz');evaluateCP blstm_bc-CJKU6seg-ch-inv-[800]-1 TheBeatles180List.txt;
+
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','mlp_bc-CJKUR6seg-ch-inv-[800,800]-1.pkl');evaluateCP thebeatles-mlp_bc-CJKUR6seg-ch-inv-[800,800]-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn_bc-CJKUR6seg-ch-inv-[800,800]-1.pkl');evaluateCP thebeatles-dbn_bc2-CJKUR6seg-ch-inv-[800,800]-1 TheBeatles180List.txt;
+% tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm_bc-CJKUR6seg-ch-inv-[800]-1.npz');evaluateCP blstm_bc-CJKUR6seg-ch-inv-[800]-1 TheBeatles180List.txt;
+
 % tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','mlp-CJKUR6seg-ch-inv-[800,800]-1.pkl');evaluateCP CJKUR-thebeatles-ch-mlp-1 TheBeatles180List.txt;
 % tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','dbn-CJKUR6seg-ch-inv-[800,800]-1.pkl');evaluateCP CJKUR-thebeatles-ch-dbn-1 TheBeatles180List.txt;
 % tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm-CJKUR6seg-ch-inv-[800]-1.npz');evaluateCP CJKUR-thebeatles-ch-blstm-1 TheBeatles180List.txt;
