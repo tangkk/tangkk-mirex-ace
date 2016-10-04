@@ -682,14 +682,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % tangkkace('Jazz','GaryBurton7List.txt','3','GaryBurton7ListBUB.mat','lstmrnn-Jazzsong-ch-jazz-i.npz');evaluateJazz garyburton-lstmrnn GaryBurton7List.txt;
 % tangkkace('Jazz','GaryBurton7List.txt','3','GaryBurton7ListBUB.mat','blstmrnn-Jazzsong-ch-jazz-i.npz');evaluateJazz garyburton-blstmrnn GaryBurton7List.txt;
-tangkkace('Jazz','JG106List.txt','3','JG106ListBUB.mat','blstmrnn-JazzTutorialsong-ch-jazz-[800]-1.npz');evaluateJazz jg106-ch-blstmrnn JG106List.txt;
+% tangkkace('Jazz','JG106List.txt','3','JG106ListBUB.mat','blstmrnn-JazzTutorialsong-ch-jazz-[800]-1.npz');evaluateJazz jg106-ch-blstmrnn JG106List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Jazz - ns-songwise %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % tangkkace('Jazz','GaryBurton7List.txt','4','GaryBurton7ListBUBns.mat','lstmrnn-Jazzsong-ns-jazz-i.npz');evaluateJazz garyburton-ns-lstmrnn GaryBurton7List.txt;
 % tangkkace('Jazz','GaryBurton7List.txt','4','GaryBurton7ListBUBns.mat','blstmrnn-Jazzsong-ns-jazz-i.npz');evaluateJazz garyburton-ns-blstmrnn GaryBurton7List.txt;
-tangkkace('Jazz','JG106List.txt','4','JG106ListBUB.mat','blstmrnn-JazzTutorialsong-ns-jazz-[800]-1.npz');evaluateJazz jg106-ns-blstmrnn JG106List.txt;
+% tangkkace('Jazz','JG106List.txt','4','JG106ListBUBns.mat','blstmrnn-JazzTutorialsong-ns-jazz-[800]-1.npz');evaluateJazz jg106-ns-blstmrnn JG106List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Full (121) Region %%%%%%%%%%%%%%%%%%
