@@ -82,6 +82,28 @@
 % trainingDataGenFullNSeg('rawU-full.mat','USPop191List.txt',6)
 % trainingDataGenFullNSeg('rawR-full.mat','RWC100List.txt',6)
 
+%%%%%%%%%%cross-validation data%%%%%%%%%%%%%%%
+% cvCombine('JK-1-ns.mat','JK-1-ch.mat','JK',1);
+% cvCombine('JK-2-ns.mat','JK-2-ch.mat','JK',2);
+% cvCombine('JK-3-ns.mat','JK-3-ch.mat','JK',3);
+% cvCombine('JK-4-ns.mat','JK-4-ch.mat','JK',4);
+% cvCombine('JK-5-ns.mat','JK-5-ch.mat','JK',5);
+% cvCombine('JKU-1-ns.mat','JKU-1-ch.mat','JKU',1);
+% cvCombine('JKU-2-ns.mat','JKU-2-ch.mat','JKU',2);
+% cvCombine('JKU-3-ns.mat','JKU-3-ch.mat','JKU',3);
+% cvCombine('JKU-4-ns.mat','JKU-4-ch.mat','JKU',4);
+% cvCombine('JKU-5-ns.mat','JKU-5-ch.mat','JKU',5);
+% cvCombine('JKUR-1-ns.mat','JKUR-1-ch.mat','JKUR',1);
+% cvCombine('JKUR-2-ns.mat','JKUR-2-ch.mat','JKUR',2);
+% cvCombine('JKUR-3-ns.mat','JKUR-3-ch.mat','JKUR',3);
+% cvCombine('JKUR-4-ns.mat','JKUR-4-ch.mat','JKUR',4);
+% cvCombine('JKUR-5-ns.mat','JKUR-5-ch.mat','JKUR',5);
+% cvCombine('JKURB-1-ns.mat','JKURB-1-ch.mat','JKURB',1);
+% cvCombine('JKURB-2-ns.mat','JKURB-2-ch.mat','JKURB',2);
+% cvCombine('JKURB-3-ns.mat','JKURB-3-ch.mat','JKURB',3);
+% cvCombine('JKURB-4-ns.mat','JKURB-4-ch.mat','JKURB',4);
+% cvCombine('JKURB-5-ns.mat','JKURB-5-ch.mat','JKURB',5);
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Saving BUB sets %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -682,14 +704,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % tangkkace('Jazz','GaryBurton7List.txt','3','GaryBurton7ListBUB.mat','lstmrnn-Jazzsong-ch-jazz-i.npz');evaluateJazz garyburton-lstmrnn GaryBurton7List.txt;
 % tangkkace('Jazz','GaryBurton7List.txt','3','GaryBurton7ListBUB.mat','blstmrnn-Jazzsong-ch-jazz-i.npz');evaluateJazz garyburton-blstmrnn GaryBurton7List.txt;
-tangkkace('Jazz','JG106List.txt','3','JG106ListBUB.mat','blstmrnn-JazzTutorialsong-ch-jazz-[800]-1.npz');evaluateJazz jg106-ch-blstmrnn JG106List.txt;
+% tangkkace('Jazz','JG106List.txt','3','JG106ListBUB.mat','blstmrnn-JazzTutorialsong-ch-jazz-[800]-1.npz');evaluateJazz jg106-ch-blstmrnn JG106List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Jazz - ns-songwise %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % tangkkace('Jazz','GaryBurton7List.txt','4','GaryBurton7ListBUBns.mat','lstmrnn-Jazzsong-ns-jazz-i.npz');evaluateJazz garyburton-ns-lstmrnn GaryBurton7List.txt;
 % tangkkace('Jazz','GaryBurton7List.txt','4','GaryBurton7ListBUBns.mat','blstmrnn-Jazzsong-ns-jazz-i.npz');evaluateJazz garyburton-ns-blstmrnn GaryBurton7List.txt;
-tangkkace('Jazz','JG106List.txt','4','JG106ListBUB.mat','blstmrnn-JazzTutorialsong-ns-jazz-[800]-1.npz');evaluateJazz jg106-ns-blstmrnn JG106List.txt;
+% tangkkace('Jazz','JG106List.txt','4','JG106ListBUBns.mat','blstmrnn-JazzTutorialsong-ns-jazz-[800]-1.npz');evaluateJazz jg106-ns-blstmrnn JG106List.txt;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Full (121) Region %%%%%%%%%%%%%%%%%%

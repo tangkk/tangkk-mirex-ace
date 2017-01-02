@@ -1,14 +1,12 @@
 import os
 import sys
 import timeit
-import cPickle
 import numpy
 import theano
 import theano.tensor as T
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 from loadmat import loadmat
 from logistic import LogisticRegression
-import sys
 
 # start-snippet-1
 class HiddenLayer(object):
@@ -63,7 +61,7 @@ class HiddenLayer(object):
                 ),
                 dtype=theano.config.floatX
             )
-            if activation == theano.tensor.nnet.sigmoid:
+            if activation == T.nnet.sigmoid:
                 W_values *= 4
 
             W = theano.shared(value=W_values, name='W', borrow=True)
@@ -155,7 +153,8 @@ class MLP(object):
                 n_out=hidden_layers_sizes[i],
                 W = W,
                 b = b,
-                activation=T.nnet.sigmoid
+                #activation=T.nnet.sigmoid
+                activation=T.nnet.relu
             )
             self.hiddenlayers.append(hiddenLayer)
             self.params.extend(hiddenLayer.params)
@@ -219,7 +218,8 @@ def dropout_layer(state_before, use_noise, trng, p):
                          state_before * p)
     return layer
     
-def predprobs(model, X):
+def predprobs(savez, X):
+    model = savez['model']
     W = []
     b = []
     hidden_layers_sizes = []
@@ -257,7 +257,8 @@ def predprobs(model, X):
     
     
 def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
-             hidden_layers_sizes, dataset, batch_size, datasel, shuffle, scaling, dropout, earlystop, dumppath):
+             hidden_layers_sizes, trainpath, trainlist, validset, batch_size, datasel,
+             shuffle, scaling, dropout, earlystop, dumppath):
     """
     Demonstrate stochastic gradient descent optimization for a multilayer
     perceptron
@@ -284,16 +285,15 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
    """
     print locals()
     
-    datasets = loadmat(dataset=dataset,shuffle=shuffle,datasel=datasel,scaling=scaling,robust=robust)
+    datasets = loadmat(trainpath=trainpath,trainlist=trainlist,validset=validset,shuffle=shuffle,datasel=datasel,
+                       scaling=scaling,robust=robust)
 
     train_set_x, train_set_y = datasets[0]
     valid_set_x, valid_set_y = datasets[1]
-    test_set_x, test_set_y = datasets[2]
 
     # compute number of minibatches for training, validation and testing
     n_train_batches = train_set_x.get_value(borrow=True).shape[0] / batch_size
     n_valid_batches = valid_set_x.get_value(borrow=True).shape[0] / batch_size
-    n_test_batches = test_set_x.get_value(borrow=True).shape[0] / batch_size
 
     ######################
     # BUILD ACTUAL MODEL #
@@ -339,17 +339,6 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
         + L2_reg * classifier.L2_sqr
     )
     # end-snippet-4
-
-    # compiling a Theano function that computes the mistakes that are made
-    # by the model on a minibatch
-    test_model = theano.function(
-        inputs=[index],
-        outputs=classifier.errors(y),
-        givens={
-            x: test_set_x[index * batch_size:(index + 1) * batch_size],
-            y: test_set_y[index * batch_size:(index + 1) * batch_size]
-        }
-    )
 
     validate_model = theano.function(
         inputs=[index],
@@ -415,10 +404,10 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
     print '... training'
 
     # early-stopping parameters
-    patience = 100 * n_train_batches  # look as this many examples regardless
+    patience = 10 * n_train_batches  # look as this many examples regardless
     patience_increase = 2  # wait this much longer when a new best is
                            # found
-    improvement_threshold = 0.999  # a relative improvement of this much is
+    improvement_threshold = 0.996   # a relative improvement of this much is
                                    # considered significant
     validation_frequency = min(n_train_batches, patience / 2)
                                   # go through this many
@@ -428,7 +417,7 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
 
     best_validation_loss = numpy.inf
     best_iter = 0
-    test_score = 0.
+    training_history=[]
     start_time = timeit.default_timer()
 
     epoch = 0
@@ -438,7 +427,6 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
         if earlystop and done_looping:
             print 'early-stopping'
             break
-    # while (epoch < n_epochs):
         epoch = epoch + 1
         for minibatch_index in xrange(n_train_batches):
             use_noise.set_value(1.) # use dropout
@@ -449,34 +437,21 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
             if (iter + 1) % validation_frequency == 0:
                 # compute zero-one loss on validation set
                 use_noise.set_value(0.) # at validation/testing time, no dropout
-                validation_losses = [validate_model(i) for i
-                                     in xrange(n_valid_batches)]
-                training_losses = [train_score(i) for i
-                                    in xrange(n_train_batches)]
+                validation_losses = [validate_model(i) for i in xrange(n_valid_batches)]
+                #training_losses = [train_score(i) for i in xrange(n_train_batches)]
                 this_validation_loss = numpy.mean(validation_losses)
-                this_training_loss = numpy.mean(training_losses)
-                probs = [pred_probs(i) for i
-                                    in xrange(n_train_batches)]
+                #this_training_loss = numpy.mean(training_losses)
+                #training_history.append([iter,this_training_loss,this_validation_loss])
+                training_history.append([iter,this_validation_loss])
                 
-                print(
-                    'epoch %i, minibatch %i/%i, training error %f %%' %
-                    (
-                        epoch,
-                        minibatch_index + 1,
-                        n_train_batches,
-                        this_training_loss * 100.
-                    )
-                )
-
-                print(
-                    'epoch %i, minibatch %i/%i, validation error %f %%' %
-                    (
-                        epoch,
-                        minibatch_index + 1,
-                        n_train_batches,
-                        this_validation_loss * 100.
-                    )
-                )
+#                print('epoch %i, minibatch %i/%i, training error %f %%' %
+#                      (epoch, minibatch_index + 1, n_train_batches,
+#                       this_training_loss * 100.))
+                print('epoch %i, minibatch %i/%i, validation error %f %%' %
+                      (epoch, minibatch_index + 1, n_train_batches,
+                       this_validation_loss * 100.))
+                print('iter = %d' % iter)
+                print('patience = %d' % patience)
 
                 # if we got the best validation score until now
                 if this_validation_loss < best_validation_loss:
@@ -486,24 +461,13 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
                         improvement_threshold
                     ):
                         patience = max(patience, iter * patience_increase)
-                    # save model
-                    with open(dumppath, "wb") as f:
-                        cPickle.dump(classifier.params, f)
+                        
+                    numpy.savez(dumppath, model=classifier.params, training_history=training_history,
+                                best_validation_loss=best_validation_loss)
                         
                     best_validation_loss = this_validation_loss
                     best_iter = iter
-                    
-                    '''
-                    # test it on the test set
-                    test_losses = [test_model(i) for i
-                                   in xrange(n_test_batches)]
-                    test_score = numpy.mean(test_losses)
-
-                    print(('     epoch %i, minibatch %i/%i, test error of '
-                           'best model %f %%') %
-                          (epoch, minibatch_index + 1, n_train_batches,
-                           test_score * 100.))
-                    '''
+                    print('best_validation_loss %f' % best_validation_loss)
 
             if patience <= iter:
                 done_looping = True
@@ -511,29 +475,40 @@ def test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
                     break
 
     end_time = timeit.default_timer()
+    
+    # final save
+    numpy.savez(dumppath, model=classifier.params, training_history=training_history,
+                                best_validation_loss=best_validation_loss)
+    
     print(('Optimization complete. Best validation score of %f %% '
-           'obtained at iteration %i, with test performance %f %%') %
-          (best_validation_loss * 100., best_iter + 1, test_score * 100.))
+           'obtained at iteration %i') %
+          (best_validation_loss * 100., best_iter + 1))
     print >> sys.stderr, ('The code for file ' +
                           os.path.split(__file__)[1] +
                           ' ran for %.2fm' % ((end_time - start_time) / 60.))
 
 
 if __name__ == '__main__':
-    dataset = sys.argv[1] #'../data/ch/B6seg-ch-noinv.mat'
-    dumppath = sys.argv[2] #'../data/ch/mlp.pkl'
-    hidden_layers_sizes_ = sys.argv[3].split(',') #1000
+    trainpath = sys.argv[1] #'../data/cv/'
+    trainlist = sys.argv[2] #'JK-ch-1234' hold one out
+    validset = sys.argv[3] #'../data/cv/C-ch.mat'
+    hidden_layers_sizes_ = sys.argv[4].split(',') #[800,800]
     hidden_layers_sizes = []
     for hls in range(len(hidden_layers_sizes_)):
         hidden_layers_sizes.append(int(hidden_layers_sizes_[hls]))
         
+    # build dumppath
+    nntoks = sys.argv[0].split('.')
+    nn = nntoks[0]
+    dumppath = '../model/' + nn + '-' + trainlist + '-' + sys.argv[4] + '.npz'
+        
     scaling = 1
-    shuffle = 1
-    datasel = 1
+    shuffle = 0 # do NOT shuffle
+    datasel = 1 # select all data
     robust = 0
     
     batch_size = 100
-    n_epochs=500
+    n_epochs=300
     learning_rate=0.01
     L1_reg=0.0000
     L2_reg=0.0000
@@ -541,4 +516,5 @@ if __name__ == '__main__':
     dropout = True
     
     test_mlp(learning_rate, L1_reg, L2_reg, n_epochs,
-             hidden_layers_sizes, dataset, batch_size, datasel, shuffle, scaling, dropout, earlystop, dumppath)
+             hidden_layers_sizes, trainpath, trainlist, validset,
+             batch_size, datasel, shuffle, scaling, dropout, earlystop, dumppath)
