@@ -631,9 +631,9 @@ if __name__ == '__main__':
     robust = 0
     
     batch_size=100
-    pretraining_epochs=50
+    pretraining_epochs=30
     pretrain_lr=0.001
-    cdk=20
+    cdk=10
     usepersistent=False
     
     training_epochs=300
