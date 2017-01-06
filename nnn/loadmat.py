@@ -114,8 +114,15 @@ def loadmat(trainpath, trainlist, validset, shuffle=0, datasel=1, scaling=1, rob
         sets = strtoks[0]
         folds = strtoks[1]
         feature = strtoks[2]
+        print strtoks
+        if len(strtoks) > 3:
+            nseg = strtoks[3]
+            print nseg
         for fold in folds:
-            dataset = trainpath + sets + '-' + fold + '-' + feature;
+            if len(strtoks) == 3:
+                dataset = trainpath + sets + '-' + fold + '-' + feature
+            else:
+                dataset = trainpath + sets + '-' + fold + '-' + feature + '-' + nseg
             print dataset
             if rc == 0:
                 mat = sio.loadmat(dataset)
@@ -132,7 +139,11 @@ def loadmat(trainpath, trainlist, validset, shuffle=0, datasel=1, scaling=1, rob
         folds = strtoks[1]
         feature = strtoks[2]
         for fold in folds:
-            dataset = trainpath + sets + '-' + fold + '-' + feature;
+            if len(strtoks) == 3:
+                dataset = trainpath + sets + '-' + fold + '-' + feature
+            else:
+                dataset = trainpath + sets + '-' + fold + '-' + feature + '-' + nseg
+            print dataset
             if rc == 0:
                 X = load_matrix_data_h5py(dataset,'X')
                 y = load_matrix_data_h5py(dataset,'y')
