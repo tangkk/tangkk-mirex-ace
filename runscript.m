@@ -104,6 +104,99 @@
 % cvCombine('JKURB-4-ns.mat','JKURB-4-ch.mat','JKURB',4);
 % cvCombine('JKURB-5-ns.mat','JKURB-5-ch.mat','JKURB',5);
 
+% cvCombine('JK',1,1);
+% cvCombine('JK',2,1);
+% cvCombine('JK',3,1);
+% cvCombine('JK',4,1);
+% cvCombine('JK',5,1);
+% cvCombine('JKU',1,1);
+% cvCombine('JKU',2,1);
+% cvCombine('JKU',3,1);
+% cvCombine('JKU',4,1);
+% cvCombine('JKU',5,1);
+% cvCombine('JKUR',1,1);
+% cvCombine('JKUR',2,1);
+% cvCombine('JKUR',3,1);
+% cvCombine('JKUR',4,1);
+% cvCombine('JKUR',5,1);
+% cvCombine('JKURB',1,1);
+% cvCombine('JKURB',2,1);
+% cvCombine('JKURB',3,1);
+% cvCombine('JKURB',4,1);
+% cvCombine('JKURB',5,1);
+% 
+% cvCombine('JK',1,2);
+% cvCombine('JK',2,2);
+% cvCombine('JK',3,2);
+% cvCombine('JK',4,2);
+% cvCombine('JK',5,2);
+% cvCombine('JKU',1,2);
+% cvCombine('JKU',2,2);
+% cvCombine('JKU',3,2);
+% cvCombine('JKU',4,2);
+% cvCombine('JKU',5,2);
+% cvCombine('JKUR',1,2);
+% cvCombine('JKUR',2,2);
+% cvCombine('JKUR',3,2);
+% cvCombine('JKUR',4,2);
+% cvCombine('JKUR',5,2);
+% cvCombine('JKURB',1,2);
+% cvCombine('JKURB',2,2);
+% cvCombine('JKURB',3,2);
+% cvCombine('JKURB',4,2);
+% cvCombine('JKURB',5,2);
+% 
+% cvCombine('JK',1,3);
+% cvCombine('JK',2,3);
+% cvCombine('JK',3,3);
+% cvCombine('JK',4,3);
+% cvCombine('JK',5,3);
+% cvCombine('JKU',1,3);
+% cvCombine('JKU',2,3);
+% cvCombine('JKU',3,3);
+% cvCombine('JKU',4,3);
+% cvCombine('JKU',5,3);
+% cvCombine('JKUR',1,3);
+% cvCombine('JKUR',2,3);
+% cvCombine('JKUR',3,3);
+% cvCombine('JKUR',4,3);
+% cvCombine('JKUR',5,3);
+% cvCombine('JKURB',1,3);
+% cvCombine('JKURB',2,3);
+% cvCombine('JKURB',3,3);
+% cvCombine('JKURB',4,3);
+% cvCombine('JKURB',5,3);
+
+% cvCombine('JK',1,9);
+% cvCombine('JK',2,9);
+% cvCombine('JK',3,9);
+% cvCombine('JK',4,9);
+% cvCombine('JK',5,9);
+% cvCombine('JKU',1,9);
+% cvCombine('JKU',2,9);
+% cvCombine('JKU',3,9);
+% cvCombine('JKU',4,9);
+% cvCombine('JKU',5,9);
+% 
+% 
+% cvCombine('JK',1,12);
+% cvCombine('JK',2,12);
+% cvCombine('JK',3,12);
+% cvCombine('JK',4,12);
+% cvCombine('JK',5,12);
+% cvCombine('JKU',1,12);
+% cvCombine('JKU',2,12);
+% cvCombine('JKU',3,12);
+% cvCombine('JKU',4,12);
+% cvCombine('JKU',5,12);
+
+% foldCombine('C',1);
+% foldCombine('C',2);
+% foldCombine('C',3);
+% foldCombine('C',9);
+% foldCombine('C',12);
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%% Saving BUB sets %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
