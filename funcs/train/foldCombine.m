@@ -1,7 +1,7 @@
 % this function combine a set folds to bigger folds
 % the setList could be as long as 'CJKURB'
 
-function foldCombine(savns,savch,setList)
+function foldCombine(setList,nseg)
 
 Xns = [];
 yns = [];
@@ -9,9 +9,12 @@ yns = [];
 Xch = [];
 ych = [];
 
+savns = [setList '-ns-' num2str(nseg) 'seg' '.mat'];
+savch = [setList '-ch-' num2str(nseg) 'seg' '.mat'];
+
 if sum(setList == 'C') > 0 % C case
     for i = 1:5
-        C = load(['cv/CNPop20List-' num2str(i) '.mat']);
+        C = load(['data/cvraw/CNPop20List-' num2str(i) '-' num2str(nseg) 'seg' '.mat']);
         Xns = [Xns;C.trainingDataX11];
         yns = [yns;C.trainingDatay11];
         Xch = [Xch;C.trainingDataX22];
