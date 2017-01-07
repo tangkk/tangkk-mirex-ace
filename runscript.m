@@ -225,6 +225,7 @@
 % tangkkace('SB','RWC100List.txt','-1','RWC100ListBUB.mat',0);
 % tangkkace('SB','RWC100List.txt','-2','RWC100ListBUBns.mat',0);
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %%%%%%%%%%%%%%%%%% J-CNPop - INV %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1060,3 +1061,17 @@
 % tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm-CJKU(191)9seg-ch-inv-[800]-1.npz');evaluateCP CJKU(191)-9seg-thebeatles-ch-blstm-1 TheBeatles180List.txt;
 % tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm-CJKU(191)12seg-ch-inv-[800]-1.npz');evaluateCP CJKU(191)-12seg-thebeatles-ch-blstm-1 TheBeatles180List.txt;
 % tangkkace('SB','TheBeatles180List.txt','2','TheBeatles180ListBUB','blstm-CJKU(191)6seg-ch-inv-[800]-1_.npz');evaluateCP CJKU(191)-6seg-thebeatles-ch-blstm-1_ TheBeatles180List.txt;
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CV Testing %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% now we only specify the dnn model, dataset, feature level, network config
+% the evaluation will automatically run and generate the cv results
+% this refactoring clearout a lot of previous redundancies
+tangkkace_cv('mlp-JK-ch-800,800');
+
+
+
+

@@ -74,3 +74,4 @@ test*.mat
 raw.mat
 *.pkl
 TODO
+*~
