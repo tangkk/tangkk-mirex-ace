@@ -225,7 +225,6 @@
 % tangkkace('SB','RWC100List.txt','-1','RWC100ListBUB.mat',0);
 % tangkkace('SB','RWC100List.txt','-2','RWC100ListBUBns.mat',0);
 
-<<<<<<< HEAD
 % tangkkace('SB','data/cvlist/CaroleKingQueen26List-1.txt','-1','CaroleKingQueen26ListBUB-1.mat',0);
 % tangkkace('SB','data/cvlist/CaroleKingQueen26List-1.txt','-2','CaroleKingQueen26ListBUBns-1.mat',0);
 % tangkkace('SB','data/cvlist/CaroleKingQueen26List-2.txt','-1','CaroleKingQueen26ListBUB-2.mat',0);
@@ -291,8 +290,6 @@
 % tangkkace('SB','data/cvlist/USPop191List-4.txt','-2','USPop191ListBUBns-4.mat',0);
 % tangkkace('SB','data/cvlist/USPop191List-5.txt','-1','USPop191ListBUB-5.mat',0);
 % tangkkace('SB','data/cvlist/USPop191List-5.txt','-2','USPop191ListBUBns-5.mat',0);
-=======
->>>>>>> 8e417fff325dee470f1bd306d9e45f98414113e7
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %%%%%%%%%%%%%%%%%% J-CNPop - INV %%%%%%%%%%%%%%%%%%
