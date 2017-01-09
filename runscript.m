@@ -225,6 +225,74 @@
 % tangkkace('SB','RWC100List.txt','-1','RWC100ListBUB.mat',0);
 % tangkkace('SB','RWC100List.txt','-2','RWC100ListBUBns.mat',0);
 
+<<<<<<< HEAD
+% tangkkace('SB','data/cvlist/CaroleKingQueen26List-1.txt','-1','CaroleKingQueen26ListBUB-1.mat',0);
+% tangkkace('SB','data/cvlist/CaroleKingQueen26List-1.txt','-2','CaroleKingQueen26ListBUBns-1.mat',0);
+% tangkkace('SB','data/cvlist/CaroleKingQueen26List-2.txt','-1','CaroleKingQueen26ListBUB-2.mat',0);
+% tangkkace('SB','data/cvlist/CaroleKingQueen26List-2.txt','-2','CaroleKingQueen26ListBUBns-2.mat',0);
+% tangkkace('SB','data/cvlist/CaroleKingQueen26List-3.txt','-1','CaroleKingQueen26ListBUB-3.mat',0);
+% tangkkace('SB','data/cvlist/CaroleKingQueen26List-3.txt','-2','CaroleKingQueen26ListBUBns-3.mat',0);
+% tangkkace('SB','data/cvlist/CaroleKingQueen26List-4.txt','-1','CaroleKingQueen26ListBUB-4.mat',0);
+% tangkkace('SB','data/cvlist/CaroleKingQueen26List-4.txt','-2','CaroleKingQueen26ListBUBns-4.mat',0);
+% tangkkace('SB','data/cvlist/CaroleKingQueen26List-5.txt','-1','CaroleKingQueen26ListBUB-5.mat',0);
+% tangkkace('SB','data/cvlist/CaroleKingQueen26 List-5.txt','-2','CaroleKingQueen26ListBUBns-5.mat',0);
+% 
+% tangkkace('SB','data/cvlist/CNPop20List-1.txt','-1','CNPop20ListBUB-1.mat',0);
+% tangkkace('SB','data/cvlist/CNPop20List-1.txt','-2','CNPop20ListBUBns-1.mat',0);
+% tangkkace('SB','data/cvlist/CNPop20List-2.txt','-1','CNPop20ListBUB-2.mat',0);
+% tangkkace('SB','data/cvlist/CNPop20List-2.txt','-2','CNPop20ListBUBns-2.mat',0);
+% tangkkace('SB','data/cvlist/CNPop20List-3.txt','-1','CNPop20ListBUB-3.mat',0);
+% tangkkace('SB','data/cvlist/CNPop20List-3.txt','-2','CNPop20ListBUBns-3.mat',0);
+% tangkkace('SB','data/cvlist/CNPop20List-4.txt','-1','CNPop20ListBUB-4.mat',0);
+% tangkkace('SB','data/cvlist/CNPop20List-4.txt','-2','CNPop20ListBUBns-4.mat',0);
+% tangkkace('SB','data/cvlist/CNPop20List-5.txt','-1','CNPop20ListBUB-5.mat',0);
+% tangkkace('SB','data/cvlist/CNPop20List-5.txt','-2','CNPop20ListBUBns-5.mat',0);
+% 
+% tangkkace('SB','data/cvlist/JayChou29List-1.txt','-1','JayChou29ListBUB-1.mat',0);
+% tangkkace('SB','data/cvlist/JayChou29List-1.txt','-2','JayChou29ListBUBns-1.mat',0);
+% tangkkace('SB','data/cvlist/JayChou29List-2.txt','-1','JayChou29ListBUB-2.mat',0);
+% tangkkace('SB','data/cvlist/JayChou29List-2.txt','-2','JayChou29ListBUBns-2.mat',0);
+% tangkkace('SB','data/cvlist/JayChou29List-3.txt','-1','JayChou29ListBUB-3.mat',0);
+% tangkkace('SB','data/cvlist/JayChou29List-3.txt','-2','JayChou29ListBUBns-3.mat',0);
+% tangkkace('SB','data/cvlist/JayChou29List-4.txt','-1','JayChou29ListBUB-4.mat',0);
+% tangkkace('SB','data/cvlist/JayChou29List-4.txt','-2','JayChou29ListBUBns-4.mat',0);
+% tangkkace('SB','data/cvlist/JayChou29List-5.txt','-1','JayChou29ListBUB-5.mat',0);
+% tangkkace('SB','data/cvlist/JayChou29List-5.txt','-2','JayChou29ListBUBns-5.mat',0);
+% 
+% tangkkace('SB','data/cvlist/RWC100List-1.txt','-1','RWC100ListBUB-1.mat',0);
+% tangkkace('SB','data/cvlist/RWC100List-1.txt','-2','RWC100ListBUBns-1.mat',0);
+% tangkkace('SB','data/cvlist/RWC100List-2.txt','-1','RWC100ListBUB-2.mat',0);
+% tangkkace('SB','data/cvlist/RWC100List-2.txt','-2','RWC100ListBUBns-2.mat',0);
+% tangkkace('SB','data/cvlist/RWC100List-3.txt','-1','RWC100ListBUB-3.mat',0);
+% tangkkace('SB','data/cvlist/RWC100List-3.txt','-2','RWC100ListBUBns-3.mat',0);
+% tangkkace('SB','data/cvlist/RWC100List-4.txt','-1','RWC100ListBUB-4.mat',0);
+% tangkkace('SB','data/cvlist/RWC100List-4.txt','-2','RWC100ListBUBns-4.mat',0);
+% tangkkace('SB','data/cvlist/RWC100List-5.txt','-1','RWC100ListBUB-5.mat',0);
+% tangkkace('SB','data/cvlist/RWC100List-5.txt','-2','RWC100ListBUBns-5.mat',0);
+% 
+% tangkkace('SB','data/cvlist/TheBeatles180List-1.txt','-1','TheBeatles180ListBUB-1.mat',0);
+% tangkkace('SB','data/cvlist/TheBeatles180List-1.txt','-2','TheBeatles180ListBUBns-1.mat',0);
+% tangkkace('SB','data/cvlist/TheBeatles180List-2.txt','-1','TheBeatles180ListBUB-2.mat',0);
+% tangkkace('SB','data/cvlist/TheBeatles180List-2.txt','-2','TheBeatles180ListBUBns-2.mat',0);
+% tangkkace('SB','data/cvlist/TheBeatles180List-3.txt','-1','TheBeatles180ListBUB-3.mat',0);
+% tangkkace('SB','data/cvlist/TheBeatles180List-3.txt','-2','TheBeatles180ListBUBns-3.mat',0);
+% tangkkace('SB','data/cvlist/TheBeatles180List-4.txt','-1','TheBeatles180ListBUB-4.mat',0);
+% tangkkace('SB','data/cvlist/TheBeatles180List-4.txt','-2','TheBeatles180ListBUBns-4.mat',0);
+% tangkkace('SB','data/cvlist/TheBeatles180List-5.txt','-1','TheBeatles180ListBUB-5.mat',0);
+% tangkkace('SB','data/cvlist/TheBeatles180List-5.txt','-2','TheBeatles180ListBUBns-5.mat',0);
+% 
+% tangkkace('SB','data/cvlist/USPop191List-1.txt','-1','USPop191ListBUB-1.mat',0);
+% tangkkace('SB','data/cvlist/USPop191List-1.txt','-2','USPop191ListBUBns-1.mat',0);
+% tangkkace('SB','data/cvlist/USPop191List-2.txt','-1','USPop191ListBUB-2.mat',0);
+% tangkkace('SB','data/cvlist/USPop191List-2.txt','-2','USPop191ListBUBns-2.mat',0);
+% tangkkace('SB','data/cvlist/USPop191List-3.txt','-1','USPop191ListBUB-3.mat',0);
+% tangkkace('SB','data/cvlist/USPop191List-3.txt','-2','USPop191ListBUBns-3.mat',0);
+% tangkkace('SB','data/cvlist/USPop191List-4.txt','-1','USPop191ListBUB-4.mat',0);
+% tangkkace('SB','data/cvlist/USPop191List-4.txt','-2','USPop191ListBUBns-4.mat',0);
+% tangkkace('SB','data/cvlist/USPop191List-5.txt','-1','USPop191ListBUB-5.mat',0);
+% tangkkace('SB','data/cvlist/USPop191List-5.txt','-2','USPop191ListBUBns-5.mat',0);
+=======
+>>>>>>> 8e417fff325dee470f1bd306d9e45f98414113e7
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %%%%%%%%%%%%%%%%%% J-CNPop - INV %%%%%%%%%%%%%%%%%%
