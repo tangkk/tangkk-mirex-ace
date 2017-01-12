@@ -3,13 +3,15 @@
 
 % original function: function tangkkace(paramN, testlist, savetmp, loadtmp, model)
 % testing params example: 'mlp-JK-ch-800,800'
-function tangkkace_cv(testingParams)
+function tangkkace_cv(testingParams,putget)
 
 strtoks = strsplit(testingParams,'-');
-dnnmodel = strtoks(1);
-dataset = strtoks(2);
-featurelevel = strtoks(3);
-netconfig = strtoks(4);
+dnnmodel = strtoks{1};
+dataset = strtoks{2};
+featurelevel = strtoks{3};
+segtile = strtoks{4};
+netconfig = strtoks{5};
+
 
 paramN = 'SB';
 
@@ -20,6 +22,9 @@ elseif strcmp(featurelevel,'ns')
 else
     savetmp = inf;
 end
+
+% extract nseg info
+nseg = str2double(segtile(1:end-3));
 
 % now perform cross validation testing
 % first loop, loop folds
@@ -37,7 +42,7 @@ for cvi = 1:5
     else
         trainfolds = '';
     end
-    model = [dnnmodel, '-', dataset, '-', trainfolds, '-', featurelevel, '-', netconfig];
+    model = [dnnmodel, '-', dataset, '-', trainfolds, '-', featurelevel, '-', segtile, '-' netconfig, '.npz'];
     
     % second loop, loop datasets
     for dsi = 1:length(dataset)
@@ -60,11 +65,14 @@ for cvi = 1:5
         
         testlist = ['data/cvlist/', thisset, '-', num2str(cvi), '.txt'];
         if strcmp(featurelevel,'ch')
-            loadtmp = ['bub/', thisset, 'BUB', '-', num2str(cvi), '.mat'];
+            loadtmp = ['bub/', thisset, 'BUB', '-', num2str(cvi)];
         elseif strcmp(featurelevel,'ns')
-            loadtmp = ['bub/', thisset, 'BUBns', '-', num2str(cvi), '.mat'];
+            loadtmpch = ['bub/', thisset, 'BUB', '-', num2str(cvi)];
+            loadtmpns = ['bub/', thisset, 'BUBns', '-', num2str(cvi)];
         else
             loadtmp = [];
+            loadtmpch = [];
+            loadtmpns = [];
         end
 
         if ischar(paramN)
@@ -100,26 +108,9 @@ for cvi = 1:5
         end
         if (savetmp == 5 || savetmp == 6)
             % load both BUB and BUBns
-            loadtmpch = [loadtmp '.mat'];
-            loadtmpns = [loadtmp 'ns.mat'];
             load(loadtmpch);
             load(loadtmpns);
             loadidx = 1;
-        end
-
-        % extract nseg info
-        nseg = 0;
-        pos = strfind(model,'seg');
-        if ~isempty(pos)
-           s0 = model(pos-1);
-           s1 = model(pos-2);
-           % nseg = 1,2,3,6,9,12...
-           n1 = str2double(s1);
-           if isnan(n1)
-               nseg = str2double(s0);
-           else
-               nseg = str2double([s1,s0]);
-           end
         end
 
         while ischar(tline)
@@ -177,7 +168,13 @@ for cvi = 1:5
                 endtime = endtimeSet{loadidx};
                 loadidx = loadidx + 1;
                 display('ch-seg-NN backend...');
-                [rootgram, bassgram, treblegram] = nn2Decode(chordmode, rawbasegram, rawuppergram, bdrys, model, nseg);
+                if strcmp(putget,'put')
+                    nnn2Decode_put(tline, rawbasegram, rawuppergram, bdrys, nseg);
+                elseif strcmp(putget,'get')
+                    [rootgram, bassgram, treblegram] = nnn2Decode_get(chordmode, rawbasegram, rawuppergram, bdrys, model, nseg);
+                else
+                    [rootgram, bassgram, treblegram] = nnn2Decode(chordmode, rawbasegram, rawuppergram, bdrys, model, nseg);
+                end
             elseif savetmp == 3 % type-III decode (ch recurrent model songwise model decode)
                 rawbasegram = rawbasegramSet{loadidx};
                 rawuppergram = rawuppergramSet{loadidx};
@@ -206,12 +203,20 @@ for cvi = 1:5
                 endtime = endtimeSet{loadidx};
                 loadidx = loadidx + 1;
                 display('ns-seg-NN backend...');
-                [rootgram, bassgram, treblegram] = nn6Decode(chordmode, ns, bdrys, model, nseg);
+                if strcmp(putget,'put')
+                    nnn6Decode_put(tline, ns, bdrys, nseg);
+                elseif strcmp(putget,'get')
+                    nnn6Decode_get(chordmode, ns, bdrys, model, nseg);
+                else
+                    [rootgram, bassgram, treblegram] = nnn6Decode(chordmode, ns, bdrys, model, nseg);
+                end
             end
-
-            display('writing to output...');
-            writeOut(outputpath, feparam.hopsize, feparam.fs,...
-                rootgram, treblegram, bdrys, endtime, chordmode);
+            
+            if ~strcmp(putget,'put')
+                display('writing to output...');
+                writeOut(outputpath, feparam.hopsize, feparam.fs,...
+                    rootgram, treblegram, bdrys, endtime, chordmode);
+            end
 
             display(strcat('finish analyzing...',songtitle, ' !'));
             tline = fgetl(fe);
@@ -232,9 +237,13 @@ for cvi = 1:5
     end
     
     % test one time for each fold
-    evalsuffix = [testingParams, '-', num2str(cvi)];
-    evallistins = [dataset, '-', num2str(cvi)];
-    evaluateCP_cv(evalsuffix,evallistins);
+    if strcmp(putget,'put')
+        continue;
+    else
+        evalsuffix = [testingParams, '-', num2str(cvi)];
+        evallistins = [dataset, '-', num2str(cvi)];
+        evaluateCP_cv(evalsuffix,evallistins);
+    end
 end
 
 

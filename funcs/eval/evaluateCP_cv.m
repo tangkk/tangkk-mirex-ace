@@ -7,8 +7,8 @@ function evaluateCP_cv(suffix, evallistins)
 fw = fopen(['e' evallistins],'w+');
 
 strtoks = strsplit(evallistins,'-');
-dataset = strtoks(1);
-fold = strtoks(2);
+dataset = strtoks{1};
+fold = strtoks{2};
 
 % dump the content of each datasets into fw
 for dsi = 1:length(dataset)

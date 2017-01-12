@@ -1,5 +1,5 @@
 % work with TheanoNN
-function [rootgram, bassgram, treblegram] = nn2Decode(chordmode, rawbasegram, rawuppergram, bdrys, model, nseg)
+function [rootgram, bassgram, treblegram] = nnn2Decode(chordmode, rawbasegram, rawuppergram, bdrys, model, nseg)
 
 rootgram = [];
 bassgram = [];
@@ -67,29 +67,45 @@ else % default
     chordnums = [chnames2chnums(chordnames, chordmode);'0:0'];
 end
 
-if isempty(strfind(model,'.txt')) % not ensemble model
-    if ~isempty(strfind(model,'mlp'))
-        nntype = 'mlp';
-    elseif ~isempty(strfind(model,'dbn'))
-        nntype = 'dbn';
-    elseif ~isempty(strfind(model,'blstm'))
-        nntype = 'blstm';
-    elseif ~isempty(strfind(model,'lstm'))
-        nntype = 'lstm';
-    elseif ~isempty(strfind(model,'knn'))
-        nntype = 'knn';
-    elseif ~isempty(strfind(model,'svm'))
-        nntype = 'svm';
-    else
-        nntype = 'none';
-    end
-    % execute python prediction script to predict X
-    pythoncmd = {'nn/predict.py','./data/temp/X.mat',['./data/model/' model],nntype,invtype};
-else % ensemble model
-    pythoncmd = {'nn/enspredict.py','./data/temp/X.mat',['./data/model/' model]};
+if ~isempty(strfind(model,'mlp'))
+    nntype = 'mlp';
+elseif ~isempty(strfind(model,'dbn'))
+    nntype = 'dbn';
+elseif ~isempty(strfind(model,'blstm'))
+    nntype = 'blstm';
+elseif ~isempty(strfind(model,'lstm'))
+    nntype = 'lstm';
+elseif ~isempty(strfind(model,'knn'))
+    nntype = 'knn';
+elseif ~isempty(strfind(model,'svm'))
+    nntype = 'svm';
+else
+    nntype = 'none';
 end
+% execute python prediction script to predict X
+% pythoncmd = {'nn/predict.py','./data/temp/X.mat',['./data/model/' model],nntype,invtype};
+% python(pythoncmd)
 
-python(pythoncmd)
+% ************ use the trained model to predict chordbeats/whatever ************ %
+% the content of python.m may subject to change when you use a different environment
+% especially the Execute Python script part
+
+% my local machine cannot do this well
+% relay this task to remote machine
+remotehost = '10.16.0.53';
+remotepath = '~/Documents/Projects/ace/data/temp/';
+localpath = './data/temp/';
+remoteace = '~/Documents/Projects/ace/';
+scp_simple_put(remotehost,'test','test','X.mat',remotepath,localpath,'X.mat');
+% let the remote run to predict on this thing
+% command = ['python ', remoteace,'nnn/predict.py ',remoteace, 'temp/X.mat ', remoteace, 'model/',model,' ', remoteace, 'temp/'];
+command = ['THEANO_FLAGS="device=cuda3" ', 'python ', remoteace,'nnn/predict.py ',remotepath, 'X.mat ', remoteace, 'model/',model,' ', nntype, ' ', invtype, ' ', remotepath];
+% command_result = ssh2_simple_command(remotehost,'test','test', command, 1);
+ssh2_struct = ssh2_config(remotehost, 'test', 'test',22);
+ssh2_command(ssh2_struct, command, 1);
+% get the remote preds back
+scp_simple_get(remotehost,'test','test', 'y_preds.mat', localpath, remotepath);
+scp_simple_get(remotehost,'test','test', 'y_probs.mat', localpath, remotepath);
 
 
 % the output of the process is saved to ./data/temp/y_probs.mat and

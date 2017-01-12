@@ -1,0 +1,1 @@
+sh runscript-1245-datasize-ch.sh;sh runscript-1245-datasize-ns.sh;sh runscript-1245-config-ch.sh;sh runscript-1245-config-ns.sh;sh runscript-1245-segtile-ch.sh;sh runscript-1245-segtile-ns.sh

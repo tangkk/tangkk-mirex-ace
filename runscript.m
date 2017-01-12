@@ -1135,7 +1135,19 @@
 % now we only specify the dnn model, dataset, feature level, network config
 % the evaluation will automatically run and generate the cv results
 % this refactoring clearout a lot of previous redundancies
-tangkkace_cv('mlp-JK-ch-800,800');
+% tangkkace_cv('X-CJKURB-ch-6seg-X','put');
+% tangkkace_cv('X-CJKURB-ns-6seg-X','put');
+
+tangkkace_cv('X-JKU-ch-1seg-X','put');
+tangkkace_cv('X-JKU-ns-1seg-X','put');
+tangkkace_cv('X-JKU-ch-2seg-X','put');
+tangkkace_cv('X-JKU-ns-2seg-X','put');
+tangkkace_cv('X-JKU-ch-3seg-X','put');
+tangkkace_cv('X-JKU-ns-3seg-X','put');
+tangkkace_cv('X-JKU-ch-9seg-X','put');
+tangkkace_cv('X-JKU-ns-9seg-X','put');
+tangkkace_cv('X-JKU-ch-12seg-X','put');
+tangkkace_cv('X-JKU-ns-12seg-X','put');
 
 
 

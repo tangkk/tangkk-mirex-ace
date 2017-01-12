@@ -53,6 +53,7 @@ conf/
 data/
 cv/
 temp/
+model/
 testdata/
 mirexace/
 slides/
