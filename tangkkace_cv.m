@@ -162,16 +162,16 @@ for cvi = 1:5
                 display('ch-NN-HMM backend...');
                 [rootgram, bassgram, treblegram, bdrys] = nn1Decode(chordmode, model, beparam, dbn2param, rawbasegram, rawuppergram, bdrys);
             elseif savetmp == 2 % type-II decode (ch fix model with segmentation information provided by baseline method)
-                rawbasegram = rawbasegramSet{loadidx};
-                rawuppergram = rawuppergramSet{loadidx};
-                bdrys = bdrysSet{loadidx};
-                endtime = endtimeSet{loadidx};
-                loadidx = loadidx + 1;
                 display('ch-seg-NN backend...');
                 if strcmp(putget,'put')
+                    rawbasegram = rawbasegramSet{loadidx};
+                    rawuppergram = rawuppergramSet{loadidx};
+                    bdrys = bdrysSet{loadidx};
+                    endtime = endtimeSet{loadidx};
+                    loadidx = loadidx + 1;
                     nnn2Decode_put(tline, rawbasegram, rawuppergram, bdrys, nseg);
                 elseif strcmp(putget,'get')
-                    [rootgram, bassgram, treblegram] = nnn2Decode_get(chordmode, rawbasegram, rawuppergram, bdrys, model, nseg);
+                    [rootgram, bassgram, treblegram] = nnn2Decode_get(tline, model, nseg);
                 else
                     [rootgram, bassgram, treblegram] = nnn2Decode(chordmode, rawbasegram, rawuppergram, bdrys, model, nseg);
                 end
@@ -197,16 +197,16 @@ for cvi = 1:5
                 loadidx = loadidx + 1;
                 display('ns-NN-HMM backend...');
                 [rootgram, bassgram, treblegram, bdrys] = nn5Decode(chordmode, model, beparam, dbn2param, ns, bdrys);
-            elseif savetmp == 6 % type-VI decode (ns fix model with segmentation information provided by baseline method)
-                ns = nsSet{loadidx};
-                bdrys = bdrysSet{loadidx};
-                endtime = endtimeSet{loadidx};
-                loadidx = loadidx + 1;
+            elseif savetmp == 6 % type-VI decode (ns fix model with segmentation information provided by baseline method)       
                 display('ns-seg-NN backend...');
                 if strcmp(putget,'put')
+                    ns = nsSet{loadidx};
+                    bdrys = bdrysSet{loadidx};
+                    endtime = endtimeSet{loadidx};
+                    loadidx = loadidx + 1;
                     nnn6Decode_put(tline, ns, bdrys, nseg);
                 elseif strcmp(putget,'get')
-                    nnn6Decode_get(chordmode, ns, bdrys, model, nseg);
+                    nnn6Decode_get(tline, model, nseg);
                 else
                     [rootgram, bassgram, treblegram] = nnn6Decode(chordmode, ns, bdrys, model, nseg);
                 end

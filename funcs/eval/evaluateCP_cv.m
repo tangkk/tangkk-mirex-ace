@@ -1,5 +1,6 @@
 % The following evaluator is built and executed from Johan's source code:
 % https://github.com/jpauwels/MusOOEvaluator
+% this only evaluate one fold of the given dataset
 
 % original function evaluateCP(suffix, evallistin)
 function evaluateCP_cv(suffix, evallistins)
