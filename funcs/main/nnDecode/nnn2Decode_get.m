@@ -1,13 +1,16 @@
 % work with TheanoNN
-function [rootgram, bassgram, treblegram] = nnn2Decode_get(tline, model, nseg)
+function [rootgram, bassgram, treblegram] = nnn2Decode_get(chordmode, tline, model, nseg)
 
 x = [strrep(tline(1:end-4),'/','-'), '-ch', '-', num2str(nseg), 'seg.mat'];
-y = [model, '|', x];
+y = [model, '=', x];
 
 load(['./data/y_preds/',y]);
 y_preds = y_preds';
 
-for j = 1:nslices
+load('chordnames-inv.mat');
+chordnums = [chnames2chnums(chordnames, chordmode);'0:0'];
+
+for j = 1:length(y_preds)
     out = y_preds(j);
     chnum = chordnums{out};
     strtoks = strsplit(chnum,':');
