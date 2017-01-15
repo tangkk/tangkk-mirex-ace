@@ -65,8 +65,8 @@ def predict(x, model, datapath):
     strtoksx = x.split('/');
     strtoksm = model.split('/');
     
-    y_probspath = datapath + 'y_probs/' + strtoksm[-1] + "|" + strtoksx[-1]
-    y_predspath = datapath + 'y_preds/' + strtoksm[-1] + "|" + strtoksx[-1]
+    y_probspath = datapath + 'y_probs/' + strtoksm[-1] + "=" + strtoksx[-1]
+    y_predspath = datapath + 'y_preds/' + strtoksm[-1] + "=" + strtoksx[-1]
     
     print y_probspath
     print y_predspath

@@ -2,7 +2,7 @@
 % main process
 
 % original function: function tangkkace(paramN, testlist, savetmp, loadtmp, model)
-% testing params example: 'mlp-JK-ch-800,800'
+% testing params example: 'mlp-JK-ch-6seg-800,800'
 function tangkkace_cv(testingParams,putget)
 
 strtoks = strsplit(testingParams,'-');
@@ -42,6 +42,7 @@ for cvi = 1:5
     else
         trainfolds = '';
     end
+    
     model = [dnnmodel, '-', dataset, '-', trainfolds, '-', featurelevel, '-', segtile, '-' netconfig, '.npz'];
     
     % second loop, loop datasets

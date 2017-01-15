@@ -1149,7 +1149,113 @@
 % tangkkace_cv('X-JKU-ch-12seg-X','put');
 % tangkkace_cv('X-JKU-ns-12seg-X','put');
 
-tangkkace_cv('mlp-JKU-ch-1seg-800,800','get');
+% massive cv testing
+
+% *************************** segtile ******************************** %
+% tangkkace_cv('mlp-JKU-ch-1seg-800,800','get');
+% tangkkace_cv('mlp-JKU-ch-2seg-800,800','get');
+% tangkkace_cv('mlp-JKU-ch-3seg-800,800','get');
+% tangkkace_cv('mlp-JKU-ch-9seg-800,800','get');
+% tangkkace_cv('mlp-JKU-ch-12seg-800,800','get');
+% tangkkace_cv('mlp-JKU-ns-1seg-800,800','get');
+% tangkkace_cv('mlp-JKU-ns-2seg-800,800','get');
+% tangkkace_cv('mlp-JKU-ns-3seg-800,800','get');
+% tangkkace_cv('mlp-JKU-ns-9seg-800,800','get');
+% tangkkace_cv('mlp-JKU-ns-12seg-800,800','get');
+% 
+% tangkkace_cv('dbn-JKU-ch-1seg-800,800','get');
+% tangkkace_cv('dbn-JKU-ch-2seg-800,800','get');
+% tangkkace_cv('dbn-JKU-ch-3seg-800,800','get');
+% tangkkace_cv('dbn-JKU-ch-9seg-800,800','get');
+% tangkkace_cv('dbn-JKU-ch-12seg-800,800','get');
+% tangkkace_cv('dbn-JKU-ns-1seg-800,800','get');
+% tangkkace_cv('dbn-JKU-ns-2seg-800,800','get');
+% tangkkace_cv('dbn-JKU-ns-3seg-800,800','get');
+% tangkkace_cv('dbn-JKU-ns-9seg-800,800','get');
+% tangkkace_cv('dbn-JKU-ns-12seg-800,800','get');
+% 
+% tangkkace_cv('blstm-JKU-ch-1seg-800','get');
+% tangkkace_cv('blstm-JKU-ch-2seg-800','get');
+% tangkkace_cv('blstm-JKU-ch-3seg-800','get');
+% tangkkace_cv('blstm-JKU-ch-9seg-800','get');
+% tangkkace_cv('blstm-JKU-ch-12seg-800','get');
+% tangkkace_cv('blstm-JKU-ns-1seg-800','get');
+% tangkkace_cv('blstm-JKU-ns-2seg-800','get');
+% tangkkace_cv('blstm-JKU-ns-3seg-800','get');
+% tangkkace_cv('blstm-JKU-ns-9seg-800','get');
+% tangkkace_cv('blstm-JKU-ns-12seg-800','get');
+% 
+% % *************************** config ******************************** %
+% tangkkace_cv('mlp-JKU-ch-6seg-500,500','get');
+% tangkkace_cv('mlp-JKU-ch-6seg-500,500,500','get');
+% tangkkace_cv('mlp-JKU-ch-6seg-500,500,500,500','get');
+% tangkkace_cv('mlp-JKU-ns-6seg-500,500','get');
+% tangkkace_cv('mlp-JKU-ns-6seg-500,500,500','get');
+% tangkkace_cv('mlp-JKU-ns-6seg-500,500,500,500','get');
+% 
+% tangkkace_cv('mlp-JKU-ch-6seg-800,800','get');
+% tangkkace_cv('mlp-JKU-ch-6seg-800,800,800','get');
+% tangkkace_cv('mlp-JKU-ch-6seg-800,800,800,800','get');
+% tangkkace_cv('mlp-JKU-ns-6seg-800,800','get');
+% tangkkace_cv('mlp-JKU-ns-6seg-800,800,800','get');
+% tangkkace_cv('mlp-JKU-ns-6seg-800,800,800,800','get');
+% 
+% tangkkace_cv('mlp-JKU-ch-6seg-1000,1000','get');
+% tangkkace_cv('mlp-JKU-ch-6seg-1000,1000,1000','get');
+% tangkkace_cv('mlp-JKU-ch-6seg-1000,1000,1000,1000','get');
+% tangkkace_cv('mlp-JKU-ns-6seg-1000,1000','get');
+% tangkkace_cv('mlp-JKU-ns-6seg-1000,1000,1000','get');
+% tangkkace_cv('mlp-JKU-ns-6seg-1000,1000,1000,1000','get');
+% 
+% tangkkace_cv('dbn-JKU-ch-6seg-500,500','get');
+% tangkkace_cv('dbn-JKU-ch-6seg-500,500,500','get');
+% tangkkace_cv('dbn-JKU-ch-6seg-500,500,500,500','get');
+% tangkkace_cv('dbn-JKU-ns-6seg-500,500','get');
+% tangkkace_cv('dbn-JKU-ns-6seg-500,500,500','get');
+% tangkkace_cv('dbn-JKU-ns-6seg-500,500,500,500','get');
+% 
+% tangkkace_cv('dbn-JKU-ch-6seg-800,800','get');
+% tangkkace_cv('dbn-JKU-ch-6seg-800,800,800','get');
+% tangkkace_cv('dbn-JKU-ch-6seg-800,800,800,800','get');
+% tangkkace_cv('dbn-JKU-ns-6seg-800,800','get');
+% tangkkace_cv('dbn-JKU-ns-6seg-800,800,800','get');
+% tangkkace_cv('dbn-JKU-ns-6seg-800,800,800,800','get');
+% 
+% tangkkace_cv('dbn-JKU-ch-6seg-1000,1000','get');
+% tangkkace_cv('dbn-JKU-ch-6seg-1000,1000,1000','get');
+% tangkkace_cv('dbn-JKU-ch-6seg-1000,1000,1000,1000','get');
+% tangkkace_cv('dbn-JKU-ns-6seg-1000,1000','get');
+% tangkkace_cv('dbn-JKU-ns-6seg-1000,1000,1000','get');
+% tangkkace_cv('dbn-JKU-ns-6seg-1000,1000,1000,1000','get');
+% 
+% % *************************** datasize ******************************** %
+% tangkkace_cv('mlp-JK-ch-6seg-800,800','get');
+% tangkkace_cv('mlp-JKU-ch-6seg-800,800','get');
+% tangkkace_cv('mlp-JKUR-ch-6seg-800,800','get');
+% tangkkace_cv('mlp-JKURB-ch-6seg-800,800','get');
+% tangkkace_cv('mlp-JK-ns-6seg-800,800','get');
+% tangkkace_cv('mlp-JKU-ns-6seg-800,800','get');
+% tangkkace_cv('mlp-JKUR-ns-6seg-800,800','get');
+% tangkkace_cv('mlp-JKURB-ns-6seg-800,800','get');
+% 
+% tangkkace_cv('dbn-JK-ch-6seg-800,800','get');
+% tangkkace_cv('dbn-JKU-ch-6seg-800,800','get');
+% tangkkace_cv('dbn-JKUR-ch-6seg-800,800','get');
+% tangkkace_cv('dbn-JKURB-ch-6seg-800,800','get');
+% tangkkace_cv('dbn-JK-ns-6seg-800,800','get');
+% tangkkace_cv('dbn-JKU-ns-6seg-800,800','get');
+% tangkkace_cv('dbn-JKUR-ns-6seg-800,800','get');
+% tangkkace_cv('dbn-JKURB-ns-6seg-800,800','get');
+% 
+% tangkkace_cv('blstm-JK-ch-6seg-800','get');
+% tangkkace_cv('blstm-JKU-ch-6seg-800','get');
+% tangkkace_cv('blstm-JKUR-ch-6seg-800','get');
+% tangkkace_cv('blstm-JKURB-ch-6seg-800','get');
+% tangkkace_cv('blstm-JK-ns-6seg-800','get');
+% tangkkace_cv('blstm-JKU-ns-6seg-800','get');
+% tangkkace_cv('blstm-JKUR-ns-6seg-800','get');
+% tangkkace_cv('blstm-JKURB-ns-6seg-800','get');
+
 
 
 
