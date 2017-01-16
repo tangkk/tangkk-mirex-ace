@@ -2,14 +2,33 @@
 % https://github.com/jpauwels/MusOOEvaluator
 % this only evaluate one fold of the given dataset
 
-% original function evaluateCP(suffix, evallistin)
-function evaluateCP_cv(suffix, evallistins)
+% this function evaluates training error
 
-fw = fopen(['e' evallistins],'w+');
+% original function evaluateCP(suffix, evallistin)
+function evaluateCP_cvt(suffix, evallistins)
 
 strtoks = strsplit(evallistins,'-');
 dataset = strtoks{1};
 fold = strtoks{2};
+
+cvi = str2double(fold);
+if cvi == 1
+    trainfolds = '2345';
+elseif cvi == 2
+    trainfolds = '1345';
+elseif cvi == 3
+    trainfolds = '1245';
+elseif cvi == 4
+    trainfolds = '1235';
+elseif cvi == 5
+    trainfolds = '1234';
+else
+    trainfolds = '';
+end
+
+evallistins = [dataset,'-',trainfolds];
+
+fw = fopen(['e' evallistins],'w+');
 
 % dump the content of each datasets into fw
 for dsi = 1:length(dataset)
@@ -30,24 +49,27 @@ for dsi = 1:length(dataset)
         thisset = '';
     end
     
-    evallistin = ['data/cvlist/', thisset, '-', fold, '.txt'];
-    
-    
-    fr = fopen(evallistin,'r');
+    % loop over training folds
+    for cvt = 1:4
+        thisfold = str2double(trainfolds(cvt));
+        evallistin = ['data/cvlist/', thisset, '-', num2str(thisfold), '.txt'];
 
-    tline = fgetl(fr);
-    if ispc
-        formatSpec = '%s\r\n';
-    else
-        formatSpec = '%s\n';
-    end
-    while ischar(tline)
-        sufposes = strfind(tline,'.');
-        ntline = tline(1:sufposes(end)-1);
-        fprintf(fw, formatSpec, ntline);
+        fr = fopen(evallistin,'r');
+
         tline = fgetl(fr);
+        if ispc
+            formatSpec = '%s\r\n';
+        else
+            formatSpec = '%s\n';
+        end
+        while ischar(tline)
+            sufposes = strfind(tline,'.');
+            ntline = tline(1:sufposes(end)-1);
+            fprintf(fw, formatSpec, ntline);
+            tline = fgetl(fr);
+        end
+        fclose(fr);
     end
-    fclose(fr);
 end
 
 fclose(fw);

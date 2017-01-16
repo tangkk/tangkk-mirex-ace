@@ -1149,7 +1149,7 @@
 % tangkkace_cv('X-JKU-ch-12seg-X','put');
 % tangkkace_cv('X-JKU-ns-12seg-X','put');
 
-% massive cv testing
+% massive cv testing - testing error
 
 % *************************** segtile ******************************** %
 % tangkkace_cv('mlp-JKU-ch-1seg-800,800','get');
@@ -1257,5 +1257,109 @@
 % tangkkace_cv('blstm-JKURB-ns-6seg-800','get');
 
 
+% massive cv testing - training error
 
+% *************************** segtile ******************************** %
+tangkkace_cvt('mlp-JKU-ch-1seg-800,800','get');
+tangkkace_cvt('mlp-JKU-ch-2seg-800,800','get');
+tangkkace_cvt('mlp-JKU-ch-3seg-800,800','get');
+tangkkace_cvt('mlp-JKU-ch-9seg-800,800','get');
+tangkkace_cvt('mlp-JKU-ch-12seg-800,800','get');
+tangkkace_cvt('mlp-JKU-ns-1seg-800,800','get');
+tangkkace_cvt('mlp-JKU-ns-2seg-800,800','get');
+tangkkace_cvt('mlp-JKU-ns-3seg-800,800','get');
+tangkkace_cvt('mlp-JKU-ns-9seg-800,800','get');
+tangkkace_cvt('mlp-JKU-ns-12seg-800,800','get');
 
+tangkkace_cvt('dbn-JKU-ch-1seg-800,800','get');
+tangkkace_cvt('dbn-JKU-ch-2seg-800,800','get');
+tangkkace_cvt('dbn-JKU-ch-3seg-800,800','get');
+tangkkace_cvt('dbn-JKU-ch-9seg-800,800','get');
+tangkkace_cvt('dbn-JKU-ch-12seg-800,800','get');
+tangkkace_cvt('dbn-JKU-ns-1seg-800,800','get');
+tangkkace_cvt('dbn-JKU-ns-2seg-800,800','get');
+tangkkace_cvt('dbn-JKU-ns-3seg-800,800','get');
+tangkkace_cvt('dbn-JKU-ns-9seg-800,800','get');
+tangkkace_cvt('dbn-JKU-ns-12seg-800,800','get');
+
+tangkkace_cvt('blstm-JKU-ch-1seg-800','get');
+tangkkace_cvt('blstm-JKU-ch-2seg-800','get');
+tangkkace_cvt('blstm-JKU-ch-3seg-800','get');
+tangkkace_cvt('blstm-JKU-ch-9seg-800','get');
+tangkkace_cvt('blstm-JKU-ch-12seg-800','get');
+tangkkace_cvt('blstm-JKU-ns-1seg-800','get');
+tangkkace_cvt('blstm-JKU-ns-2seg-800','get');
+tangkkace_cvt('blstm-JKU-ns-3seg-800','get');
+tangkkace_cvt('blstm-JKU-ns-9seg-800','get');
+tangkkace_cvt('blstm-JKU-ns-12seg-800','get');
+
+% *************************** config ******************************** %
+tangkkace_cvt('mlp-JKU-ch-6seg-500,500','get');
+tangkkace_cvt('mlp-JKU-ch-6seg-500,500,500','get');
+tangkkace_cvt('mlp-JKU-ch-6seg-500,500,500,500','get');
+tangkkace_cvt('mlp-JKU-ns-6seg-500,500','get');
+tangkkace_cvt('mlp-JKU-ns-6seg-500,500,500','get');
+tangkkace_cvt('mlp-JKU-ns-6seg-500,500,500,500','get');
+
+tangkkace_cvt('mlp-JKU-ch-6seg-800,800','get');
+tangkkace_cvt('mlp-JKU-ch-6seg-800,800,800','get');
+tangkkace_cvt('mlp-JKU-ch-6seg-800,800,800,800','get');
+tangkkace_cvt('mlp-JKU-ns-6seg-800,800','get');
+tangkkace_cvt('mlp-JKU-ns-6seg-800,800,800','get');
+tangkkace_cvt('mlp-JKU-ns-6seg-800,800,800,800','get');
+
+tangkkace_cvt('mlp-JKU-ch-6seg-1000,1000','get');
+tangkkace_cvt('mlp-JKU-ch-6seg-1000,1000,1000','get');
+tangkkace_cvt('mlp-JKU-ch-6seg-1000,1000,1000,1000','get');
+tangkkace_cvt('mlp-JKU-ns-6seg-1000,1000','get');
+tangkkace_cvt('mlp-JKU-ns-6seg-1000,1000,1000','get');
+tangkkace_cvt('mlp-JKU-ns-6seg-1000,1000,1000,1000','get');
+
+tangkkace_cvt('dbn-JKU-ch-6seg-500,500','get');
+tangkkace_cvt('dbn-JKU-ch-6seg-500,500,500','get');
+tangkkace_cvt('dbn-JKU-ch-6seg-500,500,500,500','get');
+tangkkace_cvt('dbn-JKU-ns-6seg-500,500','get');
+tangkkace_cvt('dbn-JKU-ns-6seg-500,500,500','get');
+tangkkace_cvt('dbn-JKU-ns-6seg-500,500,500,500','get');
+
+tangkkace_cvt('dbn-JKU-ch-6seg-800,800','get');
+tangkkace_cvt('dbn-JKU-ch-6seg-800,800,800','get');
+tangkkace_cvt('dbn-JKU-ch-6seg-800,800,800,800','get');
+tangkkace_cvt('dbn-JKU-ns-6seg-800,800','get');
+tangkkace_cvt('dbn-JKU-ns-6seg-800,800,800','get');
+tangkkace_cvt('dbn-JKU-ns-6seg-800,800,800,800','get');
+
+tangkkace_cvt('dbn-JKU-ch-6seg-1000,1000','get');
+tangkkace_cvt('dbn-JKU-ch-6seg-1000,1000,1000','get');
+tangkkace_cvt('dbn-JKU-ch-6seg-1000,1000,1000,1000','get');
+tangkkace_cvt('dbn-JKU-ns-6seg-1000,1000','get');
+tangkkace_cvt('dbn-JKU-ns-6seg-1000,1000,1000','get');
+tangkkace_cvt('dbn-JKU-ns-6seg-1000,1000,1000,1000','get');
+
+% *************************** datasize ******************************** %
+tangkkace_cvt('mlp-JK-ch-6seg-800,800','get');
+tangkkace_cvt('mlp-JKU-ch-6seg-800,800','get');
+tangkkace_cvt('mlp-JKUR-ch-6seg-800,800','get');
+tangkkace_cvt('mlp-JKURB-ch-6seg-800,800','get');
+tangkkace_cvt('mlp-JK-ns-6seg-800,800','get');
+tangkkace_cvt('mlp-JKU-ns-6seg-800,800','get');
+tangkkace_cvt('mlp-JKUR-ns-6seg-800,800','get');
+tangkkace_cvt('mlp-JKURB-ns-6seg-800,800','get');
+
+tangkkace_cvt('dbn-JK-ch-6seg-800,800','get');
+tangkkace_cvt('dbn-JKU-ch-6seg-800,800','get');
+tangkkace_cvt('dbn-JKUR-ch-6seg-800,800','get');
+tangkkace_cvt('dbn-JKURB-ch-6seg-800,800','get');
+tangkkace_cvt('dbn-JK-ns-6seg-800,800','get');
+tangkkace_cvt('dbn-JKU-ns-6seg-800,800','get');
+tangkkace_cvt('dbn-JKUR-ns-6seg-800,800','get');
+tangkkace_cvt('dbn-JKURB-ns-6seg-800,800','get');
+
+tangkkace_cvt('blstm-JK-ch-6seg-800','get');
+tangkkace_cvt('blstm-JKU-ch-6seg-800','get');
+tangkkace_cvt('blstm-JKUR-ch-6seg-800','get');
+tangkkace_cvt('blstm-JKURB-ch-6seg-800','get');
+tangkkace_cvt('blstm-JK-ns-6seg-800','get');
+tangkkace_cvt('blstm-JKU-ns-6seg-800','get');
+tangkkace_cvt('blstm-JKUR-ns-6seg-800','get');
+tangkkace_cvt('blstm-JKURB-ns-6seg-800','get');
