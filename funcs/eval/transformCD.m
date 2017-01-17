@@ -1,7 +1,8 @@
 % transform chordino output .lab to the .txt that can be recognized by
 % evaluation tools
 
-target = './cd/variousartist/others';
+%target = './cd/variousartist/others';
+function transformCD(target)
 
 files = dir(target); 
 
@@ -117,7 +118,9 @@ while ischar(tline)
         elseif strcmp(ch(3:end),'m6')
             newch = [ch(1:2) ':' 'min6'];
         elseif strcmp(ch(3:end),'m7-5')
-            newch = [ch(1:2) ':' 'hdim'];
+            newch = ['N'];
+        elseif strcmp(ch(3:end),'m7b5')
+            newch = ['N'];
         elseif strcmp(ch(3:end),'6')
             newch = [ch(1:2) ':' 'maj6'];
         else
@@ -131,7 +134,9 @@ while ischar(tline)
         elseif strcmp(ch(2:end),'m6')
             newch = [ch(1) ':' 'min6'];
         elseif strcmp(ch(2:end),'m7-5')
-            newch = [ch(1) ':' 'hdim'];
+            newch = ['N'];
+        elseif strcmp(ch(3:end),'m7b5')
+            newch = ['N'];
         elseif strcmp(ch(2:end),'6')
             newch = [ch(1) ':' 'maj6'];
         else

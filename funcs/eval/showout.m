@@ -225,10 +225,10 @@ while ischar(evalmodule)
     tline = fgetl(fr);
     li = 1;
     while ischar(tline)
-        if li >= 7 && li <= 7
+        if li >= 11 && li <= 11
             strtoks1 = strsplit(tline,':');
             per = strtoks1{2};
-            segmentationscore = str2double(per(2:end)); % delete the '%' symbol
+            segmentationscore = 100*str2double(per(2:end)); % delete the '%' symbol
         end
         tline = fgetl(fr);
         li = li+1;
