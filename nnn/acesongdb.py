@@ -514,39 +514,39 @@ def load_data_varlen(trainpath, trainlist, validset,
 
     return train, valid
     
-def load_data_song(dataset=None, valid_portion=0.1, test_portion=0.1):
-    f = open(dataset, 'rb')
-    X,y = cPickle.load(f)
+def load_data_song(trainpath, trainlist, validset):
+    strtoks = trainlist.split('-')
+    sets = strtoks[0]
+    folds = strtoks[1]
+    feature = strtoks[2]
+    songwise = strtoks[3]
+    print strtoks
+    rc = 0
+    for fold in folds:
+        dataset = trainpath + sets + '-' + fold + '-' + feature + '-' + songwise + '.pkl'
+        print dataset
+        if rc == 0:
+            f = open(dataset, 'rb')
+            X,y = cPickle.load(f)
+            rc = rc + 1
+            f.close()
+        else:
+            f = open(dataset, 'rb')
+            X_,y_ = cPickle.load(f)
+            X = numpy.concatenate((X,X_))
+            y = numpy.concatenate((y,y_))
+            f.close()
     
     # do not shuffle
-    n_samples = X.shape[0]
-    sidx = numpy.random.permutation(n_samples)
-    n_train = int(numpy.round(n_samples * (1. - valid_portion - test_portion)))
-    n_valid = int(numpy.round(n_samples * (1. - test_portion)))
-    
-    # note that these are list objects now (train_set_ , valid_set_, test_set_) rather than numpy objects
-    test_set_x = numpy.asarray([X[s] for s in sidx[n_valid:]])
-    test_set_y = numpy.asarray([y[s] for s in sidx[n_valid:]])
-    # valid_set_x = numpy.asarray([X[s] for s in sidx[n_train:n_valid]])
-    # valid_set_y = numpy.asarray([y[s] for s in sidx[n_train:n_valid]])
-    valid_set_x = numpy.asarray([X[s] for s in sidx[n_train:]]) # 20% validation
-    valid_set_y = numpy.asarray([y[s] for s in sidx[n_train:]]) # 20% validation
-    train_set_x = numpy.asarray([X[s] for s in sidx[:n_train]])
-    train_set_y = numpy.asarray([y[s] for s in sidx[:n_train]])
+    train = (X,y)
 
-    train = (train_set_x, train_set_y)
-    valid = (valid_set_x, valid_set_y)
-    test = (test_set_x, test_set_y)
-    
-    print train_set_x.shape
-    print train_set_y.shape
-    print valid_set_x.shape
-    print valid_set_y.shape
-    print test_set_x.shape
-    print test_set_y.shape
-    
+    fv = open(validset, 'rb')
+    Xv,yv = cPickle.load(fv)
+    # take only every 12 entries
+    valid = (Xv[0::12],yv[0::12])
+    fv.close()
 
-    return train, valid, test
+    return train, valid
     
 
 if __name__ == '__main__':

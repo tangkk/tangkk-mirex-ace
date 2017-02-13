@@ -17,16 +17,30 @@ netconfig = strtoks{5};
 
 paramN = 'SB';
 
-if strcmp(featurelevel,'ch')
-    savetmp = 2;
-elseif strcmp(featurelevel,'ns')
-    savetmp = 6;
+if strcmp(segtile,'songwise')
+    if strcmp(featurelevel,'ch')
+        savetmp = 3;
+    elseif strcmp(featurelevel,'ns')
+        savetmp = 4;
+    else
+        savetmp = inf;
+    end
 else
-    savetmp = inf;
+    if strcmp(featurelevel,'ch')
+        savetmp = 2;
+    elseif strcmp(featurelevel,'ns')
+        savetmp = 6;
+    else
+        savetmp = inf;
+    end
 end
 
 % extract nseg info
-nseg = str2double(segtile(1:end-3));
+if strcmp(segtile,'songwise')
+    nseg = 0;
+else
+    nseg = str2double(segtile(1:end-3));
+end
 
 % now perform cross validation testing
 % first loop, loop folds
@@ -108,11 +122,11 @@ for cvi = 1:5
                 endtimeSet = {};
                 saveidx = 1;
             end
-            if (savetmp == 1 || savetmp == 2 || savetmp == 3 || savetmp == 4)
+            if (savetmp == 1 || savetmp == 2 || savetmp == 3)
                 load(loadtmp);
                 loadidx = 1;
             end
-            if (savetmp == 5 || savetmp == 6)
+            if (savetmp == 4 || savetmp == 5 || savetmp == 6)
                 % load both BUB and BUBns
                 load(loadtmpch);
                 load(loadtmpns);
@@ -182,20 +196,32 @@ for cvi = 1:5
                         [rootgram, bassgram, treblegram] = nnn2Decode(chordmode, rawbasegram, rawuppergram, bdrys, model, nseg);
                     end
                 elseif savetmp == 3 % type-III decode (ch recurrent model songwise model decode)
+                    display('ch-song-RNN backend...');
                     rawbasegram = rawbasegramSet{loadidx};
                     rawuppergram = rawuppergramSet{loadidx};
                     bdrys = 1:size(rawbasegram,2);
                     endtime = endtimeSet{loadidx};
                     loadidx = loadidx + 1;
-                    display('ch-song-RNN backend...');
-                    [rootgram, bassgram, treblegram, bdrys] = nn3Decode(chordmode, model, beparam, rawbasegram, rawuppergram, bdrys);
+                    if strcmp(putget,'put')
+                        nn3Decode_put(tline, rawbasegram, rawuppergram);
+                    elseif strcmp(putget,'get')
+                        [rootgram, bassgram, treblegram, bdrys] = nn3Decode_get(chordmode, tline, model, beparam, bdrys);
+                    else
+                        [rootgram, bassgram, treblegram, bdrys] = nn3Decode(chordmode, model, beparam, rawbasegram, rawuppergram, bdrys);
+                    end
                 elseif savetmp == 4 % type-IV decode (ns recurrent model songwise decode)
+                    display('ns-song-RNN backend...');
                     ns = nsSet{loadidx};
                     bdrys = 1:size(ns,2);
                     endtime = endtimeSet{loadidx};
                     loadidx = loadidx + 1;
-                    display('ns-song-RNN backend...');
-                    [rootgram, bassgram, treblegram, bdrys] = nn4Decode(chordmode, model, beparam, ns, bdrys);
+                    if strcmp(putget,'put')
+                        nn4Decode_put(tline,ns);
+                    elseif strcmp(putget,'get')
+                        [rootgram, bassgram, treblegram, bdrys] = nn4Decode_get(chordmode, tline, model, beparam, bdrys);
+                    else
+                        [rootgram, bassgram, treblegram, bdrys] = nn4Decode(chordmode, model, beparam, ns, bdrys);
+                    end
                 elseif savetmp == 5 % type-V decode (ns fix model with HMM backend)
                     ns = nsSet{loadidx};
                     bdrys = 1:size(ns,2);

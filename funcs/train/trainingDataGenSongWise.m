@@ -217,14 +217,17 @@ trainingDatay11 = {};
 trainingDataX22 = {};
 trainingDatay22 = {};
 nsongs = size(trainingDataX1,1);
+disp('nsongs:');
+disp(nsongs)
 for ii = 1:nsongs
+    disp(ii);
     trainingDataOneSongX1 = trainingDataX1{ii};
     trainingDataOneSongX2 = trainingDataX2{ii};
     trainingDataOneSongy = trainingDatay{ii};
     
     len = size(trainingDataOneSongX1,1); % number of songs
-    trainingDataOneSongX11 = [];
-    trainingDataOneSongy11 = [];
+    trainingDataOneSongX11 = zeros(12,size(trainingDataOneSongX1,1),size(trainingDataOneSongX1,2));
+    trainingDataOneSongy11 = zeros(12,size(trainingDataOneSongX1,1),1);
     idx = 1;
     for i = 1:len
         Xi = trainingDataOneSongX1(i,:);
@@ -274,8 +277,8 @@ for ii = 1:nsongs
     % entry in X2 (24 dim feature - basstreble chroma)
     t12idx = 1;
     len = size(trainingDataOneSongX2,1);
-    trainingDataOneSongX22 = [];
-    trainingDataOneSongy22 = [];
+    trainingDataOneSongX22 = zeros(12,size(trainingDataOneSongX2,1),size(trainingDataOneSongX2,2));
+    trainingDataOneSongy22 = zeros(12,size(trainingDataOneSongX2,1),1);
     for j = 1:len
         ocase = trainingDataOneSongX2(j,:);
         y = trainingDataOneSongy(j);

@@ -1,9 +1,5 @@
 % work with TheanoNN
-function [rootgram, bassgram, treblegram] = nnn2Decode_put(tline, rawbasegram, rawuppergram, bdrys, nseg)
-
-rootgram = [];
-bassgram = [];
-treblegram = [];
+function nnn2Decode_put(tline, rawbasegram, rawuppergram, bdrys, nseg)
 
 nslices = size(bdrys,2)-1;
 

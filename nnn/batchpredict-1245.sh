@@ -1,0 +1,1 @@
+THEANO_FLAGS="device=cuda1" python batchpredictsongwise.py ../data/ ../model2/ 1245
