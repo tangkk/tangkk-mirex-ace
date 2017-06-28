@@ -30,5 +30,12 @@ Publications:
   year={2016}
 }
 
+@inproceedings{deng2016large,
+  title={Large Vocabulary Automatic Chord Estimation with Even Chance Training Scheme},
+  author={Deng, Junqi and Kwok, Yu-Kwong},
+  booktitle={ISMIR},
+  year={2017}
+}
+
 License:
 This software is under BSD License. For commercial use of this software, please contact the author.
