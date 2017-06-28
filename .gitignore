@@ -68,6 +68,9 @@ nn/*.ipynb
 *.txt
 *.exe
 *.asv
+*.fig
+*.xps
+*.pdf
 data.mat
 data-J*.mat
 data-B*.mat
