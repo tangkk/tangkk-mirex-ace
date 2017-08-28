@@ -3,7 +3,7 @@
 
 close all;
 clear;
-comptarget = 'min';
+comptarget = 'WCSR';
 
 % [maj_5, maj_3, maj, ...
 %         maj7_5, maj7_3, maj7_7, maj7, ...
@@ -14,7 +14,7 @@ targetseq = {'maj/5', 'maj/3', 'maj', 'maj7/5', 'maj7/3', 'maj7/7', 'maj7', '7/5
 compidx = find(strcmp(targetseq,comptarget));
 
 resroot = 'data/cvres/songwise/testing/';
-modules={'blstmrnn_ec-JKURB-ns-songwise-800','blstmrnn-JKURB-ns-songwise-800'};
+modules={'blstmrnn_ec-JKURB-ch-songwise-800','blstmrnn-JKURB-ch-songwise-800','chordino-JKURB'};
 
 disp(comptarget);
 disp(modules);
