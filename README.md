@@ -23,6 +23,11 @@ For simple chord estimation output, you could run for example:
 ```
 tangkkace('SB','TheBeatles180List.txt','3','TheBeatles180ListBUB.mat','blstmrnn-CJKURsong-ch-inv-[800]-1.npz');
 ```
+or
+```
+tangkkace('SB','CNPop20List.txt','6','CNPop20ListBUB','mlp-J6seg-ns-inv-[800,800]-1.pkl');
+```
+
 where the first parameter specifies the parameter initialization (in this case SeventhsBass configuration); the second parameter specifies the test list; the third specifies the "mode" (whether it is a segment-tiling approach, or a fully RNN approach); the fourth specifies the pre-extracted feature (bub); and the fifth specifies the neural network.
 
 For cross-valiation score, you could run for example:
@@ -46,6 +51,9 @@ The models are trained using the scripts provided in the ./nn and ./nnn folders.
 
 # Pretrained models
 Please find all the bubs and neural network models needed to run the systems [here](http://tangkk.net/me/model/ace/). The 'bubs' are the pre-extracted audio features. The models are exactly those used to derive the thesis.
+
+# Evaluation
+"evaluateCP.m" and "evaluateCD.m" are two evaluation scripts. They rely on the [MusOOEvaluator](https://github.com/jpauwels/MusOOEvaluator) to generate comparison results.
 
 # Publications:
 Deng, J., Kwok, Y. K., Large Vocabulary Automatic Chord Estimation with an Even Chance Training Scheme, In Proceedings of the 18th International Society for Music Information Retrieval Conference, Suzhou, China, 2017 (ISMIR 2017)
