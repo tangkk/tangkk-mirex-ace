@@ -13,6 +13,9 @@ The code here exactly implements the systems in Chapter 3 and 4 of my [PhD thesi
 - MATLAB R2015a or later
 - Python 2.7 with Numpy, Scipy and Theano (>0.8.0) installed (Preferrably [Anaconda](https://anaconda.org/) distribution)
 
+# Before you Run:
+Run ```acepath;``` to load the ace environment. (it is specified in acepath.m)
+
 # How to Run:
 Open the runscript.m file to see all possible ways to run the system in Matlab shell. For example, for the baseline approach, run:
 ```
