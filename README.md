@@ -53,7 +53,7 @@ The BUBs are extracted by specifying the "mode" to be -2 (for notegram) or -1 (f
 The models are trained using the scripts provided in the ./nn and ./nnn folders. You could perfectly repeat all the experiments if you have access to all the original audios and ground-truth labels. If you are interested in these contents, please contact me directly.
 
 # Pretrained models
-Please find all the bubs and neural network models needed to run the systems [here](http://tangkk.net/me/model/ace/). The 'bubs' are the pre-extracted audio features. The models are exactly those used to derive the thesis.
+Please find all the bubs and neural network models needed to run the systems here. The 'bubs' are the pre-extracted audio features. The models are exactly those used to derive the thesis.
 
 # Evaluation
 "evaluateCP.m" and "evaluateCD.m" are two evaluation scripts. They rely on the [MusOOEvaluator](https://github.com/jpauwels/MusOOEvaluator) to generate comparison results.
