@@ -7,7 +7,7 @@ The code here exactly implements the systems in Chapter 3 and 4 of my [PhD thesi
 
 
 # Author:
-[Junqi Deng](http://www.tangkk.net/), [The University of Hong Kong](http://www.hku.hk/)
+[Junqi Deng](https://tangkk.github.io/), [The University of Hong Kong](http://www.hku.hk/)
 
 # System Environment:
 - MATLAB R2015a or later
